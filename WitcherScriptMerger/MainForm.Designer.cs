@@ -299,6 +299,8 @@
             this.MinimumSize = new System.Drawing.Size(545, 280);
             this.Name = "MainForm";
             this.Text = "Script Merger";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.treeContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

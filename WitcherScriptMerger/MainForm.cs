@@ -67,26 +67,27 @@ namespace WitcherScriptMerger
             chkMoveToBackup.Checked = Program.Settings.Get<bool>("MoveToBackupAfterMerge");
             chkLineBreakSymbol.Checked = Program.Settings.Get<bool>("LineBreakSymbol");
 
+            LoadLastWindowConfiguration();
+        }
+
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
             if (chkCheckAtLaunch.Checked)
                 btnCheckForConflicts_Click(null, null);
+        }
 
-            LoadLastWindowConfiguration();
-            
-            ResizeEnd += delegate
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (WindowState == FormWindowState.Maximized)
+                Program.Settings.Set("StartMaximized", true);
+            else
             {
+                Program.Settings.Set("StartMaximized", false);
                 Program.Settings.Set("StartWidth", Width);
                 Program.Settings.Set("StartHeight", Height);
                 Program.Settings.Set("StartPosTop", Top);
                 Program.Settings.Set("StartPosLeft", Left);
-            };
-            LocationChanged += delegate
-            {
-                if (_lastWindowState != WindowState && WindowState != FormWindowState.Minimized)
-                {
-                    _lastWindowState = WindowState;
-                    Program.Settings.Set("StartMaximized", (WindowState == FormWindowState.Maximized));
-                }
-            };
+            }
         }
 
         private void LoadLastWindowConfiguration()
