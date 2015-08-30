@@ -76,22 +76,14 @@ namespace WitcherScriptMerger
                 if (contextRange.End < text.Length - 1)
                     contextRange.End = text.NextLineBreak(contextRange.End);
             }
+
+            // RichTextBox strips out all carriage returns (\r), so just replace them with
+            // a paragraph symbol as a placeholder to keep indexes correct
             rtb.Text = text.Substring(contextRange.Start, contextRange.Length).Replace('\r', '\xB6');
-            //rtb.Select(0, 0);  // Just strip the carriage returns now & get it over with, stupid RichTextBox.
 
             changeRange.Start -= contextRange.Start;  // Offset change range to be
             changeRange.End -= contextRange.Start;    // relative to context start
 
-            int breakCount1 = rtb.CountChar('\xB6', 0, changeRange.Start);
-            int breakCount2 = breakCount1 + rtb.CountChar('\xB6', changeRange.Start, changeRange.End); 
-            bool showLineBreakSymbols = Program.Settings.Get<bool>("LineBreakSymbol");
-            if (!showLineBreakSymbols)
-            {
-                // Account for lost carriage returns.
-                changeRange.Start -= breakCount1;
-                changeRange.End -= breakCount2;
-            }
-            
             var insertRanges = new List<Range>();
             var deleteRanges = new List<Range>();
             if (patch != null)
@@ -103,25 +95,16 @@ namespace WitcherScriptMerger
                         continue;
                     if (diff.Operation == Operation.INSERT)
                     {
-                        string textMinusCr = diff.Text.Replace("\r", "");
-                        insertRanges.Add(Range.WithLength(changeRange.Start + offset, textMinusCr.Length));
+                        insertRanges.Add(Range.WithLength(changeRange.Start + offset, diff.Text.Length));
                     }
                     else if (diff.Operation == Operation.DELETE)
                     {
                         int insertPos = changeRange.Start + offset;
                         Range deleteRange;
-                        if (showLineBreakSymbols)
                             deleteRange = Range.WithLength(insertPos, diff.Text.Length);
-                        else
-                        {
-                            deleteRange = Range.WithLength(insertPos, diff.Text.Replace("\r", "").Length);
-                            insertPos += breakCount1;  // Insert happens before \xB6 is removed, so
-                        }
-
                         deleteRanges.Add(deleteRange);
-                        
-                        changeRange.End += deleteRange.Length;
                         rtb.Text = rtb.Text.Insert(insertPos, diff.Text.Replace('\r', '\xB6'));
+                        changeRange.End += deleteRange.Length;
                     }
                     offset += diff.Text.Length;
                 }
@@ -134,9 +117,6 @@ namespace WitcherScriptMerger
                 _leftStartLine = startLine;
             else if (rtb == rtbRight)
                 _rightStartLine = startLine;
-
-            if (!showLineBreakSymbols)
-                rtb.Text = rtb.Text.Replace("\xB6", "");  // Remove line break symbol substitute
 
             rtb.Select(changeRange.Start, changeRange.Length);
             rtb.SelectionBackColor = Color.Goldenrod;
@@ -155,8 +135,12 @@ namespace WitcherScriptMerger
             }
 
             if (rtb.Text[rtb.SelectionStart] == '\n' && rtb.SelectionStart < rtb.Text.Length - 1)
-                ++rtb.SelectionStart;  // Workaround: Advance past \n to get correct line number.
+                ++rtb.SelectionStart;  // Workaround: Advance past \n to get correct line number
             rtb.SelectionLength = 0;
+
+            // To preserve formatting, remove paragraph symbols from RTF code instead of just Text
+            if (!Program.Settings.Get<bool>("LineBreakSymbol"))
+                rtb.Rtf = rtb.Rtf.Replace("\\'b6", "");
         }
 
         #endregion
