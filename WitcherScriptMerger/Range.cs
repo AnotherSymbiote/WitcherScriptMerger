@@ -43,6 +43,16 @@
             return new Range(start, start + length);
         }
 
+        public bool Contains(int num)
+        {
+            return (Start <= num && num <= End);
+        }
+
+        public bool OverlapsWith(Range otherRange)
+        {
+            return Contains(otherRange.Start + 1) || Contains(otherRange.End - 1);
+        }
+
         public bool Equals(Range otherRange)
         {
             return (Start == otherRange.Start && End == otherRange.End);
@@ -50,7 +60,7 @@
 
         public override string ToString()
         {
-            return string.Format("{0}, {1}", Start, End);
+            return string.Format("{0}, {1}, length {2}", Start, End, Length);
         }
     }
 }

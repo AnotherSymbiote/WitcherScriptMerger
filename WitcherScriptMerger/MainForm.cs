@@ -1,6 +1,7 @@
 ﻿using GoogleDiffMatchPatch;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -10,6 +11,11 @@ namespace WitcherScriptMerger
     public partial class MainForm : Form
     {
         #region Members
+        private FormWindowState _lastWindowState = FormWindowState.Minimized;
+
+        private string _scriptsDirSetting = Program.Settings.Get("ScriptsDirectory");
+        private string _modsDirSetting = Program.Settings.Get("ModsDirectory");
+
         private TreeNode _clickedNode = null;
         private List<TreeNode> _checkedModNodes = new List<TreeNode>();
         private FileInfo _vanillaFile = null;
@@ -17,12 +23,22 @@ namespace WitcherScriptMerger
 
         private string ScriptsDirectory
         {
-            get { return Path.Combine(txtGameDir.Text, "content\\content0\\scripts"); }
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(_scriptsDirSetting))
+                    return _scriptsDirSetting;
+                return Path.Combine(txtGameDir.Text, "content\\content0\\scripts");
+            }
         }
-        
+
         private string ModsDirectory
         {
-            get { return Path.Combine(txtGameDir.Text, "Mods"); }
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(_modsDirSetting))
+                    return _modsDirSetting;
+                return Path.Combine(txtGameDir.Text, "Mods");
+            }
         }
 
         private string BackupDirectory
@@ -32,7 +48,8 @@ namespace WitcherScriptMerger
                 if (Path.IsPathRooted(txtBackupDir.Text))
                     return txtBackupDir.Text;
                 else
-                    return Path.Combine(txtGameDir.Text, txtBackupDir.Text); }
+                    return Path.Combine(txtGameDir.Text, txtBackupDir.Text);
+            }
         }
 
         #endregion
@@ -48,9 +65,46 @@ namespace WitcherScriptMerger
             txtMergedModName.Text = Program.Settings.Get("MergedModName");
             txtBackupDir.Text = Program.Settings.Get("BackupDirectory");
             chkMoveToBackup.Checked = Program.Settings.Get<bool>("MoveToBackupAfterMerge");
+            chkLineBreakSymbol.Checked = Program.Settings.Get<bool>("LineBreakSymbol");
 
             if (chkCheckAtLaunch.Checked)
                 btnCheckForConflicts_Click(null, null);
+
+            LoadLastWindowConfiguration();
+            
+            ResizeEnd += delegate
+            {
+                Program.Settings.Set("StartWidth", Width);
+                Program.Settings.Set("StartHeight", Height);
+                Program.Settings.Set("StartPosTop", Top);
+                Program.Settings.Set("StartPosLeft", Left);
+            };
+            LocationChanged += delegate
+            {
+                if (_lastWindowState != WindowState && WindowState != FormWindowState.Minimized)
+                {
+                    _lastWindowState = WindowState;
+                    Program.Settings.Set("StartMaximized", (WindowState == FormWindowState.Maximized));
+                }
+            };
+        }
+
+        private void LoadLastWindowConfiguration()
+        {
+            Top = Program.Settings.Get<int>("StartPosTop");
+            Left = Program.Settings.Get<int>("StartPosLeft");
+            if (Top > 0 || Left > 0)
+                StartPosition = FormStartPosition.Manual;
+            
+            int startWidth = Program.Settings.Get<int>("StartWidth");
+            int startHeight = Program.Settings.Get<int>("StartHeight");
+            if (startWidth > 0)
+                Width = startWidth;
+            if (startHeight > 0)
+                Height = startHeight;
+            
+            if (Program.Settings.Get<bool>("StartMaximized"))
+                WindowState = FormWindowState.Maximized;
         }
 
         #region Button Clicks
@@ -78,15 +132,20 @@ namespace WitcherScriptMerger
         {
             if (!Directory.Exists(ModsDirectory))
             {
-                MessageBox.Show("Couldn't find Mods directory in the specified game directory.");
+                MessageBox.Show(!string.IsNullOrWhiteSpace(_modsDirSetting)
+                    ? "Couldn't find the Mods directory specified in the config file."
+                    : "Couldn't find Mods directory in the specified game directory.");
                 return;
             }
             if (!Directory.Exists(ScriptsDirectory))
             {
-                MessageBox.Show("Couldn't find \\content\\content0\\scripts directory in the specified game directory.");
+                MessageBox.Show(!string.IsNullOrWhiteSpace(_scriptsDirSetting)
+                    ? "Couldn't find the Scripts directory specified in the config file."
+                    : "Couldn't find \\content\\content0\\scripts directory in the specified game directory.");
                 return;
             }
 
+            _checkedModNodes.Clear();
             treConflicts.Nodes.Clear();
             _vanillaFile = null;
 
@@ -100,10 +159,10 @@ namespace WitcherScriptMerger
                 foreach (var scriptFile in modDir.ScriptFiles)
                 {
                     string relPath = ModDirectory.GetRelativePath(scriptFile, ModsDirectory);
-                    
+
                     var existingScriptNode = treConflicts.GetTreeNodes()
-                        .FirstOrDefault(node => node.Text == relPath);
-                    
+                        .FirstOrDefault(node => node.Text.EqualsIgnoreCase(relPath));
+
                     var newModNode = new TreeNode(modDir.ModName);
                     newModNode.Tag = scriptFile;
 
@@ -116,6 +175,7 @@ namespace WitcherScriptMerger
                         {
                             var newScriptNode = new TreeNode(relPath);
                             newScriptNode.Tag = new FileInfo(vanillaPath);
+                            newScriptNode.ForeColor = Color.Red;
                             newScriptNode.Nodes.Add(newModNode);
                             treConflicts.Nodes.Add(newScriptNode);
                         }
@@ -145,13 +205,23 @@ namespace WitcherScriptMerger
 
         private void btnTryMergeSelected_Click(object sender, EventArgs e)
         {
+            if (!Directory.Exists(txtGameDir.Text))
+            {
+                MessageBox.Show("Couldn't find the specified Witcher 3 directory.");
+                return;
+            }
             if (string.IsNullOrWhiteSpace(txtMergedModName.Text))
             {
                 MessageBox.Show("Enter a name for the mod folder where merged scripts will be saved.");
                 return;
             }
-
-            string vanillaText = File.ReadAllText(_vanillaFile.FullName);
+            if (!txtMergedModName.Text.IsAlphaNumeric()
+                && (DialogResult.No == MessageBox.Show(
+                "The Witcher 3 only loads mods with alphanumeric names. Do you want to use the following name anyway?" + Environment.NewLine + Environment.NewLine + txtMergedModName.Text,
+                "Warning",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning)))
+                return;
 
             var file1 = _checkedModNodes[0].Tag as FileInfo;
 
@@ -160,69 +230,54 @@ namespace WitcherScriptMerger
                     txtMergedModName.Text,
                     ModDirectory.GetRelativePath(file1, ModsDirectory, false));
             if (!File.Exists(outputPath)
-                || (DialogResult.Yes == MessageBox.Show(
+                && (DialogResult.No == MessageBox.Show(
                     "The output file below already exists! Overwrite?" + Environment.NewLine + Environment.NewLine + outputPath,
                     "Overwrite?",
                     MessageBoxButtons.YesNo)))
-            {
-                for (int i = 1; i < _checkedModNodes.Count; ++i)
-                {
-                    var file2 = _checkedModNodes[i].Tag as FileInfo;
-                    var mergedFile = TryMergePair(i, vanillaText, file1, file2, outputPath);
-                    if (mergedFile != null)
-                        file1 = mergedFile;
-                }
+                return;
 
-                _checkedModNodes.Clear();
-                btnTryMergeSelected.Enabled = false;
-                btnCheckForConflicts_Click(null, null);  // Update conflict list
+            for (int i = 1; i < _checkedModNodes.Count; ++i)
+            {
+                var file2 = _checkedModNodes[i].Tag as FileInfo;
+                var mergedFile = TryMergePair(i, file1, file2, outputPath);
+                if (mergedFile != null)
+                    file1 = mergedFile;
             }
+
+            btnTryMergeSelected.Enabled = false;
+            btnCheckForConflicts_Click(null, null);  // Update conflict list
         }
 
-        private FileInfo TryMergePair(int mergeNum, string vanillaText, FileInfo file1, FileInfo file2, string outputPath)
+        private FileInfo TryMergePair(int mergeNum, FileInfo file1, FileInfo file2, string outputPath)
         {
-            string text1 = File.ReadAllText(file1.FullName);
-            string text2 = File.ReadAllText(file2.FullName);
-            var diffs1 = _differ.DiffMain(vanillaText, text1);
-            var diffs2 = _differ.DiffMain(vanillaText, text2);
-            var patchList1 = _differ.PatchMake(vanillaText, diffs1);
-            var patchList2 = _differ.PatchMake(vanillaText, diffs2);
+            string vanillaText = File.ReadAllText(_vanillaFile.FullName);
+            var set1 = new Changeset(vanillaText, file1);
+            var set2 = new Changeset(vanillaText, file2);
 
-            string modName1 = ModDirectory.GetModName(file1);
-            string modName2 = ModDirectory.GetModName(file2);
-
-            var combinedPatchList = patchList1.Combine(patchList2,
-                vanillaText, text1, text2,
-                file1.Name, modName1, modName2);
-
-            var mergeResult = _differ.PatchApply(combinedPatchList, vanillaText);
-            string mergeText = (string)mergeResult[0];
-            bool[] mergeSuccesses = (bool[])mergeResult[1];
-            int patchFailCount = mergeSuccesses.Count(success => !success);
-            int patchSuccessCount = mergeSuccesses.Length - patchFailCount;
-            int totalPatchCount = mergeSuccesses.Length;
+            var combinedSet = new ChangesetMerger(set1, set2, vanillaText).Merge();
+            var result = combinedSet.TryApply(vanillaText);
 
             string outputDir = Path.GetDirectoryName(outputPath);
             if (!Directory.Exists(outputDir))
                 Directory.CreateDirectory(outputDir);
-            File.WriteAllText(outputPath, mergeText);
+            File.WriteAllText(outputPath, result.Text);
 
             string backupMsg = "";
-            if (patchFailCount == 0 && chkMoveToBackup.Checked)
+            if (result.FailureCount == 0 && chkMoveToBackup.Checked)
                 backupMsg = CleanUpAfterMerge(file1, file2, outputPath);
 
             string msg =
-                string.Format("{0}  +  {1}", modName1, modName2) +
+                string.Format("{0}  +  {1}", set1.ModName, set2.ModName) +
                 Environment.NewLine +
                 string.Format("{0} out of {1} changes merged successfully!",
-                    (mergeSuccesses.Length - patchFailCount),
-                    mergeSuccesses.Length) +
+                    result.SuccessCount,
+                    result.AttemptCount) +
                 Environment.NewLine +
                 Environment.NewLine + "Output file: " +
                 Environment.NewLine + outputPath.Replace(txtGameDir.Text, "");
             if (!string.IsNullOrWhiteSpace(backupMsg))
                 msg += backupMsg;
-                
+
             MessageBox.Show(msg, string.Format("Merge Finished ({0} of {1})", mergeNum, _checkedModNodes.Count - 1));
 
             return new FileInfo(outputPath);
@@ -233,13 +288,13 @@ namespace WitcherScriptMerger
             string backupMsg = "";
             foreach (var file in new FileInfo[] { file1, file2 })
             {
-                if (file.FullName == outputPath)
+                if (file.FullName.EqualsIgnoreCase(outputPath))
                     continue;
 
                 string modName = ModDirectory.GetModName(file);
                 string modDirPath = Path.Combine(ModsDirectory, modName);
                 string backupPath = Path.Combine(BackupDirectory, modName, ModDirectory.GetRelativePath(file, ModsDirectory, false));
-                
+
                 string backupDir = Path.GetDirectoryName(backupPath);
                 if (!Directory.Exists(backupDir))
                     Directory.CreateDirectory(backupDir);
@@ -247,14 +302,14 @@ namespace WitcherScriptMerger
                 {
                     int extensionStart = backupPath.LastIndexOf('.');
                     backupPath = backupPath.Substring(0, extensionStart) +
-                        DateTime.Now.ToString(Program.Settings.Get("BackupNameDateFormat")) +
+                        DateTime.Now.ToString("-yyyyMMdd-HHmmss") +
                         backupPath.Substring(extensionStart);
                 }
 
                 File.Move(file.FullName, backupPath);
                 backupMsg += Environment.NewLine + Environment.NewLine +
                     Environment.NewLine + "MOVED OBSOLETE SCRIPT" + Environment.NewLine + "——————————————" +
-                    Environment.NewLine + file.FullName.Replace(txtGameDir.Text, "") +
+                    Environment.NewLine + file.FullName.Replace(ModsDirectory, "") +
                     Environment.NewLine +
                     Environment.NewLine + "TO " + Environment.NewLine + "—————" +
                     Environment.NewLine + backupPath.Replace(txtGameDir.Text, "");
@@ -262,6 +317,7 @@ namespace WitcherScriptMerger
                 var remainingModFiles = Directory.GetFiles(modDirPath, "*", SearchOption.AllDirectories);
                 if (remainingModFiles.Length == 0)
                 {
+                    System.Threading.Thread.Sleep(100);
                     Directory.Delete(modDirPath, true);
                     backupMsg += Environment.NewLine +
                         Environment.NewLine + "DELETED " + Environment.NewLine + "—————" +
@@ -306,7 +362,7 @@ namespace WitcherScriptMerger
             {
                 contextExpandAll.Available = contextCollapseAll.Available = (treConflicts.Nodes.Count > 0);
                 contextCopyPath.Available = (_clickedNode != null);
-                contextModScript.Available = contextModDir.Available = 
+                contextModScript.Available = contextModDir.Available =
                     (_clickedNode != null && _clickedNode.Nodes.Count == 0);
                 contextVanillaScript.Available = contextVanillaDir.Available =
                     (_clickedNode != null && _clickedNode.Nodes.Count > 0);
@@ -369,7 +425,7 @@ namespace WitcherScriptMerger
                     continue;
                 scriptNode.Checked = false;
                 foreach (var modNode in scriptNode.GetTreeNodes())
-                { 
+                {
                     modNode.Checked = false;
                     _checkedModNodes.Remove(modNode);
                 }
@@ -452,6 +508,11 @@ namespace WitcherScriptMerger
         private void chkMoveToBackup_CheckedChanged(object sender, EventArgs e)
         {
             Program.Settings.Set("MoveToBackupAfterMerge", chkMoveToBackup.Checked);
+        }
+
+        private void chkLineBreakSymbol_CheckedChanged(object sender, EventArgs e)
+        {
+            Program.Settings.Set("LineBreakSymbol", chkLineBreakSymbol.Checked);
         }
 
         #endregion
