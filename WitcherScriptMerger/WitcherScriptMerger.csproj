@@ -57,17 +57,17 @@
     <Compile Include="Changeset.cs" />
     <Compile Include="ChangesetMerger.cs" />
     <Compile Include="PatchMerger.cs" />
-    <Compile Include="ResolveConflictForm.cs">
+    <Compile Include="Forms\ResolveConflictForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ResolveConflictForm.Designer.cs">
+    <Compile Include="Forms\ResolveConflictForm.Designer.cs">
       <DependentUpon>ResolveConflictForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ModDirectory.cs" />
@@ -78,10 +78,10 @@
     <Compile Include="SyncedRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <EmbeddedResource Include="ResolveConflictForm.resx">
+    <EmbeddedResource Include="Forms\ResolveConflictForm.resx">
       <DependentUpon>ResolveConflictForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
