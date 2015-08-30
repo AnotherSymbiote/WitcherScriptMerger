@@ -272,7 +272,7 @@
             this.chkLineBreakSymbol.Name = "chkLineBreakSymbol";
             this.chkLineBreakSymbol.Size = new System.Drawing.Size(283, 17);
             this.chkLineBreakSymbol.TabIndex = 13;
-            this.chkLineBreakSymbol.Text = "Resolve Conflict screen: Show line &breaks as ¶ symbol";
+            this.chkLineBreakSymbol.Text = "Resolve Conflict screen: &Show line breaks as ¶ symbol";
             this.chkLineBreakSymbol.UseVisualStyleBackColor = true;
             this.chkLineBreakSymbol.CheckedChanged += new System.EventHandler(this.chkLineBreakSymbol_CheckedChanged);
             // 
