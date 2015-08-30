@@ -11,8 +11,6 @@ namespace WitcherScriptMerger
     public partial class MainForm : Form
     {
         #region Members
-        private FormWindowState _lastWindowState = FormWindowState.Minimized;
-
         private string _scriptsDirSetting = Program.Settings.Get("ScriptsDirectory");
         private string _modsDirSetting = Program.Settings.Get("ModsDirectory");
 
