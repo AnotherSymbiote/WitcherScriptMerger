@@ -127,6 +127,16 @@ namespace WitcherScriptMerger
             return range;
         }
 
+        public bool StartsWith(Diff diff)
+        {
+            return (Diffs.Count > 0 && Diffs.First() == diff);
+        }
+
+        public bool EndsWith(Diff diff)
+        {
+            return (Diffs.Count > 0 && Diffs.Last() == diff);
+        }
+
         public override string ToString()
         {
             return ((Patch)this).ToString();

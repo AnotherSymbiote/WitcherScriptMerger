@@ -48,9 +48,35 @@
             return (Start <= num && num <= End);
         }
 
+        public bool Contains(Range otherRange)
+        {
+            return (Contains(otherRange.Start) && Contains(otherRange.End));
+        }
+
         public bool OverlapsWith(Range otherRange)
         {
+            // Not true if ranges start & end (or vice versa) at same index
             return Contains(otherRange.Start + 1) || Contains(otherRange.End - 1);
+        }
+
+        public bool OverlapsLeftOf(Range otherRange)
+        {
+            return (OverlapsWith(otherRange) && StartsBefore(otherRange));
+        }
+
+        public bool OverlapsRightOf(Range otherRange)
+        {
+            return (OverlapsWith(otherRange) && EndsAfter(otherRange));
+        }
+
+        public bool StartsBefore(Range otherRange)
+        {
+            return Start < otherRange.Start;
+        }
+
+        public bool EndsAfter(Range otherRange)
+        {
+            return End > otherRange.End;
         }
 
         public bool Equals(Range otherRange)
