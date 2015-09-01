@@ -38,7 +38,7 @@ namespace WitcherScriptMerger
             var patchList = differ.PatchMake(vanillaText, diffs);
 
             // Removing these won't affect any positions — they're empty & thus have no deltas
-            patchList = patchList.Where(p => !p.IsOnlyEqualOrEmpty()).ToList();
+            patchList = patchList.Where(p => !p.Diffs.AreOnlyEqualOrEmpty()).ToList();
 
             Patches = new List<SMPatch>();
             foreach (Patch p in patchList)

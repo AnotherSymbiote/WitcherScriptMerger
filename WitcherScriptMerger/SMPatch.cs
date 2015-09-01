@@ -142,21 +142,4 @@ namespace WitcherScriptMerger
             return ((Patch)this).ToString();
         }
     }
-
-    public static class PatchExtensions
-    {
-        public static bool IsOnlyEqualOrEmpty(this Patch p)
-        {
-            return p.Diffs.All(d =>
-                d.Operation == Operation.EQUAL ||
-                string.IsNullOrEmpty(d.Text));
-        }
-
-        public static bool IsOnlyWhitespace(this Patch p)
-        {
-            return p.Diffs.All(d =>
-                d.Operation == Operation.EQUAL ||
-                string.IsNullOrWhiteSpace(d.Text));
-        }
-    }
 }

@@ -38,16 +38,34 @@ namespace WitcherScriptMerger
             SMPatch patch2 = (Set2.Patches.Any() ? Set2.Patches[_index2] : null);
             while (patch1 != null || patch2 != null)  // While there are still patches to merge
             {
-                SMPatch chosenPatch = null;
-                if (patch1 != null && patch2 != null)
-                    chosenPatch = ChooseNextFromPair(patch1, patch2);
-                else if (patch1 != null)
-                    chosenPatch = patch1;
-                else
-                    chosenPatch = patch2;
+                bool foundWhitespacePatch = false;
+                if (Program.MainForm.IsIgnoreWhitespaceEnabled())
+                {
+                    if (patch1 != null && patch1.Diffs.AreOnlyWhitespace())
+                    {
+                        IgnorePatch(patch1);
+                        foundWhitespacePatch = true;
+                    }
+                    if (patch2 != null && patch2.Diffs.AreOnlyWhitespace())
+                    {
+                        IgnorePatch(patch2);
+                        foundWhitespacePatch = true;
+                    }
+                }
+                
+                if (!foundWhitespacePatch)
+                {
+                    SMPatch chosenPatch = null;
+                    if (patch1 != null && patch2 != null)
+                        chosenPatch = ChooseNextFromPair(patch1, patch2);
+                    else if (patch1 != null)
+                        chosenPatch = patch1;
+                    else
+                        chosenPatch = patch2;
 
-                if (chosenPatch != null)
-                    AddChosenPatch(chosenPatch);
+                    if (chosenPatch != null)
+                        AddChosenPatch(chosenPatch);
+                }
 
                 if (_index1 < Set1.Patches.Count)
                     patch1 = Set1.Patches[_index1];

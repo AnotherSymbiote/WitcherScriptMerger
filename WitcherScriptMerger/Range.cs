@@ -45,7 +45,7 @@
 
         public bool Contains(int num)
         {
-            return (Start <= num && num <= End);
+            return num.IsBetween(Start, End);
         }
 
         public bool Contains(Range otherRange)
@@ -55,7 +55,8 @@
 
         public bool OverlapsWith(Range otherRange)
         {
-            // Not true if ranges start & end (or vice versa) at same index
+            // Overlapping at only 1 index doesn't count
+            // (i.e. start1 == end2 or start2 == end1)
             return Contains(otherRange.Start + 1) || Contains(otherRange.End - 1);
         }
 

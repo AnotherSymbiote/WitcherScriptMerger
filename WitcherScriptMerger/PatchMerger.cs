@@ -50,7 +50,8 @@ namespace WitcherScriptMerger
                         (diff2.Operation != Operation.INSERT ? diff2.Text.Length : 0));
                     if (!diffRange1.OverlapsWith(diffRange2))
                     {
-                        if (_vanillaDiffPos1 < _vanillaDiffPos2)  // If #2 comes after #1 without overlap, keep looking
+                        // If #2 comes after #1 without overlap, keep looking
+                        if (_vanillaDiffPos1 < _vanillaDiffPos2)
                         {
                             if (diff1.Operation != Operation.INSERT)
                             {
@@ -59,6 +60,9 @@ namespace WitcherScriptMerger
                             }
                             continue;
                         }
+                        // If #1 is an insert & #2 starts at its index, keep looking
+                        if (diff1.Operation == Operation.INSERT && _vanillaDiffPos1 == _vanillaDiffPos2)
+                            continue;
                         // If #2 comes first without overlap & it's not a frivolous equality in middle of Patch1, insert
                         if (diff2.Operation != Operation.EQUAL || !Patch1.VanillaRange.Contains(diffRange2))
                             InsertNewDiff(insertPos, diff2);
@@ -66,8 +70,9 @@ namespace WitcherScriptMerger
                     }
                     else
                     {
-                        HandleOverlap(diff1, diff2, diffRange1, diffRange2, insertPos);
-                        break;
+                        bool doneWithDiff2 = HandleOverlap(diff1, diff2, diffRange1, diffRange2, insertPos);
+                        if (doneWithDiff2)
+                            break;
                     }
                 }
                 if (diff2.Operation != Operation.INSERT)
@@ -93,10 +98,17 @@ namespace WitcherScriptMerger
             {
                 // If #2 is equality & doesn't protrude from start or end of Patch1, just throw it out
                 if (Patch1.VanillaRange.Contains(diffRange2))
-                    return false;
+                    return true;
+                // If #2 is equality & protrudes from end of Patch1, trim to end of Patch1
+                if (diffRange2.EndsAfter(Patch1.VanillaRange))
+                {
+                    TrimToEndOfPatch(diff2, diffRange2, Patch1);
+                    InsertNewDiff(Patch1.Diffs.Count, diff2);  // Now #2 can go after Patch1
+                    return true;
+                }
                 // If #2 is leading equality & overlaps with anything other than end of Patch1, throw it out
                 if (Patch2.StartsWith(diff2) && !Patch1.EndsWith(diff1))
-                    return false;
+                    return true;
 
                 // So only insert/join #2 if it's a non-leading equality overlapping left of Patch1,
                 // or it's any equality overlapping right of Patch1
@@ -200,6 +212,13 @@ namespace WitcherScriptMerger
             _addedLength += insert2.Text.Length;  // New text added
         }
 
+        private void TrimToEndOfPatch(Diff diff, Range diffRange, SMPatch patch)
+        {
+            int trimIndex = patch.VanillaRange.End - diffRange.Start;
+            diff.Text = diff.Text.Substring(trimIndex);
+            _vanillaDiffPos2 += trimIndex;  // Must count trimmed chars, plus diff2.Text.Length later
+        }
+
         private bool AdjustEqualitiesToFit(Diff diff1, Diff diff2)
         {
             bool joinedEqualities = false;
@@ -234,7 +253,7 @@ namespace WitcherScriptMerger
                     else
                         diff1.Text = diff1.Text.Substring(overlapIndex);     // Left-shrink equal text
                     _vanillaDiffPos1 += overlapIndex;  // Must count trimmed chars, plus diff1.Text.Length later
-                    _addedLength -= overlapIndex;  // Text was removed (but will be added back in Merge())
+                    _addedLength -= overlapIndex;  // Text was removed (but will be added back in Merge() > InsertNewDiff())
                 }
             }
             else
@@ -245,7 +264,7 @@ namespace WitcherScriptMerger
                 else
                     diff2.Text = diff2.Text.Substring(0, indexFromEnd);  // Right-shrink equal text
                 _vanillaDiffPos2 += overlapIndex;  // Must count trimmed chars, plus diff2.Text.Length later
-                _addedLength -= overlapIndex;  // Text was removed (but will be added back in Merge())
+                ////_addedLength -= overlapIndex;  // PRETTY SURE THIS IS BS: Text was removed (but will be added back in Merge() > InsertNewDiff())
             }
             return joinedEqualities;
         }

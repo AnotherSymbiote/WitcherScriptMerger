@@ -6,31 +6,59 @@ namespace WitcherScriptMerger
 {
     public class AppSettings
     {
-        private Configuration _config;
+        private string _assemblyPath;
+        private Configuration _cachedConfig;
 
         public AppSettings()
         {
-            _config = ConfigurationManager.OpenExeConfiguration(System.Reflection.Assembly.GetEntryAssembly().Location);
+            _assemblyPath = System.Reflection.Assembly.GetEntryAssembly().Location;
+        }
+
+        private Configuration GetConfig()
+        {
+            return ConfigurationManager.OpenExeConfiguration(_assemblyPath);
+        }
+
+        public void StartBatch()
+        {
+            _cachedConfig = GetConfig();
+        }
+
+        public void EndBatch()
+        {
+            _cachedConfig = null;
         }
 
         public void Set(string key, object value)
         {
+            var config = _cachedConfig ?? GetConfig();
             try
             {
-                _config.AppSettings.Settings[key].Value = value.ToString();
+                config.AppSettings.Settings[key].Value = value.ToString();
             }
             catch
             {
-                _config.AppSettings.Settings.Add(key, value.ToString());
+                config.AppSettings.Settings.Add(key, value.ToString());
             }
-            _config.Save(ConfigurationSaveMode.Modified);
+            try
+            {
+                config.Save(ConfigurationSaveMode.Modified);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(string.Format(
+                    "Failed to save setting ({0}) due to error: {1}",
+                    key,
+                    ex.Message));
+            }
         }
 
         public T Get<T>(string key)
         {
             try
             {
-                string valueString = _config.AppSettings.Settings[key].Value;
+                var config = _cachedConfig ?? GetConfig();
+                string valueString = config.AppSettings.Settings[key].Value;
                 MethodInfo parseMethod = typeof(T).GetMethod("Parse", new Type[] { typeof(string) });
                 object valueObject = parseMethod.Invoke(null, new object[] { valueString });
                 return (T)valueObject;
@@ -45,7 +73,8 @@ namespace WitcherScriptMerger
         {
             try
             {
-                return _config.AppSettings.Settings[key].Value;
+                var config = _cachedConfig ?? GetConfig();
+                return config.AppSettings.Settings[key].Value;
             }
             catch
             {

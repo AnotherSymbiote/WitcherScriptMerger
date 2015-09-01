@@ -23,17 +23,17 @@ namespace WitcherScriptMerger
 
         public static string GetModName(FileInfo modFile)
         {
-            int nameEnd = modFile.FullName.IndexOf(Path.Combine("content", "scripts")) - 1;
+            int nameEnd = modFile.FullName.IndexOfIgnoreCase(Path.Combine("content", "scripts")) - 1;
             string name = modFile.FullName.Substring(0, nameEnd);
             return name.Substring(name.LastIndexOf('\\') + 1);
         }
 
         public static string GetRelativePath(FileInfo modFile, string modsDir, bool leadingSeparator = true)
         {
-            string relPath = modFile.FullName.Replace(modsDir , "");  // Trim mod directory.
-            relPath = relPath.Substring(1);                           // Trim backslash.
-            relPath = relPath.Substring(relPath.IndexOf('\\'));       // Trim mod name.
-            if (!leadingSeparator)                                    // Trim backslash.
+            string relPath = modFile.FullName.ReplaceIgnoreCase(modsDir , "");  // Trim mod directory.
+            relPath = relPath.Substring(1);                                     // Trim backslash.
+            relPath = relPath.Substring(relPath.IndexOf('\\'));                 // Trim mod name.
+            if (!leadingSeparator)                                              // Trim backslash.
                 relPath = relPath.Substring(1);
             return relPath;
         }

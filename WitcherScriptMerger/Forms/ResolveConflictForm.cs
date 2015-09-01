@@ -68,7 +68,7 @@ namespace WitcherScriptMerger
         {
             // Add lines before & after change range, to give the user some context
             Range contextRange = new Range(changeRange);
-            int contextRadius = Program.Settings.Get<int>("ConflictResolverContextRadius");
+            int contextRadius = Program.Settings.Get<int>("ConflictContextRadius");
             for (int i = 0; i < contextRadius; ++i)
             {
                 if (contextRange.Start > 0)
@@ -139,7 +139,7 @@ namespace WitcherScriptMerger
             rtb.SelectionLength = 0;
 
             // To preserve formatting, remove paragraph symbols from RTF code instead of just Text
-            if (!Program.Settings.Get<bool>("LineBreakSymbol"))
+            if (!Program.MainForm.IsLineBreakSymbolEnabled())
                 rtb.Rtf = rtb.Rtf.Replace("\\'b6", "");
         }
 

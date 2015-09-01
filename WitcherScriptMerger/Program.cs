@@ -6,6 +6,7 @@ namespace WitcherScriptMerger
     static class Program
     {
         public static AppSettings Settings = new AppSettings();
+        public static MainForm MainForm;
 
         /// <summary>
         /// The main entry point for the application.
@@ -15,7 +16,8 @@ namespace WitcherScriptMerger
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            MainForm = new MainForm();
+            Application.Run(MainForm);
         }
     }
 }
