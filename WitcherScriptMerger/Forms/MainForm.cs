@@ -534,6 +534,24 @@ namespace WitcherScriptMerger
 
         #endregion
 
+        #region Key Input
+
+        private void txt_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.A)
+                (sender as TextBox).SelectAll();
+        }
+
+        private void treConflicts_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.A)
+                contextSelectAll_Click(null, null);
+        }
+
+        #endregion
+
+        #region Settings
+
         private void txtGameDir_TextChanged(object sender, EventArgs e)
         {
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
@@ -548,5 +566,7 @@ namespace WitcherScriptMerger
         {
             return chkIgnoreWhitespace.Checked;
         }
+
+        #endregion
     }
 }
