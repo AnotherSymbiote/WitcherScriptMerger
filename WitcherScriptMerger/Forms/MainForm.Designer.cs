@@ -1,4 +1,4 @@
-﻿namespace WitcherScriptMerger
+﻿namespace WitcherScriptMerger.Forms
 {
     partial class MainForm
     {
@@ -50,7 +50,6 @@
             this.btnTryMergeSelected = new System.Windows.Forms.Button();
             this.lblMergedModName = new System.Windows.Forms.Label();
             this.txtMergedModName = new System.Windows.Forms.TextBox();
-            this.chkMoveToBackup = new System.Windows.Forms.CheckBox();
             this.chkCheckAtLaunch = new System.Windows.Forms.CheckBox();
             this.btnSelectBackupDir = new System.Windows.Forms.Button();
             this.lblBackupDir = new System.Windows.Forms.Label();
@@ -101,7 +100,7 @@
             this.treConflicts.Name = "treConflicts";
             this.treConflicts.ShowNodeToolTips = true;
             this.treConflicts.ShowRootLines = false;
-            this.treConflicts.Size = new System.Drawing.Size(539, 416);
+            this.treConflicts.Size = new System.Drawing.Size(539, 391);
             this.treConflicts.TabIndex = 4;
             this.treConflicts.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treConflicts_AfterCheck);
             this.treConflicts.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treConflicts_AfterSelect);
@@ -218,9 +217,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnTryMergeSelected.Enabled = false;
             this.btnTryMergeSelected.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTryMergeSelected.Location = new System.Drawing.Point(350, 553);
+            this.btnTryMergeSelected.Location = new System.Drawing.Point(12, 553);
             this.btnTryMergeSelected.Name = "btnTryMergeSelected";
-            this.btnTryMergeSelected.Size = new System.Drawing.Size(201, 40);
+            this.btnTryMergeSelected.Size = new System.Drawing.Size(539, 43);
             this.btnTryMergeSelected.TabIndex = 7;
             this.btnTryMergeSelected.Text = "Try to &Merge Selected Scripts";
             this.btnTryMergeSelected.UseVisualStyleBackColor = true;
@@ -230,7 +229,7 @@
             // 
             this.lblMergedModName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblMergedModName.AutoSize = true;
-            this.lblMergedModName.Location = new System.Drawing.Point(9, 511);
+            this.lblMergedModName.Location = new System.Drawing.Point(9, 488);
             this.lblMergedModName.Name = "lblMergedModName";
             this.lblMergedModName.Size = new System.Drawing.Size(151, 13);
             this.lblMergedModName.TabIndex = 9;
@@ -239,22 +238,11 @@
             // txtMergedModName
             // 
             this.txtMergedModName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtMergedModName.Location = new System.Drawing.Point(12, 527);
+            this.txtMergedModName.Location = new System.Drawing.Point(12, 504);
             this.txtMergedModName.Name = "txtMergedModName";
             this.txtMergedModName.Size = new System.Drawing.Size(252, 20);
             this.txtMergedModName.TabIndex = 5;
             this.txtMergedModName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
-            // 
-            // chkMoveToBackup
-            // 
-            this.chkMoveToBackup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.chkMoveToBackup.AutoSize = true;
-            this.chkMoveToBackup.Location = new System.Drawing.Point(12, 553);
-            this.chkMoveToBackup.Name = "chkMoveToBackup";
-            this.chkMoveToBackup.Size = new System.Drawing.Size(335, 17);
-            this.chkMoveToBackup.TabIndex = 6;
-            this.chkMoveToBackup.Text = "After successful merge, move obsolete scripts to &backup directory";
-            this.chkMoveToBackup.UseVisualStyleBackColor = true;
             // 
             // chkCheckAtLaunch
             // 
@@ -270,7 +258,7 @@
             // btnSelectBackupDir
             // 
             this.btnSelectBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSelectBackupDir.Location = new System.Drawing.Point(525, 525);
+            this.btnSelectBackupDir.Location = new System.Drawing.Point(525, 502);
             this.btnSelectBackupDir.Name = "btnSelectBackupDir";
             this.btnSelectBackupDir.Size = new System.Drawing.Size(26, 23);
             this.btnSelectBackupDir.TabIndex = 12;
@@ -282,7 +270,7 @@
             // 
             this.lblBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblBackupDir.AutoSize = true;
-            this.lblBackupDir.Location = new System.Drawing.Point(267, 511);
+            this.lblBackupDir.Location = new System.Drawing.Point(267, 488);
             this.lblBackupDir.Name = "lblBackupDir";
             this.lblBackupDir.Size = new System.Drawing.Size(92, 13);
             this.lblBackupDir.TabIndex = 11;
@@ -292,7 +280,7 @@
             // 
             this.txtBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBackupDir.Location = new System.Drawing.Point(270, 527);
+            this.txtBackupDir.Location = new System.Drawing.Point(270, 504);
             this.txtBackupDir.Name = "txtBackupDir";
             this.txtBackupDir.Size = new System.Drawing.Size(249, 20);
             this.txtBackupDir.TabIndex = 10;
@@ -303,7 +291,7 @@
             // 
             this.chkIgnoreWhitespace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkIgnoreWhitespace.AutoSize = true;
-            this.chkIgnoreWhitespace.Location = new System.Drawing.Point(12, 576);
+            this.chkIgnoreWhitespace.Location = new System.Drawing.Point(12, 530);
             this.chkIgnoreWhitespace.Name = "chkIgnoreWhitespace";
             this.chkIgnoreWhitespace.Size = new System.Drawing.Size(179, 17);
             this.chkIgnoreWhitespace.TabIndex = 14;
@@ -315,13 +303,12 @@
             this.AcceptButton = this.btnTryMergeSelected;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(563, 603);
+            this.ClientSize = new System.Drawing.Size(563, 602);
             this.Controls.Add(this.chkIgnoreWhitespace);
             this.Controls.Add(this.btnSelectBackupDir);
             this.Controls.Add(this.lblBackupDir);
             this.Controls.Add(this.txtBackupDir);
             this.Controls.Add(this.chkCheckAtLaunch);
-            this.Controls.Add(this.chkMoveToBackup);
             this.Controls.Add(this.lblMergedModName);
             this.Controls.Add(this.txtMergedModName);
             this.Controls.Add(this.btnTryMergeSelected);
@@ -360,7 +347,6 @@
         private System.Windows.Forms.Button btnTryMergeSelected;
         private System.Windows.Forms.Label lblMergedModName;
         private System.Windows.Forms.TextBox txtMergedModName;
-        private System.Windows.Forms.CheckBox chkMoveToBackup;
         private System.Windows.Forms.CheckBox chkCheckAtLaunch;
         private System.Windows.Forms.Button btnSelectBackupDir;
         private System.Windows.Forms.Label lblBackupDir;

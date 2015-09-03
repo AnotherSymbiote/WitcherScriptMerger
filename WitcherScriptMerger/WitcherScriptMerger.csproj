@@ -56,6 +56,12 @@
     <Compile Include="AppSettings.cs" />
     <Compile Include="Changeset.cs" />
     <Compile Include="ChangesetMerger.cs" />
+    <Compile Include="Forms\ReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReportForm.Designer.cs">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PatchMerger.cs" />
     <Compile Include="Forms\ResolveConflictForm.cs">
       <SubType>Form</SubType>
@@ -78,6 +84,9 @@
     <Compile Include="SyncedRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <EmbeddedResource Include="Forms\ReportForm.resx">
+      <DependentUpon>ReportForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ResolveConflictForm.resx">
       <DependentUpon>ResolveConflictForm.cs</DependentUpon>
     </EmbeddedResource>

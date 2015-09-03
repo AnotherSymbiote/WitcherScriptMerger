@@ -6,17 +6,16 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace WitcherScriptMerger
+namespace WitcherScriptMerger.Forms
 {
     public partial class MainForm : Form
     {
         #region Members
-        private string _scriptsDirSetting = Program.Settings.Get("ScriptsDirectory");
-        private string _modsDirSetting = Program.Settings.Get("ModsDirectory");
 
         private TreeNode _clickedNode = null;
         private int _mergesToDo = 0;
 
+        private string _scriptsDirSetting = Program.Settings.Get("ScriptsDirectory");
         private string ScriptsDirectory
         {
             get
@@ -27,6 +26,7 @@ namespace WitcherScriptMerger
             }
         }
 
+        private string _modsDirSetting = Program.Settings.Get("ModsDirectory");
         private string ModsDirectory
         {
             get
@@ -62,7 +62,6 @@ namespace WitcherScriptMerger
             chkCheckAtLaunch.Checked = Program.Settings.Get<bool>("CheckAtLaunch");
             txtMergedModName.Text = Program.Settings.Get("MergedModName");
             txtBackupDir.Text = Program.Settings.Get("BackupDirectory");
-            chkMoveToBackup.Checked = Program.Settings.Get<bool>("MoveToBackupAfterMerge");
             chkIgnoreWhitespace.Checked = Program.Settings.Get<bool>("IgnoreWhitespace");
             
             LoadLastWindowConfiguration();
@@ -82,7 +81,6 @@ namespace WitcherScriptMerger
             Program.Settings.Set("CheckAtLaunch", chkCheckAtLaunch.Checked);
             Program.Settings.Set("MergedModName", txtMergedModName.Text);
             Program.Settings.Set("BackupDirectory", txtBackupDir.Text);
-            Program.Settings.Set("MoveToBackupAfterMerge", chkMoveToBackup.Checked);
             Program.Settings.Set("IgnoreWhitespace", chkIgnoreWhitespace.Checked);
 
             if (WindowState == FormWindowState.Maximized)
@@ -289,72 +287,12 @@ namespace WitcherScriptMerger
                 Directory.CreateDirectory(outputDir);
             File.WriteAllText(outputPath, result.Text);
 
-            string backupMsg = "";
-            if (result.FailureCount == 0 && chkMoveToBackup.Checked)
-                backupMsg = CleanUpAfterMerge(file1, file2, outputPath);
-
-            string msg =
-                string.Format("{0}  +  {1}", set1.ModName, set2.ModName) +
-                Environment.NewLine +
-                string.Format("{0} out of {1} changes merged successfully!",
-                    result.SuccessCount,
-                    result.AttemptCount) +
-                Environment.NewLine +
-                Environment.NewLine + "Output file: " +
-                Environment.NewLine + outputPath.ReplaceIgnoreCase(txtGameDir.Text, "");
-            if (!string.IsNullOrWhiteSpace(backupMsg))
-                msg += backupMsg;
-
-            if (_mergesToDo > 1)
-                MessageBox.Show(msg, string.Format("Merge Finished ({0} of {1})", mergeNum, _mergesToDo));
-            else
-                MessageBox.Show(msg, "Merge Finished");
+            var reportForm = new ReportForm(mergeNum, _mergesToDo, result, ModsDirectory, BackupDirectory);
+            reportForm.SetModNames(set1.ModName, set2.ModName);
+            reportForm.SetFilePaths(file1.FullName, file2.FullName, outputPath);
+            reportForm.ShowDialog();
 
             return new FileInfo(outputPath);
-        }
-
-        private string CleanUpAfterMerge(FileInfo file1, FileInfo file2, string outputPath)
-        {
-            string backupMsg = "";
-            foreach (var file in new FileInfo[] { file1, file2 })
-            {
-                if (file.FullName.EqualsIgnoreCase(outputPath))
-                    continue;
-
-                string modName = ModDirectory.GetModName(file);
-                string modDirPath = Path.Combine(ModsDirectory, modName);
-                string backupPath = Path.Combine(BackupDirectory, modName, ModDirectory.GetRelativePath(file, ModsDirectory, false));
-
-                string backupDir = Path.GetDirectoryName(backupPath);
-                if (!Directory.Exists(backupDir))
-                    Directory.CreateDirectory(backupDir);
-                else if (File.Exists(backupPath))
-                {
-                    int extensionStart = backupPath.LastIndexOf('.');
-                    backupPath = backupPath.Substring(0, extensionStart) +
-                        DateTime.Now.ToString("-yyyyMMdd-HHmmss") +
-                        backupPath.Substring(extensionStart);
-                }
-
-                File.Move(file.FullName, backupPath);
-                backupMsg += Environment.NewLine + Environment.NewLine +
-                    Environment.NewLine + "MOVED OBSOLETE SCRIPT" + Environment.NewLine + "——————————————" +
-                    Environment.NewLine + file.FullName.ReplaceIgnoreCase(ModsDirectory, "") +
-                    Environment.NewLine +
-                    Environment.NewLine + "TO " + Environment.NewLine + "—————" +
-                    Environment.NewLine + backupPath.ReplaceIgnoreCase(txtGameDir.Text, "");
-
-                var remainingModFiles = Directory.GetFiles(modDirPath, "*", SearchOption.AllDirectories);
-                if (remainingModFiles.Length == 0)
-                {
-                    System.Threading.Thread.Sleep(100);
-                    Directory.Delete(modDirPath, true);
-                    backupMsg += Environment.NewLine +
-                        Environment.NewLine + "DELETED " + Environment.NewLine + "—————" +
-                        Environment.NewLine + "Empty " + modName + " folder";
-                }
-            }
-            return backupMsg;
         }
 
         #endregion
