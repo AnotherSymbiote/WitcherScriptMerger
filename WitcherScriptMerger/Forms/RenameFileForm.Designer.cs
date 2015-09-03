@@ -86,6 +86,7 @@
             this.txtNewName.Name = "txtNewName";
             this.txtNewName.Size = new System.Drawing.Size(341, 20);
             this.txtNewName.TabIndex = 4;
+            this.txtNewName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtNewName_KeyDown);
             // 
             // btnCancel
             // 

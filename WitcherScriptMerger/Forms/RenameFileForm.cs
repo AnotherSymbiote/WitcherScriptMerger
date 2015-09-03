@@ -34,5 +34,11 @@ namespace WitcherScriptMerger.Forms
         {
             DialogResult = DialogResult.Cancel;
         }
+
+        private void txtNewName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.A)
+                (sender as TextBox).SelectAll();
+        }
     }
 }

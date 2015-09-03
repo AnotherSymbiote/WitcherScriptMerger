@@ -216,5 +216,11 @@ namespace WitcherScriptMerger.Forms
         {
             Program.Settings.Set("BackupDirectory", txtBackupDir.Text);
         }
+
+        private void txt_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.A)
+                (sender as TextBox).SelectAll();
+        }
     }
 }

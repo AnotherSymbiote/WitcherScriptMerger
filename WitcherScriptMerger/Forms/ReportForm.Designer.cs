@@ -64,6 +64,7 @@
             this.txtFilePath1.ReadOnly = true;
             this.txtFilePath1.Size = new System.Drawing.Size(633, 20);
             this.txtFilePath1.TabIndex = 2;
+            this.txtFilePath1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
             // btnOpenFile1
             // 
@@ -170,6 +171,7 @@
             this.txtOutputPath.ReadOnly = true;
             this.txtOutputPath.Size = new System.Drawing.Size(633, 20);
             this.txtOutputPath.TabIndex = 2;
+            this.txtOutputPath.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
             // grpFile2
             // 
@@ -230,6 +232,7 @@
             this.txtFilePath2.ReadOnly = true;
             this.txtFilePath2.Size = new System.Drawing.Size(633, 20);
             this.txtFilePath2.TabIndex = 2;
+            this.txtFilePath2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
             // chkAutoBackup
             // 
@@ -275,6 +278,7 @@
             this.txtBackupDir.Size = new System.Drawing.Size(518, 20);
             this.txtBackupDir.TabIndex = 10;
             this.txtBackupDir.TextChanged += new System.EventHandler(this.txtBackupDir_TextChanged);
+            this.txtBackupDir.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
             // btnSelectBackupDir
             // 
