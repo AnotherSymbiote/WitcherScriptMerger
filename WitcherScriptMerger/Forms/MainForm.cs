@@ -167,7 +167,7 @@ namespace WitcherScriptMerger.Forms
             {
                 foreach (var scriptFile in modDir.ScriptFiles)
                 {
-                    string relPath = ModDirectory.GetRelativePath(scriptFile, ModsDirectory);
+                    string relPath = ModDirectory.GetRelativePath(scriptFile.FullName, false);
 
                     var existingScriptNode = treConflicts.GetTreeNodes()
                         .FirstOrDefault(node => node.Text.EqualsIgnoreCase(relPath));
@@ -249,7 +249,7 @@ namespace WitcherScriptMerger.Forms
                 string outputPath = Path.Combine(
                         ModsDirectory,
                         txtMergedModName.Text,
-                        ModDirectory.GetRelativePath(file1, ModsDirectory, false));
+                        ModDirectory.GetRelativePath(file1.FullName, false, false));
                 if (File.Exists(outputPath)
                     && (DialogResult.No == MessageBox.Show(
                         "The output file below already exists! Overwrite?" + Environment.NewLine + Environment.NewLine + outputPath,

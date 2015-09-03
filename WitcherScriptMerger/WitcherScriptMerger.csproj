@@ -56,6 +56,12 @@
     <Compile Include="AppSettings.cs" />
     <Compile Include="Changeset.cs" />
     <Compile Include="ChangesetMerger.cs" />
+    <Compile Include="Forms\RenameFileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RenameFileForm.Designer.cs">
+      <DependentUpon>RenameFileForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ReportForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,6 +90,9 @@
     <Compile Include="SyncedRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <EmbeddedResource Include="Forms\RenameFileForm.resx">
+      <DependentUpon>RenameFileForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ReportForm.resx">
       <DependentUpon>ReportForm.cs</DependentUpon>
     </EmbeddedResource>

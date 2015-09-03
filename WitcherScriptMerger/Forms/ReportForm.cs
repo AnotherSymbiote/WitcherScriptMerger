@@ -122,7 +122,19 @@ namespace WitcherScriptMerger.Forms
                 MessageBox.Show("Can't find directory: " + dirPath);
         }
 
-        private bool BackUpFile(TextBox txtPath, Button btnBackUp)
+        private void BackUpFile(TextBox txtPath, Button btnBackUp)
+        {
+            if (MoveFile(txtPath, _modsDir, _backupsDir))
+                btnBackUp.Text = "Undo Move to Backup Directory";
+        }
+
+        private void UndoBackUp(TextBox txtPath, Button btnBackUp)
+        {
+            if (MoveFile(txtPath, _backupsDir, _modsDir))
+                btnBackUp.Text = "Move to Backup Directory";
+        }
+
+        private bool MoveFile(TextBox txtPath, string sourceRelRoot, string destinationRelRoot)
         {
             if (!File.Exists(txtPath.Text))
             {
@@ -130,40 +142,38 @@ namespace WitcherScriptMerger.Forms
                 return false;
             }
 
-            var file = new FileInfo(txtPath.Text);
+            string relPath = ModDirectory.GetRelativePath(txtPath.Text, true, false);
+            string destinationPath = Path.Combine(destinationRelRoot, relPath);
+            string destinationDir = Path.GetDirectoryName(destinationPath);
 
-            string modName = ModDirectory.GetModName(file);
-            string modDirPath = Path.Combine(_modsDir, modName);
-            string backupPath = Path.Combine(_backupsDir, modName, ModDirectory.GetRelativePath(file, _modsDir, false));
+            string fileName = Path.GetFileName(txtPath.Text);
+            string outputFileName = Path.GetFileName(txtOutputPath.Text);
+            if (!fileName.EqualsIgnoreCase(outputFileName))
+                destinationPath = Path.Combine(destinationDir, outputFileName);
 
-            string backupDir = Path.GetDirectoryName(backupPath);
-            if (!Directory.Exists(backupDir))
-                Directory.CreateDirectory(backupDir);
-            else if (File.Exists(backupPath))
+            if (!Directory.Exists(destinationDir))
+                Directory.CreateDirectory(destinationDir);
+            else if (File.Exists(destinationPath))
             {
-                int extensionStart = backupPath.LastIndexOf('.');
-                backupPath = backupPath.Substring(0, extensionStart) +
-                    DateTime.Now.ToString("-yyyyMMdd-HHmmss") +
-                    backupPath.Substring(extensionStart);
+                using (var renameForm = new RenameFileForm(destinationPath))
+                {
+                    if (renameForm.ShowDialog() == DialogResult.Cancel)
+                        return false;
+                    destinationPath = renameForm.FilePath;
+                }
             }
 
-            File.Move(file.FullName, backupPath);
-            txtPath.Text = backupPath;
+            File.Move(txtPath.Text, destinationPath);
+            txtPath.Text = destinationPath;
 
-            var remainingModFiles = Directory.GetFiles(modDirPath, "*", SearchOption.AllDirectories);
+            string sourceModDirPath = Path.Combine(sourceRelRoot, ModDirectory.GetModName(relPath));
+            var remainingModFiles = Directory.GetFiles(sourceModDirPath, "*", SearchOption.AllDirectories);
             if (remainingModFiles.Length == 0)
             {
-                System.Threading.Thread.Sleep(100);
-                Directory.Delete(modDirPath, true);
+                System.Threading.Thread.Sleep(100);  // Avoid directory not empty exception
+                Directory.Delete(sourceModDirPath, true);
             }
-
-            btnBackUp.Text = "Undo Move to Backup Directory";
             return true;
-        }
-
-        private void UndoBackUp(TextBox txtPath, Button btnBackUp)
-        {
-            throw new NotImplementedException();
         }
 
         private void btnDone_Click(object sender, EventArgs e)
@@ -175,7 +185,7 @@ namespace WitcherScriptMerger.Forms
                 if (txtFilePath2.Text != txtOutputPath.Text && !btnBackUpFile2.Text.StartsWith("Undo"))
                     BackUpFile(txtFilePath2, btnBackUpFile2);
             }
-            DialogResult = System.Windows.Forms.DialogResult.OK;
+            DialogResult = DialogResult.OK;
         }
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportForm));
             this.txtFilePath1 = new System.Windows.Forms.TextBox();
             this.btnOpenFile1 = new System.Windows.Forms.Button();
             this.grpFile1 = new System.Windows.Forms.GroupBox();
@@ -263,6 +264,7 @@
             this.Controls.Add(this.grpOutputFile);
             this.Controls.Add(this.lblSuccessCount);
             this.Controls.Add(this.grpFile1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1920, 370);
             this.MinimumSize = new System.Drawing.Size(685, 370);
             this.Name = "ReportForm";

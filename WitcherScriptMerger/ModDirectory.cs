@@ -21,20 +21,26 @@ namespace WitcherScriptMerger
                 .Select(path => new FileInfo(path));
         }
 
-        public static string GetModName(FileInfo modFile)
+        public static string GetModName(string modFilePath)
         {
-            int nameEnd = modFile.FullName.IndexOfIgnoreCase(Path.Combine("content", "scripts")) - 1;
-            string name = modFile.FullName.Substring(0, nameEnd);
+            int nameEnd = modFilePath.IndexOfIgnoreCase(Path.Combine("content", "scripts")) - 1;
+            string name = modFilePath.Substring(0, nameEnd);
             return name.Substring(name.LastIndexOf('\\') + 1);
         }
 
-        public static string GetRelativePath(FileInfo modFile, string modsDir, bool leadingSeparator = true)
+        public static string GetModName(FileInfo modFile)
         {
-            string relPath = modFile.FullName.ReplaceIgnoreCase(modsDir , "");  // Trim mod directory.
-            relPath = relPath.Substring(1);                                     // Trim backslash.
-            relPath = relPath.Substring(relPath.IndexOf('\\'));                 // Trim mod name.
-            if (!leadingSeparator)                                              // Trim backslash.
-                relPath = relPath.Substring(1);
+            return GetModName(modFile.FullName);
+        }
+
+        public static string GetRelativePath(string modFilePath, bool includeModName, bool includeLeadingSeparator = true)
+        {
+            int startIndex = modFilePath.IndexOfIgnoreCase(Path.Combine("content", "scripts")) - 1;
+            if (includeModName)
+                startIndex = modFilePath.LastIndexOfIgnoreCase("\\", startIndex - 1);
+            string relPath = modFilePath.Substring(startIndex);
+            if (!includeLeadingSeparator)
+                relPath = relPath.Substring(1);  // Trim backslash.
             return relPath;
         }
     }

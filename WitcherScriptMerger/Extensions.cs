@@ -66,6 +66,13 @@ namespace WitcherScriptMerger
             return s.IndexOf(value, 0, StringComparison.InvariantCultureIgnoreCase);
         }
 
+        public static int LastIndexOfIgnoreCase(this string s, string value, int startIndex = -1)
+        {
+            if (startIndex == -1)
+                startIndex = s.Length - 1;
+            return s.LastIndexOf(value, startIndex, StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public static bool IsAlphaNumeric(this string s)
         {
             return new Regex("^[a-zA-Z0-9]*$").IsMatch(s);
