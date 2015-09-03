@@ -64,7 +64,6 @@ namespace WitcherScriptMerger
             txtBackupDir.Text = Program.Settings.Get("BackupDirectory");
             chkMoveToBackup.Checked = Program.Settings.Get<bool>("MoveToBackupAfterMerge");
             chkIgnoreWhitespace.Checked = Program.Settings.Get<bool>("IgnoreWhitespace");
-            chkLineBreakSymbol.Checked = Program.Settings.Get<bool>("LineBreakSymbol");
             
             LoadLastWindowConfiguration();
             Program.Settings.EndBatch();
@@ -85,7 +84,6 @@ namespace WitcherScriptMerger
             Program.Settings.Set("BackupDirectory", txtBackupDir.Text);
             Program.Settings.Set("MoveToBackupAfterMerge", chkMoveToBackup.Checked);
             Program.Settings.Set("IgnoreWhitespace", chkIgnoreWhitespace.Checked);
-            Program.Settings.Set("LineBreakSymbol", chkLineBreakSymbol.Checked);
 
             if (WindowState == FormWindowState.Maximized)
                 Program.Settings.Set("StartMaximized", true);
@@ -549,11 +547,6 @@ namespace WitcherScriptMerger
         public bool IsIgnoreWhitespaceEnabled()
         {
             return chkIgnoreWhitespace.Checked;
-        }
-
-        public bool IsLineBreakSymbolEnabled()
-        {
-            return chkLineBreakSymbol.Checked;
         }
     }
 }

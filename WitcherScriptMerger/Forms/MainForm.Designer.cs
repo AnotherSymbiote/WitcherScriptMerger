@@ -55,7 +55,6 @@
             this.btnSelectBackupDir = new System.Windows.Forms.Button();
             this.lblBackupDir = new System.Windows.Forms.Label();
             this.txtBackupDir = new System.Windows.Forms.TextBox();
-            this.chkLineBreakSymbol = new System.Windows.Forms.CheckBox();
             this.chkIgnoreWhitespace = new System.Windows.Forms.CheckBox();
             this.treeContextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -66,7 +65,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtGameDir.Location = new System.Drawing.Point(116, 14);
             this.txtGameDir.Name = "txtGameDir";
-            this.txtGameDir.Size = new System.Drawing.Size(205, 20);
+            this.txtGameDir.Size = new System.Drawing.Size(189, 20);
             this.txtGameDir.TabIndex = 0;
             this.txtGameDir.TextChanged += new System.EventHandler(this.txtGameDir_TextChanged);
             // 
@@ -82,7 +81,7 @@
             // btnSelectGameDir
             // 
             this.btnSelectGameDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSelectGameDir.Location = new System.Drawing.Point(327, 12);
+            this.btnSelectGameDir.Location = new System.Drawing.Point(311, 12);
             this.btnSelectGameDir.Name = "btnSelectGameDir";
             this.btnSelectGameDir.Size = new System.Drawing.Size(26, 23);
             this.btnSelectGameDir.TabIndex = 1;
@@ -101,7 +100,7 @@
             this.treConflicts.Name = "treConflicts";
             this.treConflicts.ShowNodeToolTips = true;
             this.treConflicts.ShowRootLines = false;
-            this.treConflicts.Size = new System.Drawing.Size(451, 390);
+            this.treConflicts.Size = new System.Drawing.Size(435, 416);
             this.treConflicts.TabIndex = 4;
             this.treConflicts.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treConflicts_AfterCheck);
             this.treConflicts.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treConflicts_AfterSelect);
@@ -123,7 +122,7 @@
             this.contextExpandAll,
             this.contextCollapseAll});
             this.treeContextMenu.Name = "treeContextMenu";
-            this.treeContextMenu.Size = new System.Drawing.Size(226, 236);
+            this.treeContextMenu.Size = new System.Drawing.Size(226, 214);
             this.treeContextMenu.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.treeContextMenu_Closing);
             // 
             // contextVanillaScript
@@ -205,7 +204,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCheckForConflicts.Location = new System.Drawing.Point(12, 41);
             this.btnCheckForConflicts.Name = "btnCheckForConflicts";
-            this.btnCheckForConflicts.Size = new System.Drawing.Size(451, 43);
+            this.btnCheckForConflicts.Size = new System.Drawing.Size(435, 43);
             this.btnCheckForConflicts.TabIndex = 3;
             this.btnCheckForConflicts.Text = "&Check for Script File Conflicts";
             this.btnCheckForConflicts.UseVisualStyleBackColor = true;
@@ -217,9 +216,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnTryMergeSelected.Enabled = false;
             this.btnTryMergeSelected.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTryMergeSelected.Location = new System.Drawing.Point(350, 528);
+            this.btnTryMergeSelected.Location = new System.Drawing.Point(350, 553);
             this.btnTryMergeSelected.Name = "btnTryMergeSelected";
-            this.btnTryMergeSelected.Size = new System.Drawing.Size(113, 63);
+            this.btnTryMergeSelected.Size = new System.Drawing.Size(97, 40);
             this.btnTryMergeSelected.TabIndex = 7;
             this.btnTryMergeSelected.Text = "Try to &Merge Selected Scripts";
             this.btnTryMergeSelected.UseVisualStyleBackColor = true;
@@ -229,7 +228,7 @@
             // 
             this.lblMergedModName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblMergedModName.AutoSize = true;
-            this.lblMergedModName.Location = new System.Drawing.Point(9, 486);
+            this.lblMergedModName.Location = new System.Drawing.Point(9, 511);
             this.lblMergedModName.Name = "lblMergedModName";
             this.lblMergedModName.Size = new System.Drawing.Size(151, 13);
             this.lblMergedModName.TabIndex = 9;
@@ -238,7 +237,7 @@
             // txtMergedModName
             // 
             this.txtMergedModName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtMergedModName.Location = new System.Drawing.Point(12, 502);
+            this.txtMergedModName.Location = new System.Drawing.Point(12, 527);
             this.txtMergedModName.Name = "txtMergedModName";
             this.txtMergedModName.Size = new System.Drawing.Size(205, 20);
             this.txtMergedModName.TabIndex = 5;
@@ -247,7 +246,7 @@
             // 
             this.chkMoveToBackup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkMoveToBackup.AutoSize = true;
-            this.chkMoveToBackup.Location = new System.Drawing.Point(12, 528);
+            this.chkMoveToBackup.Location = new System.Drawing.Point(12, 553);
             this.chkMoveToBackup.Name = "chkMoveToBackup";
             this.chkMoveToBackup.Size = new System.Drawing.Size(335, 17);
             this.chkMoveToBackup.TabIndex = 6;
@@ -258,7 +257,7 @@
             // 
             this.chkCheckAtLaunch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkCheckAtLaunch.AutoSize = true;
-            this.chkCheckAtLaunch.Location = new System.Drawing.Point(359, 16);
+            this.chkCheckAtLaunch.Location = new System.Drawing.Point(343, 16);
             this.chkCheckAtLaunch.Name = "chkCheckAtLaunch";
             this.chkCheckAtLaunch.Size = new System.Drawing.Size(104, 17);
             this.chkCheckAtLaunch.TabIndex = 2;
@@ -268,7 +267,7 @@
             // btnSelectBackupDir
             // 
             this.btnSelectBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSelectBackupDir.Location = new System.Drawing.Point(437, 500);
+            this.btnSelectBackupDir.Location = new System.Drawing.Point(421, 525);
             this.btnSelectBackupDir.Name = "btnSelectBackupDir";
             this.btnSelectBackupDir.Size = new System.Drawing.Size(26, 23);
             this.btnSelectBackupDir.TabIndex = 12;
@@ -280,7 +279,7 @@
             // 
             this.lblBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblBackupDir.AutoSize = true;
-            this.lblBackupDir.Location = new System.Drawing.Point(220, 486);
+            this.lblBackupDir.Location = new System.Drawing.Point(220, 511);
             this.lblBackupDir.Name = "lblBackupDir";
             this.lblBackupDir.Size = new System.Drawing.Size(92, 13);
             this.lblBackupDir.TabIndex = 11;
@@ -290,28 +289,17 @@
             // 
             this.txtBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBackupDir.Location = new System.Drawing.Point(223, 502);
+            this.txtBackupDir.Location = new System.Drawing.Point(223, 527);
             this.txtBackupDir.Name = "txtBackupDir";
-            this.txtBackupDir.Size = new System.Drawing.Size(208, 20);
+            this.txtBackupDir.Size = new System.Drawing.Size(192, 20);
             this.txtBackupDir.TabIndex = 10;
             this.txtBackupDir.TextChanged += new System.EventHandler(this.txtBackupDir_TextChanged);
-            // 
-            // chkLineBreakSymbol
-            // 
-            this.chkLineBreakSymbol.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.chkLineBreakSymbol.AutoSize = true;
-            this.chkLineBreakSymbol.Location = new System.Drawing.Point(12, 574);
-            this.chkLineBreakSymbol.Name = "chkLineBreakSymbol";
-            this.chkLineBreakSymbol.Size = new System.Drawing.Size(283, 17);
-            this.chkLineBreakSymbol.TabIndex = 13;
-            this.chkLineBreakSymbol.Text = "Resolve Conflict screen: &Show line breaks as ¶ symbol";
-            this.chkLineBreakSymbol.UseVisualStyleBackColor = true;
             // 
             // chkIgnoreWhitespace
             // 
             this.chkIgnoreWhitespace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkIgnoreWhitespace.AutoSize = true;
-            this.chkIgnoreWhitespace.Location = new System.Drawing.Point(12, 551);
+            this.chkIgnoreWhitespace.Location = new System.Drawing.Point(12, 576);
             this.chkIgnoreWhitespace.Name = "chkIgnoreWhitespace";
             this.chkIgnoreWhitespace.Size = new System.Drawing.Size(179, 17);
             this.chkIgnoreWhitespace.TabIndex = 14;
@@ -322,9 +310,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(475, 603);
+            this.ClientSize = new System.Drawing.Size(459, 603);
             this.Controls.Add(this.chkIgnoreWhitespace);
-            this.Controls.Add(this.chkLineBreakSymbol);
             this.Controls.Add(this.btnSelectBackupDir);
             this.Controls.Add(this.lblBackupDir);
             this.Controls.Add(this.txtBackupDir);
@@ -339,7 +326,7 @@
             this.Controls.Add(this.lblGameDir);
             this.Controls.Add(this.txtGameDir);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(435, 280);
+            this.MinimumSize = new System.Drawing.Size(475, 280);
             this.Name = "MainForm";
             this.Text = "Script Merger";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -373,7 +360,6 @@
         private System.Windows.Forms.Button btnSelectBackupDir;
         private System.Windows.Forms.Label lblBackupDir;
         private System.Windows.Forms.TextBox txtBackupDir;
-        private System.Windows.Forms.CheckBox chkLineBreakSymbol;
         private System.Windows.Forms.CheckBox chkIgnoreWhitespace;
         private System.Windows.Forms.ToolStripSeparator contextSelectSeparator;
         private System.Windows.Forms.ToolStripMenuItem contextSelectAll;

@@ -34,6 +34,11 @@ namespace WitcherScriptMerger
         public ResolveConflictForm(string fileName, string leftModName, string rightModName)
         {
             InitializeComponent();
+
+            chkLineBreakSymbol.CheckedChanged -= chkLineBreakSymbol_CheckedChanged;
+            chkLineBreakSymbol.Checked = Program.Settings.Get<bool>("LineBreakSymbol");
+            chkLineBreakSymbol.CheckedChanged += chkLineBreakSymbol_CheckedChanged;
+
             this.Text += fileName;
             btnUseLeft.Text += leftModName;
             btnUseRight.Text += rightModName;
@@ -45,6 +50,11 @@ namespace WitcherScriptMerger
             rtbLeft.AddPeer(rtbRight);
             rtbRight.AddPeer(rtbVanilla);
             rtbRight.AddPeer(rtbLeft);
+        }
+
+        private void ResolveConflictForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Program.Settings.Set("LineBreakSymbol", chkLineBreakSymbol.Checked);
         }
 
         #region Setting Text
@@ -139,7 +149,7 @@ namespace WitcherScriptMerger
             rtb.SelectionLength = 0;
 
             // To preserve formatting, remove paragraph symbols from RTF code instead of just Text
-            if (!Program.MainForm.IsLineBreakSymbolEnabled())
+            if (!chkLineBreakSymbol.Checked)
                 rtb.Rtf = rtb.Rtf.Replace("\\'b6", "");
         }
 
@@ -290,5 +300,19 @@ namespace WitcherScriptMerger
         }
 
         #endregion
+
+        private void chkLineBreakSymbol_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkLineBreakSymbol.Checked)
+            {
+                foreach (var rtb in tableLayoutPanel.Controls.OfType<SyncedRichTextBox>())
+                    rtb.Rtf = rtb.Rtf.Replace("\\par\r\n", "\\'b6\\par\r\n");
+            }
+            else
+            {
+                foreach (var rtb in tableLayoutPanel.Controls.OfType<SyncedRichTextBox>())
+                    rtb.Rtf = rtb.Rtf.Replace("\\'b6", "");
+            }
+        }
     }
 }
