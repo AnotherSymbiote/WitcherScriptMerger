@@ -51,9 +51,6 @@
             this.lblMergedModName = new System.Windows.Forms.Label();
             this.txtMergedModName = new System.Windows.Forms.TextBox();
             this.chkCheckAtLaunch = new System.Windows.Forms.CheckBox();
-            this.btnSelectBackupDir = new System.Windows.Forms.Button();
-            this.lblBackupDir = new System.Windows.Forms.Label();
-            this.txtBackupDir = new System.Windows.Forms.TextBox();
             this.chkIgnoreWhitespace = new System.Windows.Forms.CheckBox();
             this.treeContextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -100,7 +97,7 @@
             this.treConflicts.Name = "treConflicts";
             this.treConflicts.ShowNodeToolTips = true;
             this.treConflicts.ShowRootLines = false;
-            this.treConflicts.Size = new System.Drawing.Size(539, 391);
+            this.treConflicts.Size = new System.Drawing.Size(539, 408);
             this.treConflicts.TabIndex = 4;
             this.treConflicts.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treConflicts_AfterCheck);
             this.treConflicts.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treConflicts_AfterSelect);
@@ -229,7 +226,7 @@
             // 
             this.lblMergedModName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblMergedModName.AutoSize = true;
-            this.lblMergedModName.Location = new System.Drawing.Point(9, 488);
+            this.lblMergedModName.Location = new System.Drawing.Point(12, 505);
             this.lblMergedModName.Name = "lblMergedModName";
             this.lblMergedModName.Size = new System.Drawing.Size(151, 13);
             this.lblMergedModName.TabIndex = 9;
@@ -238,9 +235,9 @@
             // txtMergedModName
             // 
             this.txtMergedModName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtMergedModName.Location = new System.Drawing.Point(12, 504);
+            this.txtMergedModName.Location = new System.Drawing.Point(12, 527);
             this.txtMergedModName.Name = "txtMergedModName";
-            this.txtMergedModName.Size = new System.Drawing.Size(252, 20);
+            this.txtMergedModName.Size = new System.Drawing.Size(539, 20);
             this.txtMergedModName.TabIndex = 5;
             this.txtMergedModName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
@@ -255,43 +252,11 @@
             this.chkCheckAtLaunch.Text = "Check at &launch";
             this.chkCheckAtLaunch.UseVisualStyleBackColor = true;
             // 
-            // btnSelectBackupDir
-            // 
-            this.btnSelectBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSelectBackupDir.Location = new System.Drawing.Point(525, 502);
-            this.btnSelectBackupDir.Name = "btnSelectBackupDir";
-            this.btnSelectBackupDir.Size = new System.Drawing.Size(26, 23);
-            this.btnSelectBackupDir.TabIndex = 12;
-            this.btnSelectBackupDir.Text = "...";
-            this.btnSelectBackupDir.UseVisualStyleBackColor = true;
-            this.btnSelectBackupDir.Click += new System.EventHandler(this.btnSelectBackupDir_Click);
-            // 
-            // lblBackupDir
-            // 
-            this.lblBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblBackupDir.AutoSize = true;
-            this.lblBackupDir.Location = new System.Drawing.Point(267, 488);
-            this.lblBackupDir.Name = "lblBackupDir";
-            this.lblBackupDir.Size = new System.Drawing.Size(92, 13);
-            this.lblBackupDir.TabIndex = 11;
-            this.lblBackupDir.Text = "Backup Directory:";
-            // 
-            // txtBackupDir
-            // 
-            this.txtBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBackupDir.Location = new System.Drawing.Point(270, 504);
-            this.txtBackupDir.Name = "txtBackupDir";
-            this.txtBackupDir.Size = new System.Drawing.Size(249, 20);
-            this.txtBackupDir.TabIndex = 10;
-            this.txtBackupDir.TextChanged += new System.EventHandler(this.txtBackupDir_TextChanged);
-            this.txtBackupDir.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
-            // 
             // chkIgnoreWhitespace
             // 
             this.chkIgnoreWhitespace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkIgnoreWhitespace.AutoSize = true;
-            this.chkIgnoreWhitespace.Location = new System.Drawing.Point(12, 530);
+            this.chkIgnoreWhitespace.Location = new System.Drawing.Point(372, 504);
             this.chkIgnoreWhitespace.Name = "chkIgnoreWhitespace";
             this.chkIgnoreWhitespace.Size = new System.Drawing.Size(179, 17);
             this.chkIgnoreWhitespace.TabIndex = 14;
@@ -305,9 +270,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(563, 602);
             this.Controls.Add(this.chkIgnoreWhitespace);
-            this.Controls.Add(this.btnSelectBackupDir);
-            this.Controls.Add(this.lblBackupDir);
-            this.Controls.Add(this.txtBackupDir);
             this.Controls.Add(this.chkCheckAtLaunch);
             this.Controls.Add(this.lblMergedModName);
             this.Controls.Add(this.txtMergedModName);
@@ -348,9 +310,6 @@
         private System.Windows.Forms.Label lblMergedModName;
         private System.Windows.Forms.TextBox txtMergedModName;
         private System.Windows.Forms.CheckBox chkCheckAtLaunch;
-        private System.Windows.Forms.Button btnSelectBackupDir;
-        private System.Windows.Forms.Label lblBackupDir;
-        private System.Windows.Forms.TextBox txtBackupDir;
         private System.Windows.Forms.CheckBox chkIgnoreWhitespace;
         private System.Windows.Forms.ToolStripSeparator contextSelectSeparator;
         private System.Windows.Forms.ToolStripMenuItem contextSelectAll;

@@ -46,6 +46,9 @@
             this.txtFilePath2 = new System.Windows.Forms.TextBox();
             this.chkAutoBackup = new System.Windows.Forms.CheckBox();
             this.btnOK = new System.Windows.Forms.Button();
+            this.lblBackupDir = new System.Windows.Forms.Label();
+            this.txtBackupDir = new System.Windows.Forms.TextBox();
+            this.btnSelectBackupDir = new System.Windows.Forms.Button();
             this.grpFile1.SuspendLayout();
             this.grpOutputFile.SuspendLayout();
             this.grpFile2.SuspendLayout();
@@ -230,19 +233,22 @@
             // 
             // chkAutoBackup
             // 
+            this.chkAutoBackup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkAutoBackup.AutoSize = true;
-            this.chkAutoBackup.Location = new System.Drawing.Point(125, 305);
+            this.chkAutoBackup.Location = new System.Drawing.Point(12, 331);
             this.chkAutoBackup.Name = "chkAutoBackup";
-            this.chkAutoBackup.Size = new System.Drawing.Size(161, 17);
+            this.chkAutoBackup.Size = new System.Drawing.Size(415, 17);
             this.chkAutoBackup.TabIndex = 9;
-            this.chkAutoBackup.Text = "Auto-&backup if all successful";
+            this.chkAutoBackup.Text = "Move both to &backup directory when I click OK, if all changes merged successfull" +
+    "y";
             this.chkAutoBackup.UseVisualStyleBackColor = true;
             // 
             // btnOK
             // 
+            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOK.Location = new System.Drawing.Point(12, 301);
+            this.btnOK.Location = new System.Drawing.Point(550, 327);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(107, 23);
             this.btnOK.TabIndex = 10;
@@ -250,23 +256,57 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnDone_Click);
             // 
+            // lblBackupDir
+            // 
+            this.lblBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblBackupDir.AutoSize = true;
+            this.lblBackupDir.Location = new System.Drawing.Point(9, 303);
+            this.lblBackupDir.Name = "lblBackupDir";
+            this.lblBackupDir.Size = new System.Drawing.Size(92, 13);
+            this.lblBackupDir.TabIndex = 11;
+            this.lblBackupDir.Text = "Backup Directory:";
+            // 
+            // txtBackupDir
+            // 
+            this.txtBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtBackupDir.Location = new System.Drawing.Point(107, 300);
+            this.txtBackupDir.Name = "txtBackupDir";
+            this.txtBackupDir.Size = new System.Drawing.Size(518, 20);
+            this.txtBackupDir.TabIndex = 10;
+            this.txtBackupDir.TextChanged += new System.EventHandler(this.txtBackupDir_TextChanged);
+            // 
+            // btnSelectBackupDir
+            // 
+            this.btnSelectBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSelectBackupDir.Location = new System.Drawing.Point(631, 298);
+            this.btnSelectBackupDir.Name = "btnSelectBackupDir";
+            this.btnSelectBackupDir.Size = new System.Drawing.Size(26, 23);
+            this.btnSelectBackupDir.TabIndex = 12;
+            this.btnSelectBackupDir.Text = "...";
+            this.btnSelectBackupDir.UseVisualStyleBackColor = true;
+            this.btnSelectBackupDir.Click += new System.EventHandler(this.btnSelectBackupDir_Click);
+            // 
             // ReportForm
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnOK;
-            this.ClientSize = new System.Drawing.Size(669, 332);
+            this.ClientSize = new System.Drawing.Size(669, 362);
             this.ControlBox = false;
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.chkAutoBackup);
+            this.Controls.Add(this.btnSelectBackupDir);
             this.Controls.Add(this.grpFile2);
+            this.Controls.Add(this.lblBackupDir);
+            this.Controls.Add(this.txtBackupDir);
             this.Controls.Add(this.grpOutputFile);
             this.Controls.Add(this.lblSuccessCount);
             this.Controls.Add(this.grpFile1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(1920, 370);
-            this.MinimumSize = new System.Drawing.Size(685, 370);
+            this.MaximumSize = new System.Drawing.Size(1920, 400);
+            this.MinimumSize = new System.Drawing.Size(685, 400);
             this.Name = "ReportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Merge Finished";
@@ -301,5 +341,8 @@
         private System.Windows.Forms.TextBox txtFilePath2;
         private System.Windows.Forms.CheckBox chkAutoBackup;
         private System.Windows.Forms.Button btnOK;
+        private System.Windows.Forms.Label lblBackupDir;
+        private System.Windows.Forms.TextBox txtBackupDir;
+        private System.Windows.Forms.Button btnSelectBackupDir;
     }
 }

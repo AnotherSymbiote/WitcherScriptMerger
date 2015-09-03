@@ -1,5 +1,4 @@
-﻿using GoogleDiffMatchPatch;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -15,8 +14,13 @@ namespace WitcherScriptMerger.Forms
         private TreeNode _clickedNode = null;
         private int _mergesToDo = 0;
 
+        public string GameDirectory
+        {
+            get { return txtGameDir.Text; }
+        }
+        
         private string _scriptsDirSetting = Program.Settings.Get("ScriptsDirectory");
-        private string ScriptsDirectory
+        public string ScriptsDirectory
         {
             get
             {
@@ -27,24 +31,13 @@ namespace WitcherScriptMerger.Forms
         }
 
         private string _modsDirSetting = Program.Settings.Get("ModsDirectory");
-        private string ModsDirectory
+        public string ModsDirectory
         {
             get
             {
                 if (!string.IsNullOrWhiteSpace(_modsDirSetting))
                     return _modsDirSetting;
                 return Path.Combine(txtGameDir.Text, "Mods");
-            }
-        }
-
-        private string BackupDirectory
-        {
-            get
-            {
-                if (Path.IsPathRooted(txtBackupDir.Text))
-                    return txtBackupDir.Text;
-                else
-                    return Path.Combine(txtGameDir.Text, txtBackupDir.Text);
             }
         }
 
@@ -61,7 +54,6 @@ namespace WitcherScriptMerger.Forms
             txtGameDir.Text = Program.Settings.Get("GameDirectory");
             chkCheckAtLaunch.Checked = Program.Settings.Get<bool>("CheckAtLaunch");
             txtMergedModName.Text = Program.Settings.Get("MergedModName");
-            txtBackupDir.Text = Program.Settings.Get("BackupDirectory");
             chkIgnoreWhitespace.Checked = Program.Settings.Get<bool>("IgnoreWhitespace");
             
             LoadLastWindowConfiguration();
@@ -80,7 +72,6 @@ namespace WitcherScriptMerger.Forms
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
             Program.Settings.Set("CheckAtLaunch", chkCheckAtLaunch.Checked);
             Program.Settings.Set("MergedModName", txtMergedModName.Text);
-            Program.Settings.Set("BackupDirectory", txtBackupDir.Text);
             Program.Settings.Set("IgnoreWhitespace", chkIgnoreWhitespace.Checked);
 
             if (WindowState == FormWindowState.Maximized)
@@ -120,21 +111,11 @@ namespace WitcherScriptMerger.Forms
 
         private void btnSelectGameDirectory_Click(object sender, EventArgs e)
         {
-            txtGameDir.Text = GetUserDirectoryChoice();
-        }
-
-        private void btnSelectBackupDir_Click(object sender, EventArgs e)
-        {
-            txtBackupDir.Text = GetUserDirectoryChoice();
-        }
-
-        private string GetUserDirectoryChoice()
-        {
             FolderBrowserDialog dlgSelectRoot = new FolderBrowserDialog();
             if (Directory.Exists(txtGameDir.Text))
                 dlgSelectRoot.SelectedPath = txtGameDir.Text;
             dlgSelectRoot.ShowDialog();
-            return dlgSelectRoot.SelectedPath;
+            txtGameDir.Text = dlgSelectRoot.SelectedPath;
         }
 
         private void btnCheckForConflicts_Click(object sender, EventArgs e)
@@ -287,10 +268,13 @@ namespace WitcherScriptMerger.Forms
                 Directory.CreateDirectory(outputDir);
             File.WriteAllText(outputPath, result.Text);
 
-            var reportForm = new ReportForm(mergeNum, _mergesToDo, result, ModsDirectory, BackupDirectory);
-            reportForm.SetModNames(set1.ModName, set2.ModName);
-            reportForm.SetFilePaths(file1.FullName, file2.FullName, outputPath);
-            reportForm.ShowDialog();
+            using (var reportForm = new ReportForm(
+                mergeNum, _mergesToDo, result,
+                file1.FullName, file2.FullName, outputPath,
+                set1.ModName, set2.ModName))
+            {
+                reportForm.ShowDialog();
+            }
 
             return new FileInfo(outputPath);
         }
@@ -493,11 +477,6 @@ namespace WitcherScriptMerger.Forms
         private void txtGameDir_TextChanged(object sender, EventArgs e)
         {
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
-        }
-
-        private void txtBackupDir_TextChanged(object sender, EventArgs e)
-        {
-            Program.Settings.Set("BackupDirectory", txtBackupDir.Text);
         }
 
         public bool IsIgnoreWhitespaceEnabled()
