@@ -53,14 +53,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblFilePath.Location = new System.Drawing.Point(12, 35);
             this.lblFilePath.Name = "lblFilePath";
-            this.lblFilePath.Size = new System.Drawing.Size(367, 71);
+            this.lblFilePath.Size = new System.Drawing.Size(598, 90);
             this.lblFilePath.TabIndex = 1;
             this.lblFilePath.Text = "filePath";
             // 
             // lblNewName
             // 
             this.lblNewName.AutoSize = true;
-            this.lblNewName.Location = new System.Drawing.Point(12, 106);
+            this.lblNewName.Location = new System.Drawing.Point(12, 125);
             this.lblNewName.Name = "lblNewName";
             this.lblNewName.Size = new System.Drawing.Size(282, 39);
             this.lblNewName.TabIndex = 2;
@@ -70,7 +70,7 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(256, 179);
+            this.btnOK.Location = new System.Drawing.Point(487, 179);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(123, 23);
             this.btnOK.TabIndex = 3;
@@ -82,9 +82,9 @@
             // 
             this.txtNewName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtNewName.Location = new System.Drawing.Point(15, 148);
+            this.txtNewName.Location = new System.Drawing.Point(299, 148);
             this.txtNewName.Name = "txtNewName";
-            this.txtNewName.Size = new System.Drawing.Size(341, 20);
+            this.txtNewName.Size = new System.Drawing.Size(288, 20);
             this.txtNewName.TabIndex = 4;
             this.txtNewName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtNewName_KeyDown);
             // 
@@ -92,7 +92,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(127, 179);
+            this.btnCancel.Location = new System.Drawing.Point(358, 179);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(123, 23);
             this.btnCancel.TabIndex = 5;
@@ -104,7 +104,7 @@
             // 
             this.lblExtension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblExtension.AutoSize = true;
-            this.lblExtension.Location = new System.Drawing.Point(356, 151);
+            this.lblExtension.Location = new System.Drawing.Point(587, 151);
             this.lblExtension.Name = "lblExtension";
             this.lblExtension.Size = new System.Drawing.Size(23, 13);
             this.lblExtension.TabIndex = 6;
@@ -116,7 +116,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(391, 214);
+            this.ClientSize = new System.Drawing.Size(622, 214);
             this.ControlBox = false;
             this.Controls.Add(this.lblExtension);
             this.Controls.Add(this.btnCancel);

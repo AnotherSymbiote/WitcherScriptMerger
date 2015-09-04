@@ -86,7 +86,7 @@
             this.grpFile1.Controls.Add(this.btnOpenFile1);
             this.grpFile1.Controls.Add(this.txtFilePath1);
             this.grpFile1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpFile1.Location = new System.Drawing.Point(12, 39);
+            this.grpFile1.Location = new System.Drawing.Point(12, 54);
             this.grpFile1.Name = "grpFile1";
             this.grpFile1.Size = new System.Drawing.Size(645, 79);
             this.grpFile1.TabIndex = 4;
@@ -118,9 +118,10 @@
             // lblSuccessCount
             // 
             this.lblSuccessCount.AutoSize = true;
-            this.lblSuccessCount.Location = new System.Drawing.Point(12, 9);
+            this.lblSuccessCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSuccessCount.Location = new System.Drawing.Point(12, 11);
             this.lblSuccessCount.Name = "lblSuccessCount";
-            this.lblSuccessCount.Size = new System.Drawing.Size(213, 13);
+            this.lblSuccessCount.Size = new System.Drawing.Size(312, 20);
             this.lblSuccessCount.TabIndex = 8;
             this.lblSuccessCount.Text = "{0} out of {1} changes merged successfully!";
             // 
@@ -132,7 +133,7 @@
             this.grpOutputFile.Controls.Add(this.btnOpenOutputFile);
             this.grpOutputFile.Controls.Add(this.txtOutputPath);
             this.grpOutputFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpOutputFile.Location = new System.Drawing.Point(12, 209);
+            this.grpOutputFile.Location = new System.Drawing.Point(12, 234);
             this.grpOutputFile.Name = "grpOutputFile";
             this.grpOutputFile.Size = new System.Drawing.Size(645, 77);
             this.grpOutputFile.TabIndex = 5;
@@ -182,7 +183,7 @@
             this.grpFile2.Controls.Add(this.btnOpenFile2);
             this.grpFile2.Controls.Add(this.txtFilePath2);
             this.grpFile2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpFile2.Location = new System.Drawing.Point(12, 124);
+            this.grpFile2.Location = new System.Drawing.Point(12, 144);
             this.grpFile2.Name = "grpFile2";
             this.grpFile2.Size = new System.Drawing.Size(645, 79);
             this.grpFile2.TabIndex = 6;
@@ -238,7 +239,7 @@
             // 
             this.chkAutoBackup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkAutoBackup.AutoSize = true;
-            this.chkAutoBackup.Location = new System.Drawing.Point(12, 331);
+            this.chkAutoBackup.Location = new System.Drawing.Point(12, 361);
             this.chkAutoBackup.Name = "chkAutoBackup";
             this.chkAutoBackup.Size = new System.Drawing.Size(415, 17);
             this.chkAutoBackup.TabIndex = 9;
@@ -248,10 +249,10 @@
             // 
             // btnOK
             // 
-            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOK.Location = new System.Drawing.Point(550, 327);
+            this.btnOK.Location = new System.Drawing.Point(550, 357);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(107, 23);
             this.btnOK.TabIndex = 10;
@@ -263,7 +264,7 @@
             // 
             this.lblBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblBackupDir.AutoSize = true;
-            this.lblBackupDir.Location = new System.Drawing.Point(9, 303);
+            this.lblBackupDir.Location = new System.Drawing.Point(9, 333);
             this.lblBackupDir.Name = "lblBackupDir";
             this.lblBackupDir.Size = new System.Drawing.Size(92, 13);
             this.lblBackupDir.TabIndex = 11;
@@ -273,7 +274,7 @@
             // 
             this.txtBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBackupDir.Location = new System.Drawing.Point(107, 300);
+            this.txtBackupDir.Location = new System.Drawing.Point(107, 330);
             this.txtBackupDir.Name = "txtBackupDir";
             this.txtBackupDir.Size = new System.Drawing.Size(518, 20);
             this.txtBackupDir.TabIndex = 10;
@@ -283,7 +284,7 @@
             // btnSelectBackupDir
             // 
             this.btnSelectBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSelectBackupDir.Location = new System.Drawing.Point(631, 298);
+            this.btnSelectBackupDir.Location = new System.Drawing.Point(631, 328);
             this.btnSelectBackupDir.Name = "btnSelectBackupDir";
             this.btnSelectBackupDir.Size = new System.Drawing.Size(26, 23);
             this.btnSelectBackupDir.TabIndex = 12;
@@ -297,7 +298,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnOK;
-            this.ClientSize = new System.Drawing.Size(669, 362);
+            this.ClientSize = new System.Drawing.Size(669, 392);
             this.ControlBox = false;
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.chkAutoBackup);
@@ -309,8 +310,8 @@
             this.Controls.Add(this.lblSuccessCount);
             this.Controls.Add(this.grpFile1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(1920, 400);
-            this.MinimumSize = new System.Drawing.Size(685, 400);
+            this.MaximumSize = new System.Drawing.Size(1920, 430);
+            this.MinimumSize = new System.Drawing.Size(685, 430);
             this.Name = "ReportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Merge Finished";

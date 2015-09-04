@@ -137,13 +137,13 @@ namespace WitcherScriptMerger.Forms
 
         private void BackUpFile(TextBox txtPath, Button btnBackUp)
         {
-            if (MoveFile(txtPath, Program.MainForm.ModsDirectory, txtBackupDir.Text))
+            if (MoveFile(txtPath, Program.MainForm.ModsDirectory, BackupDirectory))
                 btnBackUp.Text = "Undo Move to Backup Directory";
         }
 
         private void UndoBackUp(TextBox txtPath, Button btnBackUp)
         {
-            if (MoveFile(txtPath, txtBackupDir.Text, Program.MainForm.ModsDirectory))
+            if (MoveFile(txtPath, BackupDirectory, Program.MainForm.ModsDirectory))
                 btnBackUp.Text = "Move to Backup Directory";
         }
 
