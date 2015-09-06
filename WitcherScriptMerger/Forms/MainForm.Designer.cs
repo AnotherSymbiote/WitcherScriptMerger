@@ -61,7 +61,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtGameDir.Location = new System.Drawing.Point(116, 14);
             this.txtGameDir.Name = "txtGameDir";
-            this.txtGameDir.Size = new System.Drawing.Size(293, 20);
+            this.txtGameDir.Size = new System.Drawing.Size(207, 20);
             this.txtGameDir.TabIndex = 0;
             this.txtGameDir.TextChanged += new System.EventHandler(this.txtGameDir_TextChanged);
             this.txtGameDir.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
@@ -78,7 +78,7 @@
             // btnSelectGameDir
             // 
             this.btnSelectGameDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSelectGameDir.Location = new System.Drawing.Point(415, 12);
+            this.btnSelectGameDir.Location = new System.Drawing.Point(329, 12);
             this.btnSelectGameDir.Name = "btnSelectGameDir";
             this.btnSelectGameDir.Size = new System.Drawing.Size(26, 23);
             this.btnSelectGameDir.TabIndex = 1;
@@ -97,7 +97,7 @@
             this.treConflicts.Name = "treConflicts";
             this.treConflicts.ShowNodeToolTips = true;
             this.treConflicts.ShowRootLines = false;
-            this.treConflicts.Size = new System.Drawing.Size(539, 408);
+            this.treConflicts.Size = new System.Drawing.Size(453, 408);
             this.treConflicts.TabIndex = 4;
             this.treConflicts.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.treConflicts_AfterCheck);
             this.treConflicts.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treConflicts_AfterSelect);
@@ -202,7 +202,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCheckForConflicts.Location = new System.Drawing.Point(12, 41);
             this.btnCheckForConflicts.Name = "btnCheckForConflicts";
-            this.btnCheckForConflicts.Size = new System.Drawing.Size(539, 43);
+            this.btnCheckForConflicts.Size = new System.Drawing.Size(453, 43);
             this.btnCheckForConflicts.TabIndex = 3;
             this.btnCheckForConflicts.Text = "&Check for Script File Conflicts";
             this.btnCheckForConflicts.UseVisualStyleBackColor = true;
@@ -216,7 +216,7 @@
             this.btnTryMergeSelected.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTryMergeSelected.Location = new System.Drawing.Point(12, 553);
             this.btnTryMergeSelected.Name = "btnTryMergeSelected";
-            this.btnTryMergeSelected.Size = new System.Drawing.Size(539, 43);
+            this.btnTryMergeSelected.Size = new System.Drawing.Size(453, 43);
             this.btnTryMergeSelected.TabIndex = 7;
             this.btnTryMergeSelected.Text = "Try to &Merge Selected Scripts";
             this.btnTryMergeSelected.UseVisualStyleBackColor = true;
@@ -245,7 +245,7 @@
             // 
             this.chkCheckAtLaunch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.chkCheckAtLaunch.AutoSize = true;
-            this.chkCheckAtLaunch.Location = new System.Drawing.Point(447, 16);
+            this.chkCheckAtLaunch.Location = new System.Drawing.Point(361, 16);
             this.chkCheckAtLaunch.Name = "chkCheckAtLaunch";
             this.chkCheckAtLaunch.Size = new System.Drawing.Size(104, 17);
             this.chkCheckAtLaunch.TabIndex = 2;
@@ -254,9 +254,9 @@
             // 
             // chkIgnoreWhitespace
             // 
-            this.chkIgnoreWhitespace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkIgnoreWhitespace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.chkIgnoreWhitespace.AutoSize = true;
-            this.chkIgnoreWhitespace.Location = new System.Drawing.Point(372, 504);
+            this.chkIgnoreWhitespace.Location = new System.Drawing.Point(286, 504);
             this.chkIgnoreWhitespace.Name = "chkIgnoreWhitespace";
             this.chkIgnoreWhitespace.Size = new System.Drawing.Size(179, 17);
             this.chkIgnoreWhitespace.TabIndex = 14;
@@ -268,7 +268,7 @@
             this.AcceptButton = this.btnTryMergeSelected;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(563, 602);
+            this.ClientSize = new System.Drawing.Size(477, 602);
             this.Controls.Add(this.chkIgnoreWhitespace);
             this.Controls.Add(this.chkCheckAtLaunch);
             this.Controls.Add(this.lblMergedModName);
@@ -280,7 +280,7 @@
             this.Controls.Add(this.lblGameDir);
             this.Controls.Add(this.txtGameDir);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(475, 280);
+            this.MinimumSize = new System.Drawing.Size(410, 280);
             this.Name = "MainForm";
             this.Text = "Script Merger";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
