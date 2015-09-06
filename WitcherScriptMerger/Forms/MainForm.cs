@@ -290,6 +290,7 @@ namespace WitcherScriptMerger.Forms
 
         private void treConflicts_MouseDown(object sender, MouseEventArgs e)
         {
+            treConflicts.EndUpdate();
             treConflicts.BeginUpdate();
             _clickedNode = treConflicts.GetNodeAt(e.Location);
             if (_clickedNode != null && !_clickedNode.Bounds.Contains(e.Location))
