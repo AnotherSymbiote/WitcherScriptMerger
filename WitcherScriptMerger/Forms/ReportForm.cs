@@ -6,8 +6,6 @@ namespace WitcherScriptMerger.Forms
 {
     public partial class ReportForm : Form
     {
-        private bool _success;
-
         private string BackupDirectory
         {
             get
@@ -190,7 +188,7 @@ namespace WitcherScriptMerger.Forms
 
         private void btnDone_Click(object sender, EventArgs e)
         {
-            if (_success && chkAutoBackup.Checked)
+            if (chkAutoBackup.Checked)
             {
                 if (txtFilePath1.Text != txtOutputPath.Text && !btnBackUpFile1.Text.StartsWith("Undo"))
                     btnBackUpFile1_Click(null, null);

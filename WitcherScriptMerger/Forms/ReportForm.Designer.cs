@@ -237,7 +237,6 @@
             // 
             // chkAutoBackup
             // 
-            this.chkAutoBackup.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.chkAutoBackup.AutoSize = true;
             this.chkAutoBackup.Location = new System.Drawing.Point(12, 361);
             this.chkAutoBackup.Name = "chkAutoBackup";
@@ -249,7 +248,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOK.Location = new System.Drawing.Point(550, 357);
@@ -262,7 +261,6 @@
             // 
             // lblBackupDir
             // 
-            this.lblBackupDir.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblBackupDir.AutoSize = true;
             this.lblBackupDir.Location = new System.Drawing.Point(9, 333);
             this.lblBackupDir.Name = "lblBackupDir";
@@ -272,7 +270,8 @@
             // 
             // txtBackupDir
             // 
-            this.txtBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBackupDir.Location = new System.Drawing.Point(107, 330);
             this.txtBackupDir.Name = "txtBackupDir";
             this.txtBackupDir.Size = new System.Drawing.Size(518, 20);
@@ -282,7 +281,7 @@
             // 
             // btnSelectBackupDir
             // 
-            this.btnSelectBackupDir.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btnSelectBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSelectBackupDir.Location = new System.Drawing.Point(631, 328);
             this.btnSelectBackupDir.Name = "btnSelectBackupDir";
             this.btnSelectBackupDir.Size = new System.Drawing.Size(26, 23);

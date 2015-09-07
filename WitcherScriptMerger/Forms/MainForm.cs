@@ -13,6 +13,7 @@ namespace WitcherScriptMerger.Forms
 
         private TreeNode _clickedNode = null;
         private int _mergesToDo = 0;
+        private string _kdiff3PathSetting = Program.Settings.Get("KDiff3Path");
 
         public string GameDirectory
         {
@@ -40,7 +41,6 @@ namespace WitcherScriptMerger.Forms
                 return Path.Combine(txtGameDir.Text, "Mods");
             }
         }
-
         #endregion
 
         #region Form Operations
@@ -291,7 +291,10 @@ namespace WitcherScriptMerger.Forms
             if (!chkReviewEachMerge.Checked)
                 args += " --auto";
             
-            string kdiff3Path = Path.Combine(Environment.CurrentDirectory, "KDiff3", "kdiff3.exe");
+            string kdiff3Path = (Path.IsPathRooted(_kdiff3PathSetting)
+                ? _kdiff3PathSetting
+                : Path.Combine(Environment.CurrentDirectory, _kdiff3PathSetting));
+            
             var kdiff3Proc = System.Diagnostics.Process.Start(kdiff3Path, args);
             kdiff3Proc.WaitForExit();
 

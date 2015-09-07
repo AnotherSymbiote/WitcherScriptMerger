@@ -234,10 +234,11 @@
             // 
             // txtMergedModName
             // 
-            this.txtMergedModName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txtMergedModName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtMergedModName.Location = new System.Drawing.Point(12, 527);
             this.txtMergedModName.Name = "txtMergedModName";
-            this.txtMergedModName.Size = new System.Drawing.Size(539, 20);
+            this.txtMergedModName.Size = new System.Drawing.Size(453, 20);
             this.txtMergedModName.TabIndex = 5;
             this.txtMergedModName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
@@ -280,7 +281,7 @@
             this.Controls.Add(this.lblGameDir);
             this.Controls.Add(this.txtGameDir);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(410, 280);
+            this.MinimumSize = new System.Drawing.Size(430, 280);
             this.Name = "MainForm";
             this.Text = "Script Merger";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
