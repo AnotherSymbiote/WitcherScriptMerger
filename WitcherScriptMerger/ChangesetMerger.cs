@@ -39,7 +39,7 @@ namespace WitcherScriptMerger
             while (patch1 != null || patch2 != null)  // While there are still patches to merge
             {
                 bool foundWhitespacePatch = false;
-                if (Program.MainForm.IsIgnoreWhitespaceEnabled())
+                ////if (Program.MainForm.IsIgnoreWhitespaceEnabled())
                 {
                     if (patch1 != null && patch1.Diffs.AreOnlyWhitespace())
                     {

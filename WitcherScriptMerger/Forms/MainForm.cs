@@ -54,7 +54,7 @@ namespace WitcherScriptMerger.Forms
             txtGameDir.Text = Program.Settings.Get("GameDirectory");
             chkCheckAtLaunch.Checked = Program.Settings.Get<bool>("CheckAtLaunch");
             txtMergedModName.Text = Program.Settings.Get("MergedModName");
-            chkIgnoreWhitespace.Checked = Program.Settings.Get<bool>("IgnoreWhitespace");
+            chkReviewEachMerge.Checked = Program.Settings.Get<bool>("ReviewEachMerge");
             
             LoadLastWindowConfiguration();
             Program.Settings.EndBatch();
@@ -72,7 +72,7 @@ namespace WitcherScriptMerger.Forms
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
             Program.Settings.Set("CheckAtLaunch", chkCheckAtLaunch.Checked);
             Program.Settings.Set("MergedModName", txtMergedModName.Text);
-            Program.Settings.Set("IgnoreWhitespace", chkIgnoreWhitespace.Checked);
+            Program.Settings.Set("ReviewEachMerge", chkReviewEachMerge.Checked);
 
             if (WindowState == FormWindowState.Maximized)
                 Program.Settings.Set("StartMaximized", true);
@@ -103,6 +103,11 @@ namespace WitcherScriptMerger.Forms
             
             if (Program.Settings.Get<bool>("StartMaximized"))
                 WindowState = FormWindowState.Maximized;
+        }
+
+        private void txtGameDir_TextChanged(object sender, EventArgs e)
+        {
+            Program.Settings.Set("GameDirectory", txtGameDir.Text);
         }
 
         #endregion
@@ -247,34 +252,61 @@ namespace WitcherScriptMerger.Forms
                     var mergedFile = TryMergePair(i, vanillaFile, file1, file2, outputPath);
                     if (mergedFile != null)
                         file1 = mergedFile;
+                    else
+                    {
+                        string msg = "Merge was canceled.";
+                        var buttons = MessageBoxButtons.OK;
+                        if (_mergesToDo > 1 || scriptNodes.Count() > 1)
+                        {
+                            buttons = MessageBoxButtons.OKCancel;
+                            if (_mergesToDo > 1)
+                                msg = string.Format("Merge {0} of {1} was canceled.", i, _mergesToDo);
+                        }
+                        var result = MessageBox.Show(msg, "Skipped Merge", buttons, MessageBoxIcon.Information);
+                        if (result == System.Windows.Forms.DialogResult.Cancel)
+                        {
+                            btnTryMergeSelected.Enabled = false;
+                            btnCheckForConflicts_Click(null, null);  // Update conflict list
+                            return;
+                        }
+                    }
                 }
             }
-
             btnTryMergeSelected.Enabled = false;
             btnCheckForConflicts_Click(null, null);  // Update conflict list
         }
 
         private FileInfo TryMergePair(int mergeNum, FileInfo vanillaFile, FileInfo file1, FileInfo file2, string outputPath)
         {
-            string vanillaText = File.ReadAllText(vanillaFile.FullName);
-            var set1 = new Changeset(vanillaText, file1);
-            var set2 = new Changeset(vanillaText, file2);
-
-            var combinedSet = new ChangesetMerger(set1, set2, vanillaText).Merge();
-            var result = combinedSet.TryApply(vanillaText);
-
             string outputDir = Path.GetDirectoryName(outputPath);
             if (!Directory.Exists(outputDir))
                 Directory.CreateDirectory(outputDir);
-            File.WriteAllText(outputPath, result.Text);
 
-            using (var reportForm = new ReportForm(
-                mergeNum, _mergesToDo, result,
-                file1.FullName, file2.FullName, outputPath,
-                set1.ModName, set2.ModName))
+            string modName1 = ModDirectory.GetModName(file1);
+            string modName2 = ModDirectory.GetModName(file2);
+
+            string args = string.Format(
+                "\"{0}\" \"{1}\" \"{2}\" -o \"{3}\"",
+                vanillaFile.FullName, file1.FullName, file2.FullName, outputPath);
+            if (!chkReviewEachMerge.Checked)
+                args += " --auto";
+            
+            string kdiff3Path = Path.Combine(Environment.CurrentDirectory, "KDiff3", "kdiff3.exe");
+            var kdiff3Proc = System.Diagnostics.Process.Start(kdiff3Path, args);
+            kdiff3Proc.WaitForExit();
+
+            if (kdiff3Proc.ExitCode == 0)
             {
-                reportForm.ShowDialog();
+                using (var reportForm = new ReportForm(
+                    mergeNum, _mergesToDo,
+                    file1.FullName, file2.FullName, outputPath,
+                    modName1, modName2))
+                {
+                    reportForm.ShowDialog();
+                }
             }
+            else
+                return null;
 
             return new FileInfo(outputPath);
         }
@@ -469,20 +501,6 @@ namespace WitcherScriptMerger.Forms
         {
             if (e.Control && e.KeyCode == Keys.A)
                 contextSelectAll_Click(null, null);
-        }
-
-        #endregion
-
-        #region Settings
-
-        private void txtGameDir_TextChanged(object sender, EventArgs e)
-        {
-            Program.Settings.Set("GameDirectory", txtGameDir.Text);
-        }
-
-        public bool IsIgnoreWhitespaceEnabled()
-        {
-            return chkIgnoreWhitespace.Checked;
         }
 
         #endregion

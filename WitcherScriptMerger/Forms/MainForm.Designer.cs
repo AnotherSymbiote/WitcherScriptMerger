@@ -51,7 +51,7 @@
             this.lblMergedModName = new System.Windows.Forms.Label();
             this.txtMergedModName = new System.Windows.Forms.TextBox();
             this.chkCheckAtLaunch = new System.Windows.Forms.CheckBox();
-            this.chkIgnoreWhitespace = new System.Windows.Forms.CheckBox();
+            this.chkReviewEachMerge = new System.Windows.Forms.CheckBox();
             this.treeContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -252,16 +252,16 @@
             this.chkCheckAtLaunch.Text = "Check at &launch";
             this.chkCheckAtLaunch.UseVisualStyleBackColor = true;
             // 
-            // chkIgnoreWhitespace
+            // chkReviewEachMerge
             // 
-            this.chkIgnoreWhitespace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkIgnoreWhitespace.AutoSize = true;
-            this.chkIgnoreWhitespace.Location = new System.Drawing.Point(286, 504);
-            this.chkIgnoreWhitespace.Name = "chkIgnoreWhitespace";
-            this.chkIgnoreWhitespace.Size = new System.Drawing.Size(179, 17);
-            this.chkIgnoreWhitespace.TabIndex = 14;
-            this.chkIgnoreWhitespace.Text = "Ignore &whitespace-only changes";
-            this.chkIgnoreWhitespace.UseVisualStyleBackColor = true;
+            this.chkReviewEachMerge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkReviewEachMerge.AutoSize = true;
+            this.chkReviewEachMerge.Location = new System.Drawing.Point(237, 505);
+            this.chkReviewEachMerge.Name = "chkReviewEachMerge";
+            this.chkReviewEachMerge.Size = new System.Drawing.Size(228, 17);
+            this.chkReviewEachMerge.TabIndex = 15;
+            this.chkReviewEachMerge.Text = "Review each merge (even if auto-solvable)";
+            this.chkReviewEachMerge.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -269,7 +269,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(477, 602);
-            this.Controls.Add(this.chkIgnoreWhitespace);
+            this.Controls.Add(this.chkReviewEachMerge);
             this.Controls.Add(this.chkCheckAtLaunch);
             this.Controls.Add(this.lblMergedModName);
             this.Controls.Add(this.txtMergedModName);
@@ -310,11 +310,11 @@
         private System.Windows.Forms.Label lblMergedModName;
         private System.Windows.Forms.TextBox txtMergedModName;
         private System.Windows.Forms.CheckBox chkCheckAtLaunch;
-        private System.Windows.Forms.CheckBox chkIgnoreWhitespace;
         private System.Windows.Forms.ToolStripSeparator contextSelectSeparator;
         private System.Windows.Forms.ToolStripMenuItem contextSelectAll;
         private System.Windows.Forms.ToolStripMenuItem contextDeselectAll;
         private System.Windows.Forms.ToolStripSeparator contextExpandSeparator;
+        private System.Windows.Forms.CheckBox chkReviewEachMerge;
     }
 }
 

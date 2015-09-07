@@ -34,7 +34,7 @@
             this.grpFile1 = new System.Windows.Forms.GroupBox();
             this.btnBackUpFile1 = new System.Windows.Forms.Button();
             this.btnOpenDir1 = new System.Windows.Forms.Button();
-            this.lblSuccessCount = new System.Windows.Forms.Label();
+            this.lblMergedFiles = new System.Windows.Forms.Label();
             this.grpOutputFile = new System.Windows.Forms.GroupBox();
             this.btnOpenOutputDir = new System.Windows.Forms.Button();
             this.btnOpenOutputFile = new System.Windows.Forms.Button();
@@ -115,15 +115,15 @@
             this.btnOpenDir1.UseVisualStyleBackColor = true;
             this.btnOpenDir1.Click += new System.EventHandler(this.btnOpenDir1_Click);
             // 
-            // lblSuccessCount
+            // lblMergedFiles
             // 
-            this.lblSuccessCount.AutoSize = true;
-            this.lblSuccessCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSuccessCount.Location = new System.Drawing.Point(12, 11);
-            this.lblSuccessCount.Name = "lblSuccessCount";
-            this.lblSuccessCount.Size = new System.Drawing.Size(312, 20);
-            this.lblSuccessCount.TabIndex = 8;
-            this.lblSuccessCount.Text = "{0} out of {1} changes merged successfully!";
+            this.lblMergedFiles.AutoSize = true;
+            this.lblMergedFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMergedFiles.Location = new System.Drawing.Point(12, 11);
+            this.lblMergedFiles.Name = "lblMergedFiles";
+            this.lblMergedFiles.Size = new System.Drawing.Size(448, 20);
+            this.lblMergedFiles.TabIndex = 8;
+            this.lblMergedFiles.Text = "Merged files!  Now you can move them to the backup directory.";
             // 
             // grpOutputFile
             // 
@@ -237,7 +237,7 @@
             // 
             // chkAutoBackup
             // 
-            this.chkAutoBackup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkAutoBackup.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.chkAutoBackup.AutoSize = true;
             this.chkAutoBackup.Location = new System.Drawing.Point(12, 361);
             this.chkAutoBackup.Name = "chkAutoBackup";
@@ -249,7 +249,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOK.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOK.Location = new System.Drawing.Point(550, 357);
@@ -262,7 +262,7 @@
             // 
             // lblBackupDir
             // 
-            this.lblBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblBackupDir.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblBackupDir.AutoSize = true;
             this.lblBackupDir.Location = new System.Drawing.Point(9, 333);
             this.lblBackupDir.Name = "lblBackupDir";
@@ -272,8 +272,7 @@
             // 
             // txtBackupDir
             // 
-            this.txtBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBackupDir.Location = new System.Drawing.Point(107, 330);
             this.txtBackupDir.Name = "txtBackupDir";
             this.txtBackupDir.Size = new System.Drawing.Size(518, 20);
@@ -283,7 +282,7 @@
             // 
             // btnSelectBackupDir
             // 
-            this.btnSelectBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSelectBackupDir.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btnSelectBackupDir.Location = new System.Drawing.Point(631, 328);
             this.btnSelectBackupDir.Name = "btnSelectBackupDir";
             this.btnSelectBackupDir.Size = new System.Drawing.Size(26, 23);
@@ -307,7 +306,7 @@
             this.Controls.Add(this.lblBackupDir);
             this.Controls.Add(this.txtBackupDir);
             this.Controls.Add(this.grpOutputFile);
-            this.Controls.Add(this.lblSuccessCount);
+            this.Controls.Add(this.lblMergedFiles);
             this.Controls.Add(this.grpFile1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1920, 430);
@@ -333,7 +332,7 @@
         private System.Windows.Forms.Button btnOpenFile1;
         private System.Windows.Forms.GroupBox grpFile1;
         private System.Windows.Forms.Button btnOpenDir1;
-        private System.Windows.Forms.Label lblSuccessCount;
+        private System.Windows.Forms.Label lblMergedFiles;
         private System.Windows.Forms.Button btnBackUpFile1;
         private System.Windows.Forms.GroupBox grpOutputFile;
         private System.Windows.Forms.Button btnOpenOutputDir;

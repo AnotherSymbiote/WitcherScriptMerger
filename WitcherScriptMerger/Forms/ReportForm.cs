@@ -22,7 +22,7 @@ namespace WitcherScriptMerger.Forms
         #region Initialization
 
         public ReportForm(
-            int mergeNum, int mergeTotal, Changeset.ChangesetResult mergeResult,
+            int mergeNum, int mergeTotal,
             string file1, string file2, string outputFile,
             string modName1, string modName2)
         {
@@ -34,9 +34,6 @@ namespace WitcherScriptMerger.Forms
                 if (mergeNum < mergeTotal)
                     btnOK.Text = "Continue";
             }
-
-            _success = (mergeResult.SuccessCount == mergeResult.AttemptCount);
-            lblSuccessCount.Text = string.Format(lblSuccessCount.Text, mergeResult.SuccessCount, mergeResult.AttemptCount);
 
             txtBackupDir.Text = Program.Settings.Get("BackupDirectory");
             chkAutoBackup.Checked = Program.Settings.Get<bool>("MoveToBackupAfterMerge");
@@ -63,7 +60,7 @@ namespace WitcherScriptMerger.Forms
         private void DisableBackupButton(Button btn)
         {
             btnBackUpFile1.Enabled = false;
-            btnBackUpFile1.Text = "Can't backup (path matches output file)";
+            btnBackUpFile1.Text = "Can't back up (path matches output file)";
         }
 
         #endregion
