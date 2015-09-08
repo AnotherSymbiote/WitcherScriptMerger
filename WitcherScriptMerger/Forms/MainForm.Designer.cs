@@ -54,9 +54,6 @@
             this.chkReviewEachMerge = new System.Windows.Forms.CheckBox();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.lblConflicts = new System.Windows.Forms.Label();
-            this.btnSelectBackupDir = new System.Windows.Forms.Button();
-            this.txtBackupDir = new System.Windows.Forms.TextBox();
-            this.lblBackupDir = new System.Windows.Forms.Label();
             this.btnRefreshMerged = new System.Windows.Forms.Button();
             this.lblMergeInventory = new System.Windows.Forms.Label();
             this.btnUnmergeSelected = new System.Windows.Forms.Button();
@@ -103,7 +100,7 @@
             this.treConflicts.Name = "treConflicts";
             this.treConflicts.ShowNodeToolTips = true;
             this.treConflicts.ShowRootLines = false;
-            this.treConflicts.Size = new System.Drawing.Size(312, 449);
+            this.treConflicts.Size = new System.Drawing.Size(312, 479);
             this.treConflicts.TabIndex = 1;
             this.treConflicts.TabStop = false;
             this.treConflicts.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tree_AfterCheck);
@@ -251,7 +248,7 @@
             // 
             this.lblMergedModName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblMergedModName.AutoSize = true;
-            this.lblMergedModName.Location = new System.Drawing.Point(8, 488);
+            this.lblMergedModName.Location = new System.Drawing.Point(8, 518);
             this.lblMergedModName.Name = "lblMergedModName";
             this.lblMergedModName.Size = new System.Drawing.Size(101, 13);
             this.lblMergedModName.TabIndex = 9;
@@ -261,7 +258,7 @@
             // 
             this.txtMergedModName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMergedModName.Location = new System.Drawing.Point(115, 485);
+            this.txtMergedModName.Location = new System.Drawing.Point(115, 515);
             this.txtMergedModName.MaxLength = 64;
             this.txtMergedModName.Name = "txtMergedModName";
             this.txtMergedModName.Size = new System.Drawing.Size(209, 20);
@@ -291,10 +288,7 @@
             // 
             this.splitContainer.Panel1.Controls.Add(this.lblConflicts);
             this.splitContainer.Panel1.Controls.Add(this.chkReviewEachMerge);
-            this.splitContainer.Panel1.Controls.Add(this.btnSelectBackupDir);
             this.splitContainer.Panel1.Controls.Add(this.treConflicts);
-            this.splitContainer.Panel1.Controls.Add(this.txtBackupDir);
-            this.splitContainer.Panel1.Controls.Add(this.lblBackupDir);
             this.splitContainer.Panel1.Controls.Add(this.lblMergedModName);
             this.splitContainer.Panel1.Controls.Add(this.btnRefreshConflicts);
             this.splitContainer.Panel1.Controls.Add(this.txtMergedModName);
@@ -321,38 +315,6 @@
             this.lblConflicts.Size = new System.Drawing.Size(71, 16);
             this.lblConflicts.TabIndex = 16;
             this.lblConflicts.Text = "Conflicts:";
-            // 
-            // btnSelectBackupDir
-            // 
-            this.btnSelectBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSelectBackupDir.Location = new System.Drawing.Point(298, 511);
-            this.btnSelectBackupDir.Name = "btnSelectBackupDir";
-            this.btnSelectBackupDir.Size = new System.Drawing.Size(26, 23);
-            this.btnSelectBackupDir.TabIndex = 4;
-            this.btnSelectBackupDir.Text = "...";
-            this.btnSelectBackupDir.UseVisualStyleBackColor = true;
-            this.btnSelectBackupDir.Click += new System.EventHandler(this.btnSelectBackupDir_Click);
-            // 
-            // txtBackupDir
-            // 
-            this.txtBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBackupDir.Location = new System.Drawing.Point(115, 513);
-            this.txtBackupDir.Name = "txtBackupDir";
-            this.txtBackupDir.Size = new System.Drawing.Size(177, 20);
-            this.txtBackupDir.TabIndex = 3;
-            this.txtBackupDir.TextChanged += new System.EventHandler(this.txtBackupDir_TextChanged);
-            this.txtBackupDir.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
-            // 
-            // lblBackupDir
-            // 
-            this.lblBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblBackupDir.AutoSize = true;
-            this.lblBackupDir.Location = new System.Drawing.Point(17, 516);
-            this.lblBackupDir.Name = "lblBackupDir";
-            this.lblBackupDir.Size = new System.Drawing.Size(92, 13);
-            this.lblBackupDir.TabIndex = 11;
-            this.lblBackupDir.Text = "Backup Directory:";
             // 
             // btnRefreshMerged
             // 
@@ -388,7 +350,7 @@
             this.btnUnmergeSelected.Name = "btnUnmergeSelected";
             this.btnUnmergeSelected.Size = new System.Drawing.Size(310, 35);
             this.btnUnmergeSelected.TabIndex = 2;
-            this.btnUnmergeSelected.Text = "&Unmerge Selected Script";
+            this.btnUnmergeSelected.Text = "&Delete Selected Merge";
             this.btnUnmergeSelected.UseVisualStyleBackColor = true;
             this.btnUnmergeSelected.Click += new System.EventHandler(this.btnUnmergeSelected_Click);
             // 
@@ -481,9 +443,6 @@
         private System.Windows.Forms.TreeView treMergeInventory;
         private System.Windows.Forms.GroupBox grpGameDir;
         private System.Windows.Forms.Label lblConflicts;
-        private System.Windows.Forms.Label lblBackupDir;
-        private System.Windows.Forms.TextBox txtBackupDir;
-        private System.Windows.Forms.Button btnSelectBackupDir;
         private System.Windows.Forms.ToolStripMenuItem contextMergedScript;
         private System.Windows.Forms.ToolStripMenuItem contextMergedDir;
         private System.Windows.Forms.Button btnRefreshMerged;

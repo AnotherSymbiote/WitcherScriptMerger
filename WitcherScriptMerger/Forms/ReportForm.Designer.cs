@@ -43,6 +43,7 @@
             this.btnOpenFile2 = new System.Windows.Forms.Button();
             this.txtFilePath2 = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();
+            this.chkShowAfterMerge = new System.Windows.Forms.CheckBox();
             this.grpFile1.SuspendLayout();
             this.grpOutputFile.SuspendLayout();
             this.grpFile2.SuspendLayout();
@@ -103,9 +104,9 @@
             this.lblMergedFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMergedFiles.Location = new System.Drawing.Point(12, 11);
             this.lblMergedFiles.Name = "lblMergedFiles";
-            this.lblMergedFiles.Size = new System.Drawing.Size(303, 20);
+            this.lblMergedFiles.Size = new System.Drawing.Size(99, 20);
             this.lblMergedFiles.TabIndex = 8;
-            this.lblMergedFiles.Text = "Merged files && moved to backup directory!";
+            this.lblMergedFiles.Text = "Merged files!";
             // 
             // grpOutputFile
             // 
@@ -218,6 +219,16 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
+            // chkShowAfterMerge
+            // 
+            this.chkShowAfterMerge.AutoSize = true;
+            this.chkShowAfterMerge.Location = new System.Drawing.Point(16, 331);
+            this.chkShowAfterMerge.Name = "chkShowAfterMerge";
+            this.chkShowAfterMerge.Size = new System.Drawing.Size(185, 17);
+            this.chkShowAfterMerge.TabIndex = 11;
+            this.chkShowAfterMerge.Text = "&Show this report after each merge";
+            this.chkShowAfterMerge.UseVisualStyleBackColor = true;
+            // 
             // ReportForm
             // 
             this.AcceptButton = this.btnOK;
@@ -226,6 +237,7 @@
             this.CancelButton = this.btnOK;
             this.ClientSize = new System.Drawing.Size(669, 362);
             this.ControlBox = false;
+            this.Controls.Add(this.chkShowAfterMerge);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.grpFile2);
             this.Controls.Add(this.grpOutputFile);
@@ -237,6 +249,7 @@
             this.Name = "ReportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Merge Finished";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReportForm_FormClosing);
             this.grpFile1.ResumeLayout(false);
             this.grpFile1.PerformLayout();
             this.grpOutputFile.ResumeLayout(false);
@@ -264,5 +277,6 @@
         private System.Windows.Forms.Button btnOpenFile2;
         private System.Windows.Forms.TextBox txtFilePath2;
         private System.Windows.Forms.Button btnOK;
+        private System.Windows.Forms.CheckBox chkShowAfterMerge;
     }
 }

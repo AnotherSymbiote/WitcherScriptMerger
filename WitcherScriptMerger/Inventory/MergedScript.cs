@@ -12,7 +12,7 @@ namespace WitcherScriptMerger.Inventory
         [XmlElement]
         public string MergedModName;
 
-        [XmlElement(ElementName="ModBackup")]
-        public List<string> ModBackups;
+        [XmlElement(ElementName="IncludedMod")]
+        public List<string> IncludedMods;
     }
 }

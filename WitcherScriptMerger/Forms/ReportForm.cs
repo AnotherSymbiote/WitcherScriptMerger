@@ -6,6 +6,7 @@ namespace WitcherScriptMerger.Forms
 {
     public partial class ReportForm : Form
     {
+        bool _savedCheckedState;
 
         #region Initialization
 
@@ -29,6 +30,9 @@ namespace WitcherScriptMerger.Forms
             txtFilePath1.Text = file1;
             txtFilePath2.Text = file2;
             txtOutputPath.Text = outputFile;
+
+            chkShowAfterMerge.Checked = Program.Settings.Get<bool>("ReportAfterMerge");
+            _savedCheckedState = chkShowAfterMerge.Checked;
 
             btnOK.Select();
         }
@@ -95,6 +99,12 @@ namespace WitcherScriptMerger.Forms
         {
             if (e.Control && e.KeyCode == Keys.A)
                 (sender as TextBox).SelectAll();
+        }
+
+        private void ReportForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (chkShowAfterMerge.Checked != _savedCheckedState)
+                Program.Settings.Set("ReportAfterMerge", chkShowAfterMerge.Checked);
         }
     }
 }
