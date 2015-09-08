@@ -243,7 +243,7 @@
             this.btnTryMergeSelected.Name = "btnTryMergeSelected";
             this.btnTryMergeSelected.Size = new System.Drawing.Size(312, 35);
             this.btnTryMergeSelected.TabIndex = 6;
-            this.btnTryMergeSelected.Text = "Try to &Merge Selected Script";
+            this.btnTryMergeSelected.Text = "&Merge Selected Script";
             this.btnTryMergeSelected.UseVisualStyleBackColor = true;
             this.btnTryMergeSelected.Click += new System.EventHandler(this.btnTryMergeSelected_Click);
             // 

@@ -148,25 +148,54 @@ namespace WitcherScriptMerger.Forms
         {
             btnUnmergeSelected.Enabled = false;
             treMergeInventory.Nodes.Clear();
+            bool changed = false;
             var inventory = MergeInventory.Load(InventoryPath);
             foreach (var script in inventory.MergedScripts)
             {
+                var mergedFile = GetModFile(ModsDirectory, script.MergedModName, script.RelativePath);
+                if (!mergedFile.Exists &&
+                    ConfirmPruneMissingMergeFile("the merged version", Path.GetFileName(script.RelativePath)))
+                {
+                    inventory.MergedScripts.Remove(script);
+                    changed = true;
+                    continue;
+                }
                 var scriptNode = new TreeNode(script.RelativePath);
-                scriptNode.Tag = GetModFile(ModsDirectory, script.MergedModName, script.RelativePath);
+                scriptNode.Tag = mergedFile;
+
                 scriptNode.ForeColor = Color.Blue;
                 treMergeInventory.Nodes.Add(scriptNode);
 
                 foreach (var modBackupName in script.ModBackups)
                 {
+                    var modBackup = GetModFile(BackupDirectory, modBackupName, script.RelativePath);
+                    if (!modBackup.Exists &&
+                        ConfirmPruneMissingMergeFile("the " + modBackupName + " version", Path.GetFileName(script.RelativePath)))
+                    {
+                        script.ModBackups.Remove(modBackupName);
+                        changed = true;
+                        continue;
+                    }
                     var modNode = new TreeNode(modBackupName);
-                    modNode.Tag = GetModFile(BackupDirectory, modBackupName, script.RelativePath);
+                    modNode.Tag = modBackup;
                     scriptNode.Nodes.Add(modNode);
                 }
             }
+            if (changed)
+                inventory.Save(InventoryPath);
             treMergeInventory.Sort();
             treMergeInventory.ExpandAll();
             foreach (var modNode in treMergeInventory.GetTreeNodes().SelectMany(node => node.GetTreeNodes()))
                 modNode.HideCheckBox();
+        }
+
+        private bool ConfirmPruneMissingMergeFile(string missingType, string mergedFileName)
+        {
+            return (DialogResult.Yes == MessageBox.Show(
+                string.Format("Can't find {0} of {1}.\n\nRemove from Merged Scripts list?", missingType, mergedFileName),
+                "Missing Merge Inventory File",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question));
         }
 
         private FileInfo GetModFile(string root, string modName, string relPath)
@@ -219,15 +248,15 @@ namespace WitcherScriptMerger.Forms
             if (!Directory.Exists(ModsDirectory))
             {
                 MessageBox.Show(!string.IsNullOrWhiteSpace(_modsDirSetting)
-                    ? "Couldn't find the Mods directory specified in the config file."
-                    : "Couldn't find Mods directory in the specified game directory.");
+                    ? "Can't find the Mods directory specified in the config file."
+                    : "Can't find Mods directory in the specified game directory.");
                 return;
             }
             if (!Directory.Exists(ScriptsDirectory))
             {
                 MessageBox.Show(!string.IsNullOrWhiteSpace(_scriptsDirSetting)
-                    ? "Couldn't find the Scripts directory specified in the config file."
-                    : "Couldn't find \\content\\content0\\scripts directory in the specified game directory.");
+                    ? "Can't find the Scripts directory specified in the config file."
+                    : "Can't find \\content\\content0\\scripts directory in the specified game directory.");
                 return;
             }
 
@@ -235,7 +264,7 @@ namespace WitcherScriptMerger.Forms
             treConflicts.Nodes.Clear();
 
             var ignoredModNames = GetIgnoredModNames();
-            var directories = Directory.GetDirectories(ModsDirectory, "*", SearchOption.TopDirectoryOnly);
+            var directories = Directory.GetDirectories(ModsDirectory, "mod*", SearchOption.TopDirectoryOnly);
             var modDirectories = directories
                 .Select(path => new ModDirectory(path))
                 .Where(modDir => modDir.ScriptFiles.Any())
@@ -300,7 +329,7 @@ namespace WitcherScriptMerger.Forms
         {
             if (!Directory.Exists(txtGameDir.Text))
             {
-                MessageBox.Show("Couldn't find the specified Witcher 3 directory.");
+                MessageBox.Show("Can't find the specified Witcher 3 directory.");
                 return;
             }
             if (string.IsNullOrWhiteSpace(txtMergedModName.Text))
@@ -308,13 +337,11 @@ namespace WitcherScriptMerger.Forms
                 MessageBox.Show("Enter a name for the mod folder where merged scripts will be saved.");
                 return;
             }
-            if (!txtMergedModName.Text.IsAlphaNumeric()
-                && (DialogResult.No == MessageBox.Show(
-                "The Witcher 3 only loads mods with alphanumeric names. Do you want to use the following name anyway?" + Environment.NewLine + Environment.NewLine + txtMergedModName.Text,
-                "Warning",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning)))
-                return;
+            if (!txtMergedModName.Text.IsAlphaNumeric() || !txtMergedModName.Text.StartsWith("mod"))
+            {
+                if (!ConfirmInvalidModName())
+                    return;
+            }
 
             var inventory = MergeInventory.Load(InventoryPath);
             bool updatedInventory = false;
@@ -329,11 +356,8 @@ namespace WitcherScriptMerger.Forms
                         ModsDirectory,
                         txtMergedModName.Text,
                         ModDirectory.GetRelativePath(file1.FullName, false, false));
-                if (File.Exists(outputPath)
-                    && (DialogResult.No == MessageBox.Show(
-                        "The output file below already exists! Overwrite?" + Environment.NewLine + Environment.NewLine + outputPath,
-                        "Overwrite?",
-                        MessageBoxButtons.YesNo)))
+                
+                if (File.Exists(outputPath) && !ConfirmOutputOverwrite(outputPath))
                     continue;
 
                 var vanillaFile = scriptNode.Tag as FileInfo;
@@ -370,6 +394,7 @@ namespace WitcherScriptMerger.Forms
                             if (_mergesToDo > 1)
                                 msg = string.Format("Merge {0} of {1} was canceled.", i, _mergesToDo);
                         }
+                        this.Activate();
                         var result = MessageBox.Show(msg, "Skipped Merge", buttons, MessageBoxIcon.Information);
                         if (result == System.Windows.Forms.DialogResult.Cancel)
                         {
@@ -384,6 +409,24 @@ namespace WitcherScriptMerger.Forms
             if (updatedInventory)
                 inventory.Save(InventoryPath);
             UpdateTrees();
+        }
+
+        private bool ConfirmOutputOverwrite(string outputPath)
+        {
+            return (DialogResult.Yes == MessageBox.Show(
+                "The output file below already exists! Overwrite?" + Environment.NewLine + Environment.NewLine + outputPath,
+                "Overwrite?",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Exclamation));
+        }
+
+        private bool ConfirmInvalidModName()
+        {
+            return (DialogResult.Yes == MessageBox.Show(
+                "The Witcher 3 only loads mods with alphanumeric names that start with \"mod\". Use the following name anyway?" + Environment.NewLine + Environment.NewLine + txtMergedModName.Text,
+                "Warning",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning));
         }
 
         private FileInfo TryMergePair(
@@ -420,13 +463,21 @@ namespace WitcherScriptMerger.Forms
                 string filePath2 = file2.FullName;
                 if (filePath1 != outputPath)
                 {
-                    if (null != MoveFile(filePath1, ModsDirectory, BackupDirectory))
+                    string destPath = MoveFile(filePath1, ModsDirectory, BackupDirectory);
+                    if (destPath != null)
+                    {
+                        filePath1 = destPath;
                         mergedScript.ModBackups.Add(ModDirectory.GetModName(file1));
+                    }
                 }
                 if (filePath2 != outputPath)
                 {
-                    if (null != MoveFile(filePath2, ModsDirectory, BackupDirectory))
+                    string destPath = MoveFile(filePath2, ModsDirectory, BackupDirectory);
+                    if (destPath != null)
+                    {
+                        filePath2 = destPath;
                         mergedScript.ModBackups.Add(ModDirectory.GetModName(file2));
+                    }
                 }
 
                 using (var reportForm = new ReportForm(
@@ -613,8 +664,8 @@ namespace WitcherScriptMerger.Forms
             int validScriptNodes = treConflicts.GetTreeNodes().Count(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
             btnTryMergeSelected.Enabled = (validScriptNodes > 0);
             btnTryMergeSelected.Text = (validScriptNodes > 1
-                ? "Try to &Merge Selected Scripts"
-                : "Try to &Merge Selected Script");
+                ? "&Merge Selected Scripts"
+                : "&Merge Selected Script");
         }
 
         private void EnableUnmergeIfValidSelection()
