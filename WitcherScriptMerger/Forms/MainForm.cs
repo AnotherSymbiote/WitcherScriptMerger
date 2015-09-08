@@ -91,8 +91,12 @@ namespace WitcherScriptMerger.Forms
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            LoadMergeInventory();
-            if (!string.IsNullOrWhiteSpace(txtGameDir.Text))
+            if ((!string.IsNullOrWhiteSpace(txtGameDir.Text) || !string.IsNullOrWhiteSpace(_modsDirSetting)) &&
+                !string.IsNullOrWhiteSpace(BackupDirectory))
+                LoadMergeInventory();
+
+            if (!string.IsNullOrWhiteSpace(txtGameDir.Text) ||
+                (!string.IsNullOrWhiteSpace(_scriptsDirSetting) && !string.IsNullOrWhiteSpace(_modsDirSetting)))
                 btnRefreshConflicts_Click(null, null);
         }
 
@@ -219,9 +223,12 @@ namespace WitcherScriptMerger.Forms
 
         private void btnSelectGameDirectory_Click(object sender, EventArgs e)
         {
-            txtGameDir.Text = GetUserDirectoryChoice();
-            if (!string.IsNullOrWhiteSpace(txtGameDir.Text))
+            string dirChoice = GetUserDirectoryChoice();
+            if (!string.IsNullOrWhiteSpace(dirChoice))
+            {
+                txtGameDir.Text = dirChoice;
                 btnRefreshConflicts_Click(null, null);
+            }
         }
 
         private void btnSelectBackupDir_Click(object sender, EventArgs e)
@@ -234,8 +241,10 @@ namespace WitcherScriptMerger.Forms
             FolderBrowserDialog dlgSelectRoot = new FolderBrowserDialog();
             if (Directory.Exists(txtGameDir.Text))
                 dlgSelectRoot.SelectedPath = txtGameDir.Text;
-            dlgSelectRoot.ShowDialog();
-            return dlgSelectRoot.SelectedPath;
+            if (DialogResult.OK == dlgSelectRoot.ShowDialog())
+                return dlgSelectRoot.SelectedPath;
+            else
+                return null;
         }
 
         private void btnRefreshMerged_Click(object sender, EventArgs e)
