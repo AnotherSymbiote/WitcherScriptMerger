@@ -72,7 +72,6 @@ namespace WitcherScriptMerger.Forms
         {
             Program.Settings.StartBatch();
             txtGameDir.Text = Program.Settings.Get("GameDirectory");
-            chkCheckAtLaunch.Checked = Program.Settings.Get<bool>("CheckAtLaunch");
             txtMergedModName.Text = Program.Settings.Get("MergedModName");
             txtBackupDir.Text = Program.Settings.Get("BackupDirectory");
             chkReviewEachMerge.Checked = Program.Settings.Get<bool>("ReviewEachMerge");
@@ -84,15 +83,14 @@ namespace WitcherScriptMerger.Forms
         private void MainForm_Shown(object sender, EventArgs e)
         {
             LoadMergeInventory();
-            if (chkCheckAtLaunch.Checked)
-                btnCheckForConflicts_Click(null, null);
+            if (!string.IsNullOrWhiteSpace(txtGameDir.Text))
+                btnRefreshConflicts_Click(null, null);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Program.Settings.StartBatch();
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
-            Program.Settings.Set("CheckAtLaunch", chkCheckAtLaunch.Checked);
             Program.Settings.Set("MergedModName", txtMergedModName.Text);
             Program.Settings.Set("BackupDirectory", txtBackupDir.Text);
             Program.Settings.Set("ReviewEachMerge", chkReviewEachMerge.Checked);
@@ -194,7 +192,12 @@ namespace WitcherScriptMerger.Forms
             return dlgSelectRoot.SelectedPath;
         }
 
-        private void btnCheckForConflicts_Click(object sender, EventArgs e)
+        private void btnRefreshMerged_Click(object sender, EventArgs e)
+        {
+            LoadMergeInventory();
+        }
+
+        private void btnRefreshConflicts_Click(object sender, EventArgs e)
         {
             if (!Directory.Exists(ModsDirectory))
             {
@@ -470,7 +473,7 @@ namespace WitcherScriptMerger.Forms
         private void UpdateTrees()
         {
             LoadMergeInventory();
-            btnCheckForConflicts_Click(null, null);
+            btnRefreshConflicts_Click(null, null);
         }
 
         #endregion
