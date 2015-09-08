@@ -774,36 +774,6 @@ namespace WitcherScriptMerger.Forms
 
         #region File/Dir Operations
 
-        private string MoveFile(string filePath, string sourceRelRoot, string destinationRelRoot)
-        {
-            if (!File.Exists(filePath))
-            {
-                MessageBox.Show("Can't find file: " + filePath);
-                return null;
-            }
-
-            string relPath = ModDirectory.GetRelativePath(filePath, true, false);
-            string destinationPath = Path.Combine(destinationRelRoot, relPath);
-            string destinationDir = Path.GetDirectoryName(destinationPath);
-            string fileName = Path.GetFileName(filePath);
-
-            if (!Directory.Exists(destinationDir))
-                Directory.CreateDirectory(destinationDir);
-            else if (File.Exists(destinationPath)
-                && (DialogResult.No == MessageBox.Show(
-                        "The file below already exists! Overwrite?" + Environment.NewLine + Environment.NewLine + destinationPath,
-                        "Overwrite?",
-                        MessageBoxButtons.YesNo)))
-                return null;
-
-            if (File.Exists(destinationPath))  // If user didn't cancel, it's okay to delete existing file
-                File.Delete(destinationPath);
-            File.Move(filePath, destinationPath);
-
-            DeleteEmptyDirs(Path.GetDirectoryName(filePath), sourceRelRoot);
-            return destinationPath;
-        }
-
         private void DeleteEmptyDirs(string dirPath, string stopPath)
         {
             if (dirPath == stopPath)
