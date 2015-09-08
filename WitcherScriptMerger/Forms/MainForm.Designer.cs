@@ -362,7 +362,7 @@
             this.btnRefreshMerged.MinimumSize = new System.Drawing.Size(100, 23);
             this.btnRefreshMerged.Name = "btnRefreshMerged";
             this.btnRefreshMerged.Size = new System.Drawing.Size(117, 23);
-            this.btnRefreshMerged.TabIndex = 8;
+            this.btnRefreshMerged.TabIndex = 0;
             this.btnRefreshMerged.Text = "Re&fresh";
             this.btnRefreshMerged.UseVisualStyleBackColor = true;
             this.btnRefreshMerged.Click += new System.EventHandler(this.btnRefreshMerged_Click);
@@ -386,7 +386,7 @@
             this.btnUnmergeSelected.Location = new System.Drawing.Point(3, 564);
             this.btnUnmergeSelected.Name = "btnUnmergeSelected";
             this.btnUnmergeSelected.Size = new System.Drawing.Size(310, 35);
-            this.btnUnmergeSelected.TabIndex = 1;
+            this.btnUnmergeSelected.TabIndex = 2;
             this.btnUnmergeSelected.Text = "&Unmerge Selected Script";
             this.btnUnmergeSelected.UseVisualStyleBackColor = true;
             this.btnUnmergeSelected.Click += new System.EventHandler(this.btnUnmergeSelected_Click);
@@ -403,7 +403,7 @@
             this.treMergeInventory.ShowNodeToolTips = true;
             this.treMergeInventory.ShowRootLines = false;
             this.treMergeInventory.Size = new System.Drawing.Size(310, 528);
-            this.treMergeInventory.TabIndex = 0;
+            this.treMergeInventory.TabIndex = 1;
             this.treMergeInventory.TabStop = false;
             this.treMergeInventory.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tree_AfterCheck);
             this.treMergeInventory.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tree_AfterSelect);
