@@ -191,6 +191,8 @@ namespace WitcherScriptMerger.Forms
         private void btnSelectGameDirectory_Click(object sender, EventArgs e)
         {
             txtGameDir.Text = GetUserDirectoryChoice();
+            if (!string.IsNullOrWhiteSpace(txtGameDir.Text))
+                btnRefreshConflicts_Click(null, null);
         }
 
         private void btnSelectBackupDir_Click(object sender, EventArgs e)
@@ -527,7 +529,9 @@ namespace WitcherScriptMerger.Forms
             }
             else if (e.Button == MouseButtons.Right)
             {
-                contextExpandAll.Available = contextCollapseAll.Available = (tree.Nodes.Count > 0);
+                contextSelectAll.Available = contextDeselectAll.Available =
+                    contextExpandAll.Available = contextCollapseAll.Available =
+                    (tree.Nodes.Count > 0);
                 contextCopyPath.Available = (_clickedNode != null);
                 contextModScript.Available = contextModDir.Available =
                     (_clickedNode != null && _clickedNode.Nodes.Count == 0);
