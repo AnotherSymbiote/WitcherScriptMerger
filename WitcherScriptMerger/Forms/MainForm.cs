@@ -66,6 +66,15 @@ namespace WitcherScriptMerger.Forms
         {
             InitializeComponent();
             this.Text += " v" + Application.ProductVersion;
+
+            if (!File.Exists(_kdiff3PathSetting))
+            {
+                MessageBox.Show("Launch failed. Can't find KDiff3 at the following path:" + Environment.NewLine + Environment.NewLine + _kdiff3PathSetting,
+                    "Can't Find KDiff3",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                Application.Exit();
+            }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -111,8 +120,12 @@ namespace WitcherScriptMerger.Forms
 
         private void LoadLastWindowConfiguration()
         {
-            Top = Program.Settings.Get<int>("StartPosTop");
-            Left = Program.Settings.Get<int>("StartPosLeft");
+            int top = Program.Settings.Get<int>("StartPosTop");
+            int left = Program.Settings.Get<int>("StartPosLeft");
+            if (top > 0)
+                Top = top;
+            if (left > 0)
+                Left = left;
             if (Top > 0 || Left > 0)
                 StartPosition = FormStartPosition.Manual;
             
@@ -126,7 +139,9 @@ namespace WitcherScriptMerger.Forms
             if (Program.Settings.Get<bool>("StartMaximized"))
                 WindowState = FormWindowState.Maximized;
 
-            splitContainer.SplitterDistance = (int)(Program.Settings.Get<int>("StartSplitterPosPct") / 100f * splitContainer.Width);
+            int splitterPosPct = Program.Settings.Get<int>("StartSplitterPosPct");
+            if (splitterPosPct > 0)
+                splitContainer.SplitterDistance = (int)(splitterPosPct / 100f * splitContainer.Width);
         }
 
         private void LoadMergeInventory()
