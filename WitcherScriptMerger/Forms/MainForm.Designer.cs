@@ -262,6 +262,7 @@
             this.txtMergedModName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtMergedModName.Location = new System.Drawing.Point(115, 485);
+            this.txtMergedModName.MaxLength = 64;
             this.txtMergedModName.Name = "txtMergedModName";
             this.txtMergedModName.Size = new System.Drawing.Size(209, 20);
             this.txtMergedModName.TabIndex = 2;
