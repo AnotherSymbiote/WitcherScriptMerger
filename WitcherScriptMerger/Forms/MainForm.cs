@@ -529,9 +529,17 @@ namespace WitcherScriptMerger.Forms
             }
             else if (e.Button == MouseButtons.Right)
             {
-                contextSelectAll.Available = contextDeselectAll.Available =
+                if (tree.Nodes.Count > 0)
+                {
+                    contextSelectAll.Available =   (tree.GetTreeNodes().Any(node => !node.Checked));
+                    contextDeselectAll.Available = (tree.GetTreeNodes().Any(node => node.Checked));
+                    contextExpandAll.Available =   (tree.GetTreeNodes().Any(node => !node.IsExpanded));
+                    contextCollapseAll.Available = (tree.GetTreeNodes().Any(node => node.IsExpanded));
+                }
+                else
+                    contextSelectAll.Available = contextDeselectAll.Available =
                     contextExpandAll.Available = contextCollapseAll.Available =
-                    (tree.Nodes.Count > 0);
+                    false;
                 contextCopyPath.Available = (_clickedNode != null);
                 contextModScript.Available = contextModDir.Available =
                     (_clickedNode != null && _clickedNode.Nodes.Count == 0);
