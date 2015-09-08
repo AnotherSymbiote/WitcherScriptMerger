@@ -6,16 +6,6 @@ namespace WitcherScriptMerger.Forms
 {
     public partial class ReportForm : Form
     {
-        private string BackupDirectory
-        {
-            get
-            {
-                if (Path.IsPathRooted(txtBackupDir.Text))
-                    return txtBackupDir.Text;
-                else
-                    return Path.Combine(Program.MainForm.GameDirectory, txtBackupDir.Text);
-            }
-        }
 
         #region Initialization
 
@@ -33,32 +23,14 @@ namespace WitcherScriptMerger.Forms
                     btnOK.Text = "Continue";
             }
 
-            txtBackupDir.Text = Program.Settings.Get("BackupDirectory");
-            chkAutoBackup.Checked = Program.Settings.Get<bool>("MoveToBackupAfterMerge");
-
             grpFile1.Text = modName1;
             grpFile2.Text = modName2;
             
             txtFilePath1.Text = file1;
             txtFilePath2.Text = file2;
             txtOutputPath.Text = outputFile;
-            if (outputFile.EqualsIgnoreCase(file1))
-                DisableBackupButton(btnBackUpFile1);
-            if (outputFile.EqualsIgnoreCase(file2))
-                DisableBackupButton(btnBackUpFile2);
-            
-            chkAutoBackup.Select();
-        }
 
-        private void ReportForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Program.Settings.Set("MoveToBackupAfterMerge", chkAutoBackup.Checked);
-        }
-
-        private void DisableBackupButton(Button btn)
-        {
-            btnBackUpFile1.Enabled = false;
-            btnBackUpFile1.Text = "Can't back up (path matches output file)";
+            btnOK.Select();
         }
 
         #endregion
@@ -95,20 +67,9 @@ namespace WitcherScriptMerger.Forms
             TryOpenFileDir(txtOutputPath.Text);
         }
 
-        private void btnBackUpFile1_Click(object sender, EventArgs e)
+        private void btnOK_Click(object sender, EventArgs e)
         {
-            if (btnBackUpFile1.Text.StartsWith("Undo"))
-                UndoBackUp(txtFilePath1, btnBackUpFile1);
-            else
-                BackUpFile(txtFilePath1, btnBackUpFile1);
-        }
-
-        private void btnBackUpFile2_Click(object sender, EventArgs e)
-        {
-            if (btnBackUpFile2.Text.StartsWith("Undo"))
-                UndoBackUp(txtFilePath2, btnBackUpFile2);
-            else
-                BackUpFile(txtFilePath2, btnBackUpFile2);
+            DialogResult = DialogResult.OK;
         }
 
         #endregion
@@ -128,88 +89,6 @@ namespace WitcherScriptMerger.Forms
                 System.Diagnostics.Process.Start(dirPath);
             else
                 MessageBox.Show("Can't find directory: " + dirPath);
-        }
-
-        private void BackUpFile(TextBox txtPath, Button btnBackUp)
-        {
-            if (MoveFile(txtPath, Program.MainForm.ModsDirectory, BackupDirectory))
-                btnBackUp.Text = "Undo Move to Backup Directory";
-        }
-
-        private void UndoBackUp(TextBox txtPath, Button btnBackUp)
-        {
-            if (MoveFile(txtPath, BackupDirectory, Program.MainForm.ModsDirectory))
-                btnBackUp.Text = "Move to Backup Directory";
-        }
-
-        private bool MoveFile(TextBox txtPath, string sourceRelRoot, string destinationRelRoot)
-        {
-            if (!File.Exists(txtPath.Text))
-            {
-                MessageBox.Show("Can't find file: " + txtPath.Text);
-                return false;
-            }
-
-            string relPath = ModDirectory.GetRelativePath(txtPath.Text, true, false);
-            string destinationPath = Path.Combine(destinationRelRoot, relPath);
-            string destinationDir = Path.GetDirectoryName(destinationPath);
-
-            string fileName = Path.GetFileName(txtPath.Text);
-            string outputFileName = Path.GetFileName(txtOutputPath.Text);
-            if (!fileName.EqualsIgnoreCase(outputFileName))
-                destinationPath = Path.Combine(destinationDir, outputFileName);
-
-            if (!Directory.Exists(destinationDir))
-                Directory.CreateDirectory(destinationDir);
-            else if (File.Exists(destinationPath))
-            {
-                using (var renameForm = new RenameFileForm(destinationPath))
-                {
-                    if (renameForm.ShowDialog() == DialogResult.Cancel)
-                        return false;
-                    destinationPath = renameForm.FilePath;
-                }
-            }
-
-            if (File.Exists(destinationPath))  // If user saw rename form & didn't cancel, it's
-                File.Delete(destinationPath);  // okay to delete the existing destination file
-            File.Move(txtPath.Text, destinationPath);
-            txtPath.Text = destinationPath;
-
-            string sourceModDirPath = Path.Combine(sourceRelRoot, ModDirectory.GetModName(relPath));
-            var remainingModFiles = Directory.GetFiles(sourceModDirPath, "*", SearchOption.AllDirectories);
-            if (remainingModFiles.Length == 0)
-            {
-                System.Threading.Thread.Sleep(100);  // Avoid directory not empty exception
-                Directory.Delete(sourceModDirPath, true);
-            }
-            return true;
-        }
-
-        private void btnDone_Click(object sender, EventArgs e)
-        {
-            if (chkAutoBackup.Checked)
-            {
-                if (txtFilePath1.Text != txtOutputPath.Text && !btnBackUpFile1.Text.StartsWith("Undo"))
-                    btnBackUpFile1_Click(null, null);
-                if (txtFilePath2.Text != txtOutputPath.Text && !btnBackUpFile2.Text.StartsWith("Undo"))
-                    btnBackUpFile2_Click(null, null);
-            }
-            DialogResult = DialogResult.OK;
-        }
-
-        private void btnSelectBackupDir_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog dlgSelectRoot = new FolderBrowserDialog();
-            if (Directory.Exists(txtBackupDir.Text))
-                dlgSelectRoot.SelectedPath = txtBackupDir.Text;
-            dlgSelectRoot.ShowDialog();
-            txtBackupDir.Text = dlgSelectRoot.SelectedPath;
-        }
-
-        private void txtBackupDir_TextChanged(object sender, EventArgs e)
-        {
-            Program.Settings.Set("BackupDirectory", txtBackupDir.Text);
         }
 
         private void txt_KeyDown(object sender, KeyEventArgs e)

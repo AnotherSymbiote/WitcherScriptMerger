@@ -50,12 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
-    <Compile Include="Forms\RenameFileForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RenameFileForm.Designer.cs">
-      <DependentUpon>RenameFileForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ReportForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,12 +63,11 @@
     <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Inventory\MergedScript.cs" />
+    <Compile Include="Inventory\MergeInventory.cs" />
     <Compile Include="ModDirectory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\RenameFileForm.resx">
-      <DependentUpon>RenameFileForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ReportForm.resx">
       <DependentUpon>ReportForm.cs</DependentUpon>
     </EmbeddedResource>
