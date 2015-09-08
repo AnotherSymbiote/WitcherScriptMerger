@@ -36,6 +36,8 @@
             this.treeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextVanillaScript = new System.Windows.Forms.ToolStripMenuItem();
             this.contextVanillaDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMergedScript = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMergedDir = new System.Windows.Forms.ToolStripMenuItem();
             this.contextModScript = new System.Windows.Forms.ToolStripMenuItem();
             this.contextModDir = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCopyPath = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,15 +55,13 @@
             this.chkReviewEachMerge = new System.Windows.Forms.CheckBox();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnSelectBackupDir = new System.Windows.Forms.Button();
+            this.txtBackupDir = new System.Windows.Forms.TextBox();
+            this.lblBackupDir = new System.Windows.Forms.Label();
             this.lblMergeInventory = new System.Windows.Forms.Label();
             this.btnUnmergeSelected = new System.Windows.Forms.Button();
             this.treMergeInventory = new System.Windows.Forms.TreeView();
             this.grpGameDir = new System.Windows.Forms.GroupBox();
-            this.lblBackupDir = new System.Windows.Forms.Label();
-            this.txtBackupDir = new System.Windows.Forms.TextBox();
-            this.btnSelectBackupDir = new System.Windows.Forms.Button();
-            this.contextMergedScript = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMergedDir = new System.Windows.Forms.ToolStripMenuItem();
             this.treeContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -128,7 +128,7 @@
             this.contextExpandAll,
             this.contextCollapseAll});
             this.treeContextMenu.Name = "treeContextMenu";
-            this.treeContextMenu.Size = new System.Drawing.Size(232, 280);
+            this.treeContextMenu.Size = new System.Drawing.Size(232, 258);
             this.treeContextMenu.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.treeContextMenu_Closing);
             // 
             // contextVanillaScript
@@ -144,6 +144,20 @@
             this.contextVanillaDir.Size = new System.Drawing.Size(231, 22);
             this.contextVanillaDir.Text = "Open Vanilla Script Directory";
             this.contextVanillaDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
+            // 
+            // contextMergedScript
+            // 
+            this.contextMergedScript.Name = "contextMergedScript";
+            this.contextMergedScript.Size = new System.Drawing.Size(231, 22);
+            this.contextMergedScript.Text = "Open Merged Script";
+            this.contextMergedScript.Click += new System.EventHandler(this.contextOpenScript_Click);
+            // 
+            // contextMergedDir
+            // 
+            this.contextMergedDir.Name = "contextMergedDir";
+            this.contextMergedDir.Size = new System.Drawing.Size(231, 22);
+            this.contextMergedDir.Text = "Open Merged Script Directory";
+            this.contextMergedDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
             // 
             // contextModScript
             // 
@@ -314,6 +328,38 @@
             this.label1.TabIndex = 16;
             this.label1.Text = "Conflicts:";
             // 
+            // btnSelectBackupDir
+            // 
+            this.btnSelectBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSelectBackupDir.Location = new System.Drawing.Point(341, 511);
+            this.btnSelectBackupDir.Name = "btnSelectBackupDir";
+            this.btnSelectBackupDir.Size = new System.Drawing.Size(26, 23);
+            this.btnSelectBackupDir.TabIndex = 12;
+            this.btnSelectBackupDir.Text = "...";
+            this.btnSelectBackupDir.UseVisualStyleBackColor = true;
+            this.btnSelectBackupDir.Click += new System.EventHandler(this.btnSelectBackupDir_Click);
+            // 
+            // txtBackupDir
+            // 
+            this.txtBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtBackupDir.Location = new System.Drawing.Point(115, 513);
+            this.txtBackupDir.Name = "txtBackupDir";
+            this.txtBackupDir.Size = new System.Drawing.Size(220, 20);
+            this.txtBackupDir.TabIndex = 10;
+            this.txtBackupDir.TextChanged += new System.EventHandler(this.txtBackupDir_TextChanged);
+            this.txtBackupDir.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
+            // 
+            // lblBackupDir
+            // 
+            this.lblBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblBackupDir.AutoSize = true;
+            this.lblBackupDir.Location = new System.Drawing.Point(17, 516);
+            this.lblBackupDir.Name = "lblBackupDir";
+            this.lblBackupDir.Size = new System.Drawing.Size(92, 13);
+            this.lblBackupDir.TabIndex = 11;
+            this.lblBackupDir.Text = "Backup Directory:";
+            // 
             // lblMergeInventory
             // 
             this.lblMergeInventory.AutoSize = true;
@@ -369,52 +415,6 @@
             this.grpGameDir.TabStop = false;
             this.grpGameDir.Text = "Witcher 3 Directory";
             // 
-            // lblBackupDir
-            // 
-            this.lblBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblBackupDir.AutoSize = true;
-            this.lblBackupDir.Location = new System.Drawing.Point(17, 516);
-            this.lblBackupDir.Name = "lblBackupDir";
-            this.lblBackupDir.Size = new System.Drawing.Size(92, 13);
-            this.lblBackupDir.TabIndex = 11;
-            this.lblBackupDir.Text = "Backup Directory:";
-            // 
-            // txtBackupDir
-            // 
-            this.txtBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBackupDir.Location = new System.Drawing.Point(115, 513);
-            this.txtBackupDir.Name = "txtBackupDir";
-            this.txtBackupDir.Size = new System.Drawing.Size(220, 20);
-            this.txtBackupDir.TabIndex = 10;
-            this.txtBackupDir.TextChanged += new System.EventHandler(this.txtBackupDir_TextChanged);
-            this.txtBackupDir.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
-            // 
-            // btnSelectBackupDir
-            // 
-            this.btnSelectBackupDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSelectBackupDir.Location = new System.Drawing.Point(341, 511);
-            this.btnSelectBackupDir.Name = "btnSelectBackupDir";
-            this.btnSelectBackupDir.Size = new System.Drawing.Size(26, 23);
-            this.btnSelectBackupDir.TabIndex = 12;
-            this.btnSelectBackupDir.Text = "...";
-            this.btnSelectBackupDir.UseVisualStyleBackColor = true;
-            this.btnSelectBackupDir.Click += new System.EventHandler(this.btnSelectBackupDir_Click);
-            // 
-            // contextMergedScript
-            // 
-            this.contextMergedScript.Name = "contextMergedScript";
-            this.contextMergedScript.Size = new System.Drawing.Size(231, 22);
-            this.contextMergedScript.Text = "Open Merged Script";
-            this.contextMergedScript.Click += new System.EventHandler(this.contextOpenScript_Click);
-            // 
-            // contextMergedDir
-            // 
-            this.contextMergedDir.Name = "contextMergedDir";
-            this.contextMergedDir.Size = new System.Drawing.Size(231, 22);
-            this.contextMergedDir.Text = "Open Merged Script Directory";
-            this.contextMergedDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
-            // 
             // MainForm
             // 
             this.AcceptButton = this.btnTryMergeSelected;
@@ -428,6 +428,7 @@
             this.Name = "MainForm";
             this.Text = "Script Merger";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.treeContextMenu.ResumeLayout(false);
             this.splitContainer.Panel1.ResumeLayout(false);

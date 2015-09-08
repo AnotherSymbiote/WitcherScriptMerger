@@ -66,16 +66,19 @@ namespace WitcherScriptMerger.Forms
         {
             InitializeComponent();
             this.Text += " v" + Application.ProductVersion;
+        }
 
+        private void MainForm_Load(object sender, EventArgs e)
+        {
             Program.Settings.StartBatch();
             txtGameDir.Text = Program.Settings.Get("GameDirectory");
             chkCheckAtLaunch.Checked = Program.Settings.Get<bool>("CheckAtLaunch");
             txtMergedModName.Text = Program.Settings.Get("MergedModName");
             txtBackupDir.Text = Program.Settings.Get("BackupDirectory");
             chkReviewEachMerge.Checked = Program.Settings.Get<bool>("ReviewEachMerge");
-            
+
             LoadLastWindowConfiguration();
-            Program.Settings.EndBatch();
+            Program.Settings.EndBatch();   
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -104,6 +107,7 @@ namespace WitcherScriptMerger.Forms
                 Program.Settings.Set("StartPosTop", Top);
                 Program.Settings.Set("StartPosLeft", Left);
             }
+            Program.Settings.Set("StartSplitterPosPct", (int)((float)splitContainer.SplitterDistance / splitContainer.Width * 100f));
             Program.Settings.EndBatch();
         }
 
@@ -120,9 +124,11 @@ namespace WitcherScriptMerger.Forms
                 Width = startWidth;
             if (startHeight > 0)
                 Height = startHeight;
-            
+
             if (Program.Settings.Get<bool>("StartMaximized"))
                 WindowState = FormWindowState.Maximized;
+
+            splitContainer.SplitterDistance = (int)(Program.Settings.Get<int>("StartSplitterPosPct") / 100f * splitContainer.Width);
         }
 
         private void LoadMergeInventory()

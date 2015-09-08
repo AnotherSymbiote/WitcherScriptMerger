@@ -12,10 +12,20 @@ namespace WitcherScriptMerger.Inventory
 
         public static MergeInventory Load(string path)
         {
-            var serializer = new XmlSerializer(typeof(MergeInventory));
-            using (var stream = new FileStream(path, FileMode.Open))
+            try
             {
-                return (MergeInventory)serializer.Deserialize(stream);
+                var serializer = new XmlSerializer(typeof(MergeInventory));
+                using (var stream = new FileStream(path, FileMode.Open))
+                {
+                    return (MergeInventory)serializer.Deserialize(stream);
+                }
+            }
+            catch
+            {
+                return new MergeInventory
+                {
+                    MergedScripts = new List<MergedScript>()
+                };
             }
         }
 
