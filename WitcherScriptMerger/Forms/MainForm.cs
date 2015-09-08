@@ -601,8 +601,8 @@ namespace WitcherScriptMerger.Forms
             int validScriptNodes = treConflicts.GetTreeNodes().Count(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
             btnTryMergeSelected.Enabled = (validScriptNodes > 0);
             btnTryMergeSelected.Text = (validScriptNodes > 1
-                ? "Try to Merge Selected Scripts"
-                : "Try to Merge Selected Script");
+                ? "Try to &Merge Selected Scripts"
+                : "Try to &Merge Selected Script");
         }
 
         private void EnableUnmergeIfValidSelection()
@@ -610,8 +610,8 @@ namespace WitcherScriptMerger.Forms
             int selectedNodes = treMergeInventory.GetTreeNodes().Count(node => node.Checked);
             btnUnmergeSelected.Enabled = (selectedNodes > 0);
             btnUnmergeSelected.Text = (selectedNodes > 1
-                ? "Unmerge Selected Scripts"
-                : "Unmerge Selected Script");
+                ? "&Unmerge Selected Scripts"
+                : "&Unmerge Selected Script");
         }
 
         #endregion
