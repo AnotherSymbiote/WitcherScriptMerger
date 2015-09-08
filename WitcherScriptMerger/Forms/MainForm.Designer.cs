@@ -363,7 +363,7 @@
             this.btnRefreshMerged.Name = "btnRefreshMerged";
             this.btnRefreshMerged.Size = new System.Drawing.Size(117, 23);
             this.btnRefreshMerged.TabIndex = 8;
-            this.btnRefreshMerged.Text = "&Refresh";
+            this.btnRefreshMerged.Text = "Re&fresh";
             this.btnRefreshMerged.UseVisualStyleBackColor = true;
             this.btnRefreshMerged.Click += new System.EventHandler(this.btnRefreshMerged_Click);
             // 
