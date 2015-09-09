@@ -138,7 +138,7 @@ namespace WitcherScriptMerger.Forms
 
         private void RefreshMergeInventory()
         {
-            btnUnmergeSelected.Enabled = false;
+            btnDeleteMerges.Enabled = false;
             treMergeInventory.Nodes.Clear();
             bool changed = false;
             _inventory = MergeInventory.Load(InventoryPath);
@@ -201,7 +201,7 @@ namespace WitcherScriptMerger.Forms
                 return;
             }
 
-            btnTryMergeSelected.Enabled = false;
+            btnMergeScripts.Enabled = false;
             treConflicts.Nodes.Clear();
 
             var ignoredModNames = GetIgnoredModNames();
@@ -317,7 +317,7 @@ namespace WitcherScriptMerger.Forms
                 .Select(name => name.Trim());
         }
 
-        private void btnTryMergeSelected_Click(object sender, EventArgs e)
+        private void btnMergeScripts_Click(object sender, EventArgs e)
         {
             if (!Directory.Exists(txtGameDir.Text))
             {
@@ -375,7 +375,7 @@ namespace WitcherScriptMerger.Forms
                 for (int i = 1; i < modNodes.Count; ++i)
                 {
                     var file2 = modNodes[i].Tag as FileInfo;
-                    var mergedFile = TryMergePair(i, vanillaFile, file1, file2, outputPath, mergedScript);
+                    var mergedFile = MergePair(i, vanillaFile, file1, file2, outputPath, mergedScript);
                     if (mergedFile != null)
                     {
                         updatedInventory = true;
@@ -431,13 +431,13 @@ namespace WitcherScriptMerger.Forms
         private bool ConfirmInvalidModName()
         {
             return (DialogResult.Yes == MessageBox.Show(
-                "The Witcher 3 only loads mods with alphanumeric names that start with \"mod\". Use the following name anyway?" + Environment.NewLine + Environment.NewLine + txtMergedModName.Text,
+                "The Witcher 3 won't load the merged script if the mod name isn't \"mod\" followed by numbers, letters, or underscores.\n\nUse this name anyway?\n" + txtMergedModName.Text,
                 "Warning",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Exclamation));
         }
 
-        private FileInfo TryMergePair(
+        private FileInfo MergePair(
             int mergeNum,
             FileInfo vanillaFile, FileInfo file1, FileInfo file2,
             string outputPath,
@@ -490,7 +490,7 @@ namespace WitcherScriptMerger.Forms
             return new FileInfo(outputPath);
         }
 
-        private void btnUnmergeSelected_Click(object sender, EventArgs e)
+        private void btnDeleteMerges_Click(object sender, EventArgs e)
         {
             _inventory = MergeInventory.Load(InventoryPath);
             var scriptNodes = treMergeInventory.GetTreeNodes().Where(node => node.Checked);
@@ -639,8 +639,8 @@ namespace WitcherScriptMerger.Forms
         private void EnableMergeIfValidSelection()
         {
             int validScriptNodes = treConflicts.GetTreeNodes().Count(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
-            btnTryMergeSelected.Enabled = (validScriptNodes > 0);
-            btnTryMergeSelected.Text = (validScriptNodes > 1
+            btnMergeScripts.Enabled = (validScriptNodes > 0);
+            btnMergeScripts.Text = (validScriptNodes > 1
                 ? "&Merge Selected Scripts"
                 : "&Merge Selected Script");
         }
@@ -648,8 +648,8 @@ namespace WitcherScriptMerger.Forms
         private void EnableUnmergeIfValidSelection()
         {
             int selectedNodes = treMergeInventory.GetTreeNodes().Count(node => node.Checked);
-            btnUnmergeSelected.Enabled = (selectedNodes > 0);
-            btnUnmergeSelected.Text = (selectedNodes > 1
+            btnDeleteMerges.Enabled = (selectedNodes > 0);
+            btnDeleteMerges.Text = (selectedNodes > 1
                 ? "&Delete Selected Merges"
                 : "&Delete Selected Merge");
         }

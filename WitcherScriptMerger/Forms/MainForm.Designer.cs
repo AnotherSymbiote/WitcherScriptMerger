@@ -48,7 +48,7 @@
             this.contextExpandAll = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCollapseAll = new System.Windows.Forms.ToolStripMenuItem();
             this.btnRefreshConflicts = new System.Windows.Forms.Button();
-            this.btnTryMergeSelected = new System.Windows.Forms.Button();
+            this.btnMergeScripts = new System.Windows.Forms.Button();
             this.lblMergedModName = new System.Windows.Forms.Label();
             this.txtMergedModName = new System.Windows.Forms.TextBox();
             this.chkReviewEachMerge = new System.Windows.Forms.CheckBox();
@@ -56,7 +56,7 @@
             this.lblConflicts = new System.Windows.Forms.Label();
             this.btnRefreshMerged = new System.Windows.Forms.Button();
             this.lblMergeInventory = new System.Windows.Forms.Label();
-            this.btnUnmergeSelected = new System.Windows.Forms.Button();
+            this.btnDeleteMerges = new System.Windows.Forms.Button();
             this.treMergeInventory = new System.Windows.Forms.TreeView();
             this.grpGameDir = new System.Windows.Forms.GroupBox();
             this.treeContextMenu.SuspendLayout();
@@ -230,19 +230,19 @@
             this.btnRefreshConflicts.UseVisualStyleBackColor = true;
             this.btnRefreshConflicts.Click += new System.EventHandler(this.btnRefreshConflicts_Click);
             // 
-            // btnTryMergeSelected
+            // btnMergeScripts
             // 
-            this.btnTryMergeSelected.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnMergeScripts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTryMergeSelected.Enabled = false;
-            this.btnTryMergeSelected.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTryMergeSelected.Location = new System.Drawing.Point(12, 564);
-            this.btnTryMergeSelected.Name = "btnTryMergeSelected";
-            this.btnTryMergeSelected.Size = new System.Drawing.Size(312, 35);
-            this.btnTryMergeSelected.TabIndex = 6;
-            this.btnTryMergeSelected.Text = "&Merge Selected Script";
-            this.btnTryMergeSelected.UseVisualStyleBackColor = true;
-            this.btnTryMergeSelected.Click += new System.EventHandler(this.btnTryMergeSelected_Click);
+            this.btnMergeScripts.Enabled = false;
+            this.btnMergeScripts.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMergeScripts.Location = new System.Drawing.Point(12, 564);
+            this.btnMergeScripts.Name = "btnMergeScripts";
+            this.btnMergeScripts.Size = new System.Drawing.Size(312, 35);
+            this.btnMergeScripts.TabIndex = 6;
+            this.btnMergeScripts.Text = "&Merge Selected Script";
+            this.btnMergeScripts.UseVisualStyleBackColor = true;
+            this.btnMergeScripts.Click += new System.EventHandler(this.btnMergeScripts_Click);
             // 
             // lblMergedModName
             // 
@@ -269,7 +269,7 @@
             // 
             this.chkReviewEachMerge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkReviewEachMerge.AutoSize = true;
-            this.chkReviewEachMerge.Location = new System.Drawing.Point(20, 541);
+            this.chkReviewEachMerge.Location = new System.Drawing.Point(12, 541);
             this.chkReviewEachMerge.Name = "chkReviewEachMerge";
             this.chkReviewEachMerge.Size = new System.Drawing.Size(228, 17);
             this.chkReviewEachMerge.TabIndex = 5;
@@ -292,14 +292,14 @@
             this.splitContainer.Panel1.Controls.Add(this.lblMergedModName);
             this.splitContainer.Panel1.Controls.Add(this.btnRefreshConflicts);
             this.splitContainer.Panel1.Controls.Add(this.txtMergedModName);
-            this.splitContainer.Panel1.Controls.Add(this.btnTryMergeSelected);
-            this.splitContainer.Panel1MinSize = 250;
+            this.splitContainer.Panel1.Controls.Add(this.btnMergeScripts);
+            this.splitContainer.Panel1MinSize = 240;
             // 
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.btnRefreshMerged);
             this.splitContainer.Panel2.Controls.Add(this.lblMergeInventory);
-            this.splitContainer.Panel2.Controls.Add(this.btnUnmergeSelected);
+            this.splitContainer.Panel2.Controls.Add(this.btnDeleteMerges);
             this.splitContainer.Panel2.Controls.Add(this.treMergeInventory);
             this.splitContainer.Panel2MinSize = 235;
             this.splitContainer.Size = new System.Drawing.Size(654, 611);
@@ -340,19 +340,19 @@
             this.lblMergeInventory.TabIndex = 7;
             this.lblMergeInventory.Text = "Merged Scripts:";
             // 
-            // btnUnmergeSelected
+            // btnDeleteMerges
             // 
-            this.btnUnmergeSelected.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnDeleteMerges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUnmergeSelected.Enabled = false;
-            this.btnUnmergeSelected.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUnmergeSelected.Location = new System.Drawing.Point(3, 564);
-            this.btnUnmergeSelected.Name = "btnUnmergeSelected";
-            this.btnUnmergeSelected.Size = new System.Drawing.Size(310, 35);
-            this.btnUnmergeSelected.TabIndex = 2;
-            this.btnUnmergeSelected.Text = "&Delete Selected Merge";
-            this.btnUnmergeSelected.UseVisualStyleBackColor = true;
-            this.btnUnmergeSelected.Click += new System.EventHandler(this.btnUnmergeSelected_Click);
+            this.btnDeleteMerges.Enabled = false;
+            this.btnDeleteMerges.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDeleteMerges.Location = new System.Drawing.Point(3, 564);
+            this.btnDeleteMerges.Name = "btnDeleteMerges";
+            this.btnDeleteMerges.Size = new System.Drawing.Size(310, 35);
+            this.btnDeleteMerges.TabIndex = 2;
+            this.btnDeleteMerges.Text = "&Delete Selected Merge";
+            this.btnDeleteMerges.UseVisualStyleBackColor = true;
+            this.btnDeleteMerges.Click += new System.EventHandler(this.btnDeleteMerges_Click);
             // 
             // treMergeInventory
             // 
@@ -388,14 +388,14 @@
             // 
             // MainForm
             // 
-            this.AcceptButton = this.btnTryMergeSelected;
+            this.AcceptButton = this.btnMergeScripts;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(654, 674);
             this.Controls.Add(this.grpGameDir);
             this.Controls.Add(this.splitContainer);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(505, 350);
+            this.MinimumSize = new System.Drawing.Size(495, 350);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Script Merger";
@@ -429,7 +429,7 @@
         private System.Windows.Forms.ToolStripMenuItem contextModScript;
         private System.Windows.Forms.ToolStripMenuItem contextVanillaScript;
         private System.Windows.Forms.ToolStripMenuItem contextVanillaDir;
-        private System.Windows.Forms.Button btnTryMergeSelected;
+        private System.Windows.Forms.Button btnMergeScripts;
         private System.Windows.Forms.Label lblMergedModName;
         private System.Windows.Forms.TextBox txtMergedModName;
         private System.Windows.Forms.ToolStripSeparator contextSelectSeparator;
@@ -439,7 +439,7 @@
         private System.Windows.Forms.CheckBox chkReviewEachMerge;
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.Label lblMergeInventory;
-        private System.Windows.Forms.Button btnUnmergeSelected;
+        private System.Windows.Forms.Button btnDeleteMerges;
         private System.Windows.Forms.TreeView treMergeInventory;
         private System.Windows.Forms.GroupBox grpGameDir;
         private System.Windows.Forms.Label lblConflicts;

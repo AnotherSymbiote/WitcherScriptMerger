@@ -33,7 +33,7 @@ namespace WitcherScriptMerger
 
         public static bool IsAlphaNumeric(this string s)
         {
-            return new Regex("^[a-zA-Z0-9]*$").IsMatch(s);
+            return new Regex("^[_a-zA-Z0-9]*$").IsMatch(s);
         }
 
         public static IEnumerable<TreeNode> GetTreeNodes(this TreeView treeView)
