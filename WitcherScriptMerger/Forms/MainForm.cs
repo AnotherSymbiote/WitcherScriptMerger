@@ -762,7 +762,7 @@ namespace WitcherScriptMerger.Forms
         {
             if (_clickedNode != null)
             {
-                _clickedNode.BackColor = Color.White;
+                _clickedNode.BackColor = Color.Transparent;
                 _clickedNode.TreeView.Update();
             }
         }

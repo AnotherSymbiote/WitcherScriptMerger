@@ -29,7 +29,7 @@ namespace WitcherScriptMerger.Forms
             
             txtFilePath1.Text = file1;
             txtFilePath2.Text = file2;
-            txtOutputPath.Text = outputFile;
+            txtMergedPath.Text = outputFile;
 
             chkShowAfterMerge.Checked = Program.Settings.Get<bool>("ReportAfterMerge");
             _savedCheckedState = chkShowAfterMerge.Checked;
@@ -53,7 +53,7 @@ namespace WitcherScriptMerger.Forms
 
         private void btnOpenOutputFile_Click(object sender, EventArgs e)
         {
-            TryOpenFile(txtOutputPath.Text);
+            TryOpenFile(txtMergedPath.Text);
         }
 
         private void btnOpenDir1_Click(object sender, EventArgs e)
@@ -68,7 +68,7 @@ namespace WitcherScriptMerger.Forms
 
         private void btnOpenOutputDir_Click(object sender, EventArgs e)
         {
-            TryOpenFileDir(txtOutputPath.Text);
+            TryOpenFileDir(txtMergedPath.Text);
         }
 
         private void btnOK_Click(object sender, EventArgs e)

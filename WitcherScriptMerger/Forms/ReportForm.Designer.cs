@@ -34,10 +34,10 @@
             this.grpFile1 = new System.Windows.Forms.GroupBox();
             this.btnOpenDir1 = new System.Windows.Forms.Button();
             this.lblMergedFiles = new System.Windows.Forms.Label();
-            this.grpOutputFile = new System.Windows.Forms.GroupBox();
-            this.btnOpenOutputDir = new System.Windows.Forms.Button();
-            this.btnOpenOutputFile = new System.Windows.Forms.Button();
-            this.txtOutputPath = new System.Windows.Forms.TextBox();
+            this.grpMergedFile = new System.Windows.Forms.GroupBox();
+            this.btnOpenMergedDir = new System.Windows.Forms.Button();
+            this.btnOpenMergedFile = new System.Windows.Forms.Button();
+            this.txtMergedPath = new System.Windows.Forms.TextBox();
             this.grpFile2 = new System.Windows.Forms.GroupBox();
             this.btnOpenDir2 = new System.Windows.Forms.Button();
             this.btnOpenFile2 = new System.Windows.Forms.Button();
@@ -45,7 +45,7 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.chkShowAfterMerge = new System.Windows.Forms.CheckBox();
             this.grpFile1.SuspendLayout();
-            this.grpOutputFile.SuspendLayout();
+            this.grpMergedFile.SuspendLayout();
             this.grpFile2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -108,54 +108,54 @@
             this.lblMergedFiles.TabIndex = 8;
             this.lblMergedFiles.Text = "Merged files!";
             // 
-            // grpOutputFile
+            // grpMergedFile
             // 
-            this.grpOutputFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.grpMergedFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpOutputFile.Controls.Add(this.btnOpenOutputDir);
-            this.grpOutputFile.Controls.Add(this.btnOpenOutputFile);
-            this.grpOutputFile.Controls.Add(this.txtOutputPath);
-            this.grpOutputFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpOutputFile.Location = new System.Drawing.Point(12, 234);
-            this.grpOutputFile.Name = "grpOutputFile";
-            this.grpOutputFile.Size = new System.Drawing.Size(645, 77);
-            this.grpOutputFile.TabIndex = 5;
-            this.grpOutputFile.TabStop = false;
-            this.grpOutputFile.Text = "Output File";
+            this.grpMergedFile.Controls.Add(this.btnOpenMergedDir);
+            this.grpMergedFile.Controls.Add(this.btnOpenMergedFile);
+            this.grpMergedFile.Controls.Add(this.txtMergedPath);
+            this.grpMergedFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpMergedFile.Location = new System.Drawing.Point(12, 234);
+            this.grpMergedFile.Name = "grpMergedFile";
+            this.grpMergedFile.Size = new System.Drawing.Size(645, 77);
+            this.grpMergedFile.TabIndex = 5;
+            this.grpMergedFile.TabStop = false;
+            this.grpMergedFile.Text = "Merged Script";
             // 
-            // btnOpenOutputDir
+            // btnOpenMergedDir
             // 
-            this.btnOpenOutputDir.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOpenOutputDir.Location = new System.Drawing.Point(326, 45);
-            this.btnOpenOutputDir.Name = "btnOpenOutputDir";
-            this.btnOpenOutputDir.Size = new System.Drawing.Size(313, 23);
-            this.btnOpenOutputDir.TabIndex = 4;
-            this.btnOpenOutputDir.Text = "Open Directory";
-            this.btnOpenOutputDir.UseVisualStyleBackColor = true;
-            this.btnOpenOutputDir.Click += new System.EventHandler(this.btnOpenOutputDir_Click);
+            this.btnOpenMergedDir.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOpenMergedDir.Location = new System.Drawing.Point(326, 45);
+            this.btnOpenMergedDir.Name = "btnOpenMergedDir";
+            this.btnOpenMergedDir.Size = new System.Drawing.Size(313, 23);
+            this.btnOpenMergedDir.TabIndex = 4;
+            this.btnOpenMergedDir.Text = "Open Directory";
+            this.btnOpenMergedDir.UseVisualStyleBackColor = true;
+            this.btnOpenMergedDir.Click += new System.EventHandler(this.btnOpenOutputDir_Click);
             // 
-            // btnOpenOutputFile
+            // btnOpenMergedFile
             // 
-            this.btnOpenOutputFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOpenOutputFile.Location = new System.Drawing.Point(7, 45);
-            this.btnOpenOutputFile.Name = "btnOpenOutputFile";
-            this.btnOpenOutputFile.Size = new System.Drawing.Size(313, 23);
-            this.btnOpenOutputFile.TabIndex = 3;
-            this.btnOpenOutputFile.Text = "Open File";
-            this.btnOpenOutputFile.UseVisualStyleBackColor = true;
-            this.btnOpenOutputFile.Click += new System.EventHandler(this.btnOpenOutputFile_Click);
+            this.btnOpenMergedFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOpenMergedFile.Location = new System.Drawing.Point(7, 45);
+            this.btnOpenMergedFile.Name = "btnOpenMergedFile";
+            this.btnOpenMergedFile.Size = new System.Drawing.Size(313, 23);
+            this.btnOpenMergedFile.TabIndex = 3;
+            this.btnOpenMergedFile.Text = "Open File";
+            this.btnOpenMergedFile.UseVisualStyleBackColor = true;
+            this.btnOpenMergedFile.Click += new System.EventHandler(this.btnOpenOutputFile_Click);
             // 
-            // txtOutputPath
+            // txtMergedPath
             // 
-            this.txtOutputPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtMergedPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtOutputPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtOutputPath.Location = new System.Drawing.Point(6, 19);
-            this.txtOutputPath.Name = "txtOutputPath";
-            this.txtOutputPath.ReadOnly = true;
-            this.txtOutputPath.Size = new System.Drawing.Size(633, 20);
-            this.txtOutputPath.TabIndex = 2;
-            this.txtOutputPath.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
+            this.txtMergedPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMergedPath.Location = new System.Drawing.Point(6, 19);
+            this.txtMergedPath.Name = "txtMergedPath";
+            this.txtMergedPath.ReadOnly = true;
+            this.txtMergedPath.Size = new System.Drawing.Size(633, 20);
+            this.txtMergedPath.TabIndex = 2;
+            this.txtMergedPath.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
             // grpFile2
             // 
@@ -240,7 +240,7 @@
             this.Controls.Add(this.chkShowAfterMerge);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.grpFile2);
-            this.Controls.Add(this.grpOutputFile);
+            this.Controls.Add(this.grpMergedFile);
             this.Controls.Add(this.lblMergedFiles);
             this.Controls.Add(this.grpFile1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -252,8 +252,8 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReportForm_FormClosing);
             this.grpFile1.ResumeLayout(false);
             this.grpFile1.PerformLayout();
-            this.grpOutputFile.ResumeLayout(false);
-            this.grpOutputFile.PerformLayout();
+            this.grpMergedFile.ResumeLayout(false);
+            this.grpMergedFile.PerformLayout();
             this.grpFile2.ResumeLayout(false);
             this.grpFile2.PerformLayout();
             this.ResumeLayout(false);
@@ -268,10 +268,10 @@
         private System.Windows.Forms.GroupBox grpFile1;
         private System.Windows.Forms.Button btnOpenDir1;
         private System.Windows.Forms.Label lblMergedFiles;
-        private System.Windows.Forms.GroupBox grpOutputFile;
-        private System.Windows.Forms.Button btnOpenOutputDir;
-        private System.Windows.Forms.Button btnOpenOutputFile;
-        private System.Windows.Forms.TextBox txtOutputPath;
+        private System.Windows.Forms.GroupBox grpMergedFile;
+        private System.Windows.Forms.Button btnOpenMergedDir;
+        private System.Windows.Forms.Button btnOpenMergedFile;
+        private System.Windows.Forms.TextBox txtMergedPath;
         private System.Windows.Forms.GroupBox grpFile2;
         private System.Windows.Forms.Button btnOpenDir2;
         private System.Windows.Forms.Button btnOpenFile2;
