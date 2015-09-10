@@ -72,7 +72,6 @@ namespace WitcherScriptMerger.Forms
         {
             Program.Settings.StartBatch();
             txtGameDir.Text = Program.Settings.Get("GameDirectory");
-            txtMergedModName.Text = Program.Settings.Get("MergedModName");
             chkReviewEachMerge.Checked = Program.Settings.Get<bool>("ReviewEachMerge");
 
             LoadLastWindowConfiguration();
@@ -93,7 +92,6 @@ namespace WitcherScriptMerger.Forms
         {
             Program.Settings.StartBatch();
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
-            Program.Settings.Set("MergedModName", txtMergedModName.Text);
             Program.Settings.Set("ReviewEachMerge", chkReviewEachMerge.Checked);
 
             if (WindowState == FormWindowState.Maximized)
@@ -324,14 +322,18 @@ namespace WitcherScriptMerger.Forms
                 MessageBox.Show("Can't find the specified Witcher 3 directory.");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(txtMergedModName.Text))
+
+            string mergedModName = Program.Settings.Get("MergedModName");
+            if (string.IsNullOrWhiteSpace(mergedModName))
             {
-                MessageBox.Show("Enter a name for the mod folder where merged scripts will be saved.");
+                MessageBox.Show("The MergedModName setting isn't configured in the .config file.");
                 return;
             }
-            if (!txtMergedModName.Text.IsAlphaNumeric() || !txtMergedModName.Text.StartsWith("mod"))
+            if (mergedModName.Length > 64)
+                mergedModName = mergedModName.Substring(0, 64);
+            if (!mergedModName.IsAlphaNumeric() || !mergedModName.StartsWith("mod"))
             {
-                if (!ConfirmInvalidModName())
+                if (!ConfirmInvalidModName(mergedModName))
                     return;
             }
 
@@ -343,15 +345,15 @@ namespace WitcherScriptMerger.Forms
             {
                 var modNodes = scriptNode.GetTreeNodes().Where(modNode => modNode.Checked).ToList();
 
-                if (modNodes.Any(node => txtMergedModName.Text.CompareTo(node.Text) > 0) &&
-                    !ConfirmRemainingConflict())
+                if (modNodes.Any(node => mergedModName.CompareTo(node.Text) > 0) &&
+                    !ConfirmRemainingConflict(mergedModName))
                     continue;
 
                 var file1 = modNodes[0].Tag as FileInfo;
 
                 string outputPath = Path.Combine(
                         ModsDirectory,
-                        txtMergedModName.Text,
+                        mergedModName,
                         ModDirectory.GetRelativePath(file1.FullName, false, false));
                 
                 if (File.Exists(outputPath) && !ConfirmOutputOverwrite(outputPath))
@@ -360,16 +362,17 @@ namespace WitcherScriptMerger.Forms
                 var vanillaFile = scriptNode.Tag as FileInfo;
                 _mergesToDo = modNodes.Count - 1;
 
+                bool isNewScript = false;
                 var mergedScript = _inventory.MergedScripts.FirstOrDefault(ms => ms.RelativePath == scriptNode.Text);
                 if (mergedScript == null)
                 {
+                    isNewScript = true;
                     mergedScript = new MergedScript
                     {
                         RelativePath = scriptNode.Text,
-                        MergedModName = txtMergedModName.Text,
+                        MergedModName = mergedModName,
                         IncludedMods = new List<string>()
                     };
-                    _inventory.MergedScripts.Add(mergedScript);
                 }
 
                 for (int i = 1; i < modNodes.Count; ++i)
@@ -383,18 +386,26 @@ namespace WitcherScriptMerger.Forms
                     }
                     else
                     {
-                        string msg = "Merge was canceled.";
+                        string msg = string.Format("Merge was canceled for {0}.", vanillaFile.Name);
                         var buttons = MessageBoxButtons.OK;
                         if (_mergesToDo > 1 || scriptNodes.Count() > 1)
                         {
-                            buttons = MessageBoxButtons.OKCancel;
                             if (_mergesToDo > 1)
-                                msg = string.Format("Merge {0} of {1} was canceled.", i, _mergesToDo);
+                            {
+                                msg = string.Format("Merge {0} of {1} was canceled for {2}.", i, _mergesToDo, vanillaFile.Name);
+                                if (i < _mergesToDo)
+                                {
+                                    msg += "\n\nContinue with the remaining merges for this file?";
+                                    buttons = MessageBoxButtons.YesNo;
+                                }
+                            }
                         }
-                        this.Activate();
+                        this.Activate(); // Focus window
                         var result = MessageBox.Show(msg, "Skipped Merge", buttons, MessageBoxIcon.Information);
-                        if (result == System.Windows.Forms.DialogResult.Cancel)
+                        if (result == DialogResult.No)
                         {
+                            if (isNewScript && mergedScript.IncludedMods.Count > 1)
+                                _inventory.MergedScripts.Add(mergedScript);
                             if (updatedInventory)
                                 _inventory.Save(InventoryPath);
                             RefreshTrees();
@@ -402,16 +413,18 @@ namespace WitcherScriptMerger.Forms
                         }
                     }
                 }
+                if (isNewScript && mergedScript.IncludedMods.Count > 1)
+                    _inventory.MergedScripts.Add(mergedScript);
             }
             if (updatedInventory)
                 _inventory.Save(InventoryPath);
             RefreshTrees();
         }
 
-        private bool ConfirmRemainingConflict()
+        private bool ConfirmRemainingConflict(string mergedModName)
         {
             return (DialogResult.Yes == MessageBox.Show(
-                "There will still be a conflict if you use the merged mod name " + txtMergedModName.Text + ".\n\n" +
+                "There will still be a conflict if you use the merged mod name " + mergedModName + ".\n\n" +
                     "The Witcher 3 loads mods in alphabetical order, so this merged mod name will load after one of the original mods and the merged file will be ignored.\n\n" +
                     "Use this name anyway?",
                 "Merged Mod Name Conflict",
@@ -428,10 +441,11 @@ namespace WitcherScriptMerger.Forms
                 MessageBoxIcon.Exclamation));
         }
 
-        private bool ConfirmInvalidModName()
+        private bool ConfirmInvalidModName(string mergedModName)
         {
             return (DialogResult.Yes == MessageBox.Show(
-                "The Witcher 3 won't load the merged script if the mod name isn't \"mod\" followed by numbers, letters, or underscores.\n\nUse this name anyway?\n" + txtMergedModName.Text,
+                "The Witcher 3 won't load the merged script if the mod name isn't \"mod\" followed by numbers, letters, or underscores.\n\nUse this name anyway?\n" + mergedModName
+                + "\n\nTo change the name: Click No, then edit \"MergedModName\" in the .config file.",
                 "Warning",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Exclamation));
@@ -483,11 +497,10 @@ namespace WitcherScriptMerger.Forms
                         reportForm.ShowDialog();
                     }
                 }
+                return new FileInfo(outputPath);
             }
             else
                 return null;
-
-            return new FileInfo(outputPath);
         }
 
         private void btnDeleteMerges_Click(object sender, EventArgs e)
@@ -768,6 +781,18 @@ namespace WitcherScriptMerger.Forms
         {
             if (e.Control && e.KeyCode == Keys.A)
                 contextSelectAll_Click(null, null);
+        }
+
+        private void treMergeInventory_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete && btnDeleteMerges.Enabled)
+                btnDeleteMerges_Click(null, null);
+        }
+
+        private void splitContainer_Panel1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && btnMergeScripts.Enabled)
+                btnMergeScripts_Click(null, null);
         }
 
         #endregion

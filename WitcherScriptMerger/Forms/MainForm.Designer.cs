@@ -49,8 +49,6 @@
             this.contextCollapseAll = new System.Windows.Forms.ToolStripMenuItem();
             this.btnRefreshConflicts = new System.Windows.Forms.Button();
             this.btnMergeScripts = new System.Windows.Forms.Button();
-            this.lblMergedModName = new System.Windows.Forms.Label();
-            this.txtMergedModName = new System.Windows.Forms.TextBox();
             this.chkReviewEachMerge = new System.Windows.Forms.CheckBox();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.lblConflicts = new System.Windows.Forms.Label();
@@ -100,7 +98,7 @@
             this.treConflicts.Name = "treConflicts";
             this.treConflicts.ShowNodeToolTips = true;
             this.treConflicts.ShowRootLines = false;
-            this.treConflicts.Size = new System.Drawing.Size(312, 479);
+            this.treConflicts.Size = new System.Drawing.Size(312, 505);
             this.treConflicts.TabIndex = 1;
             this.treConflicts.TabStop = false;
             this.treConflicts.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tree_AfterCheck);
@@ -244,27 +242,6 @@
             this.btnMergeScripts.UseVisualStyleBackColor = true;
             this.btnMergeScripts.Click += new System.EventHandler(this.btnMergeScripts_Click);
             // 
-            // lblMergedModName
-            // 
-            this.lblMergedModName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblMergedModName.AutoSize = true;
-            this.lblMergedModName.Location = new System.Drawing.Point(8, 518);
-            this.lblMergedModName.Name = "lblMergedModName";
-            this.lblMergedModName.Size = new System.Drawing.Size(101, 13);
-            this.lblMergedModName.TabIndex = 9;
-            this.lblMergedModName.Text = "Merged Mod Name:";
-            // 
-            // txtMergedModName
-            // 
-            this.txtMergedModName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMergedModName.Location = new System.Drawing.Point(115, 515);
-            this.txtMergedModName.MaxLength = 64;
-            this.txtMergedModName.Name = "txtMergedModName";
-            this.txtMergedModName.Size = new System.Drawing.Size(209, 20);
-            this.txtMergedModName.TabIndex = 2;
-            this.txtMergedModName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
-            // 
             // chkReviewEachMerge
             // 
             this.chkReviewEachMerge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -289,10 +266,9 @@
             this.splitContainer.Panel1.Controls.Add(this.lblConflicts);
             this.splitContainer.Panel1.Controls.Add(this.chkReviewEachMerge);
             this.splitContainer.Panel1.Controls.Add(this.treConflicts);
-            this.splitContainer.Panel1.Controls.Add(this.lblMergedModName);
             this.splitContainer.Panel1.Controls.Add(this.btnRefreshConflicts);
-            this.splitContainer.Panel1.Controls.Add(this.txtMergedModName);
             this.splitContainer.Panel1.Controls.Add(this.btnMergeScripts);
+            this.splitContainer.Panel1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.splitContainer_Panel1_PreviewKeyDown);
             this.splitContainer.Panel1MinSize = 240;
             // 
             // splitContainer.Panel2
@@ -370,6 +346,7 @@
             this.treMergeInventory.TabStop = false;
             this.treMergeInventory.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tree_AfterCheck);
             this.treMergeInventory.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tree_AfterSelect);
+            this.treMergeInventory.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treMergeInventory_KeyDown);
             this.treMergeInventory.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tree_MouseDown);
             this.treMergeInventory.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tree_MouseUp);
             // 
@@ -430,8 +407,6 @@
         private System.Windows.Forms.ToolStripMenuItem contextVanillaScript;
         private System.Windows.Forms.ToolStripMenuItem contextVanillaDir;
         private System.Windows.Forms.Button btnMergeScripts;
-        private System.Windows.Forms.Label lblMergedModName;
-        private System.Windows.Forms.TextBox txtMergedModName;
         private System.Windows.Forms.ToolStripSeparator contextSelectSeparator;
         private System.Windows.Forms.ToolStripMenuItem contextSelectAll;
         private System.Windows.Forms.ToolStripMenuItem contextDeselectAll;
