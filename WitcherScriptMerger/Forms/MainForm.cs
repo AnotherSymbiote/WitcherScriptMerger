@@ -137,7 +137,7 @@ namespace WitcherScriptMerger.Forms
         private void RefreshMergeInventory()
         {
             btnDeleteMerges.Enabled = false;
-            treMergeInventory.Nodes.Clear();
+            treMerges.Nodes.Clear();
             bool changed = false;
             _inventory = MergeInventory.Load(InventoryPath);
             for (int i = _inventory.MergedScripts.Count - 1; i >= 0; --i)
@@ -155,7 +155,7 @@ namespace WitcherScriptMerger.Forms
                 scriptNode.Tag = mergedFile;
 
                 scriptNode.ForeColor = Color.Blue;
-                treMergeInventory.Nodes.Add(scriptNode);
+                treMerges.Nodes.Add(scriptNode);
 
                 foreach (var modName in script.IncludedMods)
                 {
@@ -167,9 +167,9 @@ namespace WitcherScriptMerger.Forms
             }
             if (changed)
                 _inventory.Save(InventoryPath);
-            treMergeInventory.Sort();
-            treMergeInventory.ExpandAll();
-            foreach (var modNode in treMergeInventory.GetTreeNodes().SelectMany(node => node.GetTreeNodes()))
+            treMerges.Sort();
+            treMerges.ExpandAll();
+            foreach (var modNode in treMerges.GetTreeNodes().SelectMany(node => node.GetTreeNodes()))
                 modNode.HideCheckBox();
         }
 
@@ -195,7 +195,12 @@ namespace WitcherScriptMerger.Forms
             {
                 MessageBox.Show(!string.IsNullOrWhiteSpace(_scriptsDirSetting)
                     ? "Can't find the Scripts directory specified in the config file."
-                    : "Can't find \\content\\content0\\scripts directory in the specified game directory.");
+                    : "Can't find \\content\\content0\\scripts directory in the specified game directory.\n\n" +
+                      "It was added in patch 1.08.1 and should contain the game's vanilla scripts. If you don't have it, try this workaround:\n\n" +
+                      "1) Download the official mod tools from Nexus Mods and install them.\n" +
+                      "2) In the mod tools folder, open the 'r4data' folder.\n" +
+                      "3) Copy the 'scripts' folder to " + Path.Combine(GameDirectory, "content\\content0") + ".\n" +
+                      "4) Optional: Uninstall the mod tools.");
                 return;
             }
 
@@ -204,10 +209,21 @@ namespace WitcherScriptMerger.Forms
 
             var ignoredModNames = GetIgnoredModNames();
             var directories = Directory.GetDirectories(ModsDirectory, "mod*", SearchOption.TopDirectoryOnly);
+            if (!directories.Any())
+            {
+                MessageBox.Show("Can't find any mods in the Mods directory.");
+                return;
+            }
+
             var modDirectories = directories
                 .Select(path => new ModDirectory(path))
                 .Where(modDir => modDir.ScriptFiles.Any())
                 .Where(modDir => !ignoredModNames.Any(name => name.EqualsIgnoreCase(modDir.ModName)));
+            if (!modDirectories.Any())
+            {
+                MessageBox.Show("Can't find any mods with script files in the Mods directory.");
+                return;
+            }
 
             foreach (var modDir in modDirectories)
             {
@@ -249,15 +265,14 @@ namespace WitcherScriptMerger.Forms
                 var scriptNode = treConflicts.Nodes[i];
                 if (scriptNode.Nodes.Count == 1)
                     treConflicts.Nodes.RemoveAt(i);
-                else
-                    scriptNode.Expand();
             }
 
-            if (treConflicts.Nodes.Count == 0)
+            if (treConflicts.IsEmpty())
                 MessageBox.Show("No conflicts found.");
             else
             {
                 treConflicts.Sort();
+                treConflicts.ExpandAll();
                 treConflicts.Select();
             }
         }
@@ -505,8 +520,13 @@ namespace WitcherScriptMerger.Forms
 
         private void btnDeleteMerges_Click(object sender, EventArgs e)
         {
+            var scriptNodes = treMerges.GetTreeNodes().Where(node => node.Checked);
+            DeleteMerges(scriptNodes);
+        }
+
+        private void DeleteMerges(IEnumerable<TreeNode> scriptNodes)
+        {
             _inventory = MergeInventory.Load(InventoryPath);
-            var scriptNodes = treMergeInventory.GetTreeNodes().Where(node => node.Checked);
             foreach (var scriptNode in scriptNodes)
             {
                 var mergedFile = scriptNode.Tag as FileInfo;
@@ -520,7 +540,7 @@ namespace WitcherScriptMerger.Forms
                 var mergedScript = _inventory.MergedScripts.FirstOrDefault(ms =>
                     mergedFile.FullName.Contains(ms.MergedModName) &&
                     mergedFile.FullName.Contains(ms.RelativePath));
-                
+
                 if (mergedScript != null)
                     _inventory.MergedScripts.Remove(mergedScript);
             }
@@ -562,35 +582,18 @@ namespace WitcherScriptMerger.Forms
 
             if (e.Button == MouseButtons.Left)
             {
-                if (_clickedNode != null && (tree == treConflicts || _clickedNode.Level == 0))
+                if (_clickedNode != null)
                 {
+                    if (tree == treMerges && _clickedNode.IsLeaf())
+                        _clickedNode = _clickedNode.Parent;
+                    
                     _clickedNode.Checked = !_clickedNode.Checked;
                     HandleCheckedChange(sender);
                 }
             }
             else if (e.Button == MouseButtons.Right)
             {
-                if (tree.Nodes.Count > 0)
-                {
-                    contextSelectAll.Available =   (tree.GetTreeNodes().Any(node => !node.Checked));
-                    contextDeselectAll.Available = (tree.GetTreeNodes().Any(node => node.Checked));
-                    contextExpandAll.Available =   (tree.GetTreeNodes().Any(node => !node.IsExpanded));
-                    contextCollapseAll.Available = (tree.GetTreeNodes().Any(node => node.IsExpanded));
-                }
-                else
-                    contextSelectAll.Available = contextDeselectAll.Available =
-                    contextExpandAll.Available = contextCollapseAll.Available =
-                    false;
-                contextCopyPath.Available = (_clickedNode != null);
-                contextModScript.Available = contextModDir.Available =
-                    (_clickedNode != null && _clickedNode.Nodes.Count == 0);
-                contextVanillaScript.Available = contextVanillaDir.Available =
-                    (_clickedNode != null && tree == treConflicts && _clickedNode.Nodes.Count > 0);
-                contextMergedScript.Available = contextMergedDir.Available =
-                    (_clickedNode != null && tree == treMergeInventory && _clickedNode.Nodes.Count > 0);
-
-                // If can copy path, need separator above Select/Deselect All
-                contextSelectSeparator.Visible = contextCopyPath.Available;
+                SetContextMenuItems(tree);
 
                 if (_clickedNode != null)
                     _clickedNode.BackColor = Color.Gainsboro;
@@ -602,6 +605,55 @@ namespace WitcherScriptMerger.Forms
                 }
             }
             tree.EndUpdate();
+        }
+
+        private void SetContextMenuItems(TreeView tree)
+        {
+            foreach (var menuItem in treeContextMenu.Items.OfType<ToolStripItem>())
+                menuItem.Available = false;
+            
+            if (_clickedNode != null)
+            {
+                contextCopyPath.Available = true;
+                if (_clickedNode.IsLeaf())
+                    contextOpenModScript.Available = contextOpenModDir.Available = true;
+                if (!_clickedNode.IsLeaf() && tree == treConflicts)
+                    contextOpenVanillaScript.Available = contextOpenVanillaDir.Available = true;
+                if (!_clickedNode.IsLeaf() && tree == treMerges)
+                    contextOpenMergedScript.Available = contextOpenMergedDir.Available = true;
+
+                if (tree == treMerges)
+                {
+                    contextDeleteMerge.Available = contextDeleteSeparator.Available = true;
+                    if (_clickedNode.IsLeaf())
+                    {
+                        contextDeleteAssociatedMerges.Available = true;
+                        contextDeleteAssociatedMerges.Text = string.Format("Delete All {0} Merges", _clickedNode.Text);
+                    }
+                }
+            }
+
+            // If can copy path, need separator above Select/Deselect All
+            if (contextCopyPath.Available)
+                contextOpenSeparator.Visible = true;
+
+            if (!tree.IsEmpty())
+            {
+                if (tree.GetTreeNodes().Any(node => !node.Checked))     contextSelectAll.Available = true;
+                if (tree.GetTreeNodes().Any(node =>  node.Checked))     contextDeselectAll.Available = true;
+                if (tree.GetTreeNodes().Any(node => !node.IsExpanded))  contextExpandAll.Available = true;
+                if (tree.GetTreeNodes().Any(node =>  node.IsExpanded))  contextCollapseAll.Available = true;
+            }
+
+            if (treeContextMenu.Items.OfType<ToolStripItem>().Any(item => item.Available))
+            {
+                int width = treeContextMenu.Items.OfType<ToolStripMenuItem>().Where(item => item.Available)
+                    .Max(item => TextRenderer.MeasureText(item.Text, item.Font).Width);
+                int height = treeContextMenu.GetAvailableItems()
+                    .Sum(item => item.Height);
+                treeContextMenu.Width = width + 45;
+                treeContextMenu.Height = height + 5;
+            }
         }
 
         private void tree_AfterCheck(object sender, TreeViewEventArgs e)
@@ -617,7 +669,7 @@ namespace WitcherScriptMerger.Forms
         {
             TreeView tree = sender as TreeView;
             TreeNode scriptNode;
-            if (_clickedNode.Nodes.Count > 0)  // Script node
+            if (!_clickedNode.IsLeaf())  // Script node
             {
                 scriptNode = _clickedNode;
                 if (tree == treConflicts)
@@ -660,7 +712,7 @@ namespace WitcherScriptMerger.Forms
 
         private void EnableUnmergeIfValidSelection()
         {
-            int selectedNodes = treMergeInventory.GetTreeNodes().Count(node => node.Checked);
+            int selectedNodes = treMerges.GetTreeNodes().Count(node => node.Checked);
             btnDeleteMerges.Enabled = (selectedNodes > 0);
             btnDeleteMerges.Text = (selectedNodes > 1
                 ? "&Delete Selected Merges"
@@ -698,6 +750,30 @@ namespace WitcherScriptMerger.Forms
             if (_clickedNode == null)
                 return;
             Clipboard.SetText(GetPathFromNode(_clickedNode));
+        }
+
+        private void contextDeleteMerge_Click(object sender, EventArgs e)
+        {
+            if (_clickedNode == null || _clickedTree != treMerges)
+                return;
+
+            if (_clickedNode.IsLeaf())
+                DeleteMerges(new TreeNode[] { _clickedNode.Parent });
+            else
+                DeleteMerges(new TreeNode[] { _clickedNode });
+        }
+
+        private void contextDeleteAssociatedMerges_Click(object sender, EventArgs e)
+        {
+            if (_clickedNode == null || _clickedTree != treMerges || !_clickedNode.IsLeaf())
+                return;
+
+            // Find all script nodes that contain a node matching the clicked node
+            var scriptNodes = treMerges.GetTreeNodes().Where(scrNode =>
+                scrNode.GetTreeNodes().Any(modNode =>
+                    modNode.Text == _clickedNode.Text));
+
+            DeleteMerges(scriptNodes);
         }
 
         private void contextSelectAll_Click(object sender, EventArgs e)

@@ -36,6 +36,11 @@ namespace WitcherScriptMerger
             return new Regex("^[_a-zA-Z0-9]*$").IsMatch(s);
         }
 
+        public static IEnumerable<ToolStripItem> GetAvailableItems(this ContextMenuStrip menu)
+        {
+            return menu.Items.Cast<ToolStripItem>().Where(item => item.Available);
+        }
+
         public static IEnumerable<TreeNode> GetTreeNodes(this TreeView treeView)
         {
             return treeView.Nodes.Cast<TreeNode>();
@@ -44,6 +49,16 @@ namespace WitcherScriptMerger
         public static IEnumerable<TreeNode> GetTreeNodes(this TreeNode node)
         {
             return node.Nodes.Cast<TreeNode>();
+        }
+
+        public static bool IsEmpty(this TreeView tree)
+        {
+            return (tree.Nodes.Count == 0);
+        }
+
+        public static bool IsLeaf(this TreeNode node)
+        {
+            return (node.Nodes.Count == 0);
         }
 
         #region Hiding TreeView Checkbox
