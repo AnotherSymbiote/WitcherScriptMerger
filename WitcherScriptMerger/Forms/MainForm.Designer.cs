@@ -34,9 +34,6 @@
             this.btnSelectGameDir = new System.Windows.Forms.Button();
             this.treConflicts = new System.Windows.Forms.TreeView();
             this.treeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.contextDeleteMerge = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextDeleteAssociatedMerges = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextDeleteSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.contextOpenVanillaScript = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenVanillaDir = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenMergedScript = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,6 +42,9 @@
             this.contextOpenModDir = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCopyPath = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.contextDeleteMerge = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextDeleteAssociatedMerges = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextDeleteSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.contextSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.contextDeselectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.contextExpandAll = new System.Windows.Forms.ToolStripMenuItem();
@@ -132,25 +132,6 @@
             this.treeContextMenu.Size = new System.Drawing.Size(232, 324);
             this.treeContextMenu.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.treeContextMenu_Closing);
             // 
-            // contextDeleteMerge
-            // 
-            this.contextDeleteMerge.Name = "contextDeleteMerge";
-            this.contextDeleteMerge.Size = new System.Drawing.Size(231, 22);
-            this.contextDeleteMerge.Text = "Delete This Merge";
-            this.contextDeleteMerge.Click += new System.EventHandler(this.contextDeleteMerge_Click);
-            // 
-            // contextDeleteAssociatedMerges
-            // 
-            this.contextDeleteAssociatedMerges.Name = "contextDeleteAssociatedMerges";
-            this.contextDeleteAssociatedMerges.Size = new System.Drawing.Size(231, 22);
-            this.contextDeleteAssociatedMerges.Text = "Delete All {0} Merges";
-            this.contextDeleteAssociatedMerges.Click += new System.EventHandler(this.contextDeleteAssociatedMerges_Click);
-            // 
-            // contextDeleteSeparator
-            // 
-            this.contextDeleteSeparator.Name = "contextDeleteSeparator";
-            this.contextDeleteSeparator.Size = new System.Drawing.Size(228, 6);
-            // 
             // contextOpenVanillaScript
             // 
             this.contextOpenVanillaScript.Name = "contextOpenVanillaScript";
@@ -205,6 +186,25 @@
             this.contextOpenSeparator.Name = "contextOpenSeparator";
             this.contextOpenSeparator.Size = new System.Drawing.Size(228, 6);
             // 
+            // contextDeleteMerge
+            // 
+            this.contextDeleteMerge.Name = "contextDeleteMerge";
+            this.contextDeleteMerge.Size = new System.Drawing.Size(231, 22);
+            this.contextDeleteMerge.Text = "Delete This Merge";
+            this.contextDeleteMerge.Click += new System.EventHandler(this.contextDeleteMerge_Click);
+            // 
+            // contextDeleteAssociatedMerges
+            // 
+            this.contextDeleteAssociatedMerges.Name = "contextDeleteAssociatedMerges";
+            this.contextDeleteAssociatedMerges.Size = new System.Drawing.Size(231, 22);
+            this.contextDeleteAssociatedMerges.Text = "Delete All {0} Merges";
+            this.contextDeleteAssociatedMerges.Click += new System.EventHandler(this.contextDeleteAssociatedMerges_Click);
+            // 
+            // contextDeleteSeparator
+            // 
+            this.contextDeleteSeparator.Name = "contextDeleteSeparator";
+            this.contextDeleteSeparator.Size = new System.Drawing.Size(228, 6);
+            // 
             // contextSelectAll
             // 
             this.contextSelectAll.Name = "contextSelectAll";
@@ -257,7 +257,7 @@
             this.btnMergeScripts.Name = "btnMergeScripts";
             this.btnMergeScripts.Size = new System.Drawing.Size(312, 35);
             this.btnMergeScripts.TabIndex = 6;
-            this.btnMergeScripts.Text = "&Merge Selected Script";
+            this.btnMergeScripts.Text = "&Merge Selected File";
             this.btnMergeScripts.UseVisualStyleBackColor = true;
             this.btnMergeScripts.Click += new System.EventHandler(this.btnMergeScripts_Click);
             // 
@@ -315,7 +315,7 @@
             // 
             this.btnRefreshMerged.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRefreshMerged.Location = new System.Drawing.Point(126, 3);
+            this.btnRefreshMerged.Location = new System.Drawing.Point(112, 3);
             this.btnRefreshMerged.MaximumSize = new System.Drawing.Size(150, 23);
             this.btnRefreshMerged.MinimumSize = new System.Drawing.Size(100, 23);
             this.btnRefreshMerged.Name = "btnRefreshMerged";
@@ -331,9 +331,9 @@
             this.lblMergeInventory.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMergeInventory.Location = new System.Drawing.Point(3, 6);
             this.lblMergeInventory.Name = "lblMergeInventory";
-            this.lblMergeInventory.Size = new System.Drawing.Size(117, 16);
+            this.lblMergeInventory.Size = new System.Drawing.Size(103, 16);
             this.lblMergeInventory.TabIndex = 7;
-            this.lblMergeInventory.Text = "Merged Scripts:";
+            this.lblMergeInventory.Text = "Merged Files:";
             // 
             // btnDeleteMerges
             // 

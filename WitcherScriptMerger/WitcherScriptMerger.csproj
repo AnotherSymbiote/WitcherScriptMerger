@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="FileIndex\ModFile.cs" />
+    <Compile Include="FileIndex\ModFileIndex.cs" />
     <Compile Include="Forms\ReportForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,7 +67,7 @@
     </Compile>
     <Compile Include="Inventory\MergedScript.cs" />
     <Compile Include="Inventory\MergeInventory.cs" />
-    <Compile Include="ModDirectory.cs" />
+    <Compile Include="FileIndex\ModHelpers.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\ReportForm.resx">

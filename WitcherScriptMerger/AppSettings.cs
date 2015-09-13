@@ -26,6 +26,7 @@ namespace WitcherScriptMerger
 
         public void EndBatch()
         {
+            _cachedConfig.Save(ConfigurationSaveMode.Minimal);
             _cachedConfig = null;
         }
 
@@ -42,7 +43,8 @@ namespace WitcherScriptMerger
             }
             try
             {
-                config.Save(ConfigurationSaveMode.Modified);
+                if (_cachedConfig == null)
+                    config.Save(ConfigurationSaveMode.Minimal);
             }
             catch (Exception ex)
             {
