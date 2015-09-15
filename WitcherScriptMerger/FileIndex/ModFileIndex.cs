@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -26,7 +27,11 @@ namespace WitcherScriptMerger.FileIndex
             Files = new List<ModFile>();
         }
 
-        public ModFileIndex Build(MergeInventory inventory)
+        public void BuildAsync(
+            MergeInventory inventory,
+            bool checkBundles,
+            ProgressChangedEventHandler progressHandler,
+            RunWorkerCompletedEventHandler completedHandler)
         {
             var ignoredModNames = GetIgnoredModNames();
             var modDirPaths = Directory.GetDirectories(Paths.ModsDirectory, "mod*", SearchOption.TopDirectoryOnly)
@@ -35,23 +40,38 @@ namespace WitcherScriptMerger.FileIndex
             if (!modDirPaths.Any())
             {
                 MessageBox.Show("Can't find any mods in the Mods directory.");
-                return null;
+                return;
             }
 
-            foreach (var dirPath in modDirPaths)
+            var bgWorker = new BackgroundWorker
             {
-                string modName = Path.GetFileName(dirPath);
-                var filePaths = Directory.GetFiles(dirPath, "*", SearchOption.AllDirectories);
-                var scriptPaths = filePaths.Where(path => path.EndsWith(".ws"));
-                Files.AddRange(GetModFilesFromPaths(scriptPaths, inventory, modName));
-
-                foreach (string bundlePath in filePaths.Where(path => path.EndsWith(".bundle")))
+                WorkerReportsProgress = true
+            };
+            bgWorker.DoWork += (sender, e) =>
+            {
+                int i = 0;
+                foreach (var dirPath in modDirPaths)
                 {
-                    var contentPaths = GetBundleContentPaths(bundlePath);
-                    Files.AddRange(GetModFilesFromPaths(contentPaths, inventory, modName, bundlePath));
+                    string modName = Path.GetFileName(dirPath);
+                    var filePaths = Directory.GetFiles(dirPath, "*", SearchOption.AllDirectories);
+                    var scriptPaths = filePaths.Where(path => path.EndsWith(".ws"));
+                    Files.AddRange(GetModFilesFromPaths(scriptPaths, inventory, modName));
+
+                    if (checkBundles)
+                    {
+                        foreach (string bundlePath in filePaths.Where(path => path.EndsWith(".bundle")))
+                        {
+                            var contentPaths = GetBundleContentPaths(bundlePath);
+                            Files.AddRange(GetModFilesFromPaths(contentPaths, inventory, modName, bundlePath));
+                        }
+                    }
+                    int progressPct = (int)((float)++i / modDirPaths.Count * 100f);
+                    bgWorker.ReportProgress(progressPct, modName as object);
                 }
-            }
-            return this;
+            };
+            bgWorker.RunWorkerCompleted += completedHandler;
+            bgWorker.ProgressChanged += progressHandler;
+            bgWorker.RunWorkerAsync();
         }
 
         private List<ModFile> GetModFilesFromPaths(IEnumerable<string> filePaths, MergeInventory inventory, string modName, string bundlePath = null)
