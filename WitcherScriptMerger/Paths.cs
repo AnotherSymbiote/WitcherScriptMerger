@@ -66,5 +66,11 @@ namespace WitcherScriptMerger
         {
             get { return string.IsNullOrWhiteSpace(_modsDirSetting); }
         }
+
+        public static string GetRelativePath(string fullPath, string basePath)
+        {
+            int startIndex = fullPath.IndexOfIgnoreCase(basePath) + basePath.Length + 1;
+            return fullPath.Substring(startIndex);
+        }
     }
 }

@@ -285,10 +285,11 @@ namespace WitcherScriptMerger.Forms
 
                 var file1 = new FileInfo(modNodes[0].Tag as string);
 
-                string outputPath = Path.Combine(
-                        Paths.ModsDirectory,
-                        mergedModName,
-                        ModHelpers.GetRelativePath(file1.FullName, false, false));
+                string relPath = Paths.GetRelativePath(
+                    file1.FullName,
+                    Path.Combine(Paths.ModsDirectory, ModFile.GetModNameFromPath(file1.FullName)));
+
+                string outputPath = Path.Combine(Paths.ModsDirectory, mergedModName, relPath);
                 
                 if (File.Exists(outputPath) && !ConfirmOutputOverwrite(outputPath))
                     continue;
@@ -394,13 +395,16 @@ namespace WitcherScriptMerger.Forms
             if (!Directory.Exists(outputDir))
                 Directory.CreateDirectory(outputDir);
 
-            string modName1 = ModHelpers.GetModName(file1);
-            string modName2 = ModHelpers.GetModName(file2);
-
             string args = string.Format(
                 "\"{0}\" \"{1}\" \"{2}\" -o \"{3}\" " +
                 "--cs \"WhiteSpace3FileMergeDefault=2\"",
                 vanillaFile.FullName, file1.FullName, file2.FullName, outputPath);
+
+            string modName1 = ModFile.GetModNameFromPath(file1.FullName);
+            string modName2 = ModFile.GetModNameFromPath(file2.FullName);
+
+            if (!Program.Settings.Get<bool>("ShowPathsInKDiff3"))
+                args += string.Format(" --L1 Vanilla --L2 \"{0}\" --L3 \"{1}\"", modName1, modName2);
 
             if (!chkReviewEachMerge.Checked)
                 args += " --auto";
@@ -415,10 +419,10 @@ namespace WitcherScriptMerger.Forms
             if (kdiff3Proc.ExitCode == 0)
             {
                 if (file1.FullName != outputPath)
-                    mergedScript.ModNames.Add(ModHelpers.GetModName(file1));
+                    mergedScript.ModNames.Add(modName1);
 
                 if (file2.FullName != outputPath)
-                    mergedScript.ModNames.Add(ModHelpers.GetModName(file2));
+                    mergedScript.ModNames.Add(modName2);
 
                 if (Program.Settings.Get<bool>("ReportAfterMerge"))
                 {

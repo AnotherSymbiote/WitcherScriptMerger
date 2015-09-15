@@ -67,7 +67,6 @@
     </Compile>
     <Compile Include="Inventory\Merge.cs" />
     <Compile Include="Inventory\MergeInventory.cs" />
-    <Compile Include="FileIndex\ModHelpers.cs" />
     <Compile Include="Paths.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

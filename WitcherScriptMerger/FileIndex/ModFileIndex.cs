@@ -60,7 +60,7 @@ namespace WitcherScriptMerger.FileIndex
             foreach (var filePath in filePaths)
             {
                 string relPath = (Path.IsPathRooted(filePath)
-                    ? ModHelpers.GetMinimalRelativePath(filePath)
+                    ? Paths.GetRelativePath(filePath, Paths.ModScriptBase)
                     : filePath);
 
                 if (inventory.HasResolvedConflict(relPath, modName))
