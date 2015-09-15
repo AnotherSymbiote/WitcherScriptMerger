@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,7 +7,7 @@ using WitcherScriptMerger.Inventory;
 
 namespace WitcherScriptMerger.FileIndex
 {
-    public class ModFileIndex
+    internal class ModFileIndex
     {
         public List<ModFile> Files;
 
@@ -30,7 +29,7 @@ namespace WitcherScriptMerger.FileIndex
         public ModFileIndex Build(MergeInventory inventory)
         {
             var ignoredModNames = GetIgnoredModNames();
-            var modDirPaths = Directory.GetDirectories(Program.MainForm.ModsDirectory, "mod*", SearchOption.TopDirectoryOnly)
+            var modDirPaths = Directory.GetDirectories(Paths.ModsDirectory, "mod*", SearchOption.TopDirectoryOnly)
                 .Where(path => !ignoredModNames.Any(name => name.EqualsIgnoreCase(Path.GetDirectoryName(path))))
                 .ToList();
             if (!modDirPaths.Any())
@@ -41,18 +40,21 @@ namespace WitcherScriptMerger.FileIndex
 
             foreach (var dirPath in modDirPaths)
             {
+                string modName = Path.GetFileName(dirPath);
                 var filePaths = Directory.GetFiles(dirPath, "*", SearchOption.AllDirectories);
                 var scriptPaths = filePaths.Where(path => path.EndsWith(".ws"));
-                var bundlePaths = filePaths.Where(path => path.EndsWith(".bundle"));
-                var contentPaths = GetBundleContentPaths(bundlePaths);
-                string modName = Path.GetFileName(dirPath);
-                Files.AddRange(GetModFiles(scriptPaths, inventory, modName));
-                Files.AddRange(GetModFiles(contentPaths, inventory, modName));
+                Files.AddRange(GetModFilesFromPaths(scriptPaths, inventory, modName));
+
+                foreach (string bundlePath in filePaths.Where(path => path.EndsWith(".bundle")))
+                {
+                    var contentPaths = GetBundleContentPaths(bundlePath);
+                    Files.AddRange(GetModFilesFromPaths(contentPaths, inventory, modName, bundlePath));
+                }
             }
             return this;
         }
 
-        private List<ModFile> GetModFiles(IEnumerable<string> filePaths, MergeInventory inventory, string modName)
+        private List<ModFile> GetModFilesFromPaths(IEnumerable<string> filePaths, MergeInventory inventory, string modName, string bundlePath = null)
         {
             var fileList = new List<ModFile>();
             foreach (var filePath in filePaths)
@@ -61,20 +63,18 @@ namespace WitcherScriptMerger.FileIndex
                     ? ModHelpers.GetMinimalRelativePath(filePath)
                     : filePath);
 
-                if (IsConflictResolved(inventory, modName, relPath))
+                if (inventory.HasResolvedConflict(relPath, modName))
                     continue;
 
-                var existingFile = Files.FirstOrDefault(c =>
-                    c.RelativePath.EqualsIgnoreCase(relPath));
+                var existingFile = Files.FirstOrDefault(file =>
+                    file.RelativePath.EqualsIgnoreCase(relPath));
                 if (existingFile == null)
                 {
-                    ////string vanillaPath = Path.Combine(ScriptsDirectory, relPath);
-                    ////if (File.Exists(vanillaPath))
-                    ////{
-                    var newFile = new ModFile(relPath, filePath);
+                    var newFile = (bundlePath != null
+                        ? new ModFile(relPath, bundlePath)
+                        : new ModFile(relPath));
                     newFile.ModNames.Add(modName);
                     fileList.Add(newFile);
-                    ////}
                 }
                 else
                     existingFile.ModNames.Add(modName);
@@ -82,43 +82,32 @@ namespace WitcherScriptMerger.FileIndex
             return fileList;
         }
 
-        private List<string> GetBundleContentPaths(IEnumerable<string> bundlePaths)
+        private List<string> GetBundleContentPaths(string bundlePath)
         {
             var contentPaths = new List<string>();
 
-            string argBase = string.Format("-l {0} ", Program.BmsPluginPath);
             var procInfo = new ProcessStartInfo
             {
-                FileName = Program.BmsPath,
+                FileName = Paths.Bms,
+                Arguments = string.Format("-l {0} \"{1}\"", Paths.BmsPlugin, bundlePath),
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
-            foreach (var bundlePath in bundlePaths)
+            using (var bmsProc = new Process { StartInfo = procInfo })
             {
-                procInfo.Arguments = string.Format("{0} \"{1}\"", argBase, bundlePath);
-                using (var bmsProc = new Process { StartInfo = procInfo })
-                {
-                    bmsProc.Start();
-                    string output = bmsProc.StandardOutput.ReadToEnd() + "\n\n" + bmsProc.StandardError.ReadToEnd();
-                    bmsProc.WaitForExit();
-                    int footerPos = output.LastIndexOf("QuickBMS generic");
-                    var outputLines = output.Substring(0, footerPos).Split('\n');
-                    var lineParts = outputLines.SelectMany(line => line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries));
-                    var paths = lineParts.Where(part => part.Contains('.'));
-                    contentPaths.AddRange(paths);
-                }
+                bmsProc.Start();
+                string output = bmsProc.StandardOutput.ReadToEnd() + "\n\n" + bmsProc.StandardError.ReadToEnd();
+                bmsProc.WaitForExit();
+                int footerPos = output.LastIndexOf("QuickBMS generic");
+                var outputLines = output.Substring(0, footerPos).Split('\n');
+                var paths = outputLines
+                    .Where(line => line.Length > 5)
+                    .Select(line => line.Substring(line.LastIndexOf(' ')).Trim());
+                contentPaths.AddRange(paths);
             }
             return contentPaths;
-        }
-
-        private bool IsConflictResolved(MergeInventory inventory, string modName, string relPath)
-        {
-            return inventory.MergedScripts.Any(ms =>
-                ms.RelativePath == relPath &&
-                ms.IncludedMods.Contains(modName) &&
-                ms.MergedModName.CompareTo(modName) <= 0);
         }
 
         private IEnumerable<string> GetIgnoredModNames()

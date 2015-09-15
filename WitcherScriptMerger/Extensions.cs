@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace WitcherScriptMerger
 {
-    public static class Extensions
+    internal static class Extensions
     {
         public static string ReplaceIgnoreCase(this string s, string oldValue, string newValue)
         {

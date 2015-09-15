@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace WitcherScriptMerger.Forms
 {
-    public partial class ReportForm : Form
+    internal partial class ReportForm : Form
     {
         bool _savedCheckedState;
 

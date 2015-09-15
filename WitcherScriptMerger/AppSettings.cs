@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace WitcherScriptMerger
 {
-    public class AppSettings
+    internal class AppSettings
     {
         private string _assemblyPath;
         private Configuration _cachedConfig;

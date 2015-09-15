@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace WitcherScriptMerger.Inventory
@@ -7,8 +8,8 @@ namespace WitcherScriptMerger.Inventory
     [XmlRoot]
     public class MergeInventory
     {
-        [XmlElement(ElementName="MergedScript")]
-        public List<MergedScript> MergedScripts;
+        [XmlElement(ElementName="Merge")]
+        public List<Merge> Merges;
 
         public static MergeInventory Load(string path)
         {
@@ -20,11 +21,12 @@ namespace WitcherScriptMerger.Inventory
                     return (MergeInventory)serializer.Deserialize(stream);
                 }
             }
-            catch
+            catch (System.Exception ex)
             {
+                string wat = ex.Message;
                 return new MergeInventory
                 {
-                    MergedScripts = new List<MergedScript>()
+                    Merges = new List<Merge>()
                 };
             }
         }
@@ -36,6 +38,14 @@ namespace WitcherScriptMerger.Inventory
             {
                 serializer.Serialize(writer, this);
             }
+        }
+
+        public bool HasResolvedConflict(string relPath, string modName)
+        {
+            return Merges.Any(ms =>
+                ms.RelativePath == relPath &&
+                ms.ModNames.Contains(modName) &&
+                ms.MergedModName.CompareTo(modName) <= 0);
         }
     }
 }
