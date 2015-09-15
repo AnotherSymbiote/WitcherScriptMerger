@@ -9,6 +9,11 @@ namespace WitcherScriptMerger
         private string _assemblyPath;
         private Configuration _cachedConfig;
 
+        private bool IsBatching
+        {
+            get { return _cachedConfig != null; }
+        }
+
         public AppSettings()
         {
             _assemblyPath = System.Reflection.Assembly.GetEntryAssembly().Location;
@@ -26,7 +31,9 @@ namespace WitcherScriptMerger
 
         public void EndBatch()
         {
-            _cachedConfig.Save(ConfigurationSaveMode.Minimal);
+            if (!IsBatching)
+                return;
+            TrySave(_cachedConfig);
             _cachedConfig = null;
         }
 
@@ -41,18 +48,8 @@ namespace WitcherScriptMerger
             {
                 config.AppSettings.Settings.Add(key, value.ToString());
             }
-            try
-            {
-                if (_cachedConfig == null)
-                    config.Save(ConfigurationSaveMode.Minimal);
-            }
-            catch (Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(string.Format(
-                    "Failed to save setting ({0}) due to error: {1}",
-                    key,
-                    ex.Message));
-            }
+            if (!IsBatching)
+                TrySave(config);
         }
 
         public T Get<T>(string key)
@@ -81,6 +78,20 @@ namespace WitcherScriptMerger
             catch
             {
                 return string.Empty;
+            }
+        }
+
+        private void TrySave(Configuration config)
+        {
+            try
+            {
+                config.Save(ConfigurationSaveMode.Minimal);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show(string.Format(
+                    "Failed to save config due to error: {0}",
+                    ex.Message));
             }
         }
     }
