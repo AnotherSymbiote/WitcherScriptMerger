@@ -21,6 +21,8 @@ namespace WitcherScriptMerger.Inventory
         [XmlIgnore]
         public bool HasChanged { get { return ScriptsChanged || BundleChanged; } }
 
+        private static XmlSerializer _serializer = new XmlSerializer(typeof(MergeInventory));
+
         public MergeInventory()
         {
             Merges = new ObservableCollection<Merge>();
@@ -32,10 +34,10 @@ namespace WitcherScriptMerger.Inventory
             MergeInventory inventory;
             try
             {
-                var serializer = new XmlSerializer(typeof(MergeInventory));
+                _serializer = new XmlSerializer(typeof(MergeInventory));
                 using (var stream = new FileStream(path, FileMode.Open))
                 {
-                    inventory = (MergeInventory)serializer.Deserialize(stream);
+                    inventory = (MergeInventory)_serializer.Deserialize(stream);
                 }
             }
             catch
@@ -61,10 +63,11 @@ namespace WitcherScriptMerger.Inventory
 
         public void Save(string path)
         {
-            var serializer = new XmlSerializer(typeof(MergeInventory));
+            if (_serializer == null)
+                return;
             using (var writer = new StreamWriter(path))
             {
-                serializer.Serialize(writer, this);
+                _serializer.Serialize(writer, this);
             }
         }
 

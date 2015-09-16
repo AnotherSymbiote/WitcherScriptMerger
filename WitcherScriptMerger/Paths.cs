@@ -16,7 +16,7 @@ namespace WitcherScriptMerger
 
         public static string GameDirectory
         {
-            get { return Program.MainForm.GetGameDirectory(); }
+            get { return Program.MainForm.GameDirectorySetting; }
         }
 
         private static string _scriptsDirSetting = Program.Settings.Get("ScriptsDirectory");

@@ -68,6 +68,8 @@ namespace WitcherScriptMerger.FileIndex
                     int progressPct = (int)((float)++i / modDirPaths.Count * 100f);
                     bgWorker.ReportProgress(progressPct, modName as object);
                 }
+                if (checkBundles)
+                    System.Threading.Thread.Sleep(500);
             };
             bgWorker.RunWorkerCompleted += completedHandler;
             bgWorker.ProgressChanged += progressHandler;

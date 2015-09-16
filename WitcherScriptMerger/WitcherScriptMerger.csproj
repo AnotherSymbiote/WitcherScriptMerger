@@ -52,6 +52,7 @@
     <Compile Include="AppSettings.cs" />
     <Compile Include="FileIndex\ModFile.cs" />
     <Compile Include="FileIndex\ModFileIndex.cs" />
+    <Compile Include="FileMerger.cs" />
     <Compile Include="Forms\ReportForm.cs">
       <SubType>Form</SubType>
     </Compile>

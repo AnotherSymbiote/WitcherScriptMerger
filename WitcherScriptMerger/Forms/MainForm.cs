@@ -15,11 +15,30 @@ namespace WitcherScriptMerger.Forms
     {
         #region Members
 
+        public string GameDirectorySetting
+        {
+            get { return txtGameDir.Text; }
+        }
+
+        public bool PathsInKdiff3Setting
+        {
+            get { return menuPathsInKDiff3.Checked; }
+        }
+
+        public bool ReviewEachMergeSetting
+        {
+            get { return menuReviewEach.Checked; }
+        }
+
+        public bool MergeReportSetting
+        {
+            get { return menuMergeReport.Checked; }
+        }
+
         private MergeInventory _inventory = null;
         private ModFileIndex _modIndex = null;
         private TreeView _clickedTree = null;
         private TreeNode _clickedNode = null;
-        private int _mergesToDo = 0;
 
         #endregion
 
@@ -166,6 +185,8 @@ namespace WitcherScriptMerger.Forms
 
         private void RefreshConflictsTree(bool checkBundles = true)
         {
+            checkBundles = checkBundles && menuCheckBundleContents.Checked;
+
             if (_inventory.ScriptsChanged && _inventory.BundleChanged)
                 treConflicts.Nodes.Clear();
             else
@@ -184,11 +205,12 @@ namespace WitcherScriptMerger.Forms
             btnRefreshConflicts.Enabled = btnMergeScripts.Enabled = false;
             treConflicts.BackColor = pnlRefreshProgress.BackColor;
             refreshBar.Value = 0;
-            pnlRefreshProgress.Visible = true;
+            if (checkBundles)
+                pnlRefreshProgress.Visible = true;
 
             _modIndex = new ModFileIndex();
             _modIndex.BuildAsync(_inventory,
-                (checkBundles && menuCheckBundleContents.Checked),
+                checkBundles,
                 OnRefreshProgressChanged,
                 OnRefreshComplete);
         }
@@ -233,35 +255,6 @@ namespace WitcherScriptMerger.Forms
             _modIndex = null;
             UpdateStatusText();
             btnRefreshConflicts.Enabled = true;
-        }
-
-        private bool ValidateDirectories()
-        {
-            if (!Directory.Exists(Paths.ModsDirectory))
-            {
-                MessageBox.Show(!Paths.IsModsDirectoryDerived
-                    ? "Can't find the Mods directory specified in the config file."
-                    : "Can't find Mods directory in the specified game directory.");
-                return false;
-            }
-            if (!Directory.Exists(Paths.ScriptsDirectory))
-            {
-                MessageBox.Show(!Paths.IsScriptsDirectoryDerived
-                    ? "Can't find the Scripts directory specified in the config file."
-                    : "Can't find \\content\\content0\\scripts directory in the specified game directory.\n\n" +
-                      "It was added in patch 1.08.1 and should contain the game's vanilla scripts. If you don't have it, try this workaround:\n\n" +
-                      "1) Download the official mod tools from Nexus Mods and install them.\n" +
-                      "2) In the mod tools folder, open the 'r4data' folder.\n" +
-                      "3) Copy the 'scripts' folder to " + Path.Combine(Paths.GameDirectory, "content\\content0") + ".\n" +
-                      "4) Optional: Uninstall the mod tools.");
-                return false;
-            }
-            return true;
-        }
-
-        private FileInfo GetModFile(string root, string modName, string relPath)
-        {
-            return new FileInfo(Path.Combine(root, modName, Paths.ModScriptBase, relPath));
         }
 
         private void txtGameDir_TextChanged(object sender, EventArgs e)
@@ -312,7 +305,7 @@ namespace WitcherScriptMerger.Forms
 
         private void btnRefreshMerged_Click(object sender, EventArgs e)
         {
-            if (ValidateDirectories())
+            if (ValidateModsDirectory())
                 RefreshMergeInventory();
         }
 
@@ -323,11 +316,10 @@ namespace WitcherScriptMerger.Forms
 
         private void btnMergeScripts_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists(txtGameDir.Text))
-            {
-                MessageBox.Show("Can't find the specified Witcher 3 directory.");
+            if (!ValidateModsDirectory() ||
+                (treConflicts.GetTreeNodes().Any(node => node.Text.EndsWith(".ws")) && !ValidateScriptsDirectory()) ||
+                (treConflicts.GetTreeNodes().Any(node => node.Text.EndsWith(".bundles")) && !ValidateBundlesDirectory()))
                 return;
-            }
 
             string mergedModName = Program.Settings.Get("MergedModName");
             if (string.IsNullOrWhiteSpace(mergedModName))
@@ -344,109 +336,18 @@ namespace WitcherScriptMerger.Forms
             }
 
             _inventory = MergeInventory.Load(Paths.Inventory);
-            
+
+            var merger = new FileMerger(_inventory);
+
             var fileNodes = treConflicts.GetTreeNodes().Where(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
-            foreach (var fileNode in fileNodes)
-            {
-                var modNodes = fileNode.GetTreeNodes().Where(modNode => modNode.Checked).ToList();
 
-                if (modNodes.Any(node => mergedModName.CompareTo(node.Text) > 0) &&
-                    !ConfirmRemainingConflict(mergedModName))
-                    continue;
+            merger.MergeByTreeNodes(fileNodes, mergedModName);
 
-                var file1 = new FileInfo(modNodes[0].Tag as string);
-
-                string relPath = Paths.GetRelativePath(
-                    file1.FullName,
-                    Path.Combine(Paths.ModsDirectory, ModFile.GetModNameFromPath(file1.FullName)));
-
-                string outputPath = Path.Combine(Paths.ModsDirectory, mergedModName, relPath);
-                
-                if (File.Exists(outputPath) && !ConfirmOutputOverwrite(outputPath))
-                    continue;
-
-                var vanillaFile = new FileInfo(fileNode.Tag as string);
-                _mergesToDo = modNodes.Count - 1;
-
-                bool isNew = false;
-                var merge = _inventory.Merges.FirstOrDefault(ms => ms.RelativePath == fileNode.Text);
-                if (merge == null)
-                {
-                    isNew = true;
-                    merge = new Merge
-                    {
-                        RelativePath = fileNode.Text,
-                        MergedModName = mergedModName,
-                    };
-                }
-
-                for (int i = 1; i < modNodes.Count; ++i)
-                {
-                    var file2 = new FileInfo(modNodes[i].Tag as string);
-                    var mergedFile = MergePair(i, vanillaFile, file1, file2, outputPath, merge);
-                    if (mergedFile != null)
-                    {
-                        file1 = mergedFile;
-                    }
-                    else
-                    {
-                        string msg = string.Format("Merge was canceled for {0}.", vanillaFile.Name);
-                        var buttons = MessageBoxButtons.OK;
-                        if (_mergesToDo > 1 || fileNodes.Count() > 1)
-                        {
-                            if (_mergesToDo > 1)
-                            {
-                                msg = string.Format("Merge {0} of {1} was canceled for {2}.", i, _mergesToDo, vanillaFile.Name);
-                                if (i < _mergesToDo)
-                                {
-                                    msg += "\n\nContinue with the remaining merges for this file?";
-                                    buttons = MessageBoxButtons.YesNo;
-                                }
-                            }
-                        }
-                        this.Activate(); // Focus window
-                        var result = MessageBox.Show(msg, "Skipped Merge", buttons, MessageBoxIcon.Information);
-                        if (result == DialogResult.No)
-                        {
-                            if (isNew && merge.ModNames.Count > 1)
-                                _inventory.Merges.Add(merge);
-                            if (_inventory.HasChanged)
-                            {
-                                _inventory.Save(Paths.Inventory);
-                                RefreshTrees(_inventory.BundleChanged);
-                            }
-                            return;
-                        }
-                    }
-                }
-                if (isNew && merge.ModNames.Count > 1)
-                    _inventory.Merges.Add(merge);
-            }
             if (_inventory.HasChanged)
             {
                 _inventory.Save(Paths.Inventory);
                 RefreshTrees(_inventory.BundleChanged);
             }
-        }
-
-        private bool ConfirmRemainingConflict(string mergedModName)
-        {
-            return (DialogResult.Yes == MessageBox.Show(
-                "There will still be a conflict if you use the merged mod name " + mergedModName + ".\n\n" +
-                    "The Witcher 3 loads mods in alphabetical order, so this merged mod name will load after one of the original mods and the merged file will be ignored.\n\n" +
-                    "Use this name anyway?",
-                "Merged Mod Name Conflict",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Exclamation));
-        }
-
-        private bool ConfirmOutputOverwrite(string outputPath)
-        {
-            return (DialogResult.Yes == MessageBox.Show(
-                "The output file below already exists! Overwrite?\n\n" + outputPath,
-                "Overwrite?",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Exclamation));
         }
 
         private bool ConfirmInvalidModName(string mergedModName)
@@ -457,61 +358,6 @@ namespace WitcherScriptMerger.Forms
                 "Warning",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Exclamation));
-        }
-
-        private FileInfo MergePair(
-            int mergeNum,
-            FileInfo vanillaFile, FileInfo file1, FileInfo file2,
-            string outputPath,
-            Merge mergedScript)
-        {
-            string outputDir = Path.GetDirectoryName(outputPath);
-            if (!Directory.Exists(outputDir))
-                Directory.CreateDirectory(outputDir);
-
-            string args = string.Format(
-                "\"{0}\" \"{1}\" \"{2}\" -o \"{3}\" " +
-                "--cs \"WhiteSpace3FileMergeDefault=2\"",
-                vanillaFile.FullName, file1.FullName, file2.FullName, outputPath);
-
-            string modName1 = ModFile.GetModNameFromPath(file1.FullName);
-            string modName2 = ModFile.GetModNameFromPath(file2.FullName);
-
-            if (!menuPathsInKDiff3.Checked)
-                args += string.Format(" --L1 Vanilla --L2 \"{0}\" --L3 \"{1}\"", modName1, modName2);
-
-            if (!menuReviewEach.Checked)
-                args += " --auto";
-
-            string kdiff3Path = (Path.IsPathRooted(Paths.Kdiff3)
-                ? Paths.Kdiff3
-                : Path.Combine(Environment.CurrentDirectory, Paths.Kdiff3));
-            
-            var kdiff3Proc = Process.Start(kdiff3Path, args);
-            kdiff3Proc.WaitForExit();
-
-            if (kdiff3Proc.ExitCode == 0)
-            {
-                if (file1.FullName != outputPath)
-                    mergedScript.ModNames.Add(modName1);
-
-                if (file2.FullName != outputPath)
-                    mergedScript.ModNames.Add(modName2);
-
-                if (menuMergeReport.Checked)
-                {
-                    using (var reportForm = new ReportForm(
-                        mergeNum, _mergesToDo,
-                        file1.FullName, file2.FullName, outputPath,
-                        modName1, modName2))
-                    {
-                        reportForm.ShowDialog();
-                    }
-                }
-                return new FileInfo(outputPath);
-            }
-            else
-                return null;
         }
 
         private void btnDeleteMerges_Click(object sender, EventArgs e)
@@ -546,7 +392,9 @@ namespace WitcherScriptMerger.Forms
 
         private void RefreshTrees(bool checkBundles = true)
         {
-            if (ValidateDirectories())
+            if (ValidateModsDirectory() &&
+                (!menuCheckScripts.Checked || ValidateScriptsDirectory()) &&
+                (!menuCheckBundleContents.Checked || ValidateBundlesDirectory()))
             {
                 RefreshMergeTree();
                 RefreshConflictsTree(checkBundles);
@@ -888,9 +736,45 @@ namespace WitcherScriptMerger.Forms
             DeleteEmptyDirs(dirInfo.Parent.FullName, stopPath);
         }
 
-        public string GetGameDirectory()
+        private bool ValidateModsDirectory()
         {
-            return txtGameDir.Text;
+            if (!Directory.Exists(Paths.ModsDirectory))
+            {
+                MessageBox.Show(!Paths.IsModsDirectoryDerived
+                    ? "Can't find the Mods directory specified in the config file."
+                    : "Can't find Mods directory in the specified game directory.");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidateScriptsDirectory()
+        {
+            if (!Directory.Exists(Paths.ScriptsDirectory))
+            {
+                MessageBox.Show(!Paths.IsScriptsDirectoryDerived
+                    ? "Can't find the Scripts directory specified in the config file."
+                    : "Can't find \\content\\content0\\scripts directory in the specified game directory.\n\n" +
+                      "It was added in patch 1.08.1 and should contain the game's vanilla scripts. If you don't have it, try this workaround:\n\n" +
+                      "1) Download the official mod tools from Nexus Mods and install them.\n" +
+                      "2) In the mod tools folder, open the 'r4data' folder.\n" +
+                      "3) Copy the 'scripts' folder to " + Path.Combine(Paths.GameDirectory, "content\\content0") + ".\n" +
+                      "4) Optional: Uninstall the mod tools.");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidateBundlesDirectory()
+        {
+            if (!Directory.Exists(Paths.BundlesDirectory))
+            {
+                MessageBox.Show(!Paths.IsBundlesDirectoryDerived
+                    ? "Can't find the Bundles directory specified in the config file."
+                    : "Can't find \\content\\content0\\bundles directory in the specified game directory.");
+                return false;
+            }
+            return true;
         }
 
         #endregion

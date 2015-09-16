@@ -364,7 +364,6 @@
             this.refreshBar.Location = new System.Drawing.Point(25, 243);
             this.refreshBar.Name = "refreshBar";
             this.refreshBar.Size = new System.Drawing.Size(260, 20);
-            this.refreshBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.refreshBar.TabIndex = 0;
             // 
             // lblConflicts
