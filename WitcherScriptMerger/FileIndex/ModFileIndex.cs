@@ -29,7 +29,7 @@ namespace WitcherScriptMerger.FileIndex
 
         public void BuildAsync(
             MergeInventory inventory,
-            bool checkBundles,
+            bool checkScripts, bool checkBundles,
             ProgressChangedEventHandler progressHandler,
             RunWorkerCompletedEventHandler completedHandler)
         {
@@ -54,12 +54,14 @@ namespace WitcherScriptMerger.FileIndex
                 {
                     string modName = Path.GetFileName(dirPath);
                     var filePaths = Directory.GetFiles(dirPath, "*", SearchOption.AllDirectories);
-                    var scriptPaths = filePaths.Where(path => path.EndsWith(".ws"));
-                    Files.AddRange(GetModFilesFromPaths(scriptPaths, inventory, modName));
-
+                    if (checkScripts)
+                    {
+                        var scriptPaths = filePaths.Where(path => ModFile.IsScriptPath(path));
+                        Files.AddRange(GetModFilesFromPaths(scriptPaths, inventory, modName));
+                    }
                     if (checkBundles)
                     {
-                        foreach (string bundlePath in filePaths.Where(path => path.EndsWith(".bundle")))
+                        foreach (string bundlePath in filePaths.Where(path => ModFile.IsBundlePath(path)))
                         {
                             var contentPaths = GetBundleContentPaths(bundlePath);
                             Files.AddRange(GetModFilesFromPaths(contentPaths, inventory, modName, bundlePath));
@@ -104,7 +106,7 @@ namespace WitcherScriptMerger.FileIndex
             return fileList;
         }
 
-        private List<string> GetBundleContentPaths(string bundlePath)
+        public static List<string> GetBundleContentPaths(string bundlePath)
         {
             var contentPaths = new List<string>();
 
@@ -121,7 +123,6 @@ namespace WitcherScriptMerger.FileIndex
             {
                 bmsProc.Start();
                 string output = bmsProc.StandardOutput.ReadToEnd() + "\n\n" + bmsProc.StandardError.ReadToEnd();
-                bmsProc.WaitForExit();
                 int footerPos = output.LastIndexOf("QuickBMS generic");
                 var outputLines = output.Substring(0, footerPos).Split('\n');
                 var paths = outputLines

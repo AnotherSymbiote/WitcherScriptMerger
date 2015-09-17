@@ -53,7 +53,7 @@
             this.contextExpandAll = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCollapseAll = new System.Windows.Forms.ToolStripMenuItem();
             this.btnRefreshConflicts = new System.Windows.Forms.Button();
-            this.btnMergeScripts = new System.Windows.Forms.Button();
+            this.btnMergeFiles = new System.Windows.Forms.Button();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.pnlRefreshProgress = new System.Windows.Forms.Panel();
             this.lblRefreshProgress = new System.Windows.Forms.Label();
@@ -289,19 +289,19 @@
             this.btnRefreshConflicts.UseVisualStyleBackColor = true;
             this.btnRefreshConflicts.Click += new System.EventHandler(this.btnRefreshConflicts_Click);
             // 
-            // btnMergeScripts
+            // btnMergeFiles
             // 
-            this.btnMergeScripts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnMergeFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMergeScripts.Enabled = false;
-            this.btnMergeScripts.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMergeScripts.Location = new System.Drawing.Point(12, 525);
-            this.btnMergeScripts.Name = "btnMergeScripts";
-            this.btnMergeScripts.Size = new System.Drawing.Size(312, 35);
-            this.btnMergeScripts.TabIndex = 6;
-            this.btnMergeScripts.Text = "&Merge Selected File";
-            this.btnMergeScripts.UseVisualStyleBackColor = true;
-            this.btnMergeScripts.Click += new System.EventHandler(this.btnMergeScripts_Click);
+            this.btnMergeFiles.Enabled = false;
+            this.btnMergeFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMergeFiles.Location = new System.Drawing.Point(12, 525);
+            this.btnMergeFiles.Name = "btnMergeFiles";
+            this.btnMergeFiles.Size = new System.Drawing.Size(312, 35);
+            this.btnMergeFiles.TabIndex = 6;
+            this.btnMergeFiles.Text = "&Merge Selected File";
+            this.btnMergeFiles.UseVisualStyleBackColor = true;
+            this.btnMergeFiles.Click += new System.EventHandler(this.btnMergeFiles_Click);
             // 
             // splitContainer
             // 
@@ -317,7 +317,7 @@
             this.splitContainer.Panel1.Controls.Add(this.lblConflicts);
             this.splitContainer.Panel1.Controls.Add(this.treConflicts);
             this.splitContainer.Panel1.Controls.Add(this.btnRefreshConflicts);
-            this.splitContainer.Panel1.Controls.Add(this.btnMergeScripts);
+            this.splitContainer.Panel1.Controls.Add(this.btnMergeFiles);
             this.splitContainer.Panel1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.splitContainer_Panel1_PreviewKeyDown);
             this.splitContainer.Panel1MinSize = 240;
             // 
@@ -532,7 +532,7 @@
             // 
             // MainForm
             // 
-            this.AcceptButton = this.btnMergeScripts;
+            this.AcceptButton = this.btnMergeFiles;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(654, 674);
@@ -582,7 +582,7 @@
         private System.Windows.Forms.ToolStripMenuItem contextOpenModScript;
         private System.Windows.Forms.ToolStripMenuItem contextOpenVanillaScript;
         private System.Windows.Forms.ToolStripMenuItem contextOpenVanillaScriptDir;
-        private System.Windows.Forms.Button btnMergeScripts;
+        private System.Windows.Forms.Button btnMergeFiles;
         private System.Windows.Forms.ToolStripSeparator contextOpenSeparator;
         private System.Windows.Forms.ToolStripMenuItem contextSelectAll;
         private System.Windows.Forms.ToolStripMenuItem contextDeselectAll;

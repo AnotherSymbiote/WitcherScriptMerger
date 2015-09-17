@@ -121,7 +121,7 @@
             this.grpMergedFile.Size = new System.Drawing.Size(645, 77);
             this.grpMergedFile.TabIndex = 5;
             this.grpMergedFile.TabStop = false;
-            this.grpMergedFile.Text = "Merged Script";
+            this.grpMergedFile.Text = "Merged File";
             // 
             // btnOpenMergedDir
             // 

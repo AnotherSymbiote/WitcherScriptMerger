@@ -65,9 +65,20 @@ namespace WitcherScriptMerger.FileIndex
 
         public static string GetModNameFromPath(string modFilePath)
         {
-            int nameEnd = modFilePath.IndexOfIgnoreCase(Paths.ModScriptBase) - 1;
+            string nameStart = (IsScriptPath(modFilePath) ? Paths.ModScriptBase : Paths.ModBundleBase);
+            int nameEnd = modFilePath.IndexOfIgnoreCase(nameStart) - 1;
             string name = modFilePath.Substring(0, nameEnd);
             return name.Substring(name.LastIndexOf('\\') + 1);
+        }
+
+        public static bool IsScriptPath(string path)
+        {
+            return path.EndsWith(".ws");
+        }
+
+        public static bool IsBundlePath(string path)
+        {
+            return path.EndsWith(".bundle");
         }
     }
 }

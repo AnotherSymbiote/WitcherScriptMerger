@@ -15,7 +15,7 @@ namespace WitcherScriptMerger.Inventory
         {
             get
             {
-                return (RelativePath.EndsWith(".ws")
+                return (ModFile.IsScriptPath(RelativePath)
                     ? ModFileType.Script
                     : ModFileType.BundleContent);
             }
