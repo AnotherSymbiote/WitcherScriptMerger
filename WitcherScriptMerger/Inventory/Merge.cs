@@ -26,7 +26,7 @@ namespace WitcherScriptMerger.Inventory
             if (Type == ModFileType.Script)
                 return Path.Combine(Paths.ModsDirectory, MergedModName, Paths.ModScriptBase, RelativePath);
             else
-                return Path.Combine(Paths.ModsDirectory, MergedModName, Paths.ModBundleBase, BundleName);
+                return Path.Combine(Paths.MergedBundleContent, RelativePath);
         }
     }
 }

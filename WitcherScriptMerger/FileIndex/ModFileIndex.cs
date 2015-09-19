@@ -71,7 +71,7 @@ namespace WitcherScriptMerger.FileIndex
                     bgWorker.ReportProgress(progressPct, modName as object);
                 }
                 if (checkBundles)
-                    System.Threading.Thread.Sleep(500);
+                    System.Threading.Thread.Sleep(500);  // Wait for progress bar to fill completely
             };
             bgWorker.RunWorkerCompleted += completedHandler;
             bgWorker.ProgressChanged += progressHandler;

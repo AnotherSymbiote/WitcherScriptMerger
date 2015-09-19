@@ -55,9 +55,9 @@
             this.btnRefreshConflicts = new System.Windows.Forms.Button();
             this.btnMergeFiles = new System.Windows.Forms.Button();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.pnlRefreshProgress = new System.Windows.Forms.Panel();
-            this.lblRefreshProgress = new System.Windows.Forms.Label();
-            this.refreshBar = new System.Windows.Forms.ProgressBar();
+            this.pnlProgress = new System.Windows.Forms.Panel();
+            this.lblProgressState = new System.Windows.Forms.Label();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.lblConflicts = new System.Windows.Forms.Label();
             this.btnRefreshMerged = new System.Windows.Forms.Button();
             this.lblMergeInventory = new System.Windows.Forms.Label();
@@ -74,12 +74,13 @@
             this.menuShowStatusBar = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblProgressOf = new System.Windows.Forms.Label();
             this.treeContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
-            this.pnlRefreshProgress.SuspendLayout();
+            this.pnlProgress.SuspendLayout();
             this.grpGameDir.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -313,7 +314,6 @@
             // 
             // splitContainer.Panel1
             // 
-            this.splitContainer.Panel1.Controls.Add(this.pnlRefreshProgress);
             this.splitContainer.Panel1.Controls.Add(this.lblConflicts);
             this.splitContainer.Panel1.Controls.Add(this.treConflicts);
             this.splitContainer.Panel1.Controls.Add(this.btnRefreshConflicts);
@@ -332,39 +332,40 @@
             this.splitContainer.SplitterDistance = 327;
             this.splitContainer.TabIndex = 1;
             // 
-            // pnlRefreshProgress
+            // pnlProgress
             // 
-            this.pnlRefreshProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.pnlProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlRefreshProgress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlRefreshProgress.Controls.Add(this.lblRefreshProgress);
-            this.pnlRefreshProgress.Controls.Add(this.refreshBar);
-            this.pnlRefreshProgress.Location = new System.Drawing.Point(12, 30);
-            this.pnlRefreshProgress.Name = "pnlRefreshProgress";
-            this.pnlRefreshProgress.Padding = new System.Windows.Forms.Padding(8);
-            this.pnlRefreshProgress.Size = new System.Drawing.Size(312, 489);
-            this.pnlRefreshProgress.TabIndex = 8;
-            this.pnlRefreshProgress.Visible = false;
+            this.pnlProgress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlProgress.Controls.Add(this.lblProgressOf);
+            this.pnlProgress.Controls.Add(this.lblProgressState);
+            this.pnlProgress.Controls.Add(this.progressBar);
+            this.pnlProgress.Location = new System.Drawing.Point(9, 30);
+            this.pnlProgress.Name = "pnlProgress";
+            this.pnlProgress.Padding = new System.Windows.Forms.Padding(8);
+            this.pnlProgress.Size = new System.Drawing.Size(635, 619);
+            this.pnlProgress.TabIndex = 8;
+            this.pnlProgress.Visible = false;
             // 
-            // lblRefreshProgress
+            // lblProgressState
             // 
-            this.lblRefreshProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblRefreshProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRefreshProgress.Location = new System.Drawing.Point(11, 220);
-            this.lblRefreshProgress.Name = "lblRefreshProgress";
-            this.lblRefreshProgress.Size = new System.Drawing.Size(288, 20);
-            this.lblRefreshProgress.TabIndex = 1;
-            this.lblRefreshProgress.Text = "Refreshing";
-            this.lblRefreshProgress.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lblProgressState.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblProgressState.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProgressState.Location = new System.Drawing.Point(11, 333);
+            this.lblProgressState.Name = "lblProgressState";
+            this.lblProgressState.Size = new System.Drawing.Size(611, 129);
+            this.lblProgressState.TabIndex = 1;
+            this.lblProgressState.Text = "Doing thing...";
+            this.lblProgressState.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // refreshBar
+            // progressBar
             // 
-            this.refreshBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.refreshBar.Location = new System.Drawing.Point(25, 243);
-            this.refreshBar.Name = "refreshBar";
-            this.refreshBar.Size = new System.Drawing.Size(260, 20);
-            this.refreshBar.TabIndex = 0;
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar.Location = new System.Drawing.Point(25, 308);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(583, 20);
+            this.progressBar.TabIndex = 0;
             // 
             // lblConflicts
             // 
@@ -530,12 +531,24 @@
             this.lblStatus.Size = new System.Drawing.Size(114, 14);
             this.lblStatus.Text = "0 conflicts   0 merges";
             // 
+            // lblProgressOf
+            // 
+            this.lblProgressOf.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblProgressOf.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProgressOf.Location = new System.Drawing.Point(11, 283);
+            this.lblProgressOf.Name = "lblProgressOf";
+            this.lblProgressOf.Size = new System.Drawing.Size(611, 20);
+            this.lblProgressOf.TabIndex = 2;
+            this.lblProgressOf.Text = "Detecting Conflicts";
+            this.lblProgressOf.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // MainForm
             // 
             this.AcceptButton = this.btnMergeFiles;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(654, 674);
+            this.Controls.Add(this.pnlProgress);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
             this.Controls.Add(this.grpGameDir);
@@ -556,7 +569,7 @@
             this.splitContainer.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
-            this.pnlRefreshProgress.ResumeLayout(false);
+            this.pnlProgress.ResumeLayout(false);
             this.grpGameDir.ResumeLayout(false);
             this.grpGameDir.PerformLayout();
             this.menuStrip.ResumeLayout(false);
@@ -601,9 +614,9 @@
         private System.Windows.Forms.ToolStripMenuItem contextOpenVanillaBundleDir;
         private System.Windows.Forms.ToolStripMenuItem contextOpenModBundleDir;
         private System.Windows.Forms.ToolStripMenuItem contextOpenMergedBundleDir;
-        private System.Windows.Forms.Panel pnlRefreshProgress;
-        private System.Windows.Forms.Label lblRefreshProgress;
-        private System.Windows.Forms.ProgressBar refreshBar;
+        private System.Windows.Forms.Panel pnlProgress;
+        private System.Windows.Forms.Label lblProgressState;
+        private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menuCheckScripts;
@@ -614,6 +627,7 @@
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel lblStatus;
         private System.Windows.Forms.ToolStripMenuItem menuShowStatusBar;
+        private System.Windows.Forms.Label lblProgressOf;
     }
 }
 

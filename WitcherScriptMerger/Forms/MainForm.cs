@@ -167,6 +167,7 @@ namespace WitcherScriptMerger.Forms
                 _inventory.Save(Paths.Inventory);
             treMerges.Sort();
             treMerges.ExpandAll();
+            treMerges.ScrollToTop();
             var modNodes = treMerges.GetTreeNodes().SelectMany(node => node.GetTreeNodes()).ToList();
             foreach (var modNode in modNodes)
                 modNode.HideCheckBox();
@@ -201,18 +202,19 @@ namespace WitcherScriptMerger.Forms
                 if (_inventory.BundleChanged)
                 {
                     fileNodesToUpdate.AddRange(
-                        fileNodes.Where(node => ModFile.IsBundlePath(node.Text)));
+                        fileNodes.Where(node => !ModFile.IsScriptPath(node.Text)));
                 }
                 
                 foreach (var node in fileNodesToUpdate)
                     treConflicts.Nodes.Remove(node);
             }
 
-            btnRefreshConflicts.Enabled = btnMergeFiles.Enabled = false;
-            treConflicts.BackColor = pnlRefreshProgress.BackColor;
-            refreshBar.Value = 0;
+            grpGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = false;
+            progressBar.Value = 0;
+            progressBar.Style = ProgressBarStyle.Continuous;
+            lblProgressOf.Text = "Detecting Conflicts";
             if (checkBundles)
-                pnlRefreshProgress.Visible = true;
+                pnlProgress.Visible = true;
 
             _modIndex = new ModFileIndex();
             _modIndex.BuildAsync(_inventory,
@@ -224,8 +226,8 @@ namespace WitcherScriptMerger.Forms
 
         private void OnRefreshProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            refreshBar.Value = e.ProgressPercentage;
-            lblRefreshProgress.Text = e.UserState as string;
+            progressBar.Value = e.ProgressPercentage;
+            lblProgressState.Text = e.UserState as string;
         }
 
         private void OnRefreshComplete(object sender, RunWorkerCompletedEventArgs e)
@@ -257,11 +259,11 @@ namespace WitcherScriptMerger.Forms
                 treConflicts.ExpandAll();
                 treConflicts.Select();
             }
-            pnlRefreshProgress.Visible = false;
-            treConflicts.BackColor = Color.White;
+            pnlProgress.Visible = false;
+            treConflicts.ScrollToTop();
             _modIndex = null;
             UpdateStatusText();
-            btnRefreshConflicts.Enabled = true;
+            grpGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = true;
         }
 
         private void txtGameDir_TextChanged(object sender, EventArgs e)
@@ -280,9 +282,11 @@ namespace WitcherScriptMerger.Forms
 
         private void UpdateStatusText()
         {
-            lblStatus.Text = string.Format("{0} conflicts     {1} merges",
+            lblStatus.Text = string.Format("{0} conflict{1}     {2} merge{3}",
                 treConflicts.Nodes.Count,
-                treMerges.Nodes.Count);
+                (treConflicts.Nodes.Count == 1 ? "" : "s"),
+                treMerges.Nodes.Count,
+                (treMerges.Nodes.Count == 1 ? "" : "s"));
         }
 
         #endregion
@@ -348,12 +352,32 @@ namespace WitcherScriptMerger.Forms
 
             var fileNodes = treConflicts.GetTreeNodes().Where(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
 
-            merger.MergeByTreeNodes(fileNodes, mergedModName);
+            grpGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = false;
+            progressBar.Style = ProgressBarStyle.Marquee;
+            pnlProgress.Visible = true;
 
+            merger.MergeByTreeNodes(fileNodes, mergedModName, OnMergeProgressChanged, OnMergeComplete);
+        }
+
+        private void OnMergeProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            string[] userState = e.UserState as string[];
+            lblProgressOf.Text = userState[0];
+            lblProgressState.Text = userState[1];
+        }
+
+        private void OnMergeComplete(object sender, RunWorkerCompletedEventArgs e)
+        {
             if (_inventory.HasChanged)
             {
                 _inventory.Save(Paths.Inventory);
                 RefreshTrees(_inventory.BundleChanged);
+            }
+            else
+            {
+                pnlProgress.Visible = false;
+                grpGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = true;
+                EnableMergeIfValidSelection();
             }
         }
 

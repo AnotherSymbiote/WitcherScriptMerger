@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -60,6 +61,25 @@ namespace WitcherScriptMerger
         {
             return (node.Nodes.Count == 0);
         }
+
+        #region Scrolling TreeView to Top
+
+        private const int WM_VSCROLL = 0x0115;
+        private const int SB_THUMBPOSITION = 0x0004;
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern int SetScrollPos(IntPtr hWnd, int nBar, int nPos, bool bRedraw);
+
+        [DllImport("User32.Dll", EntryPoint = "PostMessageA")]
+        static extern bool PostMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
+
+        public static void ScrollToTop(this TreeView treeView)
+        {
+            if (SetScrollPos(treeView.Handle, WM_VSCROLL, 0, true) != -1)
+                PostMessage(treeView.Handle, WM_VSCROLL, SB_THUMBPOSITION, 0);
+        }
+
+        #endregion
 
         #region Hiding TreeView Checkbox
 

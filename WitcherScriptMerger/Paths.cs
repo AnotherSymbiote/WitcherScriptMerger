@@ -8,9 +8,9 @@ namespace WitcherScriptMerger
         public static string Bms = Program.Settings.Get("QuickBmsPath");
         public static string BmsPlugin = Path.Combine(Path.GetDirectoryName(Bms), "witcher3.bms");
         public static string WccLite = Program.Settings.Get("WccLitePath");
-        public static string MergedBundleContent = Program.Settings.Get("MergedBundleContentDir");
 
         public const string TempBundleContent = "tempbundlecontent";
+        public static string MergedBundleContent = "Merged Bundle Content";
         public const string Inventory = "MergeInventory.xml";
         public static string ModScriptBase = Path.Combine("content", "scripts");
         public static string ModBundleBase = "content";
