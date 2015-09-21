@@ -185,16 +185,27 @@ namespace WitcherScriptMerger
             if (!Directory.Exists(outputDir))
                 Directory.CreateDirectory(outputDir);
 
-            string args = string.Format(
-                "\"{0}\" \"{1}\" \"{2}\" -o \"{3}\" " +
+            bool hasVanillaVersion = (_vanillaFile != null && _vanillaFile.Exists);
+
+            string args = (hasVanillaVersion
+                ? "\"" + _vanillaFile.FullName + "\" "
+                : "");
+
+            args += string.Format(
+                "\"{0}\" \"{1}\" -o \"{2}\" " +
                 "--cs \"WhiteSpace3FileMergeDefault=2\" " +
                 "--cs \"CreateBakFiles=0\"",
-                _vanillaFile.FullName, _file1.FullName, _file2.FullName, _outputPath);
+                _file1.FullName, _file2.FullName, _outputPath);
 
             if (!Program.MainForm.PathsInKdiff3Setting)
-                args += string.Format(" --L1 Vanilla --L2 \"{0}\" --L3 \"{1}\"", _modName1, _modName2);
+            {
+                if (hasVanillaVersion)
+                    args += string.Format(" --L1 Vanilla --L2 \"{0}\" --L3 \"{1}\"", _modName1, _modName2);
+                else
+                    args += string.Format(" --L1 \"{0}\" --L2 \"{1}\"", _modName1, _modName2);
+            }
 
-            if (!Program.MainForm.ReviewEachMergeSetting)
+            if (!Program.MainForm.ReviewEachMergeSetting && hasVanillaVersion)
                 args += " --auto";
 
             string kdiff3Path = (Path.IsPathRooted(Paths.Kdiff3)
@@ -265,7 +276,7 @@ namespace WitcherScriptMerger
                     }
                 }
             }
-            Program.MainForm.Activate(); // Focus window
+            Program.MainForm.ActivateSafely(); // Focus window
             var result = Program.MainForm.ShowMessage(msg, "Skipped Merge", buttons, MessageBoxIcon.Information);
             if (result == DialogResult.No)
             {
@@ -296,13 +307,6 @@ namespace WitcherScriptMerger
                 if (_vanillaFile != null)
                     break;
             }
-            if (_vanillaFile == null)
-            {
-                if (PromptForManualMerge(contentRelativePath, "Couldn't find this file in any vanilla bundles."))
-                    throw new NotImplementedException();
-                else
-                    return false;
-            }
 
             ReportProgress("Unpacking vanilla bundle content file");
             string vanillaContentFile = UnpackFile(_vanillaFile.FullName, contentRelativePath, "Vanilla");
@@ -320,15 +324,6 @@ namespace WitcherScriptMerger
             _file1 = new FileInfo(modContentFile1);
             _file2 = new FileInfo(modContentFile2);
             return true;
-        }
-
-        private bool PromptForManualMerge(string path, string reason)
-        {
-            return DialogResult.Yes == Program.MainForm.ShowMessage(
-                path + "\n\nCan't auto-merge. " + reason + "\n\nDo a manual 2-way merge?",
-                "No Vanilla Version",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning);
         }
 
         private string UnpackFile(string bundlePath, string contentRelativePath, string outputDirName)

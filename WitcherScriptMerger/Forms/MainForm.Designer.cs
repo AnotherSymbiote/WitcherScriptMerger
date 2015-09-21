@@ -34,13 +34,14 @@
             this.btnSelectGameDir = new System.Windows.Forms.Button();
             this.treConflicts = new System.Windows.Forms.TreeView();
             this.treeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.contextOpenModBundleDir = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenVanillaScript = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenVanillaScriptDir = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenModScript = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenModScriptDir = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenMergedFile = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenMergedFileDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextOpenModBundleDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextCopyPath = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.contextDeleteMerge = new System.Windows.Forms.ToolStripMenuItem();
             this.contextDeleteAssociatedMerges = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,6 +67,7 @@
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCheckScripts = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCheckBundleContents = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuShowUnsolvable = new System.Windows.Forms.ToolStripMenuItem();
             this.menuReviewEach = new System.Windows.Forms.ToolStripMenuItem();
             this.menuPathsInKDiff3 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMergeReport = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,8 +75,6 @@
             this.menuShowStatusBar = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.menuShowUnsolvable = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextCopyPath = new System.Windows.Forms.ToolStripMenuItem();
             this.treeContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -152,54 +152,61 @@
             this.treeContextMenu.Size = new System.Drawing.Size(239, 390);
             this.treeContextMenu.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.treeContextMenu_Closing);
             // 
-            // contextOpenModBundleDir
-            // 
-            this.contextOpenModBundleDir.Name = "contextOpenModBundleDir";
-            this.contextOpenModBundleDir.Size = new System.Drawing.Size(238, 22);
-            this.contextOpenModBundleDir.Text = "Open Mod Bundle Directory";
-            this.contextOpenModBundleDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
-            // 
             // contextOpenVanillaScript
             // 
             this.contextOpenVanillaScript.Name = "contextOpenVanillaScript";
-            this.contextOpenVanillaScript.Size = new System.Drawing.Size(238, 22);
+            this.contextOpenVanillaScript.Size = new System.Drawing.Size(225, 22);
             this.contextOpenVanillaScript.Text = "Open Vanilla Script";
             this.contextOpenVanillaScript.Click += new System.EventHandler(this.contextOpenScript_Click);
             // 
             // contextOpenVanillaScriptDir
             // 
             this.contextOpenVanillaScriptDir.Name = "contextOpenVanillaScriptDir";
-            this.contextOpenVanillaScriptDir.Size = new System.Drawing.Size(238, 22);
+            this.contextOpenVanillaScriptDir.Size = new System.Drawing.Size(225, 22);
             this.contextOpenVanillaScriptDir.Text = "Open Vanilla Script Directory";
             this.contextOpenVanillaScriptDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
             // 
             // contextOpenModScript
             // 
             this.contextOpenModScript.Name = "contextOpenModScript";
-            this.contextOpenModScript.Size = new System.Drawing.Size(238, 22);
+            this.contextOpenModScript.Size = new System.Drawing.Size(225, 22);
             this.contextOpenModScript.Text = "Open Mod Script";
             this.contextOpenModScript.Click += new System.EventHandler(this.contextOpenScript_Click);
             // 
             // contextOpenModScriptDir
             // 
             this.contextOpenModScriptDir.Name = "contextOpenModScriptDir";
-            this.contextOpenModScriptDir.Size = new System.Drawing.Size(238, 22);
+            this.contextOpenModScriptDir.Size = new System.Drawing.Size(225, 22);
             this.contextOpenModScriptDir.Text = "Open Mod Script Directory";
             this.contextOpenModScriptDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
             // 
             // contextOpenMergedFile
             // 
             this.contextOpenMergedFile.Name = "contextOpenMergedFile";
-            this.contextOpenMergedFile.Size = new System.Drawing.Size(238, 22);
+            this.contextOpenMergedFile.Size = new System.Drawing.Size(225, 22);
             this.contextOpenMergedFile.Text = "Open Merged File";
             this.contextOpenMergedFile.Click += new System.EventHandler(this.contextOpenScript_Click);
             // 
             // contextOpenMergedFileDir
             // 
             this.contextOpenMergedFileDir.Name = "contextOpenMergedFileDir";
-            this.contextOpenMergedFileDir.Size = new System.Drawing.Size(238, 22);
+            this.contextOpenMergedFileDir.Size = new System.Drawing.Size(225, 22);
             this.contextOpenMergedFileDir.Text = "Open Merged File Directory";
             this.contextOpenMergedFileDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
+            // 
+            // contextOpenModBundleDir
+            // 
+            this.contextOpenModBundleDir.Name = "contextOpenModBundleDir";
+            this.contextOpenModBundleDir.Size = new System.Drawing.Size(225, 22);
+            this.contextOpenModBundleDir.Text = "Open Mod Bundle Directory";
+            this.contextOpenModBundleDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
+            // 
+            // contextCopyPath
+            // 
+            this.contextCopyPath.Name = "contextCopyPath";
+            this.contextCopyPath.Size = new System.Drawing.Size(225, 22);
+            this.contextCopyPath.Text = "Copy Path";
+            this.contextCopyPath.Click += new System.EventHandler(this.contextCopyPath_Click);
             // 
             // contextOpenSeparator
             // 
@@ -209,14 +216,14 @@
             // contextDeleteMerge
             // 
             this.contextDeleteMerge.Name = "contextDeleteMerge";
-            this.contextDeleteMerge.Size = new System.Drawing.Size(238, 22);
+            this.contextDeleteMerge.Size = new System.Drawing.Size(225, 22);
             this.contextDeleteMerge.Text = "Delete This Merge";
             this.contextDeleteMerge.Click += new System.EventHandler(this.contextDeleteMerge_Click);
             // 
             // contextDeleteAssociatedMerges
             // 
             this.contextDeleteAssociatedMerges.Name = "contextDeleteAssociatedMerges";
-            this.contextDeleteAssociatedMerges.Size = new System.Drawing.Size(238, 22);
+            this.contextDeleteAssociatedMerges.Size = new System.Drawing.Size(225, 22);
             this.contextDeleteAssociatedMerges.Text = "Delete All {0} Merges";
             this.contextDeleteAssociatedMerges.Click += new System.EventHandler(this.contextDeleteAssociatedMerges_Click);
             // 
@@ -228,28 +235,28 @@
             // contextSelectAll
             // 
             this.contextSelectAll.Name = "contextSelectAll";
-            this.contextSelectAll.Size = new System.Drawing.Size(238, 22);
+            this.contextSelectAll.Size = new System.Drawing.Size(225, 22);
             this.contextSelectAll.Text = "Select All";
             this.contextSelectAll.Click += new System.EventHandler(this.contextSelectAll_Click);
             // 
             // contextDeselectAll
             // 
             this.contextDeselectAll.Name = "contextDeselectAll";
-            this.contextDeselectAll.Size = new System.Drawing.Size(238, 22);
+            this.contextDeselectAll.Size = new System.Drawing.Size(225, 22);
             this.contextDeselectAll.Text = "Deselect All";
             this.contextDeselectAll.Click += new System.EventHandler(this.contextDeselectAll_Click);
             // 
             // contextExpandAll
             // 
             this.contextExpandAll.Name = "contextExpandAll";
-            this.contextExpandAll.Size = new System.Drawing.Size(238, 22);
+            this.contextExpandAll.Size = new System.Drawing.Size(225, 22);
             this.contextExpandAll.Text = "Expand All";
             this.contextExpandAll.Click += new System.EventHandler(this.contextExpandAll_Click);
             // 
             // contextCollapseAll
             // 
             this.contextCollapseAll.Name = "contextCollapseAll";
-            this.contextCollapseAll.Size = new System.Drawing.Size(238, 22);
+            this.contextCollapseAll.Size = new System.Drawing.Size(225, 22);
             this.contextCollapseAll.Text = "Collapse All";
             this.contextCollapseAll.Click += new System.EventHandler(this.contextCollapseAll_Click);
             // 
@@ -296,7 +303,7 @@
             this.splitContainer.Panel1.Controls.Add(this.btnRefreshConflicts);
             this.splitContainer.Panel1.Controls.Add(this.btnMergeFiles);
             this.splitContainer.Panel1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.splitContainer_Panel1_PreviewKeyDown);
-            this.splitContainer.Panel1MinSize = 240;
+            this.splitContainer.Panel1MinSize = 195;
             // 
             // splitContainer.Panel2
             // 
@@ -304,7 +311,7 @@
             this.splitContainer.Panel2.Controls.Add(this.lblMergeInventory);
             this.splitContainer.Panel2.Controls.Add(this.btnDeleteMerges);
             this.splitContainer.Panel2.Controls.Add(this.treMerges);
-            this.splitContainer.Panel2MinSize = 235;
+            this.splitContainer.Panel2MinSize = 225;
             this.splitContainer.Size = new System.Drawing.Size(654, 563);
             this.splitContainer.SplitterDistance = 327;
             this.splitContainer.TabIndex = 1;
@@ -474,6 +481,13 @@
             this.menuCheckBundleContents.Size = new System.Drawing.Size(321, 22);
             this.menuCheckBundleContents.Text = "Check &Bundle Contents";
             // 
+            // menuShowUnsolvable
+            // 
+            this.menuShowUnsolvable.CheckOnClick = true;
+            this.menuShowUnsolvable.Name = "menuShowUnsolvable";
+            this.menuShowUnsolvable.Size = new System.Drawing.Size(321, 22);
+            this.menuShowUnsolvable.Text = "Show Unsolvable Conflicts (file not .ws or .xml)";
+            // 
             // menuReviewEach
             // 
             this.menuReviewEach.CheckOnClick = true;
@@ -527,20 +541,6 @@
             this.lblStatus.Size = new System.Drawing.Size(114, 14);
             this.lblStatus.Text = "0 conflicts   0 merges";
             // 
-            // menuShowUnsolvable
-            // 
-            this.menuShowUnsolvable.CheckOnClick = true;
-            this.menuShowUnsolvable.Name = "menuShowUnsolvable";
-            this.menuShowUnsolvable.Size = new System.Drawing.Size(321, 22);
-            this.menuShowUnsolvable.Text = "Show Unsolvable Conflicts (file not .ws or .xml)";
-            // 
-            // contextCopyPath
-            // 
-            this.contextCopyPath.Name = "contextCopyPath";
-            this.contextCopyPath.Size = new System.Drawing.Size(225, 22);
-            this.contextCopyPath.Text = "Copy Path";
-            this.contextCopyPath.Click += new System.EventHandler(this.contextCopyPath_Click);
-            // 
             // MainForm
             // 
             this.AcceptButton = this.btnMergeFiles;
@@ -554,7 +554,7 @@
             this.Controls.Add(this.splitContainer);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip;
-            this.MinimumSize = new System.Drawing.Size(495, 350);
+            this.MinimumSize = new System.Drawing.Size(485, 350);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Script Merger";

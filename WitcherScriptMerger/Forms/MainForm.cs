@@ -222,15 +222,20 @@ namespace WitcherScriptMerger.Forms
             {
                 var fileNodes = treConflicts.GetTreeNodes();
                 var fileNodesToUpdate = new List<TreeNode>();
-                if (_inventory.ScriptsChanged)
+                if (_inventory.ScriptsChanged || !menuCheckScripts.Checked)
                 {
                     fileNodesToUpdate.AddRange(
                         fileNodes.Where(node => ModFile.IsScript(node.Text)));
                 }
-                if (_inventory.BundleChanged)
+                if (_inventory.BundleChanged || !menuCheckBundleContents.Checked)
                 {
                     fileNodesToUpdate.AddRange(
                         fileNodes.Where(node => !ModFile.IsScript(node.Text)));
+                }
+                if (!menuShowUnsolvable.Checked)
+                {
+                    fileNodesToUpdate.AddRange(
+                        fileNodes.Where(node => !ModFile.IsMergeable(node.Text)));
                 }
                 
                 foreach (var node in fileNodesToUpdate)
@@ -875,7 +880,7 @@ namespace WitcherScriptMerger.Forms
 
         #endregion
 
-        #region Cross-thread Dialogs
+        #region Cross-thread Operations
 
         public DialogResult ShowMessage(string text,
             string title = "",
@@ -904,6 +909,19 @@ namespace WitcherScriptMerger.Forms
             {
                 return form.ShowDialog(this);
             }
+        }
+
+        public void ActivateSafely()
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke((MethodInvoker)delegate ()
+                    {
+                        this.Activate();
+                    });
+            }
+            else
+                this.Activate();
         }
 
         #endregion
