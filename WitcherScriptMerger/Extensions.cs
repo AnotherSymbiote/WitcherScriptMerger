@@ -52,6 +52,11 @@ namespace WitcherScriptMerger
             return node.Nodes.Cast<TreeNode>();
         }
 
+        public static IEnumerable<TreeNode> Get2ndLevelNodes(this TreeView treeView)
+        {
+            return treeView.GetTreeNodes().SelectMany(node => node.GetTreeNodes());
+        }
+
         public static bool IsEmpty(this TreeView tree)
         {
             return (tree.Nodes.Count == 0);

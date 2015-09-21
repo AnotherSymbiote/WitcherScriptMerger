@@ -10,7 +10,7 @@ namespace WitcherScriptMerger.Inventory
     public class MergeInventory
     {
         [XmlElement(ElementName="Merge")]
-        public ObservableCollection<Merge> Merges;
+        public ObservableCollection<Merge> Merges { get; private set; }
 
         [XmlIgnore]
         public bool ScriptsChanged { get; private set; }
@@ -42,16 +42,13 @@ namespace WitcherScriptMerger.Inventory
             }
             catch
             {
-                inventory = new MergeInventory
-                {
-                    Merges = new ObservableCollection<Merge>()
-                };
+                inventory = new MergeInventory();
             }
             inventory.ScriptsChanged = inventory.BundleChanged = false;
             return inventory;
         }
 
-        public void Merges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Merges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if ((e.NewItems != null && e.NewItems.Cast<Merge>().Any(merge => merge.Type == ModFileType.Script)) ||
                 (e.OldItems != null && e.OldItems.Cast<Merge>().Any(merge => merge.Type == ModFileType.Script)))
@@ -61,11 +58,11 @@ namespace WitcherScriptMerger.Inventory
                 BundleChanged = true;
         }
 
-        public void Save(string path)
+        public void Save()
         {
             if (_serializer == null)
                 return;
-            using (var writer = new StreamWriter(path))
+            using (var writer = new StreamWriter(Paths.Inventory))
             {
                 _serializer.Serialize(writer, this);
             }

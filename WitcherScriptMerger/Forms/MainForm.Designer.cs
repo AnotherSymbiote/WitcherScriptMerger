@@ -34,16 +34,13 @@
             this.btnSelectGameDir = new System.Windows.Forms.Button();
             this.treConflicts = new System.Windows.Forms.TreeView();
             this.treeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.contextOpenVanillaBundleDir = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenModBundleDir = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextOpenMergedBundleDir = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenVanillaScript = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenVanillaScriptDir = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenModScript = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenModScriptDir = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextOpenMergedScript = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextOpenMergedScriptDir = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextCopyPath = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextOpenMergedFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextOpenMergedFileDir = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.contextDeleteMerge = new System.Windows.Forms.ToolStripMenuItem();
             this.contextDeleteAssociatedMerges = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,14 +52,15 @@
             this.btnRefreshConflicts = new System.Windows.Forms.Button();
             this.btnMergeFiles = new System.Windows.Forms.Button();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.pnlProgress = new System.Windows.Forms.Panel();
-            this.lblProgressState = new System.Windows.Forms.Label();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.lblConflicts = new System.Windows.Forms.Label();
             this.btnRefreshMerged = new System.Windows.Forms.Button();
             this.lblMergeInventory = new System.Windows.Forms.Label();
             this.btnDeleteMerges = new System.Windows.Forms.Button();
             this.treMerges = new System.Windows.Forms.TreeView();
+            this.pnlProgress = new System.Windows.Forms.Panel();
+            this.lblProgressOf = new System.Windows.Forms.Label();
+            this.lblProgressState = new System.Windows.Forms.Label();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.grpGameDir = new System.Windows.Forms.GroupBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,10 +69,12 @@
             this.menuReviewEach = new System.Windows.Forms.ToolStripMenuItem();
             this.menuPathsInKDiff3 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMergeReport = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuPackReport = new System.Windows.Forms.ToolStripMenuItem();
             this.menuShowStatusBar = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lblProgressOf = new System.Windows.Forms.Label();
+            this.menuShowUnsolvable = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextCopyPath = new System.Windows.Forms.ToolStripMenuItem();
             this.treeContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -132,15 +132,13 @@
             // 
             this.treeContextMenu.AutoSize = false;
             this.treeContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.contextOpenVanillaBundleDir,
-            this.contextOpenModBundleDir,
-            this.contextOpenMergedBundleDir,
             this.contextOpenVanillaScript,
             this.contextOpenVanillaScriptDir,
             this.contextOpenModScript,
             this.contextOpenModScriptDir,
-            this.contextOpenMergedScript,
-            this.contextOpenMergedScriptDir,
+            this.contextOpenMergedFile,
+            this.contextOpenMergedFileDir,
+            this.contextOpenModBundleDir,
             this.contextCopyPath,
             this.contextOpenSeparator,
             this.contextDeleteMerge,
@@ -154,26 +152,12 @@
             this.treeContextMenu.Size = new System.Drawing.Size(239, 390);
             this.treeContextMenu.Closing += new System.Windows.Forms.ToolStripDropDownClosingEventHandler(this.treeContextMenu_Closing);
             // 
-            // contextOpenVanillaBundleDir
-            // 
-            this.contextOpenVanillaBundleDir.Name = "contextOpenVanillaBundleDir";
-            this.contextOpenVanillaBundleDir.Size = new System.Drawing.Size(238, 22);
-            this.contextOpenVanillaBundleDir.Text = "Open Vanilla Bundle Directory";
-            this.contextOpenVanillaBundleDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
-            // 
             // contextOpenModBundleDir
             // 
             this.contextOpenModBundleDir.Name = "contextOpenModBundleDir";
             this.contextOpenModBundleDir.Size = new System.Drawing.Size(238, 22);
             this.contextOpenModBundleDir.Text = "Open Mod Bundle Directory";
             this.contextOpenModBundleDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
-            // 
-            // contextOpenMergedBundleDir
-            // 
-            this.contextOpenMergedBundleDir.Name = "contextOpenMergedBundleDir";
-            this.contextOpenMergedBundleDir.Size = new System.Drawing.Size(238, 22);
-            this.contextOpenMergedBundleDir.Text = "Open Merged Bundle Directory";
-            this.contextOpenMergedBundleDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
             // 
             // contextOpenVanillaScript
             // 
@@ -203,26 +187,19 @@
             this.contextOpenModScriptDir.Text = "Open Mod Script Directory";
             this.contextOpenModScriptDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
             // 
-            // contextOpenMergedScript
+            // contextOpenMergedFile
             // 
-            this.contextOpenMergedScript.Name = "contextOpenMergedScript";
-            this.contextOpenMergedScript.Size = new System.Drawing.Size(238, 22);
-            this.contextOpenMergedScript.Text = "Open Merged Script";
-            this.contextOpenMergedScript.Click += new System.EventHandler(this.contextOpenScript_Click);
+            this.contextOpenMergedFile.Name = "contextOpenMergedFile";
+            this.contextOpenMergedFile.Size = new System.Drawing.Size(238, 22);
+            this.contextOpenMergedFile.Text = "Open Merged File";
+            this.contextOpenMergedFile.Click += new System.EventHandler(this.contextOpenScript_Click);
             // 
-            // contextOpenMergedScriptDir
+            // contextOpenMergedFileDir
             // 
-            this.contextOpenMergedScriptDir.Name = "contextOpenMergedScriptDir";
-            this.contextOpenMergedScriptDir.Size = new System.Drawing.Size(238, 22);
-            this.contextOpenMergedScriptDir.Text = "Open Merged Script Directory";
-            this.contextOpenMergedScriptDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
-            // 
-            // contextCopyPath
-            // 
-            this.contextCopyPath.Name = "contextCopyPath";
-            this.contextCopyPath.Size = new System.Drawing.Size(238, 22);
-            this.contextCopyPath.Text = "Copy Path";
-            this.contextCopyPath.Click += new System.EventHandler(this.contextCopyPath_Click);
+            this.contextOpenMergedFileDir.Name = "contextOpenMergedFileDir";
+            this.contextOpenMergedFileDir.Size = new System.Drawing.Size(238, 22);
+            this.contextOpenMergedFileDir.Text = "Open Merged File Directory";
+            this.contextOpenMergedFileDir.Click += new System.EventHandler(this.contextOpenDirectory_Click);
             // 
             // contextOpenSeparator
             // 
@@ -332,41 +309,6 @@
             this.splitContainer.SplitterDistance = 327;
             this.splitContainer.TabIndex = 1;
             // 
-            // pnlProgress
-            // 
-            this.pnlProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlProgress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlProgress.Controls.Add(this.lblProgressOf);
-            this.pnlProgress.Controls.Add(this.lblProgressState);
-            this.pnlProgress.Controls.Add(this.progressBar);
-            this.pnlProgress.Location = new System.Drawing.Point(9, 30);
-            this.pnlProgress.Name = "pnlProgress";
-            this.pnlProgress.Padding = new System.Windows.Forms.Padding(8);
-            this.pnlProgress.Size = new System.Drawing.Size(635, 619);
-            this.pnlProgress.TabIndex = 8;
-            this.pnlProgress.Visible = false;
-            // 
-            // lblProgressState
-            // 
-            this.lblProgressState.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblProgressState.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProgressState.Location = new System.Drawing.Point(11, 333);
-            this.lblProgressState.Name = "lblProgressState";
-            this.lblProgressState.Size = new System.Drawing.Size(611, 129);
-            this.lblProgressState.TabIndex = 1;
-            this.lblProgressState.Text = "Doing thing...";
-            this.lblProgressState.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // progressBar
-            // 
-            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.Location = new System.Drawing.Point(25, 308);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(583, 20);
-            this.progressBar.TabIndex = 0;
-            // 
             // lblConflicts
             // 
             this.lblConflicts.AutoSize = true;
@@ -435,6 +377,52 @@
             this.treMerges.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tree_MouseDown);
             this.treMerges.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tree_MouseUp);
             // 
+            // pnlProgress
+            // 
+            this.pnlProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlProgress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlProgress.Controls.Add(this.lblProgressOf);
+            this.pnlProgress.Controls.Add(this.lblProgressState);
+            this.pnlProgress.Controls.Add(this.progressBar);
+            this.pnlProgress.Location = new System.Drawing.Point(9, 30);
+            this.pnlProgress.Name = "pnlProgress";
+            this.pnlProgress.Padding = new System.Windows.Forms.Padding(8);
+            this.pnlProgress.Size = new System.Drawing.Size(635, 619);
+            this.pnlProgress.TabIndex = 8;
+            this.pnlProgress.Visible = false;
+            // 
+            // lblProgressOf
+            // 
+            this.lblProgressOf.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblProgressOf.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProgressOf.Location = new System.Drawing.Point(11, 283);
+            this.lblProgressOf.Name = "lblProgressOf";
+            this.lblProgressOf.Size = new System.Drawing.Size(611, 20);
+            this.lblProgressOf.TabIndex = 2;
+            this.lblProgressOf.Text = "Detecting Conflicts";
+            this.lblProgressOf.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // lblProgressState
+            // 
+            this.lblProgressState.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblProgressState.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProgressState.Location = new System.Drawing.Point(11, 333);
+            this.lblProgressState.Name = "lblProgressState";
+            this.lblProgressState.Size = new System.Drawing.Size(611, 129);
+            this.lblProgressState.TabIndex = 1;
+            this.lblProgressState.Text = "Doing thing...";
+            this.lblProgressState.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // progressBar
+            // 
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar.Location = new System.Drawing.Point(25, 308);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(583, 20);
+            this.progressBar.TabIndex = 0;
+            // 
             // grpGameDir
             // 
             this.grpGameDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -462,9 +450,11 @@
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuCheckScripts,
             this.menuCheckBundleContents,
+            this.menuShowUnsolvable,
             this.menuReviewEach,
             this.menuPathsInKDiff3,
             this.menuMergeReport,
+            this.menuPackReport,
             this.menuShowStatusBar});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
@@ -474,42 +464,48 @@
             // 
             this.menuCheckScripts.CheckOnClick = true;
             this.menuCheckScripts.Name = "menuCheckScripts";
-            this.menuCheckScripts.Size = new System.Drawing.Size(297, 22);
+            this.menuCheckScripts.Size = new System.Drawing.Size(321, 22);
             this.menuCheckScripts.Text = "Check &Scripts";
             // 
             // menuCheckBundleContents
             // 
             this.menuCheckBundleContents.CheckOnClick = true;
             this.menuCheckBundleContents.Name = "menuCheckBundleContents";
-            this.menuCheckBundleContents.Size = new System.Drawing.Size(297, 22);
+            this.menuCheckBundleContents.Size = new System.Drawing.Size(321, 22);
             this.menuCheckBundleContents.Text = "Check &Bundle Contents";
             // 
             // menuReviewEach
             // 
             this.menuReviewEach.CheckOnClick = true;
             this.menuReviewEach.Name = "menuReviewEach";
-            this.menuReviewEach.Size = new System.Drawing.Size(297, 22);
+            this.menuReviewEach.Size = new System.Drawing.Size(321, 22);
             this.menuReviewEach.Text = "&Review Each Merge (even if auto-solvable)";
             // 
             // menuPathsInKDiff3
             // 
             this.menuPathsInKDiff3.CheckOnClick = true;
             this.menuPathsInKDiff3.Name = "menuPathsInKDiff3";
-            this.menuPathsInKDiff3.Size = new System.Drawing.Size(297, 22);
-            this.menuPathsInKDiff3.Text = "Show &Paths in KDiff3";
+            this.menuPathsInKDiff3.Size = new System.Drawing.Size(321, 22);
+            this.menuPathsInKDiff3.Text = "Show File Paths in &KDiff3";
             // 
             // menuMergeReport
             // 
             this.menuMergeReport.CheckOnClick = true;
             this.menuMergeReport.Name = "menuMergeReport";
-            this.menuMergeReport.Size = new System.Drawing.Size(297, 22);
+            this.menuMergeReport.Size = new System.Drawing.Size(321, 22);
             this.menuMergeReport.Text = "Show Report &After Each Merge";
+            // 
+            // menuPackReport
+            // 
+            this.menuPackReport.Name = "menuPackReport";
+            this.menuPackReport.Size = new System.Drawing.Size(321, 22);
+            this.menuPackReport.Text = "Show Report After &Packing Bundle";
             // 
             // menuShowStatusBar
             // 
             this.menuShowStatusBar.CheckOnClick = true;
             this.menuShowStatusBar.Name = "menuShowStatusBar";
-            this.menuShowStatusBar.Size = new System.Drawing.Size(297, 22);
+            this.menuShowStatusBar.Size = new System.Drawing.Size(321, 22);
             this.menuShowStatusBar.Text = "Show S&tatus Bar";
             this.menuShowStatusBar.Click += new System.EventHandler(this.menuShowStatusBar_Click);
             // 
@@ -531,16 +527,19 @@
             this.lblStatus.Size = new System.Drawing.Size(114, 14);
             this.lblStatus.Text = "0 conflicts   0 merges";
             // 
-            // lblProgressOf
+            // menuShowUnsolvable
             // 
-            this.lblProgressOf.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblProgressOf.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProgressOf.Location = new System.Drawing.Point(11, 283);
-            this.lblProgressOf.Name = "lblProgressOf";
-            this.lblProgressOf.Size = new System.Drawing.Size(611, 20);
-            this.lblProgressOf.TabIndex = 2;
-            this.lblProgressOf.Text = "Detecting Conflicts";
-            this.lblProgressOf.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.menuShowUnsolvable.CheckOnClick = true;
+            this.menuShowUnsolvable.Name = "menuShowUnsolvable";
+            this.menuShowUnsolvable.Size = new System.Drawing.Size(321, 22);
+            this.menuShowUnsolvable.Text = "Show Unsolvable Conflicts (file not .ws or .xml)";
+            // 
+            // contextCopyPath
+            // 
+            this.contextCopyPath.Name = "contextCopyPath";
+            this.contextCopyPath.Size = new System.Drawing.Size(225, 22);
+            this.contextCopyPath.Text = "Copy Path";
+            this.contextCopyPath.Click += new System.EventHandler(this.contextCopyPath_Click);
             // 
             // MainForm
             // 
@@ -589,7 +588,6 @@
         private System.Windows.Forms.Button btnRefreshConflicts;
         private System.Windows.Forms.ContextMenuStrip treeContextMenu;
         private System.Windows.Forms.ToolStripMenuItem contextOpenModScriptDir;
-        private System.Windows.Forms.ToolStripMenuItem contextCopyPath;
         private System.Windows.Forms.ToolStripMenuItem contextExpandAll;
         private System.Windows.Forms.ToolStripMenuItem contextCollapseAll;
         private System.Windows.Forms.ToolStripMenuItem contextOpenModScript;
@@ -605,15 +603,13 @@
         private System.Windows.Forms.TreeView treMerges;
         private System.Windows.Forms.GroupBox grpGameDir;
         private System.Windows.Forms.Label lblConflicts;
-        private System.Windows.Forms.ToolStripMenuItem contextOpenMergedScript;
-        private System.Windows.Forms.ToolStripMenuItem contextOpenMergedScriptDir;
+        private System.Windows.Forms.ToolStripMenuItem contextOpenMergedFile;
+        private System.Windows.Forms.ToolStripMenuItem contextOpenMergedFileDir;
         private System.Windows.Forms.Button btnRefreshMerged;
         private System.Windows.Forms.ToolStripMenuItem contextDeleteAssociatedMerges;
         private System.Windows.Forms.ToolStripMenuItem contextDeleteMerge;
         private System.Windows.Forms.ToolStripSeparator contextDeleteSeparator;
-        private System.Windows.Forms.ToolStripMenuItem contextOpenVanillaBundleDir;
         private System.Windows.Forms.ToolStripMenuItem contextOpenModBundleDir;
-        private System.Windows.Forms.ToolStripMenuItem contextOpenMergedBundleDir;
         private System.Windows.Forms.Panel pnlProgress;
         private System.Windows.Forms.Label lblProgressState;
         private System.Windows.Forms.ProgressBar progressBar;
@@ -628,6 +624,9 @@
         private System.Windows.Forms.ToolStripStatusLabel lblStatus;
         private System.Windows.Forms.ToolStripMenuItem menuShowStatusBar;
         private System.Windows.Forms.Label lblProgressOf;
+        private System.Windows.Forms.ToolStripMenuItem menuPackReport;
+        private System.Windows.Forms.ToolStripMenuItem menuShowUnsolvable;
+        private System.Windows.Forms.ToolStripMenuItem contextCopyPath;
     }
 }
 

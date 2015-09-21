@@ -89,9 +89,8 @@ namespace WitcherScriptMerger
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show(string.Format(
-                    "Failed to save config due to error: {0}",
-                    ex.Message));
+                Program.MainForm.ShowMessage(
+                    string.Format("Failed to save config due to error: {0}", ex.Message));
             }
         }
     }

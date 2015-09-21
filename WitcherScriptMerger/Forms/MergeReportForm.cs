@@ -1,16 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using WitcherScriptMerger.FileIndex;
 
 namespace WitcherScriptMerger.Forms
 {
-    internal partial class ReportForm : Form
+    internal partial class MergeReportForm : Form
     {
-        bool _savedCheckedState;
-
         #region Initialization
 
-        public ReportForm(
+        public MergeReportForm(
             int mergeNum, int mergeTotal,
             string file1, string file2, string outputFile,
             string modName1, string modName2)
@@ -24,6 +23,8 @@ namespace WitcherScriptMerger.Forms
                     btnOK.Text = "Continue";
             }
 
+            lblTempContentFiles.Visible = !ModFile.IsScript(outputFile);
+
             grpFile1.Text = modName1;
             grpFile2.Text = modName2;
             
@@ -31,10 +32,14 @@ namespace WitcherScriptMerger.Forms
             txtFilePath2.Text = file2;
             txtMergedPath.Text = outputFile;
 
-            chkShowAfterMerge.Checked = Program.Settings.Get<bool>("ReportAfterMerge");
-            _savedCheckedState = chkShowAfterMerge.Checked;
+            chkShowAfterMerge.Checked = Program.MainForm.MergeReportSetting;
 
             btnOK.Select();
+        }
+
+        private void MergeReportForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Program.MainForm.MergeReportSetting = chkShowAfterMerge.Checked;
         }
 
         #endregion
@@ -83,7 +88,7 @@ namespace WitcherScriptMerger.Forms
             if (File.Exists(path))
                 System.Diagnostics.Process.Start(path);
             else
-                MessageBox.Show("Can't find file: " + path);
+                Program.MainForm.ShowMessage("Can't find file: " + path);
         }
 
         private void TryOpenFileDir(string filePath)
@@ -92,19 +97,13 @@ namespace WitcherScriptMerger.Forms
             if (Directory.Exists(dirPath))
                 System.Diagnostics.Process.Start(dirPath);
             else
-                MessageBox.Show("Can't find directory: " + dirPath);
+                Program.MainForm.ShowMessage("Can't find directory: " + dirPath);
         }
 
         private void txt_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.A)
                 (sender as TextBox).SelectAll();
-        }
-
-        private void ReportForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (chkShowAfterMerge.Checked != _savedCheckedState)
-                Program.Settings.Set("ReportAfterMerge", chkShowAfterMerge.Checked);
         }
     }
 }

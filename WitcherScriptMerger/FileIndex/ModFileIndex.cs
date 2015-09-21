@@ -39,7 +39,7 @@ namespace WitcherScriptMerger.FileIndex
                 .ToList();
             if (!modDirPaths.Any())
             {
-                MessageBox.Show("Can't find any mods in the Mods directory.");
+                Program.MainForm.ShowMessage("Can't find any mods in the Mods directory.");
                 return;
             }
 
@@ -56,12 +56,12 @@ namespace WitcherScriptMerger.FileIndex
                     var filePaths = Directory.GetFiles(dirPath, "*", SearchOption.AllDirectories);
                     if (checkScripts)
                     {
-                        var scriptPaths = filePaths.Where(path => ModFile.IsScriptPath(path));
+                        var scriptPaths = filePaths.Where(path => ModFile.IsScript(path));
                         Files.AddRange(GetModFilesFromPaths(scriptPaths, inventory, modName));
                     }
                     if (checkBundles)
                     {
-                        foreach (string bundlePath in filePaths.Where(path => ModFile.IsBundlePath(path)))
+                        foreach (string bundlePath in filePaths.Where(path => ModFile.IsBundle(path)))
                         {
                             var contentPaths = GetBundleContentPaths(bundlePath);
                             Files.AddRange(GetModFilesFromPaths(contentPaths, inventory, modName, bundlePath));

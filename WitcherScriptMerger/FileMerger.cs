@@ -26,6 +26,7 @@ namespace WitcherScriptMerger
         private int _mergesToDo;
         private string _outputPath;
         
+        private string _bundlePath;
         private bool _bundleChanged;
         private List<Merge> _pendingBundleMerges = new List<Merge>();
         
@@ -34,21 +35,32 @@ namespace WitcherScriptMerger
 
         #endregion
 
-        public FileMerger(MergeInventory inventory)
-        {
-            _inventory = inventory;
-        }
-
-        public void MergeByTreeNodes(
-            IEnumerable<TreeNode> nodesToMerge,
-            string mergedModName,
+        public FileMerger(
+            MergeInventory inventory,
             ProgressChangedEventHandler progressHandler,
             RunWorkerCompletedEventHandler completedHandler)
         {
+            _inventory = inventory;
             _bgWorker = new BackgroundWorker
             {
                 WorkerReportsProgress = true
             };
+            _bgWorker.ProgressChanged += progressHandler;
+            _bgWorker.RunWorkerCompleted += completedHandler;
+            _bundlePath = Paths.RetrieveMergedBundlePath();
+        }
+
+        ~FileMerger()
+        {
+            if (_bgWorker != null)
+                _bgWorker.Dispose();
+        }
+
+        public void MergeByTreeNodesAsync(
+            IEnumerable<TreeNode> nodesToMerge,
+            string mergedModName)
+        {
+            
             _bgWorker.DoWork += (sender, e) =>
             {
                 _nodesToMerge = nodesToMerge;
@@ -60,23 +72,34 @@ namespace WitcherScriptMerger
                 }
                 if (_bundleChanged)
                 {
-                    string newBundlePath = PackNewBundle(_mergedModName);
+                    string newBundlePath = PackNewBundle(_bundlePath);
                     if (newBundlePath != null)
                     {
-                        ReportProgress(string.Format("Adding bundle merge to inventory"));
+                        ReportProgress("Adding bundle merge to inventory");
                         foreach (var bundleMerge in _pendingBundleMerges)
                             _inventory.Merges.Add(bundleMerge);
+
+                        if (Program.MainForm.PackReportSetting)
+                        {
+                            using (var reportForm = new PackReportForm(newBundlePath))
+                            {
+                                Program.MainForm.ShowModal(reportForm);
+                            }
+                        }
                     }
                 }
+                if (Directory.Exists(Paths.TempBundleContent))
+                {
+                    ReportProgress("Deleting temporary unpacked bundle content");
+                    DeleteDirectory(Paths.TempBundleContent);
+                }
             };
-            _bgWorker.RunWorkerCompleted += completedHandler;
-            _bgWorker.ProgressChanged += progressHandler;
             _bgWorker.RunWorkerAsync();
         }
 
         private void MergeTreeNode(TreeNode fileNode)
         {
-            bool isScript = ModFile.IsScriptPath(fileNode.Text);
+            bool isScript = ModFile.IsScript(fileNode.Text);
 
             var modNodes = fileNode.GetTreeNodes().Where(modNode => modNode.Checked).ToList();
 
@@ -145,6 +168,9 @@ namespace WitcherScriptMerger
                 }
                 else
                 {
+                    if (_bundlePath == null)
+                        return;
+                    merge.BundleName = Path.GetFileName(_bundlePath);
                     _bundleChanged = true;
                     _pendingBundleMerges.Add(merge);
                 }
@@ -188,12 +214,12 @@ namespace WitcherScriptMerger
 
                 if (Program.MainForm.MergeReportSetting)
                 {
-                    using (var reportForm = new ReportForm(
+                    using (var reportForm = new MergeReportForm(
                         mergeNum, _mergesToDo,
                         _file1.FullName, _file2.FullName, _outputPath,
                         _modName1, _modName2))
                     {
-                        reportForm.ShowDialog();
+                        Program.MainForm.ShowModal(reportForm);
                     }
                 }
                 return new FileInfo(_outputPath);
@@ -204,7 +230,7 @@ namespace WitcherScriptMerger
 
         private bool ConfirmRemainingConflict(string mergedModName)
         {
-            return (DialogResult.Yes == MessageBox.Show(
+            return (DialogResult.Yes == Program.MainForm.ShowMessage(
                 "There will still be a conflict if you use the merged mod name " + mergedModName + ".\n\n" +
                     "The Witcher 3 loads mods in alphabetical order, so this merged mod name will load after one of the original mods and the merged file will be ignored.\n\n" +
                     "Use this name anyway?",
@@ -215,7 +241,7 @@ namespace WitcherScriptMerger
 
         private bool ConfirmOutputOverwrite(string outputPath)
         {
-            return (DialogResult.Yes == MessageBox.Show(
+            return (DialogResult.Yes == Program.MainForm.ShowMessage(
                 "The output file below already exists! Overwrite?\n\n" + outputPath,
                 "Overwrite?",
                 MessageBoxButtons.YesNo,
@@ -240,7 +266,7 @@ namespace WitcherScriptMerger
                 }
             }
             Program.MainForm.Activate(); // Focus window
-            var result = MessageBox.Show(msg, "Skipped Merge", buttons, MessageBoxIcon.Information);
+            var result = Program.MainForm.ShowMessage(msg, "Skipped Merge", buttons, MessageBoxIcon.Information);
             if (result == DialogResult.No)
             {
                 return DialogResult.Abort;
@@ -298,7 +324,7 @@ namespace WitcherScriptMerger
 
         private bool PromptForManualMerge(string path, string reason)
         {
-            return DialogResult.Yes == MessageBox.Show(
+            return DialogResult.Yes == Program.MainForm.ShowMessage(
                 path + "\n\nCan't auto-merge. " + reason + "\n\nDo a manual 2-way merge?",
                 "No Vanilla Version",
                 MessageBoxButtons.YesNo,
@@ -346,16 +372,34 @@ namespace WitcherScriptMerger
             }
         }
 
-        private string PackNewBundle(string mergedModName)
+        public void PackNewBundleAsync(string bundlePath)
         {
-            ReportProgress("Packing merged content into new blob0.bundle");
+            if (_bgWorker.IsBusy)
+                throw new Exception("BackgroundWorker can't run 2 tasks concurrently.");
+            _bgWorker.DoWork += (sender, e) =>
+            {
+                string newBundlePath = PackNewBundle(bundlePath);
+                if (newBundlePath != null && Program.MainForm.PackReportSetting)
+                {
+                    using (var reportForm = new PackReportForm(bundlePath))
+                    {
+                        Program.MainForm.ShowModal(reportForm);
+                    }
+                }
+            };
+            _bgWorker.RunWorkerAsync();
+        }
+
+        private string PackNewBundle(string bundlePath)
+        {
+            ReportProgress("Packing merged content into new blob0.bundle", "Packing Bundle");
             
             string contentDir = Path.Combine(Environment.CurrentDirectory, Paths.MergedBundleContent);
             
             if (!ValidateWccLiteResources(contentDir))
                 return null;
 
-            string outputDir = Path.Combine(Paths.ModsDirectory, mergedModName);
+            string outputDir = Path.GetDirectoryName(bundlePath);
             var procInfo = new ProcessStartInfo
             {
                 FileName = Paths.WccLite,
@@ -404,7 +448,7 @@ namespace WitcherScriptMerger
                     return null;
                 }
             }
-            return Path.Combine(outputDir, "blob0.bundle");
+            return bundlePath;
         }
 
         private bool ValidateBmsResources(string bundlePath)
@@ -444,15 +488,52 @@ namespace WitcherScriptMerger
 
         private void ShowError(string msg, string title = "Error")
         {
-            MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Program.MainForm.ShowMessage(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void ReportProgress(string msg, string fileName = null)
+        private void ReportProgress(string msg, string title = null)
         {
-            if (fileName != null)
-                _progressState[0] = fileName;
+            if (title != null)
+                _progressState[0] = title;
             _progressState[1] = msg;
             _bgWorker.ReportProgress(0, _progressState);
+        }
+
+        /// <summary>
+        /// Depth-first recursive delete, with handling for descendant 
+        /// directories open in Windows Explorer.
+        /// </summary>
+        private void DeleteDirectory(string path)
+        {
+            foreach (string directory in Directory.GetDirectories(path))
+            {
+                System.Threading.Thread.Sleep(1);
+                DeleteDirectory(directory);
+            }
+
+            try
+            {
+                System.Threading.Thread.Sleep(1);
+                Directory.Delete(path, true);
+            }
+            catch (IOException)
+            {
+                System.Threading.Thread.Sleep(1);
+                Directory.Delete(path, true);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                System.Threading.Thread.Sleep(1);
+                Directory.Delete(path, true);
+            }
+            catch (Exception ex)
+            {
+                Program.MainForm.ShowMessage(
+                    "Non-critical error: Failed to delete temporary unpacked bundle content.\n\n" + ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
         }
     }
 }

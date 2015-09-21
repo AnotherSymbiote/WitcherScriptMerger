@@ -1,6 +1,6 @@
 ﻿namespace WitcherScriptMerger.Forms
 {
-    partial class ReportForm
+    partial class MergeReportForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeReportForm));
             this.txtFilePath1 = new System.Windows.Forms.TextBox();
             this.btnOpenFile1 = new System.Windows.Forms.Button();
             this.grpFile1 = new System.Windows.Forms.GroupBox();
@@ -44,6 +44,7 @@
             this.txtFilePath2 = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.chkShowAfterMerge = new System.Windows.Forms.CheckBox();
+            this.lblTempContentFiles = new System.Windows.Forms.Label();
             this.grpFile1.SuspendLayout();
             this.grpMergedFile.SuspendLayout();
             this.grpFile2.SuspendLayout();
@@ -229,7 +230,17 @@
             this.chkShowAfterMerge.Text = "&Show this report after each merge";
             this.chkShowAfterMerge.UseVisualStyleBackColor = true;
             // 
-            // ReportForm
+            // lblTempContentFiles
+            // 
+            this.lblTempContentFiles.AutoSize = true;
+            this.lblTempContentFiles.Location = new System.Drawing.Point(117, 16);
+            this.lblTempContentFiles.Name = "lblTempContentFiles";
+            this.lblTempContentFiles.Size = new System.Drawing.Size(531, 13);
+            this.lblTempContentFiles.TabIndex = 12;
+            this.lblTempContentFiles.Text = "The first 2 files were temporarily unpacked from blob0.bundle files && will be de" +
+    "leted when all merges are finished.";
+            // 
+            // MergeReportForm
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -237,6 +248,7 @@
             this.CancelButton = this.btnOK;
             this.ClientSize = new System.Drawing.Size(669, 362);
             this.ControlBox = false;
+            this.Controls.Add(this.lblTempContentFiles);
             this.Controls.Add(this.chkShowAfterMerge);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.grpFile2);
@@ -246,10 +258,10 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1920, 400);
             this.MinimumSize = new System.Drawing.Size(685, 400);
-            this.Name = "ReportForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Name = "MergeReportForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Merge Finished";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReportForm_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MergeReportForm_FormClosing);
             this.grpFile1.ResumeLayout(false);
             this.grpFile1.PerformLayout();
             this.grpMergedFile.ResumeLayout(false);
@@ -278,5 +290,6 @@
         private System.Windows.Forms.TextBox txtFilePath2;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.CheckBox chkShowAfterMerge;
+        private System.Windows.Forms.Label lblTempContentFiles;
     }
 }

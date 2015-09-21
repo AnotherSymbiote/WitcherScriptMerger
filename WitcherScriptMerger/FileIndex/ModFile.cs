@@ -11,17 +11,27 @@ namespace WitcherScriptMerger.FileIndex
 
     public class ModFile
     {
+        #region Members
+
         [XmlElement]
         public string RelativePath { get; set; }
 
         [XmlElement(ElementName = "IncludedMod")]
         public List<string> ModNames { get; private set; }
 
-        [XmlIgnore]
+        [XmlElement]
         public string BundleName { get; set; }
 
         [XmlIgnore]
-        public ModFileType Type { get; private set; }
+        public ModFileType Type
+        {
+            get
+            {
+                return (ModFile.IsScript(RelativePath)
+                    ? ModFileType.Script
+                    : ModFileType.BundleContent);
+            }
+        }
 
         [XmlIgnore]
         public bool HasConflict
@@ -29,17 +39,14 @@ namespace WitcherScriptMerger.FileIndex
             get { return ModNames.Count > 1; }
         }
 
+        #endregion
+
         public ModFile(string relPath, string bundlePath = null)
         {
             RelativePath = relPath;
             ModNames = new List<string>();
             if (bundlePath != null)
-            {
                 BundleName = Path.GetFileName(bundlePath);
-                Type = ModFileType.BundleContent;
-            }
-            else
-                Type = ModFileType.Script;
         }
 
         public ModFile()
@@ -52,7 +59,7 @@ namespace WitcherScriptMerger.FileIndex
             if (Type == ModFileType.Script)
                 return Path.Combine(Paths.ScriptsDirectory, RelativePath);
             else
-                return Path.Combine(Paths.BundlesDirectory, BundleName);
+                throw new System.Exception("Can only get vanilla file for scripts.");
         }
 
         public string GetModFile(string modName)
@@ -60,25 +67,35 @@ namespace WitcherScriptMerger.FileIndex
             if (Type == ModFileType.Script)
                 return Path.Combine(Paths.ModsDirectory, modName, Paths.ModScriptBase, RelativePath);
             else
-                return Path.Combine(Paths.ModsDirectory, modName, Paths.ModBundleBase, BundleName);
+                return Path.Combine(Paths.ModsDirectory, modName, Paths.BundleBase, BundleName);
         }
 
         public static string GetModNameFromPath(string modFilePath)
         {
-            string nameStart = (IsScriptPath(modFilePath) ? Paths.ModScriptBase : Paths.ModBundleBase);
+            string nameStart = (IsScript(modFilePath) ? Paths.ModScriptBase : Paths.BundleBase);
             int nameEnd = modFilePath.IndexOfIgnoreCase(nameStart) - 1;
             string name = modFilePath.Substring(0, nameEnd);
             return name.Substring(name.LastIndexOf('\\') + 1);
         }
 
-        public static bool IsScriptPath(string path)
+        public static bool IsScript(string path)
         {
             return path.EndsWith(".ws");
         }
 
-        public static bool IsBundlePath(string path)
+        public static bool IsBundle(string path)
         {
             return path.EndsWith(".bundle");
+        }
+
+        public static bool IsXml(string path)
+        {
+            return path.EndsWith(".xml");
+        }
+
+        public static bool IsMergeable(string path)
+        {
+            return (IsScript(path) || IsXml(path));
         }
     }
 }

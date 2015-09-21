@@ -20,18 +20,18 @@ namespace WitcherScriptMerger
             if (!File.Exists(Paths.Kdiff3))
             {
                 MessageBox.Show("Launch failed. Can't find KDiff3 at the following path:\n\n" + Paths.Kdiff3,
-                    "Can't Find KDiff3",
+                    "Script Merger Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                Application.Exit();
+                return;
             }
             if (!File.Exists(Paths.Bms))
             {
                 MessageBox.Show("Launch failed. Can't find QuickBMS at the following path:\n\n" + Paths.Bms,
-                    "Can't Find QuickBMS",
+                    "Script Merger Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                Application.Exit();
+                return;
             }
 
             Application.EnableVisualStyles();

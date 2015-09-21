@@ -53,11 +53,17 @@
     <Compile Include="FileIndex\ModFile.cs" />
     <Compile Include="FileIndex\ModFileIndex.cs" />
     <Compile Include="FileMerger.cs" />
-    <Compile Include="Forms\ReportForm.cs">
+    <Compile Include="Forms\PackReportForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ReportForm.Designer.cs">
-      <DependentUpon>ReportForm.cs</DependentUpon>
+    <Compile Include="Forms\PackReportForm.Designer.cs">
+      <DependentUpon>PackReportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MergeReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MergeReportForm.Designer.cs">
+      <DependentUpon>MergeReportForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="Forms\MainForm.cs">
@@ -71,8 +77,11 @@
     <Compile Include="Paths.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Forms\ReportForm.resx">
-      <DependentUpon>ReportForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\PackReportForm.resx">
+      <DependentUpon>PackReportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MergeReportForm.resx">
+      <DependentUpon>MergeReportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

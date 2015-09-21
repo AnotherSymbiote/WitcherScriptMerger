@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Windows.Forms;
 
 namespace WitcherScriptMerger
 {
@@ -13,9 +14,8 @@ namespace WitcherScriptMerger
         public static string MergedBundleContent = "Merged Bundle Content";
         public const string Inventory = "MergeInventory.xml";
         public static string ModScriptBase = Path.Combine("content", "scripts");
-        public static string ModBundleBase = "content";
         public static string VanillaScriptBase = Path.Combine("content", "content0", "scripts");
-        public static string VanillaBundleBase = Path.Combine("content", "content0", "bundles");
+        public static string BundleBase = "content";
 
         public static string GameDirectory
         {
@@ -40,7 +40,7 @@ namespace WitcherScriptMerger
             {
                 if (!string.IsNullOrWhiteSpace(_bundlesDirSetting))
                     return _bundlesDirSetting;
-                return Path.Combine(GameDirectory, VanillaBundleBase);
+                return Path.Combine(GameDirectory, BundleBase);
             }
         }
 
@@ -74,6 +74,87 @@ namespace WitcherScriptMerger
         {
             int startIndex = fullPath.IndexOfIgnoreCase(basePath) + basePath.Length + 1;
             return fullPath.Substring(startIndex);
+        }
+
+        public static bool ValidateModsDirectory()
+        {
+            if (!Directory.Exists(Paths.ModsDirectory))
+            {
+                Program.MainForm.ShowMessage(
+                    (!Paths.IsModsDirectoryDerived
+                     ? "Can't find the Mods directory specified in the config file."
+                     : "Can't find Mods directory in the specified game directory."));
+                return false;
+            }
+            return true;
+        }
+
+        public static bool ValidateScriptsDirectory()
+        {
+            if (!Directory.Exists(Paths.ScriptsDirectory))
+            {
+                Program.MainForm.ShowMessage(
+                    (!Paths.IsScriptsDirectoryDerived
+                     ? "Can't find the Scripts directory specified in the config file."
+                     : "Can't find \\content\\content0\\scripts directory in the specified game directory.\n\n" +
+                       "It was added in patch 1.08.1 and should contain the game's vanilla scripts. If you don't have it, try this workaround:\n\n" +
+                       "1) Download the official mod tools from Nexus Mods and install them.\n" +
+                       "2) In the mod tools folder, open the 'r4data' folder.\n" +
+                       "3) Copy the 'scripts' folder to " + Path.Combine(Paths.GameDirectory, "content\\content0") + ".\n" +
+                       "4) Optional: Uninstall the mod tools."));
+                return false;
+            }
+            return true;
+        }
+
+        public static bool ValidateBundlesDirectory()
+        {
+            if (!Directory.Exists(Paths.BundlesDirectory))
+            {
+                Program.MainForm.ShowMessage(
+                    (!Paths.IsBundlesDirectoryDerived
+                     ? "Can't find the Bundles directory specified in the config file."
+                     : "Can't find \\content\\content0\\bundles directory in the specified game directory."));
+                return false;
+            }
+            return true;
+        }
+
+        public static string RetrieveMergedBundlePath()
+        {
+            string mergedModName = RetrieveMergedModName();
+            if (mergedModName != null)
+                return Path.Combine(ModsDirectory, mergedModName, BundleBase, "blob0.bundle");
+            else
+                return null;
+        }
+
+        public static string RetrieveMergedModName()
+        {
+            string mergedModName = Program.Settings.Get("MergedModName");
+            if (string.IsNullOrWhiteSpace(mergedModName))
+            {
+                Program.MainForm.ShowMessage("The MergedModName setting isn't configured in the .config file.");
+                return null;
+            }
+            if (mergedModName.Length > 64)
+                mergedModName = mergedModName.Substring(0, 64);
+            if (!mergedModName.IsAlphaNumeric() || !mergedModName.StartsWith("mod"))
+            {
+                if (!ConfirmInvalidModName(mergedModName))
+                    return null;
+            }
+            return mergedModName;
+        }
+
+        private static bool ConfirmInvalidModName(string mergedModName)
+        {
+            return (DialogResult.Yes == Program.MainForm.ShowMessage(
+                "The Witcher 3 won't load the merged file if the mod name isn't \"mod\" followed by numbers, letters, or underscores.\n\nUse this name anyway?\n" + mergedModName
+                + "\n\nTo change the name: Click No, then edit \"MergedModName\" in the .config file.",
+                "Warning",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Exclamation));
         }
     }
 }
