@@ -22,7 +22,7 @@ namespace WitcherScriptMerger
 
         public static int IndexOfIgnoreCase(this string s, string value, int startIndex = 0)
         {
-            return s.IndexOf(value, 0, StringComparison.InvariantCultureIgnoreCase);
+            return s.IndexOf(value, startIndex, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static int LastIndexOfIgnoreCase(this string s, string value, int startIndex = -1)

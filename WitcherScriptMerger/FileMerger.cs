@@ -127,7 +127,7 @@ namespace WitcherScriptMerger
             _mergesToDo = modNodes.Count - 1;
 
             bool isNew = false;
-            var merge = _inventory.Merges.FirstOrDefault(ms => ms.RelativePath == fileNode.Text);
+            var merge = _inventory.Merges.FirstOrDefault(ms => ms.RelativePath.EqualsIgnoreCase(fileNode.Text));
             if (merge == null)
             {
                 isNew = true;
@@ -179,7 +179,7 @@ namespace WitcherScriptMerger
 
         private FileInfo MergeText(int mergeNum, Merge mergedFile)
         {
-            ReportProgress(string.Format("Merging with KDiff3: {0} && {1}", _modName1, _modName2));
+            ReportProgress(string.Format("Using KDiff3 to merge {0} && {1}", _modName1, _modName2));
 
             string outputDir = Path.GetDirectoryName(_outputPath);
             if (!Directory.Exists(outputDir))
@@ -217,10 +217,10 @@ namespace WitcherScriptMerger
 
             if (kdiff3Proc.ExitCode == 0)
             {
-                if (_file1.FullName != _outputPath)
+                if (!_file1.FullName.EqualsIgnoreCase(_outputPath))
                     mergedFile.ModNames.Add(_modName1);
 
-                if (_file2.FullName != _outputPath)
+                if (!_file2.FullName.EqualsIgnoreCase(_outputPath))
                     mergedFile.ModNames.Add(_modName2);
 
                 if (Program.MainForm.MergeReportSetting)
@@ -288,7 +288,7 @@ namespace WitcherScriptMerger
         private bool GetUnpackedFiles(string contentRelativePath)
         {
             _vanillaFile = null;
-            var bundleDirs = Directory.GetDirectories(Path.Combine(Paths.GameDirectory, "content"))
+            var bundleDirs = Directory.GetDirectories(Paths.BundlesDirectory)
                 .Select(path => Path.Combine(path, "bundles"))
                 .Where(path => Directory.Exists(path))
                 .ToList();

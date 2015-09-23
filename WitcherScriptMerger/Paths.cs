@@ -22,6 +22,11 @@ namespace WitcherScriptMerger
             get { return Program.MainForm.GameDirectorySetting; }
         }
 
+        public static string BundlesDirectory
+        {
+            get { return Path.Combine(GameDirectory, BundleBase); }
+        }
+
         private static string _scriptsDirSetting = Program.Settings.Get("ScriptsDirectory");
         public static string ScriptsDirectory
         {
@@ -30,17 +35,6 @@ namespace WitcherScriptMerger
                 if (!string.IsNullOrWhiteSpace(_scriptsDirSetting))
                     return _scriptsDirSetting;
                 return Path.Combine(GameDirectory, VanillaScriptBase);
-            }
-        }
-
-        private static string _bundlesDirSetting = Program.Settings.Get("BundlesDirectory");
-        public static string BundlesDirectory
-        {
-            get
-            {
-                if (!string.IsNullOrWhiteSpace(_bundlesDirSetting))
-                    return _bundlesDirSetting;
-                return Path.Combine(GameDirectory, BundleBase);
             }
         }
 
@@ -58,11 +52,6 @@ namespace WitcherScriptMerger
         public static bool IsScriptsDirectoryDerived
         {
             get { return string.IsNullOrWhiteSpace(_scriptsDirSetting); }
-        }
-
-        public static bool IsBundlesDirectoryDerived
-        {
-            get { return string.IsNullOrWhiteSpace(_bundlesDirSetting); }
         }
 
         public static bool IsModsDirectoryDerived
@@ -111,10 +100,7 @@ namespace WitcherScriptMerger
         {
             if (!Directory.Exists(Paths.BundlesDirectory))
             {
-                Program.MainForm.ShowMessage(
-                    (!Paths.IsBundlesDirectoryDerived
-                     ? "Can't find the Bundles directory specified in the config file."
-                     : "Can't find \\content\\content0\\bundles directory in the specified game directory."));
+                Program.MainForm.ShowMessage("Can't find 'content' directory in the specified game directory.");
                 return false;
             }
             return true;

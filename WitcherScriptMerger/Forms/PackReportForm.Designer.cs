@@ -87,6 +87,7 @@
             this.txtContent.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtContent.Size = new System.Drawing.Size(538, 190);
             this.txtContent.TabIndex = 13;
+            this.txtContent.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
             // btnOpenBundleDir
             // 

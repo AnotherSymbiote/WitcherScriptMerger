@@ -71,7 +71,7 @@ namespace WitcherScriptMerger.Inventory
         public bool HasResolvedConflict(string relPath, string modName)
         {
             return Merges.Any(ms =>
-                ms.RelativePath == relPath &&
+                ms.RelativePath.EqualsIgnoreCase(relPath) &&
                 ms.ModNames.Contains(modName) &&
                 ms.MergedModName.CompareTo(modName) <= 0);
         }

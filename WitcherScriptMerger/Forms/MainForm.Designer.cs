@@ -302,7 +302,6 @@
             this.splitContainer.Panel1.Controls.Add(this.treConflicts);
             this.splitContainer.Panel1.Controls.Add(this.btnRefreshConflicts);
             this.splitContainer.Panel1.Controls.Add(this.btnMergeFiles);
-            this.splitContainer.Panel1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.splitContainer_Panel1_PreviewKeyDown);
             this.splitContainer.Panel1MinSize = 195;
             // 
             // splitContainer.Panel2

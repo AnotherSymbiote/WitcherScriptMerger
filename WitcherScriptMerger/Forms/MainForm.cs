@@ -143,6 +143,33 @@ namespace WitcherScriptMerger.Forms
                 splitContainer.SplitterDistance = (int)(splitterPosPct / 100f * splitContainer.Width);
         }
 
+        private void txtGameDir_TextChanged(object sender, EventArgs e)
+        {
+            Program.Settings.Set("GameDirectory", txtGameDir.Text);
+        }
+
+        private void menuShowStatusBar_Click(object sender, EventArgs e)
+        {
+            statusStrip.Visible = menuShowStatusBar.Checked;
+            if (statusStrip.Visible)
+                splitContainer.Height -= statusStrip.Height;
+            else
+                splitContainer.Height += statusStrip.Height;
+        }
+
+        private void UpdateStatusText()
+        {
+            lblStatus.Text = string.Format("{0} conflict{1}     {2} merge{3}",
+                treConflicts.Nodes.Count,
+                (treConflicts.Nodes.Count == 1 ? "" : "s"),
+                treMerges.Nodes.Count,
+                (treMerges.Nodes.Count == 1 ? "" : "s"));
+        }
+
+        #endregion
+
+        #region Refreshing Trees
+
         private bool RefreshMergeInventory()
         {
             _inventory = MergeInventory.Load(Paths.Inventory);
@@ -307,29 +334,6 @@ namespace WitcherScriptMerger.Forms
             UpdateStatusText();
             HideProgressScreen();
             EnableMergeIfValidSelection();
-        }
-
-        private void txtGameDir_TextChanged(object sender, EventArgs e)
-        {
-            Program.Settings.Set("GameDirectory", txtGameDir.Text);
-        }
-
-        private void menuShowStatusBar_Click(object sender, EventArgs e)
-        {
-            statusStrip.Visible = menuShowStatusBar.Checked;
-            if (statusStrip.Visible)
-                splitContainer.Height -= statusStrip.Height;
-            else
-                splitContainer.Height += statusStrip.Height;
-        }
-
-        private void UpdateStatusText()
-        {
-            lblStatus.Text = string.Format("{0} conflict{1}     {2} merge{3}",
-                treConflicts.Nodes.Count,
-                (treConflicts.Nodes.Count == 1 ? "" : "s"),
-                treMerges.Nodes.Count,
-                (treMerges.Nodes.Count == 1 ? "" : "s"));
         }
 
         #endregion
@@ -597,18 +601,6 @@ namespace WitcherScriptMerger.Forms
                 EnableUnmergeIfValidSelection();
         }
 
-        private void ClearCheckedNodes(TreeNode subTreeToSkip = null)
-        {
-            foreach (var fileNode in treConflicts.GetTreeNodes())
-            {
-                if (subTreeToSkip != null && fileNode.Text == subTreeToSkip.Text)
-                    continue;
-                fileNode.Checked = false;
-                foreach (var modNode in fileNode.GetTreeNodes())
-                    modNode.Checked = false;
-            }
-        }
-
         private void EnableMergeIfValidSelection()
         {
             int validFileNodes = treConflicts.GetTreeNodes().Count(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
@@ -686,12 +678,12 @@ namespace WitcherScriptMerger.Forms
 
         private void contextSelectAll_Click(object sender, EventArgs e)
         {
-            foreach (var fileNode in _clickedTree.Nodes.Cast<TreeNode>())
+            foreach (var fileNode in _clickedTree.GetTreeNodes())
             {
                 fileNode.Checked = true;
                 if (_clickedTree == treConflicts)
                 {
-                    foreach (var modNode in fileNode.Nodes.Cast<TreeNode>())
+                    foreach (var modNode in fileNode.GetTreeNodes())
                         modNode.Checked = true;
                 }
             }
@@ -703,12 +695,12 @@ namespace WitcherScriptMerger.Forms
 
         private void contextDeselectAll_Click(object sender, EventArgs e)
         {
-            foreach (var fileNode in _clickedTree.Nodes.Cast<TreeNode>())
+            foreach (var fileNode in _clickedTree.GetTreeNodes())
             {
                 fileNode.Checked = false;
                 if (_clickedTree == treConflicts)
                 {
-                    foreach (var modNode in fileNode.Nodes.Cast<TreeNode>())
+                    foreach (var modNode in fileNode.GetTreeNodes())
                         modNode.Checked = false;
                 }
             }
@@ -760,22 +752,16 @@ namespace WitcherScriptMerger.Forms
                 btnDeleteMerges_Click(null, null);
         }
 
-        private void splitContainer_Panel1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter && btnMergeFiles.Enabled)
-                btnMergeFiles_Click(null, null);
-        }
-
         #endregion
 
         #region Deleting Merges
 
         private void DeleteMerges(IEnumerable<TreeNode> fileNodes)
         {
-            var mergePaths = fileNodes.Select(node => node.Tag as string).ToList();
             var merges = fileNodes.Select(node => 
                 _inventory.Merges.First(merge =>
-                    merge.RelativePath == node.Text)).ToList();
+                    merge.RelativePath.EqualsIgnoreCase(node.Text)))
+                    .ToList();
             DeleteMerges(merges);
         }
 
@@ -850,7 +836,7 @@ namespace WitcherScriptMerger.Forms
 
         private void DeleteEmptyDirs(string dirPath, string stopPath)
         {
-            if (dirPath == stopPath)
+            if (dirPath.EqualsIgnoreCase(stopPath))
                 return;
             var dirInfo = new DirectoryInfo(dirPath);
             if (dirInfo.GetFiles().Length > 0 || dirInfo.GetDirectories().Length > 0)
