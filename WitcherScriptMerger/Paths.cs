@@ -67,10 +67,10 @@ namespace WitcherScriptMerger
 
         public static bool ValidateModsDirectory()
         {
-            if (!Directory.Exists(Paths.ModsDirectory))
+            if (!Directory.Exists(ModsDirectory))
             {
                 Program.MainForm.ShowMessage(
-                    (!Paths.IsModsDirectoryDerived
+                    (!IsModsDirectoryDerived
                      ? "Can't find the Mods directory specified in the config file."
                      : "Can't find Mods directory in the specified game directory."));
                 return false;
@@ -80,17 +80,16 @@ namespace WitcherScriptMerger
 
         public static bool ValidateScriptsDirectory()
         {
-            if (!Directory.Exists(Paths.ScriptsDirectory))
+            if (!Directory.Exists(ScriptsDirectory))
             {
                 Program.MainForm.ShowMessage(
-                    (!Paths.IsScriptsDirectoryDerived
+                    (!IsScriptsDirectoryDerived
                      ? "Can't find the Scripts directory specified in the config file."
-                     : "Can't find \\content\\content0\\scripts directory in the specified game directory.\n\n" +
-                       "It was added in patch 1.08.1 and should contain the game's vanilla scripts. If you don't have it, try this workaround:\n\n" +
-                       "1) Download the official mod tools from Nexus Mods and install them.\n" +
-                       "2) In the mod tools folder, open the 'r4data' folder.\n" +
-                       "3) Copy the 'scripts' folder to " + Path.Combine(Paths.GameDirectory, "content\\content0") + ".\n" +
-                       "4) Optional: Uninstall the mod tools."));
+                     : "Can't find \\content\\content0\\scripts directory in the specified game directory.") +
+                    "\n\nIt was added in patch 1.08.1 and should contain the game's vanilla scripts. If you don't have it, try this workaround:\n\n" +
+                    "1) Open the folder where this .exe is located.\n" +
+                    "2) Go to '\\Tools\\wcc_lite\\r4data'.\n" +
+                    "3) Copy the 'scripts' folder to " + Path.Combine(GameDirectory, "content\\content0") + ".");
                 return false;
             }
             return true;
@@ -98,7 +97,7 @@ namespace WitcherScriptMerger
 
         public static bool ValidateBundlesDirectory()
         {
-            if (!Directory.Exists(Paths.BundlesDirectory))
+            if (!Directory.Exists(BundlesDirectory))
             {
                 Program.MainForm.ShowMessage("Can't find 'content' directory in the specified game directory.");
                 return false;
