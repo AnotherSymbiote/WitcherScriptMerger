@@ -103,7 +103,7 @@ namespace WitcherScriptMerger
 
             var modNodes = fileNode.GetTreeNodes().Where(modNode => modNode.Checked).ToList();
 
-            if (modNodes.Any(node => _mergedModName.CompareTo(node.Text) > 0) &&
+            if (modNodes.Any(node => ModFile.GetLoadOrder(node.Text, _mergedModName) < 0) &&
                 !ConfirmRemainingConflict(_mergedModName))
                 return;
 
@@ -154,7 +154,10 @@ namespace WitcherScriptMerger
 
                 var mergedFile = MergeText(i, merge);
                 if (mergedFile != null)
+                {
                     _file1 = mergedFile;
+                    _modName1 = ModFile.GetModNameFromPath(_file1.FullName);
+                }
                 else
                     HandleCanceledMerge(i, _nodesToMerge.Count(), merge);
             }
@@ -243,7 +246,9 @@ namespace WitcherScriptMerger
         {
             return (DialogResult.Yes == Program.MainForm.ShowMessage(
                 "There will still be a conflict if you use the merged mod name " + mergedModName + ".\n\n" +
-                    "The Witcher 3 loads mods in alphabetical order, so this merged mod name will load after one of the original mods and the merged file will be ignored.\n\n" +
+                    "The Witcher 3 loads mods in case-insensitive ASCII order, " +
+                    "so this merged mod name will load after one of the original mods, " +
+                    "and the merged file will be ignored.\n\n" +
                     "Use this name anyway?",
                 "Merged Mod Name Conflict",
                 MessageBoxButtons.YesNo,

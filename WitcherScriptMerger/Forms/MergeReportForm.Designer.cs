@@ -59,7 +59,7 @@
             this.txtFilePath1.Name = "txtFilePath1";
             this.txtFilePath1.ReadOnly = true;
             this.txtFilePath1.Size = new System.Drawing.Size(633, 20);
-            this.txtFilePath1.TabIndex = 2;
+            this.txtFilePath1.TabIndex = 0;
             this.txtFilePath1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
             // btnOpenFile1
@@ -68,7 +68,7 @@
             this.btnOpenFile1.Location = new System.Drawing.Point(7, 45);
             this.btnOpenFile1.Name = "btnOpenFile1";
             this.btnOpenFile1.Size = new System.Drawing.Size(313, 23);
-            this.btnOpenFile1.TabIndex = 3;
+            this.btnOpenFile1.TabIndex = 1;
             this.btnOpenFile1.Text = "Open File";
             this.btnOpenFile1.UseVisualStyleBackColor = true;
             this.btnOpenFile1.Click += new System.EventHandler(this.btnOpenFile1_Click);
@@ -84,7 +84,7 @@
             this.grpFile1.Location = new System.Drawing.Point(12, 54);
             this.grpFile1.Name = "grpFile1";
             this.grpFile1.Size = new System.Drawing.Size(645, 79);
-            this.grpFile1.TabIndex = 4;
+            this.grpFile1.TabIndex = 0;
             this.grpFile1.TabStop = false;
             this.grpFile1.Text = "Mod 1";
             // 
@@ -94,7 +94,7 @@
             this.btnOpenDir1.Location = new System.Drawing.Point(326, 45);
             this.btnOpenDir1.Name = "btnOpenDir1";
             this.btnOpenDir1.Size = new System.Drawing.Size(313, 23);
-            this.btnOpenDir1.TabIndex = 4;
+            this.btnOpenDir1.TabIndex = 2;
             this.btnOpenDir1.Text = "Open Directory";
             this.btnOpenDir1.UseVisualStyleBackColor = true;
             this.btnOpenDir1.Click += new System.EventHandler(this.btnOpenDir1_Click);
@@ -106,7 +106,7 @@
             this.lblMergedFiles.Location = new System.Drawing.Point(12, 11);
             this.lblMergedFiles.Name = "lblMergedFiles";
             this.lblMergedFiles.Size = new System.Drawing.Size(99, 20);
-            this.lblMergedFiles.TabIndex = 8;
+            this.lblMergedFiles.TabIndex = 5;
             this.lblMergedFiles.Text = "Merged files!";
             // 
             // grpMergedFile
@@ -120,7 +120,7 @@
             this.grpMergedFile.Location = new System.Drawing.Point(12, 234);
             this.grpMergedFile.Name = "grpMergedFile";
             this.grpMergedFile.Size = new System.Drawing.Size(645, 77);
-            this.grpMergedFile.TabIndex = 5;
+            this.grpMergedFile.TabIndex = 2;
             this.grpMergedFile.TabStop = false;
             this.grpMergedFile.Text = "Merged File";
             // 
@@ -130,7 +130,7 @@
             this.btnOpenMergedDir.Location = new System.Drawing.Point(326, 45);
             this.btnOpenMergedDir.Name = "btnOpenMergedDir";
             this.btnOpenMergedDir.Size = new System.Drawing.Size(313, 23);
-            this.btnOpenMergedDir.TabIndex = 4;
+            this.btnOpenMergedDir.TabIndex = 2;
             this.btnOpenMergedDir.Text = "Open Directory";
             this.btnOpenMergedDir.UseVisualStyleBackColor = true;
             this.btnOpenMergedDir.Click += new System.EventHandler(this.btnOpenOutputDir_Click);
@@ -141,7 +141,7 @@
             this.btnOpenMergedFile.Location = new System.Drawing.Point(7, 45);
             this.btnOpenMergedFile.Name = "btnOpenMergedFile";
             this.btnOpenMergedFile.Size = new System.Drawing.Size(313, 23);
-            this.btnOpenMergedFile.TabIndex = 3;
+            this.btnOpenMergedFile.TabIndex = 1;
             this.btnOpenMergedFile.Text = "Open File";
             this.btnOpenMergedFile.UseVisualStyleBackColor = true;
             this.btnOpenMergedFile.Click += new System.EventHandler(this.btnOpenOutputFile_Click);
@@ -155,7 +155,7 @@
             this.txtMergedPath.Name = "txtMergedPath";
             this.txtMergedPath.ReadOnly = true;
             this.txtMergedPath.Size = new System.Drawing.Size(633, 20);
-            this.txtMergedPath.TabIndex = 2;
+            this.txtMergedPath.TabIndex = 0;
             this.txtMergedPath.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
             // grpFile2
@@ -169,7 +169,7 @@
             this.grpFile2.Location = new System.Drawing.Point(12, 144);
             this.grpFile2.Name = "grpFile2";
             this.grpFile2.Size = new System.Drawing.Size(645, 79);
-            this.grpFile2.TabIndex = 6;
+            this.grpFile2.TabIndex = 1;
             this.grpFile2.TabStop = false;
             this.grpFile2.Text = "Mod 2";
             // 
@@ -179,7 +179,7 @@
             this.btnOpenDir2.Location = new System.Drawing.Point(326, 45);
             this.btnOpenDir2.Name = "btnOpenDir2";
             this.btnOpenDir2.Size = new System.Drawing.Size(313, 23);
-            this.btnOpenDir2.TabIndex = 4;
+            this.btnOpenDir2.TabIndex = 2;
             this.btnOpenDir2.Text = "Open Directory";
             this.btnOpenDir2.UseVisualStyleBackColor = true;
             this.btnOpenDir2.Click += new System.EventHandler(this.btnOpenDir2_Click);
@@ -190,7 +190,7 @@
             this.btnOpenFile2.Location = new System.Drawing.Point(7, 45);
             this.btnOpenFile2.Name = "btnOpenFile2";
             this.btnOpenFile2.Size = new System.Drawing.Size(313, 23);
-            this.btnOpenFile2.TabIndex = 3;
+            this.btnOpenFile2.TabIndex = 1;
             this.btnOpenFile2.Text = "Open File";
             this.btnOpenFile2.UseVisualStyleBackColor = true;
             this.btnOpenFile2.Click += new System.EventHandler(this.btnOpenFile2_Click);
@@ -204,7 +204,7 @@
             this.txtFilePath2.Name = "txtFilePath2";
             this.txtFilePath2.ReadOnly = true;
             this.txtFilePath2.Size = new System.Drawing.Size(633, 20);
-            this.txtFilePath2.TabIndex = 2;
+            this.txtFilePath2.TabIndex = 0;
             this.txtFilePath2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
             // btnOK
@@ -215,7 +215,7 @@
             this.btnOK.Location = new System.Drawing.Point(550, 327);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(107, 23);
-            this.btnOK.TabIndex = 10;
+            this.btnOK.TabIndex = 4;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -226,7 +226,7 @@
             this.chkShowAfterMerge.Location = new System.Drawing.Point(16, 331);
             this.chkShowAfterMerge.Name = "chkShowAfterMerge";
             this.chkShowAfterMerge.Size = new System.Drawing.Size(185, 17);
-            this.chkShowAfterMerge.TabIndex = 11;
+            this.chkShowAfterMerge.TabIndex = 3;
             this.chkShowAfterMerge.Text = "&Show this report after each merge";
             this.chkShowAfterMerge.UseVisualStyleBackColor = true;
             // 
@@ -236,7 +236,7 @@
             this.lblTempContentFiles.Location = new System.Drawing.Point(117, 16);
             this.lblTempContentFiles.Name = "lblTempContentFiles";
             this.lblTempContentFiles.Size = new System.Drawing.Size(531, 13);
-            this.lblTempContentFiles.TabIndex = 12;
+            this.lblTempContentFiles.TabIndex = 6;
             this.lblTempContentFiles.Text = "The first 2 files were temporarily unpacked from blob0.bundle files && will be de" +
     "leted when all merges are finished.";
             // 

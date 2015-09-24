@@ -73,7 +73,7 @@ namespace WitcherScriptMerger.Inventory
             return Merges.Any(ms =>
                 ms.RelativePath.EqualsIgnoreCase(relPath) &&
                 ms.ModNames.Contains(modName) &&
-                ms.MergedModName.CompareTo(modName) <= 0);
+                ModFile.GetLoadOrder(ms.MergedModName, modName) < 0);
         }
     }
 }

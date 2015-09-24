@@ -124,7 +124,7 @@
             this.treConflicts.TabStop = false;
             this.treConflicts.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tree_AfterCheck);
             this.treConflicts.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tree_AfterSelect);
-            this.treConflicts.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treConflicts_KeyDown);
+            this.treConflicts.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tree_KeyDown);
             this.treConflicts.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tree_MouseDown);
             this.treConflicts.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tree_MouseUp);
             // 
@@ -302,6 +302,7 @@
             this.splitContainer.Panel1.Controls.Add(this.treConflicts);
             this.splitContainer.Panel1.Controls.Add(this.btnRefreshConflicts);
             this.splitContainer.Panel1.Controls.Add(this.btnMergeFiles);
+            this.splitContainer.Panel1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.splitContainer_Panel1_PreviewKeyDown);
             this.splitContainer.Panel1MinSize = 195;
             // 
             // splitContainer.Panel2
@@ -310,6 +311,7 @@
             this.splitContainer.Panel2.Controls.Add(this.lblMergeInventory);
             this.splitContainer.Panel2.Controls.Add(this.btnDeleteMerges);
             this.splitContainer.Panel2.Controls.Add(this.treMerges);
+            this.splitContainer.Panel2.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.splitContainer_Panel2_PreviewKeyDown);
             this.splitContainer.Panel2MinSize = 225;
             this.splitContainer.Size = new System.Drawing.Size(654, 563);
             this.splitContainer.SplitterDistance = 327;
@@ -379,9 +381,9 @@
             this.treMerges.TabStop = false;
             this.treMerges.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tree_AfterCheck);
             this.treMerges.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tree_AfterSelect);
-            this.treMerges.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treMergeInventory_KeyDown);
             this.treMerges.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tree_MouseDown);
             this.treMerges.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tree_MouseUp);
+            this.treMerges.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tree_KeyDown);
             // 
             // pnlProgress
             // 

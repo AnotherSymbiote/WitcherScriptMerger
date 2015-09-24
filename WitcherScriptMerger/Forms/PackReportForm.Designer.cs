@@ -49,7 +49,7 @@
             this.txtBundlePath.Name = "txtBundlePath";
             this.txtBundlePath.ReadOnly = true;
             this.txtBundlePath.Size = new System.Drawing.Size(538, 20);
-            this.txtBundlePath.TabIndex = 2;
+            this.txtBundlePath.TabIndex = 1;
             this.txtBundlePath.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
             // btnOpenContentDir
@@ -59,7 +59,7 @@
             this.btnOpenContentDir.Location = new System.Drawing.Point(458, 114);
             this.btnOpenContentDir.Name = "btnOpenContentDir";
             this.btnOpenContentDir.Size = new System.Drawing.Size(92, 21);
-            this.btnOpenContentDir.TabIndex = 5;
+            this.btnOpenContentDir.TabIndex = 2;
             this.btnOpenContentDir.Text = "Open Directory";
             this.btnOpenContentDir.UseVisualStyleBackColor = true;
             this.btnOpenContentDir.Click += new System.EventHandler(this.btnOpenContentDir_Click);
@@ -86,7 +86,7 @@
             this.txtContent.ReadOnly = true;
             this.txtContent.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtContent.Size = new System.Drawing.Size(538, 190);
-            this.txtContent.TabIndex = 13;
+            this.txtContent.TabIndex = 3;
             this.txtContent.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
             // 
             // btnOpenBundleDir
@@ -96,7 +96,7 @@
             this.btnOpenBundleDir.Location = new System.Drawing.Point(458, 52);
             this.btnOpenBundleDir.Name = "btnOpenBundleDir";
             this.btnOpenBundleDir.Size = new System.Drawing.Size(92, 21);
-            this.btnOpenBundleDir.TabIndex = 4;
+            this.btnOpenBundleDir.TabIndex = 0;
             this.btnOpenBundleDir.Text = "Open Directory";
             this.btnOpenBundleDir.UseVisualStyleBackColor = true;
             this.btnOpenBundleDir.Click += new System.EventHandler(this.btnOpenBundleDir_Click);
@@ -119,7 +119,7 @@
             this.btnOK.Location = new System.Drawing.Point(443, 335);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(107, 23);
-            this.btnOK.TabIndex = 10;
+            this.btnOK.TabIndex = 5;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -131,7 +131,7 @@
             this.chkShowAfterPack.Location = new System.Drawing.Point(16, 337);
             this.chkShowAfterPack.Name = "chkShowAfterPack";
             this.chkShowAfterPack.Size = new System.Drawing.Size(202, 17);
-            this.chkShowAfterPack.TabIndex = 11;
+            this.chkShowAfterPack.TabIndex = 4;
             this.chkShowAfterPack.Text = "&Show this report after packing bundle";
             this.chkShowAfterPack.UseVisualStyleBackColor = true;
             // 

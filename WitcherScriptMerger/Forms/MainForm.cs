@@ -152,9 +152,15 @@ namespace WitcherScriptMerger.Forms
         {
             statusStrip.Visible = menuShowStatusBar.Checked;
             if (statusStrip.Visible)
+            {
                 splitContainer.Height -= statusStrip.Height;
+                pnlProgress.Height -= statusStrip.Height;
+            }
             else
+            {
                 splitContainer.Height += statusStrip.Height;
+                pnlProgress.Height += statusStrip.Height;
+            }
         }
 
         private void UpdateStatusText()
@@ -269,9 +275,11 @@ namespace WitcherScriptMerger.Forms
                     treConflicts.Nodes.Remove(node);
             }
 
-            PrepareProgressScreen("Detecting Conflicts", ProgressBarStyle.Continuous);
             if (checkBundles)
+            {
+                PrepareProgressScreen("Detecting Conflicts", ProgressBarStyle.Continuous);
                 pnlProgress.Visible = true;
+            }
 
             _modIndex = new ModFileIndex();
             _modIndex.BuildAsync(_inventory,
@@ -740,13 +748,30 @@ namespace WitcherScriptMerger.Forms
                 (sender as TextBox).SelectAll();
         }
 
-        private void treConflicts_KeyDown(object sender, KeyEventArgs e)
+        private void tree_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.A)
-                contextSelectAll_Click(null, null);
+            if (e.Control)
+            {
+                if (e.KeyCode == Keys.A)
+                {
+                    _clickedTree = sender as TreeView;
+                    contextSelectAll_Click(null, null);
+                }
+                if (e.KeyCode == Keys.D)
+                {
+                    _clickedTree = sender as TreeView;
+                    contextDeselectAll_Click(null, null);
+                }
+            }
         }
 
-        private void treMergeInventory_KeyDown(object sender, KeyEventArgs e)
+        private void splitContainer_Panel1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && btnMergeFiles.Enabled)
+                btnMergeFiles_Click(null, null);
+        }
+
+        private void splitContainer_Panel2_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.Delete && btnDeleteMerges.Enabled)
                 btnDeleteMerges_Click(null, null);
@@ -851,7 +876,7 @@ namespace WitcherScriptMerger.Forms
 
         private void PrepareProgressScreen(string progressOf, ProgressBarStyle style)
         {
-            grpGameDir.Enabled = splitContainer.Enabled = false;
+            grpGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = false;
             progressBar.Value = 0;
             lblProgressOf.Text = progressOf;
             progressBar.Style = style;
@@ -860,8 +885,8 @@ namespace WitcherScriptMerger.Forms
         private void HideProgressScreen()
         {
             pnlProgress.Visible = false;
-            grpGameDir.Enabled = splitContainer.Enabled = true;
-            treConflicts.Select();
+            grpGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = true;
+            treMerges.Select();
         }
 
         #endregion

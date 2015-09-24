@@ -97,5 +97,10 @@ namespace WitcherScriptMerger.FileIndex
         {
             return (IsScript(path) || IsXml(path));
         }
+
+        public static int GetLoadOrder(string modName1, string modName2)
+        {
+            return string.Compare(modName1, modName2, System.StringComparison.OrdinalIgnoreCase);
+        }
     }
 }
