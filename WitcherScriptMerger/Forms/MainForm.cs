@@ -255,20 +255,26 @@ namespace WitcherScriptMerger.Forms
             {
                 var fileNodes = treConflicts.GetTreeNodes();
                 var fileNodesToUpdate = new List<TreeNode>();
+
+                var missingFileNodes = fileNodes.Where(node =>
+                    !File.Exists(node.Tag as string) ||
+                    node.GetTreeNodes().Any(modNode => !File.Exists(modNode.Tag as string)));
+                fileNodesToUpdate.AddRange(missingFileNodes);
+
                 if (_inventory.ScriptsChanged || !menuCheckScripts.Checked)
                 {
                     fileNodesToUpdate.AddRange(
-                        fileNodes.Where(node => ModFile.IsScript(node.Text)));
+                        fileNodes.Where(node => ModFile.IsScript(node.Text) && !missingFileNodes.Contains(node)));
                 }
                 if (_inventory.BundleChanged || !menuCheckBundleContents.Checked)
                 {
                     fileNodesToUpdate.AddRange(
-                        fileNodes.Where(node => !ModFile.IsScript(node.Text)));
+                        fileNodes.Where(node => !ModFile.IsScript(node.Text) && !missingFileNodes.Contains(node)));
                 }
                 if (!menuShowUnsolvable.Checked)
                 {
                     fileNodesToUpdate.AddRange(
-                        fileNodes.Where(node => !ModFile.IsMergeable(node.Text)));
+                        fileNodes.Where(node => !ModFile.IsMergeable(node.Text) && !missingFileNodes.Contains(node)));
                 }
                 
                 foreach (var node in fileNodesToUpdate)
