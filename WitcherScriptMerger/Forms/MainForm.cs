@@ -257,7 +257,7 @@ namespace WitcherScriptMerger.Forms
                 var fileNodesToUpdate = new List<TreeNode>();
 
                 var missingFileNodes = fileNodes.Where(node =>
-                    !File.Exists(node.Tag as string) ||
+                    (ModFile.IsMergeable(node.Text) && !File.Exists(node.Tag as string)) ||
                     node.GetTreeNodes().Any(modNode => !File.Exists(modNode.Tag as string)));
                 fileNodesToUpdate.AddRange(missingFileNodes);
 
@@ -561,11 +561,11 @@ namespace WitcherScriptMerger.Forms
 
             if (!tree.IsEmpty())
             {
-                if (tree.GetTreeNodes().Any(node => !node.Checked) ||
-                    (tree == treConflicts && tree.Get2ndLevelNodes().Any(node => !node.Checked)))
+                if (tree.GetTreeNodes().Any(fileNode => !fileNode.Checked && ModFile.IsMergeable(fileNode.Text)) ||
+                    (tree == treConflicts && tree.Get2ndLevelNodes().Any(modNode => !modNode.Checked && ModFile.IsMergeable(modNode.Parent.Text))))
                     contextSelectAll.Available = true;
-                if (tree.GetTreeNodes().Any(node => node.Checked) ||
-                    (tree == treConflicts && tree.Get2ndLevelNodes().Any(node => node.Checked)))
+                if (tree.GetTreeNodes().Any(fileNode => fileNode.Checked && ModFile.IsMergeable(fileNode.Text)) ||
+                    (tree == treConflicts && tree.Get2ndLevelNodes().Any(modNode => modNode.Checked && ModFile.IsMergeable(modNode.Parent.Text))))
                     contextDeselectAll.Available = true;
                 if (tree.GetTreeNodes().Any(node => !node.IsExpanded))  contextExpandAll.Available = true;
                 if (tree.GetTreeNodes().Any(node =>  node.IsExpanded))  contextCollapseAll.Available = true;
@@ -694,6 +694,8 @@ namespace WitcherScriptMerger.Forms
         {
             foreach (var fileNode in _clickedTree.GetTreeNodes())
             {
+                if (!ModFile.IsMergeable(fileNode.Text))
+                    continue;
                 fileNode.Checked = true;
                 if (_clickedTree == treConflicts)
                 {
@@ -711,6 +713,8 @@ namespace WitcherScriptMerger.Forms
         {
             foreach (var fileNode in _clickedTree.GetTreeNodes())
             {
+                if (!ModFile.IsMergeable(fileNode.Text))
+                    continue;
                 fileNode.Checked = false;
                 if (_clickedTree == treConflicts)
                 {
