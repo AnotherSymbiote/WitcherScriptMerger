@@ -33,6 +33,22 @@ namespace WitcherScriptMerger
                     MessageBoxIcon.Error);
                 return;
             }
+            if (!File.Exists(Paths.BmsPlugin))
+            {
+                MessageBox.Show("Launch failed. Can't find QuickBMS plugin at the following path:\n\n" + Paths.BmsPlugin,
+                    "Script Merger Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+            if (!File.Exists(Paths.WccLite))
+            {
+                MessageBox.Show("Launch failed. Can't find wcc_lite at the following path:\n\n" + Paths.WccLite,
+                    "Script Merger Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
