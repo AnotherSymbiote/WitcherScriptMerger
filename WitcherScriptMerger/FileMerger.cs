@@ -313,10 +313,13 @@ namespace WitcherScriptMerger
                     break;
             }
 
-            ReportProgress("Unpacking vanilla bundle content file");
-            string vanillaContentFile = UnpackFile(_vanillaFile.FullName, contentRelativePath, "Vanilla");
-            if (vanillaContentFile == null)
-                return false;
+            if (_vanillaFile != null)
+            {
+                ReportProgress("Unpacking vanilla bundle content file");
+                string vanillaContentFile = UnpackFile(_vanillaFile.FullName, contentRelativePath, "Vanilla");
+                _vanillaFile = new FileInfo(vanillaContentFile);
+            }
+
             ReportProgress("Unpacking bundle content file for " + _modName1);
             string modContentFile1 = UnpackFile(_file1.FullName, contentRelativePath, "Mod 1");
             if (modContentFile1 == null)
@@ -325,7 +328,6 @@ namespace WitcherScriptMerger
             string modContentFile2 = UnpackFile(_file2.FullName, contentRelativePath, "Mod 2");
             if (modContentFile2 == null)
                 return false;
-            _vanillaFile = new FileInfo(vanillaContentFile);
             _file1 = new FileInfo(modContentFile1);
             _file2 = new FileInfo(modContentFile2);
             return true;
