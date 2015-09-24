@@ -10,48 +10,31 @@ namespace WitcherScriptMerger
         public static AppSettings Settings = new AppSettings();
         public static MainForm MainForm;
         
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            if (!File.Exists(Paths.Kdiff3))
-            {
-                MessageBox.Show("Launch failed. Can't find KDiff3 at the following path:\n\n" + Paths.Kdiff3,
-                    "Script Merger Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                return;
-            }
-            if (!File.Exists(Paths.Bms))
-            {
-                MessageBox.Show("Launch failed. Can't find QuickBMS at the following path:\n\n" + Paths.Bms,
-                    "Script Merger Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                return;
-            }
-            if (!File.Exists(Paths.BmsPlugin))
-            {
-                MessageBox.Show("Launch failed. Can't find QuickBMS plugin at the following path:\n\n" + Paths.BmsPlugin,
-                    "Script Merger Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                return;
-            }
-            if (!File.Exists(Paths.WccLite))
-            {
-                MessageBox.Show("Launch failed. Can't find wcc_lite at the following path:\n\n" + Paths.WccLite,
-                    "Script Merger Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                return;
-            }
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            if (!Paths.ValidateDependencyPaths())
+            {
+                using (var dependencyForm = new DependencyForm())
+                {
+                    if (dependencyForm.ShowDialog() != DialogResult.OK)
+                    {
+                        MessageBox.Show(
+                            "Launch failed. A dependency is missing.",
+                            "Script Merger Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+            }
+
             MainForm = new MainForm();
             Application.Run(MainForm);
         }

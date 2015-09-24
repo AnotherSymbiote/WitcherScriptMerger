@@ -77,6 +77,7 @@
             this.menuShowStatusBar = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.menuDependencies = new System.Windows.Forms.ToolStripMenuItem();
             this.treeContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -460,6 +461,7 @@
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuCheckingForConflicts,
             this.menuMerging,
+            this.menuDependencies,
             this.menuShowStatusBar});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
@@ -472,7 +474,7 @@
             this.menuCheckBundleContents,
             this.menuShowUnsolvable});
             this.menuCheckingForConflicts.Name = "menuCheckingForConflicts";
-            this.menuCheckingForConflicts.Size = new System.Drawing.Size(201, 22);
+            this.menuCheckingForConflicts.Size = new System.Drawing.Size(203, 22);
             this.menuCheckingForConflicts.Text = "&Checking for Conflicts...";
             // 
             // menuCheckScripts
@@ -504,7 +506,7 @@
             this.menuMergeReport,
             this.menuPackReport});
             this.menuMerging.Name = "menuMerging";
-            this.menuMerging.Size = new System.Drawing.Size(201, 22);
+            this.menuMerging.Size = new System.Drawing.Size(203, 22);
             this.menuMerging.Text = "&Merging...";
             // 
             // menuReviewEach
@@ -538,7 +540,7 @@
             // 
             this.menuShowStatusBar.CheckOnClick = true;
             this.menuShowStatusBar.Name = "menuShowStatusBar";
-            this.menuShowStatusBar.Size = new System.Drawing.Size(201, 22);
+            this.menuShowStatusBar.Size = new System.Drawing.Size(203, 22);
             this.menuShowStatusBar.Text = "&Show Status Bar";
             this.menuShowStatusBar.Click += new System.EventHandler(this.menuShowStatusBar_Click);
             // 
@@ -559,6 +561,13 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(114, 14);
             this.lblStatus.Text = "0 conflicts   0 merges";
+            // 
+            // menuDependencies
+            // 
+            this.menuDependencies.Name = "menuDependencies";
+            this.menuDependencies.Size = new System.Drawing.Size(203, 22);
+            this.menuDependencies.Text = "&Dependency Locations...";
+            this.menuDependencies.Click += new System.EventHandler(this.menuDependencies_Click);
             // 
             // MainForm
             // 
@@ -648,6 +657,7 @@
         private System.Windows.Forms.ToolStripMenuItem contextCopyPath;
         private System.Windows.Forms.ToolStripMenuItem menuCheckingForConflicts;
         private System.Windows.Forms.ToolStripMenuItem menuMerging;
+        private System.Windows.Forms.ToolStripMenuItem menuDependencies;
     }
 }
 

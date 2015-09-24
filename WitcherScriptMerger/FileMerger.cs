@@ -211,9 +211,9 @@ namespace WitcherScriptMerger
             if (!Program.MainForm.ReviewEachMergeSetting && hasVanillaVersion)
                 args += " --auto";
 
-            string kdiff3Path = (Path.IsPathRooted(Paths.Kdiff3)
-                ? Paths.Kdiff3
-                : Path.Combine(Environment.CurrentDirectory, Paths.Kdiff3));
+            string kdiff3Path = (Path.IsPathRooted(Paths.KDiff3)
+                ? Paths.KDiff3
+                : Path.Combine(Environment.CurrentDirectory, Paths.KDiff3));
 
             var kdiff3Proc = Process.Start(kdiff3Path, args);
             kdiff3Proc.WaitForExit();

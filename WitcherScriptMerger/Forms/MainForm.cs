@@ -946,5 +946,13 @@ namespace WitcherScriptMerger.Forms
         }
 
         #endregion
+
+        private void menuDependencies_Click(object sender, EventArgs e)
+        {
+            using (var dependencyForm = new DependencyForm())
+            {
+                ShowModal(dependencyForm);
+            }
+        }
     }
 }
