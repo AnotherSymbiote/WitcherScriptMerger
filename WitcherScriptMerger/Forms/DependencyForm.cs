@@ -33,6 +33,7 @@ namespace WitcherScriptMerger.Forms
                 txtBmsPluginPath.Text = Paths.BmsPlugin;
             if (File.Exists(Paths.WccLite))
                 txtWccLitePath.Text = Paths.WccLite;
+            btnOK.Select();
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -49,15 +50,18 @@ namespace WitcherScriptMerger.Forms
                     "Missing Dependency",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning))
+            {
+                DialogResult = DialogResult.None;
                 return;
+            }
 
             if (AreAnyPathsChanged)
             {
                 Program.Settings.StartBatch();
-                Paths.KDiff3    = UpdatePathSetting(Paths.KDiff3,    txtKDiff3Path.Text,    "Kdiff3Path");
-                Paths.Bms       = UpdatePathSetting(Paths.Bms,       txtBmsPath.Text,       "QuickBmsPath");
+                Paths.KDiff3 = UpdatePathSetting(Paths.KDiff3, txtKDiff3Path.Text, "Kdiff3Path");
+                Paths.Bms = UpdatePathSetting(Paths.Bms, txtBmsPath.Text, "QuickBmsPath");
                 Paths.BmsPlugin = UpdatePathSetting(Paths.BmsPlugin, txtBmsPluginPath.Text, "QuickBmsPluginPath");
-                Paths.WccLite   = UpdatePathSetting(Paths.WccLite,   txtWccLitePath.Text,   "WccLitePath");
+                Paths.WccLite = UpdatePathSetting(Paths.WccLite, txtWccLitePath.Text, "WccLitePath");
                 Program.Settings.EndBatch();
             }
 

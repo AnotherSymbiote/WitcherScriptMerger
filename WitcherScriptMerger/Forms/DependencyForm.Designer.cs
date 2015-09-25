@@ -157,7 +157,7 @@
             this.grpBms.Location = new System.Drawing.Point(9, 156);
             this.grpBms.Name = "grpBms";
             this.grpBms.Size = new System.Drawing.Size(445, 80);
-            this.grpBms.TabIndex = 3;
+            this.grpBms.TabIndex = 4;
             this.grpBms.TabStop = false;
             this.grpBms.Text = "QuickBMS.exe";
             // 
@@ -212,7 +212,7 @@
             this.lnkBmsPlugin.Location = new System.Drawing.Point(292, 252);
             this.lnkBmsPlugin.Name = "lnkBmsPlugin";
             this.lnkBmsPlugin.Size = new System.Drawing.Size(159, 17);
-            this.lnkBmsPlugin.TabIndex = 4;
+            this.lnkBmsPlugin.TabIndex = 5;
             this.lnkBmsPlugin.TabStop = true;
             this.lnkBmsPlugin.Text = "Download from QuickBMS Site";
             this.lnkBmsPlugin.UseCompatibleTextRendering = true;
@@ -230,7 +230,7 @@
             this.grpBmsPlugin.Location = new System.Drawing.Point(12, 252);
             this.grpBmsPlugin.Name = "grpBmsPlugin";
             this.grpBmsPlugin.Size = new System.Drawing.Size(445, 80);
-            this.grpBmsPlugin.TabIndex = 5;
+            this.grpBmsPlugin.TabIndex = 6;
             this.grpBmsPlugin.TabStop = false;
             this.grpBmsPlugin.Text = "witcher3.bms Plugin";
             // 
@@ -284,7 +284,7 @@
             this.lnkWccLite.Location = new System.Drawing.Point(305, 348);
             this.lnkWccLite.Name = "lnkWccLite";
             this.lnkWccLite.Size = new System.Drawing.Size(146, 17);
-            this.lnkWccLite.TabIndex = 6;
+            this.lnkWccLite.TabIndex = 7;
             this.lnkWccLite.TabStop = true;
             this.lnkWccLite.Text = "Download from Nexus Mods";
             this.lnkWccLite.UseCompatibleTextRendering = true;
@@ -302,7 +302,7 @@
             this.grpWccLite.Location = new System.Drawing.Point(12, 348);
             this.grpWccLite.Name = "grpWccLite";
             this.grpWccLite.Size = new System.Drawing.Size(445, 80);
-            this.grpWccLite.TabIndex = 7;
+            this.grpWccLite.TabIndex = 8;
             this.grpWccLite.TabStop = false;
             this.grpWccLite.Text = "wcc_lite.exe";
             // 
@@ -367,7 +367,7 @@
             this.btnCancel.Location = new System.Drawing.Point(357, 442);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(100, 23);
-            this.btnCancel.TabIndex = 8;
+            this.btnCancel.TabIndex = 10;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -391,8 +391,9 @@
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnCancel;
+            this.CancelButton = this.btnOK;
             this.ClientSize = new System.Drawing.Size(469, 477);
+            this.ControlBox = false;
             this.Controls.Add(this.lnkBms);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
