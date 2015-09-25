@@ -559,8 +559,8 @@
             // 
             this.lblStatus.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(114, 14);
-            this.lblStatus.Text = "0 conflicts   0 merges";
+            this.lblStatus.Size = new System.Drawing.Size(220, 14);
+            this.lblStatus.Text = "0 solvable,  0 unsolvable              0 merges";
             // 
             // menuDependencies
             // 
