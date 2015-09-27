@@ -58,6 +58,15 @@ namespace WitcherScriptMerger.Inventory
                 BundleChanged = true;
         }
 
+        public void AddModToMerge(string modName, Merge m)
+        {
+            m.ModNames.Add(modName);
+            if (m.Type == ModFileType.Script)
+                ScriptsChanged = true;
+            else if (m.Type == ModFileType.BundleContent)
+                BundleChanged = true;
+        }
+
         public void Save()
         {
             if (_serializer == null)

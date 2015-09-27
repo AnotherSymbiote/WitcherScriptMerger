@@ -221,10 +221,10 @@ namespace WitcherScriptMerger
             if (kdiff3Proc.ExitCode == 0)
             {
                 if (!_file1.FullName.EqualsIgnoreCase(_outputPath))
-                    mergedFile.ModNames.Add(_modName1);
+                    _inventory.AddModToMerge(_modName1, mergedFile);
 
                 if (!_file2.FullName.EqualsIgnoreCase(_outputPath))
-                    mergedFile.ModNames.Add(_modName2);
+                    _inventory.AddModToMerge(_modName2, mergedFile);
 
                 if (Program.MainForm.MergeReportSetting)
                 {

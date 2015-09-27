@@ -27,7 +27,7 @@ namespace WitcherScriptMerger.FileIndex
         {
             get
             {
-                return (ModFile.IsScript(RelativePath)
+                return (IsScript(RelativePath)
                     ? ModFileType.Script
                     : ModFileType.BundleContent);
             }
