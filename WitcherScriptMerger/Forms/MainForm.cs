@@ -69,7 +69,6 @@ namespace WitcherScriptMerger.Forms
             menuMergeReport.Checked = Program.Settings.Get<bool>("ReportAfterMerge");
             menuPackReport.Checked = Program.Settings.Get<bool>("ReportAfterPack");
             menuShowStatusBar.Checked = Program.Settings.Get<bool>("ShowStatusBar");
-
             LoadLastWindowConfiguration();
             Program.Settings.EndBatch();
         }
@@ -192,6 +191,7 @@ namespace WitcherScriptMerger.Forms
             treMerges.Nodes.Clear();
             bool changed = false;
             var bundleMergesPruned = new List<Merge>();
+            var missingModMerges = new List<Merge>();
             for (int i = _inventory.Merges.Count - 1; i >= 0; --i)
             {
                 var merge = _inventory.Merges[i];
@@ -205,6 +205,26 @@ namespace WitcherScriptMerger.Forms
                         bundleMergesPruned.Add(merge);
                     continue;
                 }
+                else
+                {
+                    bool missingModFile = false;
+                    foreach (string modName in merge.ModNames)
+                    {
+                        string modFilePath = merge.GetModFile(modName);
+                        if (!File.Exists(modFilePath) &&
+                            ConfirmDeleteChangedMerge(merge.RelativePath, modName, merge.Type))
+                        {
+                            missingModFile = true;
+                            break;
+                        }
+                    }
+                    if (missingModFile)
+                    {
+                        missingModMerges.Add(merge);
+                        continue;
+                    }
+                }
+
                 var fileNode = new TreeNode(merge.RelativePath);
                 fileNode.Tag = merge.GetMergedFile();
 
@@ -218,13 +238,16 @@ namespace WitcherScriptMerger.Forms
                     fileNode.Nodes.Add(modNode);
                 }
             }
+            if (missingModMerges.Any())
+            {
+                if (DeleteMerges(missingModMerges))
+                    return true;
+            }
             if (changed)
             {
                 _inventory.Save();
-                if (_inventory.BundleChanged)
-                {
+                if (bundleMergesPruned.Any())
                     return DeleteMerges(bundleMergesPruned);
-                }
             }
             treMerges.Sort();
             treMerges.ExpandAll();
@@ -240,11 +263,27 @@ namespace WitcherScriptMerger.Forms
 
         private bool ConfirmPruneMissingMergeFile(string filePath, ModFileType type)
         {
-            string msg = "Can't find the merged version of the following file.\n\n{0}\n\nRemove from Merged Files list?";
+            string msg = "Can't find the merged version of the following file.\n\n{0}\n\nRemove from Merged Files list";
             if (type == ModFileType.BundleContent)
-                msg = msg.Substring(0, msg.Length - 1) + " & repack merged bundle?";
+                msg += " & repack merged bundle";
+            msg += "?";
             return (DialogResult.Yes == ShowMessage(
                 string.Format(msg, filePath),
+                "Missing Merge Inventory File",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question));
+        }
+
+        private bool ConfirmDeleteChangedMerge(string filePath, string missingModName, ModFileType type)
+        {
+            string msg =
+                "Can't find the '{0}' version of the following file, " +
+                "perhaps because the mod was uninstalled or updated.\n\n{1}\n\nDelete the affected merge";
+            if (type == ModFileType.BundleContent)
+                msg += " & repack merged bundle";
+            msg += "?";
+            return (DialogResult.Yes == ShowMessage(
+                string.Format(msg, missingModName, filePath),
                 "Missing Merge Inventory File",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question));
