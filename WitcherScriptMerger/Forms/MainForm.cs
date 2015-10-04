@@ -300,27 +300,27 @@ namespace WitcherScriptMerger.Forms
                 var fileNodes = treConflicts.GetTreeNodes();
                 var fileNodesToUpdate = new List<TreeNode>();
 
-                var missingFileNodes = fileNodes.Where(node =>
-                    (ModFile.IsMergeable(node.Text) && !File.Exists(node.Tag as string)) ||
-                    node.GetTreeNodes().Any(modNode => !File.Exists(modNode.Tag as string)));
-                fileNodesToUpdate.AddRange(missingFileNodes);
-
                 if (_inventory.ScriptsChanged || !menuCheckScripts.Checked)
                 {
                     fileNodesToUpdate.AddRange(
-                        fileNodes.Where(node => ModFile.IsScript(node.Text) && !missingFileNodes.Contains(node)));
+                        fileNodes.Where(node => ModFile.IsScript(node.Text)));
                 }
                 if (_inventory.BundleChanged || !menuCheckBundleContents.Checked)
                 {
                     fileNodesToUpdate.AddRange(
-                        fileNodes.Where(node => !ModFile.IsScript(node.Text) && !missingFileNodes.Contains(node)));
+                        fileNodes.Where(node => !ModFile.IsScript(node.Text)));
                 }
                 if (!menuShowUnsolvable.Checked)
                 {
                     fileNodesToUpdate.AddRange(
-                        fileNodes.Where(node => !ModFile.IsMergeable(node.Text) && !missingFileNodes.Contains(node)));
+                        fileNodes.Where(node => !ModFile.IsMergeable(node.Text)));
                 }
-                
+
+                var missingFileNodes = fileNodes.Where(node =>
+                    !fileNodesToUpdate.Contains(node) &&
+                    node.GetTreeNodes().Any(modNode => !File.Exists(modNode.Tag as string)));
+                fileNodesToUpdate.AddRange(missingFileNodes);
+
                 foreach (var node in fileNodesToUpdate)
                     treConflicts.Nodes.Remove(node);
             }
@@ -837,7 +837,7 @@ namespace WitcherScriptMerger.Forms
 
         private void DeleteMerges(IEnumerable<TreeNode> fileNodes)
         {
-            var merges = fileNodes.Select(node => 
+            var merges = fileNodes.Select(node =>
                 _inventory.Merges.First(merge =>
                     merge.RelativePath.EqualsIgnoreCase(node.Text)))
                     .ToList();
