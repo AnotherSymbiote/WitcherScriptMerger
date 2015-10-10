@@ -74,10 +74,10 @@
             this.menuPathsInKDiff3 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMergeReport = new System.Windows.Forms.ToolStripMenuItem();
             this.menuPackReport = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuDependencies = new System.Windows.Forms.ToolStripMenuItem();
             this.menuShowStatusBar = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.menuDependencies = new System.Windows.Forms.ToolStripMenuItem();
             this.treeContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -412,7 +412,7 @@
             this.lblProgressOf.Name = "lblProgressOf";
             this.lblProgressOf.Size = new System.Drawing.Size(611, 20);
             this.lblProgressOf.TabIndex = 2;
-            this.lblProgressOf.Text = "Detecting Conflicts";
+            this.lblProgressOf.Text = "Initializing";
             this.lblProgressOf.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblProgressState
@@ -423,7 +423,7 @@
             this.lblProgressState.Name = "lblProgressState";
             this.lblProgressState.Size = new System.Drawing.Size(611, 129);
             this.lblProgressState.TabIndex = 1;
-            this.lblProgressState.Text = "Doing thing...";
+            this.lblProgressState.Text = "...";
             this.lblProgressState.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // progressBar
@@ -536,6 +536,13 @@
             this.menuPackReport.Size = new System.Drawing.Size(297, 22);
             this.menuPackReport.Text = "Show Report After &Packing Bundle";
             // 
+            // menuDependencies
+            // 
+            this.menuDependencies.Name = "menuDependencies";
+            this.menuDependencies.Size = new System.Drawing.Size(203, 22);
+            this.menuDependencies.Text = "&Dependency Locations...";
+            this.menuDependencies.Click += new System.EventHandler(this.menuDependencies_Click);
+            // 
             // menuShowStatusBar
             // 
             this.menuShowStatusBar.CheckOnClick = true;
@@ -561,13 +568,6 @@
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(220, 14);
             this.lblStatus.Text = "0 solvable,  0 unsolvable              0 merges";
-            // 
-            // menuDependencies
-            // 
-            this.menuDependencies.Name = "menuDependencies";
-            this.menuDependencies.Size = new System.Drawing.Size(203, 22);
-            this.menuDependencies.Text = "&Dependency Locations...";
-            this.menuDependencies.Click += new System.EventHandler(this.menuDependencies_Click);
             // 
             // MainForm
             // 

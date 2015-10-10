@@ -305,7 +305,7 @@ namespace WitcherScriptMerger.Forms
                     fileNodesToUpdate.AddRange(
                         fileNodes.Where(node => ModFile.IsScript(node.Text)));
                 }
-                if (_inventory.BundleChanged || !menuCheckBundleContents.Checked)
+                if (_inventory.BundleChanged || checkBundles || !menuCheckBundleContents.Checked)
                 {
                     fileNodesToUpdate.AddRange(
                         fileNodes.Where(node => !ModFile.IsScript(node.Text)));
