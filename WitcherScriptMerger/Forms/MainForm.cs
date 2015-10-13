@@ -325,11 +325,8 @@ namespace WitcherScriptMerger.Forms
                     treConflicts.Nodes.Remove(node);
             }
 
-            if (checkBundles)
-            {
-                PrepareProgressScreen("Detecting Conflicts", ProgressBarStyle.Continuous);
-                pnlProgress.Visible = true;
-            }
+            PrepareProgressScreen("Detecting Conflicts", ProgressBarStyle.Continuous);
+            pnlProgress.Visible = true;
 
             _modIndex = new ModFileIndex();
             _modIndex.BuildAsync(_inventory,
@@ -887,7 +884,9 @@ namespace WitcherScriptMerger.Forms
                     HandleDeletedBundleMerges(bundleMerges);
                     return true;
                 }
-                RefreshTrees(_inventory.BundleChanged);
+                // If mod index is null, we haven't refreshed it for the 1st time yet. Don't do it here.
+                if (_modIndex != null)
+                    RefreshTrees(_inventory.BundleChanged);
             }
             return false;
         }
