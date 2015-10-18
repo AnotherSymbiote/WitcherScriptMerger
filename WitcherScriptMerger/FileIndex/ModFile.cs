@@ -1,14 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using WitcherScriptMerger.FileIndex;
 
 namespace WitcherScriptMerger.FileIndex
 {
-    public enum ModFileType
-    {
-        Script, BundleContent
-    }
-
     public class ModFile
     {
         #region Members
@@ -23,14 +19,28 @@ namespace WitcherScriptMerger.FileIndex
         public string BundleName { get; set; }
 
         [XmlIgnore]
-        public ModFileType Type
+        public ModFileCategory Category
         {
             get
             {
-                return (IsScript(RelativePath)
-                    ? ModFileType.Script
-                    : ModFileType.BundleContent);
+                if (IsScript(RelativePath))
+                    return Categories.Script;
+                else if (BundleName != null)
+                {
+                    if (IsXml(RelativePath))
+                        return Categories.BundleXml;
+                    else
+                        return Categories.BundleUnsupported;
+                }
+                else
+                    return Categories.OtherUnsupported;
             }
+        }
+
+        [XmlIgnore]
+        public bool IsBundleContent
+        {
+            get { return BundleName != null; }
         }
 
         [XmlIgnore]
@@ -56,7 +66,7 @@ namespace WitcherScriptMerger.FileIndex
 
         public string GetVanillaFile()
         {
-            if (Type == ModFileType.Script)
+            if (Category == Categories.Script)
                 return Path.Combine(Paths.ScriptsDirectory, RelativePath);
             else
                 throw new System.Exception("Can only get vanilla file for scripts.");
@@ -64,7 +74,7 @@ namespace WitcherScriptMerger.FileIndex
 
         public string GetModFile(string modName)
         {
-            if (Type == ModFileType.Script)
+            if (Category == Categories.Script)
                 return Path.Combine(Paths.ModsDirectory, modName, Paths.ModScriptBase, RelativePath);
             else
                 return Path.Combine(Paths.ModsDirectory, modName, Paths.BundleBase, BundleName);

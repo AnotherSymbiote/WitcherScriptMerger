@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -41,9 +42,10 @@ namespace WitcherScriptMerger
             return menu.Items.Cast<ToolStripItem>().Where(item => item.Available);
         }
 
-        public static IEnumerable<TreeNode> GetTreeNodes(this TreeView treeView)
+        public static void SetFontBold(this TreeNode node)
         {
-            return treeView.Nodes.Cast<TreeNode>();
+            var currFont = node.NodeFont ?? Control.DefaultFont;
+            node.NodeFont = new Font(currFont, FontStyle.Bold);
         }
 
         public static IEnumerable<TreeNode> GetTreeNodes(this TreeNode node)
@@ -51,19 +53,9 @@ namespace WitcherScriptMerger
             return node.Nodes.Cast<TreeNode>();
         }
 
-        public static IEnumerable<TreeNode> Get2ndLevelNodes(this TreeView treeView)
-        {
-            return treeView.GetTreeNodes().SelectMany(node => node.GetTreeNodes());
-        }
-
         public static bool IsEmpty(this TreeView tree)
         {
             return (tree.Nodes.Count == 0);
-        }
-
-        public static bool IsLeaf(this TreeNode node)
-        {
-            return (node.Nodes.Count == 0);
         }
 
         #region Scrolling TreeView to Top

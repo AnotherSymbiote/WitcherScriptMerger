@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using WitcherScriptMerger.Inventory;
 
 namespace WitcherScriptMerger.FileIndex

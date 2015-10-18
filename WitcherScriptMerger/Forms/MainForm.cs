@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using WitcherScriptMerger.Controls;
 using WitcherScriptMerger.FileIndex;
 using WitcherScriptMerger.Inventory;
 
@@ -44,8 +45,6 @@ namespace WitcherScriptMerger.Forms
 
         private MergeInventory _inventory = null;
         private ModFileIndex _modIndex = null;
-        private TreeView _clickedTree = null;
-        private TreeNode _clickedNode = null;
 
         #endregion
 
@@ -63,7 +62,7 @@ namespace WitcherScriptMerger.Forms
             txtGameDir.Text = Program.Settings.Get("GameDirectory");
             menuCheckScripts.Checked = Program.Settings.Get<bool>("CheckScripts");
             menuCheckBundleContents.Checked = Program.Settings.Get<bool>("CheckBundleContents");
-            menuShowUnsolvable.Checked = Program.Settings.Get<bool>("ShowUnsolvableConflicts");
+            menuCollapseUnsupported.Checked = Program.Settings.Get<bool>("CollapseUnsupported");
             menuReviewEach.Checked = Program.Settings.Get<bool>("ReviewEachMerge");
             menuPathsInKDiff3.Checked = Program.Settings.Get<bool>("ShowPathsInKDiff3");
             menuMergeReport.Checked = Program.Settings.Get<bool>("ReportAfterMerge");
@@ -94,7 +93,7 @@ namespace WitcherScriptMerger.Forms
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
             Program.Settings.Set("CheckScripts", menuCheckScripts.Checked);
             Program.Settings.Set("CheckBundleContents", menuCheckBundleContents.Checked);
-            Program.Settings.Set("ShowUnsolvableConflicts", menuShowUnsolvable.Checked);
+            Program.Settings.Set("CollapseUnsupported", menuCollapseUnsupported.Checked);
             Program.Settings.Set("ReviewEachMerge", menuReviewEach.Checked);
             Program.Settings.Set("ShowPathsInKDiff3", menuPathsInKDiff3.Checked);
             Program.Settings.Set("ReportAfterMerge", menuMergeReport.Checked);
@@ -164,16 +163,33 @@ namespace WitcherScriptMerger.Forms
 
         private void UpdateStatusText()
         {
-            int solvableCount = treConflicts.GetTreeNodes().Count(node => ModFile.IsMergeable(node.Text));
-            string conflictText = (menuShowUnsolvable.Checked
-                ? string.Format("{0} solvable,  {1} unsolvable", solvableCount, (treConflicts.Nodes.Count - solvableCount))
-                : string.Format("{0} conflicts", solvableCount));
+            int solvableCount = treConflicts.FileNodes.Count(node => ModFile.IsMergeable(node.Text));
+            string conflictText = string.Format("{0} mergeable,  {1} unsupported",
+                solvableCount, (treConflicts.FileNodes.Count - solvableCount));
 
             lblStatus.Text = string.Format(
                 "{0}              {1} merge{2}",
                 conflictText,
                 treMerges.Nodes.Count,
                 (treMerges.Nodes.Count == 1 ? "" : "s"));
+        }
+
+        public void EnableMergeIfValidSelection()
+        {
+            int validFileNodeCount = treConflicts.FileNodes.Count(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
+            btnMergeFiles.Enabled = (validFileNodeCount > 0);
+            btnMergeFiles.Text = (validFileNodeCount > 1
+                ? "&Merge " + validFileNodeCount + " Selected Files"
+                : "&Merge Selected File");
+        }
+
+        public void EnableUnmergeIfValidSelection()
+        {
+            int selectedNodes = treMerges.FileNodes.Count(node => node.Checked);
+            btnDeleteMerges.Enabled = (selectedNodes > 0);
+            btnDeleteMerges.Text = (selectedNodes > 1
+                ? "&Delete " + selectedNodes + " Selected Merges"
+                : "&Delete Selected Merge");
         }
 
         #endregion
@@ -196,12 +212,12 @@ namespace WitcherScriptMerger.Forms
             {
                 var merge = _inventory.Merges[i];
                 if (!File.Exists(merge.GetMergedFile()) &&
-                    ConfirmPruneMissingMergeFile(merge.RelativePath, merge.Type))
+                    ConfirmPruneMissingMergeFile(merge))
                 {
                     _inventory.Merges.RemoveAt(i);
                     changed = true;
 
-                    if (merge.Type == ModFileType.BundleContent)
+                    if (merge.IsBundleContent)
                         bundleMergesPruned.Add(merge);
                     continue;
                 }
@@ -212,7 +228,7 @@ namespace WitcherScriptMerger.Forms
                     {
                         string modFilePath = merge.GetModFile(modName);
                         if (!File.Exists(modFilePath) &&
-                            ConfirmDeleteChangedMerge(merge.RelativePath, modName, merge.Type))
+                            ConfirmDeleteChangedMerge(merge, modName))
                         {
                             missingModFile = true;
                             break;
@@ -228,7 +244,7 @@ namespace WitcherScriptMerger.Forms
                 var fileNode = new TreeNode(merge.RelativePath);
                 fileNode.Tag = merge.GetMergedFile();
 
-                fileNode.ForeColor = Color.Blue;
+                fileNode.ForeColor = treMerges.FileNodeColor;
                 treMerges.Nodes.Add(fileNode);
 
                 foreach (var modName in merge.ModNames)
@@ -252,8 +268,7 @@ namespace WitcherScriptMerger.Forms
             treMerges.Sort();
             treMerges.ExpandAll();
             treMerges.ScrollToTop();
-            var modNodes = treMerges.GetTreeNodes().SelectMany(node => node.GetTreeNodes()).ToList();
-            foreach (var modNode in modNodes)
+            foreach (var modNode in treMerges.ModNodes)
                 modNode.HideCheckBox();
 
             UpdateStatusText();
@@ -261,29 +276,29 @@ namespace WitcherScriptMerger.Forms
             return false;
         }
 
-        private bool ConfirmPruneMissingMergeFile(string filePath, ModFileType type)
+        private bool ConfirmPruneMissingMergeFile(Merge merge)
         {
             string msg = "Can't find the merged version of the following file.\n\n{0}\n\nRemove from Merged Files list";
-            if (type == ModFileType.BundleContent)
+            if (merge.IsBundleContent)
                 msg += " & repack merged bundle";
             msg += "?";
             return (DialogResult.Yes == ShowMessage(
-                string.Format(msg, filePath),
+                string.Format(msg, merge.RelativePath),
                 "Missing Merge Inventory File",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question));
         }
 
-        private bool ConfirmDeleteChangedMerge(string filePath, string missingModName, ModFileType type)
+        private bool ConfirmDeleteChangedMerge(Merge merge, string missingModName)
         {
             string msg =
                 "Can't find the '{0}' version of the following file, " +
                 "perhaps because the mod was uninstalled or updated.\n\n{1}\n\nDelete the affected merge";
-            if (type == ModFileType.BundleContent)
+            if (merge.IsBundleContent)
                 msg += " & repack merged bundle";
             msg += "?";
             return (DialogResult.Yes == ShowMessage(
-                string.Format(msg, missingModName, filePath),
+                string.Format(msg, missingModName, merge.RelativePath),
                 "Missing Merge Inventory File",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question));
@@ -297,31 +312,29 @@ namespace WitcherScriptMerger.Forms
                 treConflicts.Nodes.Clear();
             else
             {
-                var fileNodes = treConflicts.GetTreeNodes();
-                var fileNodesToUpdate = new List<TreeNode>();
+                var nodesToUpdate = new List<TreeNode>();
 
                 if (_inventory.ScriptsChanged || !menuCheckScripts.Checked)
                 {
-                    fileNodesToUpdate.AddRange(
-                        fileNodes.Where(node => ModFile.IsScript(node.Text)));
+                    var scriptCatNode = treConflicts.GetCategoryNode(Categories.Script);
+                    if (scriptCatNode != null)
+                        nodesToUpdate.Add(scriptCatNode);
                 }
                 if (_inventory.BundleChanged || checkBundles || !menuCheckBundleContents.Checked)
                 {
-                    fileNodesToUpdate.AddRange(
-                        fileNodes.Where(node => !ModFile.IsScript(node.Text)));
-                }
-                if (!menuShowUnsolvable.Checked)
-                {
-                    fileNodesToUpdate.AddRange(
-                        fileNodes.Where(node => !ModFile.IsMergeable(node.Text)));
+                    var xmlCatNode = treConflicts.GetCategoryNode(Categories.BundleXml);
+                    if (xmlCatNode != null)
+                        nodesToUpdate.Add(xmlCatNode);
+                    var unsupportedCatNode = treConflicts.GetCategoryNode(Categories.BundleUnsupported);
+                    if (unsupportedCatNode != null)
+                        nodesToUpdate.Add(unsupportedCatNode);
                 }
 
-                var missingFileNodes = fileNodes.Where(node =>
-                    !fileNodesToUpdate.Contains(node) &&
+                var missingFileNodes = treConflicts.FileNodes.Where(node =>
                     node.GetTreeNodes().Any(modNode => !File.Exists(modNode.Tag as string)));
-                fileNodesToUpdate.AddRange(missingFileNodes);
+                nodesToUpdate.AddRange(missingFileNodes);
 
-                foreach (var node in fileNodesToUpdate)
+                foreach (var node in nodesToUpdate)
                     treConflicts.Nodes.Remove(node);
             }
 
@@ -348,20 +361,26 @@ namespace WitcherScriptMerger.Forms
             {
                 foreach (var conflict in _modIndex.Conflicts)
                 {
-                    if (!ModFile.IsMergeable(conflict.RelativePath) && !menuShowUnsolvable.Checked)
-                        continue;
-
-                    var fileNode = treConflicts.GetTreeNodes().FirstOrDefault(node =>
+                    var fileNode = treConflicts.FileNodes.FirstOrDefault(node =>
                         node.Text.EqualsIgnoreCase(conflict.RelativePath));
 
                     if (fileNode == null)
                     {
                         fileNode = new TreeNode(conflict.RelativePath);
-                        fileNode.Tag = (conflict.Type == ModFileType.BundleContent
-                            ? conflict.RelativePath
-                            : conflict.GetVanillaFile());
-                        fileNode.ForeColor = Color.Red;
-                        treConflicts.Nodes.Add(fileNode);
+                        fileNode.Tag = (conflict.Category == Categories.Script
+                            ? conflict.GetVanillaFile()
+                            : conflict.RelativePath);
+                        fileNode.ForeColor = treConflicts.FileNodeColor;
+
+                        var categoryNode = treConflicts.GetCategoryNode(conflict.Category);
+                        if (categoryNode == null)
+                        {
+                            categoryNode = new TreeNode(conflict.Category.DisplayName);
+                            categoryNode.ToolTipText = conflict.Category.ToolTipText;
+                            categoryNode.Tag = conflict.Category;
+                            treConflicts.Nodes.Add(categoryNode);
+                        }
+                        categoryNode.Nodes.Add(fileNode);
                     }
                     foreach (string modName in conflict.ModNames)
                     {
@@ -375,17 +394,27 @@ namespace WitcherScriptMerger.Forms
                 treConflicts.Sort();
                 treConflicts.ExpandAll();
                 treConflicts.Select();
-                foreach (var fileNode in treConflicts.GetTreeNodes())
+                foreach (var catNode in treConflicts.CategoryNodes)
                 {
-                    if (!ModFile.IsMergeable(fileNode.Text))
+                    if (!(catNode.Tag as ModFileCategory).IsSupported)
                     {
-                        fileNode.HideCheckBox();
-                        foreach (var modNode in fileNode.GetTreeNodes())
-                            modNode.HideCheckBox();
+                        catNode.HideCheckBox();
+                        foreach (var fileNode in catNode.GetTreeNodes())
+                        {
+                            fileNode.HideCheckBox();
+                            foreach (var modNode in fileNode.GetTreeNodes())
+                                modNode.HideCheckBox();
+                        }
+                        if (menuCollapseUnsupported.Checked)
+                            catNode.Collapse();
                     }
                 }
             }
             treConflicts.ScrollToTop();
+            treConflicts.BeginUpdate();
+            foreach (var catNode in treConflicts.CategoryNodes)
+                catNode.SetFontBold();
+            treConflicts.EndUpdate();
             UpdateStatusText();
             HideProgressScreen();
             EnableMergeIfValidSelection();
@@ -430,8 +459,8 @@ namespace WitcherScriptMerger.Forms
         private void btnMergeFiles_Click(object sender, EventArgs e)
         {
             if (!Paths.ValidateModsDirectory() ||
-                (treConflicts.GetTreeNodes().Any(node => ModFile.IsScript(node.Text)) && !Paths.ValidateScriptsDirectory()) ||
-                (treConflicts.GetTreeNodes().Any(node => ModFile.IsBundle(node.Text)) && !Paths.ValidateBundlesDirectory()))
+                (treConflicts.FileNodes.Any(node => ModFile.IsScript(node.Text)) && !Paths.ValidateScriptsDirectory()) ||
+                (treConflicts.FileNodes.Any(node => ModFile.IsBundle(node.Text)) && !Paths.ValidateBundlesDirectory()))
                 return;
 
             string mergedModName = Paths.RetrieveMergedModName();
@@ -442,7 +471,7 @@ namespace WitcherScriptMerger.Forms
 
             var merger = new FileMerger(_inventory, OnMergeProgressChanged, OnMergeComplete);
 
-            var fileNodes = treConflicts.GetTreeNodes().Where(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
+            var fileNodes = treConflicts.FileNodes.Where(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
 
             PrepareProgressScreen("Merging", ProgressBarStyle.Marquee);
             pnlProgress.Visible = true;
@@ -473,7 +502,7 @@ namespace WitcherScriptMerger.Forms
 
         private void btnDeleteMerges_Click(object sender, EventArgs e)
         {
-            var fileNodes = treMerges.GetTreeNodes().Where(node => node.Checked);
+            var fileNodes = treMerges.FileNodes.Where(node => node.Checked);
             DeleteMerges(fileNodes);
         }
 
@@ -492,305 +521,7 @@ namespace WitcherScriptMerger.Forms
         }
 
         #endregion
-
-        #region TreeView
-
-        private void tree_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            (sender as TreeView).SelectedNode = null;
-        }
-
-        private void tree_MouseDown(object sender, MouseEventArgs e)
-        {
-            var tree = sender as TreeView;
-            tree.EndUpdate();
-            tree.BeginUpdate();
-            _clickedNode = tree.GetNodeAt(e.Location);
-            if (_clickedNode != null && !_clickedNode.Bounds.Contains(e.Location))
-                _clickedNode = null;
-        }
-
-        private void tree_MouseUp(object sender, MouseEventArgs e)
-        {
-            var tree = sender as TreeView;
-            _clickedNode = tree.GetNodeAt(e.Location);
-            if (_clickedNode != null && !_clickedNode.Bounds.Contains(e.Location))
-                _clickedNode = null;
-
-            if (e.Button == MouseButtons.Left)
-            {
-                if (_clickedNode != null)
-                {
-                    if (tree == treMerges)
-                    {
-                         if (_clickedNode.IsLeaf())
-                            _clickedNode = _clickedNode.Parent;
-                    }
-                    else
-                    {
-                        string path = (_clickedNode.IsLeaf() ? _clickedNode.Parent.Tag : _clickedNode.Tag) as string;
-                        if (!ModFile.IsMergeable(path))
-                        {
-                            tree.EndUpdate();
-                            return;
-                        }
-                    }
-                    
-                    _clickedNode.Checked = !_clickedNode.Checked;
-                    HandleCheckedChange(sender);
-                }
-            }
-            else if (e.Button == MouseButtons.Right)
-            {
-                SetContextMenuItems(tree);
-
-                if (_clickedNode != null)
-                    _clickedNode.BackColor = Color.Gainsboro;
-
-                if (treeContextMenu.Items.OfType<ToolStripMenuItem>().Any(item => item.Available))
-                {
-                    _clickedTree = tree;
-                    treeContextMenu.Show(tree, e.X, e.Y);
-                }
-            }
-            tree.EndUpdate();
-        }
-
-        private void SetContextMenuItems(TreeView tree)
-        {
-            foreach (var menuItem in treeContextMenu.Items.OfType<ToolStripItem>())
-                menuItem.Available = false;
-            
-            if (_clickedNode != null)
-            {
-                contextCopyPath.Available = true;
-                if (_clickedNode.Tag != null)
-                {
-                    string filePath = _clickedNode.Tag as string;
-                    if (ModFile.IsScript(filePath))
-                    {
-                        if (_clickedNode.IsLeaf())
-                            contextOpenModScript.Available = contextOpenModScriptDir.Available = true;
-                        else if (tree == treConflicts)
-                            contextOpenVanillaScript.Available = contextOpenVanillaScriptDir.Available = true;
-                        else
-                            contextOpenMergedFile.Available = contextOpenMergedFileDir.Available = true;
-                    }
-                    else
-                    {
-                        if (_clickedNode.IsLeaf())
-                            contextOpenModBundleDir.Available = true;
-                        else if (tree == treMerges)
-                            contextOpenMergedFile.Available = contextOpenMergedFileDir.Available = true;
-                    }
-                }
-
-                if (tree == treMerges)
-                {
-                    contextDeleteMerge.Available = contextDeleteSeparator.Available = true;
-                    if (_clickedNode.IsLeaf())
-                    {
-                        contextDeleteAssociatedMerges.Available = true;
-                        contextDeleteAssociatedMerges.Text = string.Format("Delete All {0} Merges", _clickedNode.Text);
-                    }
-                }
-            }
-
-            // If can copy path, need separator above Select/Deselect All
-            if (contextCopyPath.Available)
-                contextOpenSeparator.Visible = true;
-
-            if (!tree.IsEmpty())
-            {
-                if (tree.GetTreeNodes().Any(fileNode => !fileNode.Checked && ModFile.IsMergeable(fileNode.Text)) ||
-                    (tree == treConflicts && tree.Get2ndLevelNodes().Any(modNode => !modNode.Checked && ModFile.IsMergeable(modNode.Parent.Text))))
-                    contextSelectAll.Available = true;
-                if (tree.GetTreeNodes().Any(fileNode => fileNode.Checked && ModFile.IsMergeable(fileNode.Text)) ||
-                    (tree == treConflicts && tree.Get2ndLevelNodes().Any(modNode => modNode.Checked && ModFile.IsMergeable(modNode.Parent.Text))))
-                    contextDeselectAll.Available = true;
-                if (tree.GetTreeNodes().Any(node => !node.IsExpanded))  contextExpandAll.Available = true;
-                if (tree.GetTreeNodes().Any(node =>  node.IsExpanded))  contextCollapseAll.Available = true;
-            }
-
-            if (treeContextMenu.Items.OfType<ToolStripItem>().Any(item => item.Available))
-            {
-                int width = treeContextMenu.Items.OfType<ToolStripMenuItem>().Where(item => item.Available)
-                    .Max(item => TextRenderer.MeasureText(item.Text, item.Font).Width);
-                int height = treeContextMenu.GetAvailableItems()
-                    .Sum(item => item.Height);
-                treeContextMenu.Width = width + 45;
-                treeContextMenu.Height = height + 5;
-            }
-        }
         
-        private void tree_AfterCheck(object sender, TreeViewEventArgs e)
-        {
-            if (e.Action == TreeViewAction.Unknown)  // Event was triggered programmatically
-                return;
-
-            _clickedNode = e.Node;
-            HandleCheckedChange(sender);
-        }
-
-        private void HandleCheckedChange(object sender)
-        {
-            TreeView tree = sender as TreeView;
-            TreeNode fileNode;
-            if (!_clickedNode.IsLeaf())  // File node
-            {
-                fileNode = _clickedNode;
-                if (tree == treConflicts)
-                {
-                    foreach (var modNode in _clickedNode.GetTreeNodes())
-                        modNode.Checked = _clickedNode.Checked;
-                }
-            }
-            else  // Mod node
-            {
-                fileNode = _clickedNode.Parent;
-                fileNode.Checked = fileNode.GetTreeNodes().All(node => node.Checked);
-            }
-            if (sender as TreeView == treConflicts)
-                EnableMergeIfValidSelection();
-            else
-                EnableUnmergeIfValidSelection();
-        }
-
-        private void EnableMergeIfValidSelection()
-        {
-            int validFileNodes = treConflicts.GetTreeNodes().Count(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
-            btnMergeFiles.Enabled = (validFileNodes > 0);
-            btnMergeFiles.Text = (validFileNodes > 1
-                ? "&Merge " + validFileNodes + " Selected Files"
-                : "&Merge Selected File");
-        }
-
-        private void EnableUnmergeIfValidSelection()
-        {
-            int selectedNodes = treMerges.GetTreeNodes().Count(node => node.Checked);
-            btnDeleteMerges.Enabled = (selectedNodes > 0);
-            btnDeleteMerges.Text = (selectedNodes > 1
-                ? "&Delete " + selectedNodes + " Selected Merges"
-                : "&Delete Selected Merge");
-        }
-
-        #endregion
-
-        #region TreeView Context Menu
-
-        private void contextOpenScript_Click(object sender, EventArgs e)
-        {
-            if (_clickedNode == null)
-                return;
-            string filePath = _clickedNode.Tag as string;
-            if (!File.Exists(filePath))
-                ShowMessage("Can't find file: " + filePath);
-            else
-                Process.Start(filePath);
-        }
-
-        private void contextOpenDirectory_Click(object sender, EventArgs e)
-        {
-            if (_clickedNode == null)
-                return;
-            var dirPath = Path.GetDirectoryName(_clickedNode.Tag as string);
-            if (!Directory.Exists(dirPath))
-                ShowMessage("Can't find directory: " + dirPath);
-            else
-                Process.Start(dirPath);
-        }
-
-        private void contextCopyPath_Click(object sender, EventArgs e)
-        {
-            if (_clickedNode == null)
-                return;
-            Clipboard.SetText(_clickedNode.Tag as string);
-        }
-
-        private void contextDeleteMerge_Click(object sender, EventArgs e)
-        {
-            if (_clickedNode == null || _clickedTree != treMerges)
-                return;
-
-            if (_clickedNode.IsLeaf())
-                DeleteMerges(new TreeNode[] { _clickedNode.Parent });
-            else
-                DeleteMerges(new TreeNode[] { _clickedNode });
-        }
-
-        private void contextDeleteAssociatedMerges_Click(object sender, EventArgs e)
-        {
-            if (_clickedNode == null || _clickedTree != treMerges || !_clickedNode.IsLeaf())
-                return;
-
-            // Find all file nodes that contain a node matching the clicked node
-            var fileNodes = treMerges.GetTreeNodes().Where(fileNode =>
-                fileNode.GetTreeNodes().Any(modNode =>
-                    modNode.Text == _clickedNode.Text));
-
-            DeleteMerges(fileNodes);
-        }
-
-        private void contextSelectAll_Click(object sender, EventArgs e)
-        {
-            foreach (var fileNode in _clickedTree.GetTreeNodes())
-            {
-                if (!ModFile.IsMergeable(fileNode.Text))
-                    continue;
-                fileNode.Checked = true;
-                if (_clickedTree == treConflicts)
-                {
-                    foreach (var modNode in fileNode.GetTreeNodes())
-                        modNode.Checked = true;
-                }
-            }
-            if (_clickedTree == treConflicts)
-                EnableMergeIfValidSelection();
-            else
-                EnableUnmergeIfValidSelection();
-        }
-
-        private void contextDeselectAll_Click(object sender, EventArgs e)
-        {
-            foreach (var fileNode in _clickedTree.GetTreeNodes())
-            {
-                if (!ModFile.IsMergeable(fileNode.Text))
-                    continue;
-                fileNode.Checked = false;
-                if (_clickedTree == treConflicts)
-                {
-                    foreach (var modNode in fileNode.GetTreeNodes())
-                        modNode.Checked = false;
-                }
-            }
-
-            if (_clickedTree == treConflicts)
-                EnableMergeIfValidSelection();
-            else
-                EnableUnmergeIfValidSelection();
-        }
-
-        private void contextExpandAll_Click(object sender, EventArgs e)
-        {
-            _clickedTree.ExpandAll();
-        }
-
-        private void contextCollapseAll_Click(object sender, EventArgs e)
-        {
-            _clickedTree.CollapseAll();
-        }
-
-        private void treeContextMenu_Closing(object sender, ToolStripDropDownClosingEventArgs e)
-        {
-            if (_clickedNode != null)
-            {
-                _clickedNode.BackColor = Color.Transparent;
-                _clickedNode.TreeView.Update();
-            }
-        }
-
-        #endregion
-
         #region Key Input
 
         private void txt_KeyDown(object sender, KeyEventArgs e)
@@ -798,24 +529,7 @@ namespace WitcherScriptMerger.Forms
             if (e.Control && e.KeyCode == Keys.A)
                 (sender as TextBox).SelectAll();
         }
-
-        private void tree_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control)
-            {
-                if (e.KeyCode == Keys.A)
-                {
-                    _clickedTree = sender as TreeView;
-                    contextSelectAll_Click(null, null);
-                }
-                if (e.KeyCode == Keys.D)
-                {
-                    _clickedTree = sender as TreeView;
-                    contextDeselectAll_Click(null, null);
-                }
-            }
-        }
-
+        
         private void splitContainer_Panel1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && btnMergeFiles.Enabled)
@@ -832,7 +546,7 @@ namespace WitcherScriptMerger.Forms
 
         #region Deleting Merges
 
-        private void DeleteMerges(IEnumerable<TreeNode> fileNodes)
+        public void DeleteMerges(IEnumerable<TreeNode> fileNodes)
         {
             var merges = fileNodes.Select(node =>
                 _inventory.Merges.First(merge =>
@@ -852,10 +566,10 @@ namespace WitcherScriptMerger.Forms
                     File.Delete(mergePath);
                     DeleteEmptyDirs(Path.GetDirectoryName(mergePath), Paths.ScriptsDirectory);
                 }
-                if (merge.Type == ModFileType.BundleContent)
+                if (merge.IsBundleContent)
                 {
                     var mergesForBundle = _inventory.Merges.Where(m =>
-                    m.Type == ModFileType.BundleContent &&
+                    m.IsBundleContent &&
                     m.MergedModName.EqualsIgnoreCase(merge.MergedModName) &&
                     m.BundleName.EqualsIgnoreCase(merge.BundleName));
                     if (mergesForBundle.All(m => merges.Contains(m)))
@@ -870,7 +584,7 @@ namespace WitcherScriptMerger.Forms
                         
                         DeleteEmptyDirs(Path.GetDirectoryName(bundlePath), Paths.ScriptsDirectory);
                     }
-                    else if (merge.Type == ModFileType.BundleContent)
+                    else if (merge.IsBundleContent)
                         bundleMerges.Add(merge);
                 }
 

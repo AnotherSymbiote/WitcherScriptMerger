@@ -50,20 +50,20 @@ namespace WitcherScriptMerger.Inventory
 
         private void Merges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if ((e.NewItems != null && e.NewItems.Cast<Merge>().Any(merge => merge.Type == ModFileType.Script)) ||
-                (e.OldItems != null && e.OldItems.Cast<Merge>().Any(merge => merge.Type == ModFileType.Script)))
+            if ((e.NewItems != null && e.NewItems.Cast<Merge>().Any(merge => merge.Category == Categories.Script)) ||
+                (e.OldItems != null && e.OldItems.Cast<Merge>().Any(merge => merge.Category == Categories.Script)))
                 ScriptsChanged = true;
-            if ((e.NewItems != null && e.NewItems.Cast<Merge>().Any(merge => merge.Type == ModFileType.BundleContent)) ||
-                (e.OldItems != null && e.OldItems.Cast<Merge>().Any(merge => merge.Type == ModFileType.BundleContent)))
+            if ((e.NewItems != null && e.NewItems.Cast<Merge>().Any(merge => merge.IsBundleContent)) ||
+                (e.OldItems != null && e.OldItems.Cast<Merge>().Any(merge => merge.IsBundleContent)))
                 BundleChanged = true;
         }
 
         public void AddModToMerge(string modName, Merge m)
         {
             m.ModNames.Add(modName);
-            if (m.Type == ModFileType.Script)
+            if (m.Category == Categories.Script)
                 ScriptsChanged = true;
-            else if (m.Type == ModFileType.BundleContent)
+            else if (m.IsBundleContent)
                 BundleChanged = true;
         }
 

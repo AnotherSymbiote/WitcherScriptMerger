@@ -52,7 +52,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="Controls\ConflictTree.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\MergeTree.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SMTree.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\SMTreeSorter.cs" />
+    <Compile Include="Controls\ToolStripRegion.cs" />
     <Compile Include="FileIndex\ModFile.cs" />
+    <Compile Include="FileIndex\ModFileCategory.cs" />
     <Compile Include="FileIndex\ModFileIndex.cs" />
     <Compile Include="FileMerger.cs" />
     <Compile Include="Forms\DependencyForm.cs">
