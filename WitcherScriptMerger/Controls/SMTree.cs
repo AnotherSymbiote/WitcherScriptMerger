@@ -86,6 +86,14 @@ namespace WitcherScriptMerger.Controls
                 category == (ModFileCategory)node.Tag);
         }
 
+        public void SetFontBold(LevelType level)
+        {
+            BeginUpdate();
+            foreach (var node in GetNodesAtLevel(level))
+                node.SetFontBold();
+            EndUpdate();
+        }
+
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);

@@ -243,9 +243,17 @@ namespace WitcherScriptMerger.Forms
 
                 var fileNode = new TreeNode(merge.RelativePath);
                 fileNode.Tag = merge.GetMergedFile();
-
                 fileNode.ForeColor = treMerges.FileNodeColor;
-                treMerges.Nodes.Add(fileNode);
+
+                var categoryNode = treMerges.GetCategoryNode(merge.Category);
+                if (categoryNode == null)
+                {
+                    categoryNode = new TreeNode(merge.Category.DisplayName);
+                    categoryNode.ToolTipText = merge.Category.ToolTipText;
+                    categoryNode.Tag = merge.Category;
+                    treMerges.Nodes.Add(categoryNode);
+                }
+                categoryNode.Nodes.Add(fileNode);
 
                 foreach (var modName in merge.ModNames)
                 {
@@ -268,6 +276,7 @@ namespace WitcherScriptMerger.Forms
             treMerges.Sort();
             treMerges.ExpandAll();
             treMerges.ScrollToTop();
+            treMerges.SetFontBold(SMTree.LevelType.Categories);
             foreach (var modNode in treMerges.ModNodes)
                 modNode.HideCheckBox();
 
@@ -411,10 +420,7 @@ namespace WitcherScriptMerger.Forms
                 }
             }
             treConflicts.ScrollToTop();
-            treConflicts.BeginUpdate();
-            foreach (var catNode in treConflicts.CategoryNodes)
-                catNode.SetFontBold();
-            treConflicts.EndUpdate();
+            treConflicts.SetFontBold(SMTree.LevelType.Categories);
             UpdateStatusText();
             HideProgressScreen();
             EnableMergeIfValidSelection();

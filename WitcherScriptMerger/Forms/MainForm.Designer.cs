@@ -314,7 +314,7 @@
             this.menuCollapseUnsupported});
             this.menuCheckingForConflicts.Name = "menuCheckingForConflicts";
             this.menuCheckingForConflicts.Size = new System.Drawing.Size(203, 22);
-            this.menuCheckingForConflicts.Text = "&Checking for Conflicts...";
+            this.menuCheckingForConflicts.Text = "&Refreshing Conflicts...";
             // 
             // menuCheckScripts
             // 
