@@ -119,6 +119,7 @@
             this.txtKDiff3Path.Name = "txtKDiff3Path";
             this.txtKDiff3Path.Size = new System.Drawing.Size(362, 20);
             this.txtKDiff3Path.TabIndex = 0;
+            this.txtKDiff3Path.TextChanged += new System.EventHandler(this.exe_TextChanged);
             // 
             // lnkKDiff3
             // 
@@ -203,6 +204,7 @@
             this.txtBmsPath.Name = "txtBmsPath";
             this.txtBmsPath.Size = new System.Drawing.Size(362, 20);
             this.txtBmsPath.TabIndex = 0;
+            this.txtBmsPath.TextChanged += new System.EventHandler(this.exe_TextChanged);
             // 
             // lnkBmsPlugin
             // 
@@ -275,6 +277,7 @@
             this.txtBmsPluginPath.Name = "txtBmsPluginPath";
             this.txtBmsPluginPath.Size = new System.Drawing.Size(362, 20);
             this.txtBmsPluginPath.TabIndex = 0;
+            this.txtBmsPluginPath.TextChanged += new System.EventHandler(this.bms_TextChanged);
             // 
             // lnkWccLite
             // 
@@ -348,6 +351,7 @@
             this.txtWccLitePath.Name = "txtWccLitePath";
             this.txtWccLitePath.Size = new System.Drawing.Size(362, 20);
             this.txtWccLitePath.TabIndex = 0;
+            this.txtWccLitePath.TextChanged += new System.EventHandler(this.exe_TextChanged);
             // 
             // btnOK
             // 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -25,26 +26,22 @@ namespace WitcherScriptMerger.Forms
 
         private void DependencyForm_Load(object sender, EventArgs e)
         {
-            if (File.Exists(Paths.KDiff3))
-                txtKDiff3Path.Text = Paths.KDiff3;
-            if (File.Exists(Paths.Bms))
-                txtBmsPath.Text = Paths.Bms;
-            if (File.Exists(Paths.BmsPlugin))
-                txtBmsPluginPath.Text = Paths.BmsPlugin;
-            if (File.Exists(Paths.WccLite))
-                txtWccLitePath.Text = Paths.WccLite;
+            txtKDiff3Path.Text = Paths.KDiff3;
+            txtBmsPath.Text = Paths.Bms;
+            txtBmsPluginPath.Text = Paths.BmsPlugin;
+            txtWccLitePath.Text = Paths.WccLite;
             btnOK.Select();
         }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            bool anyMissing =
-                !File.Exists(txtKDiff3Path.Text) ||
-                !File.Exists(txtBmsPath.Text) ||
-                !File.Exists(txtBmsPluginPath.Text) ||
-                !File.Exists(txtWccLitePath.Text);
+            bool allValid =
+                Color.LightGreen == txtKDiff3Path.BackColor &&
+                Color.LightGreen == txtBmsPath.BackColor &&
+                Color.LightGreen == txtBmsPluginPath.BackColor &&
+                Color.LightGreen == txtWccLitePath.BackColor;
 
-            if (anyMissing &&
+            if (!allValid &&
                 DialogResult.No == MessageBox.Show(
                     "Not all the files are located and valid. Save settings anyway?",
                     "Missing Dependency",
@@ -65,7 +62,7 @@ namespace WitcherScriptMerger.Forms
                 Program.Settings.EndBatch();
             }
 
-            DialogResult = (!anyMissing
+            DialogResult = (allValid
                 ? DialogResult.OK
                 : DialogResult.Cancel);
         }
@@ -132,6 +129,28 @@ namespace WitcherScriptMerger.Forms
         private void lnkWccLite_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("http://www.nexusmods.com/witcher3/news/12550/?");
+        }
+
+        #endregion
+
+        #region Validation
+
+        private void exe_TextChanged(object sender, EventArgs e)
+        {
+            ValidateTextBox(sender as TextBox, ".exe");
+        }
+
+        private void bms_TextChanged(object sender, EventArgs e)
+        {
+            ValidateTextBox(sender as TextBox, ".bms");
+        }
+
+        private void ValidateTextBox(TextBox txt, string validExtension)
+        {
+            string path = txt.Text;
+            txt.BackColor = (path.EndsWith(validExtension) && File.Exists(path)
+                ? Color.LightGreen
+                : Color.LightPink);
         }
 
         #endregion
