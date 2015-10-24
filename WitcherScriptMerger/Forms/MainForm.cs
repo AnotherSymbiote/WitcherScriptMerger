@@ -170,8 +170,8 @@ namespace WitcherScriptMerger.Forms
             lblStatus.Text = string.Format(
                 "{0}              {1} merge{2}",
                 conflictText,
-                treMerges.Nodes.Count,
-                (treMerges.Nodes.Count == 1 ? "" : "s"));
+                treMerges.FileNodes.Count,
+                (treMerges.FileNodes.Count == 1 ? "" : "s"));
         }
 
         public void EnableMergeIfValidSelection()
@@ -619,7 +619,7 @@ namespace WitcherScriptMerger.Forms
                 PrepareProgressScreen("Merge Deleted — Repacking Bundle", ProgressBarStyle.Marquee);
                 pnlProgress.Visible = true;
                 new FileMerger(_inventory, OnMergeProgressChanged, OnMergeComplete)
-                    .PackNewBundleAsync(bundlePath);
+                    .RepackBundleForDeleteAsync(bundlePath);
             }
         }
 

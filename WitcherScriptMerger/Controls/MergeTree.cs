@@ -10,11 +10,11 @@ namespace WitcherScriptMerger.Controls
     {
         #region Context Menu Members
 
-        private ToolStripMenuItem contextOpenMergedFile = new ToolStripMenuItem();
-        private ToolStripMenuItem contextOpenMergedFileDir = new ToolStripMenuItem();
-        private ToolStripMenuItem contextDeleteAssociatedMerges = new ToolStripMenuItem();
-        private ToolStripMenuItem contextDeleteMerge = new ToolStripMenuItem();
-        private ToolStripSeparator contextDeleteSeparator = new ToolStripSeparator();
+        private ToolStripMenuItem _contextOpenMergedFile = new ToolStripMenuItem();
+        private ToolStripMenuItem _contextOpenMergedFileDir = new ToolStripMenuItem();
+        private ToolStripMenuItem _contextDeleteAssociatedMerges = new ToolStripMenuItem();
+        private ToolStripMenuItem _contextDeleteMerge = new ToolStripMenuItem();
+        private ToolStripSeparator _contextDeleteSeparator = new ToolStripSeparator();
 
         #endregion
 
@@ -24,50 +24,60 @@ namespace WitcherScriptMerger.Controls
 
             ContextOpenRegion.Items.AddRange(new ToolStripItem[]
             {
-                contextOpenMergedFile, contextOpenMergedFileDir,
-                contextDeleteSeparator,
-                contextDeleteMerge,
-                contextDeleteAssociatedMerges,
+                _contextOpenMergedFile, _contextOpenMergedFileDir,
+                _contextDeleteSeparator,
+                _contextDeleteMerge,
+                _contextDeleteAssociatedMerges,
             });
             BuildContextMenu();
             
             // 
             // contextOpenMergedFile
             // 
-            contextOpenMergedFile.Name = "contextOpenMergedFile";
-            contextOpenMergedFile.Size = new Size(225, 22);
-            contextOpenMergedFile.Text = "Open Merged File";
-            contextOpenMergedFile.Click += ContextOpenScript_Click;
+            _contextOpenMergedFile.Name = "contextOpenMergedFile";
+            _contextOpenMergedFile.Size = new Size(225, 22);
+            _contextOpenMergedFile.Text = "Open Merged File";
+            _contextOpenMergedFile.Click += ContextOpenScript_Click;
             // 
             // contextOpenMergedFileDir
             // 
-            contextOpenMergedFileDir.Name = "contextOpenMergedFileDir";
-            contextOpenMergedFileDir.Size = new Size(225, 22);
-            contextOpenMergedFileDir.Text = "Open Merged File Directory";
-            contextOpenMergedFileDir.Click += ContextOpenDirectory_Click;
+            _contextOpenMergedFileDir.Name = "contextOpenMergedFileDir";
+            _contextOpenMergedFileDir.Size = new Size(225, 22);
+            _contextOpenMergedFileDir.Text = "Open Merged File Directory";
+            _contextOpenMergedFileDir.Click += ContextOpenDirectory_Click;
             // 
             // contextDeleteMerge
             // 
-            contextDeleteMerge.Name = "contextDeleteMerge";
-            contextDeleteMerge.Size = new Size(225, 22);
-            contextDeleteMerge.Text = "Delete This Merge";
-            contextDeleteMerge.Click += ContextDeleteMerge_Click;
+            _contextDeleteMerge.Name = "contextDeleteMerge";
+            _contextDeleteMerge.Size = new Size(225, 22);
+            _contextDeleteMerge.Text = "Delete This Merge";
+            _contextDeleteMerge.Click += ContextDeleteMerge_Click;
             // 
             // contextDeleteAssociatedMerges
             // 
-            contextDeleteAssociatedMerges.Name = "contextDeleteAssociatedMerges";
-            contextDeleteAssociatedMerges.Size = new Size(225, 22);
-            contextDeleteAssociatedMerges.Text = "Delete All {0} Merges";
-            contextDeleteAssociatedMerges.Click += ContextDeleteAssociatedMerges_Click;
+            _contextDeleteAssociatedMerges.Name = "contextDeleteAssociatedMerges";
+            _contextDeleteAssociatedMerges.Size = new Size(225, 22);
+            _contextDeleteAssociatedMerges.Text = "Delete All {0} Merges";
+            _contextDeleteAssociatedMerges.Click += ContextDeleteAssociatedMerges_Click;
             // 
             // contextDeleteSeparator
             // 
-            contextDeleteSeparator.Name = "contextDeleteSeparator";
-            contextDeleteSeparator.Size = new Size(235, 6);
+            _contextDeleteSeparator.Name = "contextDeleteSeparator";
+            _contextDeleteSeparator.Size = new Size(235, 6);
         }
 
         protected override void HandleCheckedChange()
         {
+            if (IsCategoryNode(ClickedNode))
+            {
+                foreach (var fileNode in ClickedNode.GetTreeNodes())
+                    fileNode.Checked = ClickedNode.Checked;
+            }
+            else if (IsFileNode(ClickedNode))
+            {
+                var catNode = ClickedNode.Parent;
+                catNode.Checked = catNode.GetTreeNodes().All(node => node.Checked);
+            }
             Program.MainForm.EnableUnmergeIfValidSelection();
         }
 
@@ -81,11 +91,11 @@ namespace WitcherScriptMerger.Controls
 
         protected override void SetAllChecked(bool isChecked)
         {
-            foreach (var fileNode in FileNodes)
+            foreach (var catNode in CategoryNodes)
             {
-                if (!ModFile.IsMergeable(fileNode.Text))
-                    continue;
-                fileNode.Checked = true;
+                catNode.Checked = isChecked;
+                foreach (var fileNode in catNode.GetTreeNodes())
+                    fileNode.Checked = isChecked;
             }
             Program.MainForm.EnableUnmergeIfValidSelection();
         }
@@ -124,17 +134,28 @@ namespace WitcherScriptMerger.Controls
                 {
                     string filePath = ClickedNode.Tag as string;
                     if (ModFile.IsScript(filePath))
-                        contextOpenMergedFile.Available = contextOpenMergedFileDir.Available = true;
+                        _contextOpenMergedFile.Available = _contextOpenMergedFileDir.Available = true;
                     else
-                        contextOpenMergedFile.Available = contextOpenMergedFileDir.Available = true;
+                        _contextOpenMergedFile.Available = _contextOpenMergedFileDir.Available = true;
                 }
 
-                contextDeleteMerge.Available = contextDeleteSeparator.Available = true;
-                if (IsModNode(ClickedNode))
+                if (!IsCategoryNode(ClickedNode))
                 {
-                    contextDeleteAssociatedMerges.Available = true;
-                    contextDeleteAssociatedMerges.Text = string.Format("Delete All {0} Merges", ClickedNode.Text);
+                    _contextDeleteMerge.Available = _contextDeleteSeparator.Available = true;
+                    if (IsModNode(ClickedNode))
+                    {
+                        _contextDeleteAssociatedMerges.Available = true;
+                        _contextDeleteAssociatedMerges.Text = string.Format("Delete All {0} Merges", ClickedNode.Text);
+                    }
                 }
+            }
+
+            if (!this.IsEmpty())
+            {
+                if (CategoryNodes.Any(catNode => !catNode.Checked))
+                    ContextSelectAll.Available = true;
+                if (FileNodes.Any(fileNode => fileNode.Checked))
+                    ContextDeselectAll.Available = true;
             }
         }
     }

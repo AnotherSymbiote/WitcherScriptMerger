@@ -82,6 +82,8 @@ namespace WitcherScriptMerger.FileIndex
 
         public static string GetModNameFromPath(string modFilePath)
         {
+            if (IsXml(modFilePath))           // Merged bundle content isn't in a mod folder
+                return Paths.MergedBundleContent;
             string nameStart = (IsScript(modFilePath) ? Paths.ModScriptBase : Paths.BundleBase);
             int nameEnd = modFilePath.IndexOfIgnoreCase(nameStart) - 1;
             string name = modFilePath.Substring(0, nameEnd);

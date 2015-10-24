@@ -235,10 +235,10 @@
             this.lblTempContentFiles.AutoSize = true;
             this.lblTempContentFiles.Location = new System.Drawing.Point(117, 16);
             this.lblTempContentFiles.Name = "lblTempContentFiles";
-            this.lblTempContentFiles.Size = new System.Drawing.Size(531, 13);
+            this.lblTempContentFiles.Size = new System.Drawing.Size(505, 13);
             this.lblTempContentFiles.TabIndex = 6;
-            this.lblTempContentFiles.Text = "The first 2 files were temporarily unpacked from blob0.bundle files && will be de" +
-    "leted when all merges are finished.";
+            this.lblTempContentFiles.Text = "The first 2 files were temporarily unpacked from .bundle files && will be deleted" +
+    " when all merges are finished.";
             // 
             // MergeReportForm
             // 
@@ -257,7 +257,7 @@
             this.Controls.Add(this.grpFile1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1920, 400);
-            this.MinimumSize = new System.Drawing.Size(685, 400);
+            this.MinimumSize = new System.Drawing.Size(650, 400);
             this.Name = "MergeReportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Merge Finished";

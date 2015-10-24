@@ -154,16 +154,15 @@ namespace WitcherScriptMerger.Controls
 
         protected virtual void OnRightMouseUp(MouseEventArgs e)
         {
+            ResetContextItemAvailability();
             SetContextItemAvailability();
+            SetContextMenuSize();
 
             if (ClickedNode != null)
                 ClickedNode.BackColor = Color.Gainsboro;
 
             if (_contextMenu.Items.OfType<ToolStripMenuItem>().Any(item => item.Available))
-            {
-                ////_clickedTree = this;
                 _contextMenu.Show(this, e.X, e.Y);
-            }
         }
 
         protected override void OnAfterCheck(TreeViewEventArgs e)
@@ -219,11 +218,10 @@ namespace WitcherScriptMerger.Controls
 
             ContextOpenRegion = new ToolStripRegion(_contextMenu as ToolStrip, new ToolStripItem[]
             {
+                _contextCopyPath,
                 _contextOpenModScript,
                 _contextOpenModScriptDir,
-                _contextOpenModBundleDir,
-                _contextCopyPath,
-                _contextOpenSeparator
+                _contextOpenModBundleDir
             });
             ContextNodeRegion = new ToolStripRegion(_contextMenu as ToolStrip, new ToolStripItem[]
             {
@@ -310,6 +308,12 @@ namespace WitcherScriptMerger.Controls
             _contextMenu.Items.AddRange(ContextNodeRegion.Items);
         }
 
+        private void ResetContextItemAvailability()
+        {
+            foreach (var menuItem in _contextMenu.Items.OfType<ToolStripItem>())
+                menuItem.Available = false;
+        }
+
         protected virtual void SetContextItemAvailability()
         {
             foreach (var menuItem in _contextMenu.Items.OfType<ToolStripItem>())
@@ -334,14 +338,16 @@ namespace WitcherScriptMerger.Controls
 
             if (!this.IsEmpty())
             {
-                if (FileNodes.Any(fileNode => !fileNode.Checked && ModFile.IsMergeable(fileNode.Text)))
-                    ContextSelectAll.Available = true;
-                if (FileNodes.Any(fileNode => fileNode.Checked && ModFile.IsMergeable(fileNode.Text)))
-                    ContextDeselectAll.Available = true;
-                if (FileNodes.Any(node => !node.IsExpanded)) _contextExpandAll.Available = true;
-                if (FileNodes.Any(node => node.IsExpanded)) _contextCollapseAll.Available = true;
+                if (CategoryNodes.Any(catNode => !catNode.IsExpanded)
+                    || FileNodes.Any(fileNode => !fileNode.IsExpanded))
+                    _contextExpandAll.Available = true;
+                if (CategoryNodes.Any(node => node.IsExpanded))
+                    _contextCollapseAll.Available = true;
             }
+        }
 
+        private void SetContextMenuSize()
+        {
             if (_contextMenu.Items.OfType<ToolStripItem>().Any(item => item.Available))
             {
                 int width = _contextMenu.Items.OfType<ToolStripMenuItem>().Where(item => item.Available)

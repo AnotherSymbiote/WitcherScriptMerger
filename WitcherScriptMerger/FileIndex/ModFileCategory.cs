@@ -25,7 +25,7 @@
             2, "Bundle Content - XML", "These bundled .xml files can be merged", true);
 
         public static ModFileCategory BundleUnsupported = new ModFileCategory(
-            3, "Bundle Content - Unsupported", "These bundled files can't be merged", false);
+            3, "Bundle Content - Unsupported", "These bundled files can't be merged (usually because they're textures or models)", false);
 
         public static ModFileCategory OtherUnsupported = new ModFileCategory(
             4, "Other Unsupported", "These files can't be merged", false);

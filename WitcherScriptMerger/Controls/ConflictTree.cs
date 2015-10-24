@@ -9,8 +9,8 @@ namespace WitcherScriptMerger.Controls
     {
         #region Context Menu Members
 
-        private ToolStripMenuItem contextOpenVanillaScript = new ToolStripMenuItem();
-        private ToolStripMenuItem contextOpenVanillaScriptDir = new ToolStripMenuItem();
+        private ToolStripMenuItem _contextOpenVanillaScript = new ToolStripMenuItem();
+        private ToolStripMenuItem _contextOpenVanillaScriptDir = new ToolStripMenuItem();
 
         #endregion
 
@@ -20,24 +20,24 @@ namespace WitcherScriptMerger.Controls
 
             ContextOpenRegion.Items.AddRange(new ToolStripItem[]
             {
-                contextOpenVanillaScript, contextOpenVanillaScriptDir
+                _contextOpenVanillaScript, _contextOpenVanillaScriptDir
             });
             BuildContextMenu();
 
             // 
             // contextOpenVanillaScript
             // 
-            contextOpenVanillaScript.Name = "contextOpenVanillaScript";
-            contextOpenVanillaScript.Size = new Size(225, 22);
-            contextOpenVanillaScript.Text = "Open Vanilla Script";
-            contextOpenVanillaScript.Click += ContextOpenScript_Click;
+            _contextOpenVanillaScript.Name = "contextOpenVanillaScript";
+            _contextOpenVanillaScript.Size = new Size(225, 22);
+            _contextOpenVanillaScript.Text = "Open Vanilla Script";
+            _contextOpenVanillaScript.Click += ContextOpenScript_Click;
             // 
             // contextOpenVanillaScriptDir
             // 
-            contextOpenVanillaScriptDir.Name = "contextOpenVanillaScriptDir";
-            contextOpenVanillaScriptDir.Size = new Size(225, 22);
-            contextOpenVanillaScriptDir.Text = "Open Vanilla Script Directory";
-            contextOpenVanillaScriptDir.Click += ContextOpenDirectory_Click;
+            _contextOpenVanillaScriptDir.Name = "contextOpenVanillaScriptDir";
+            _contextOpenVanillaScriptDir.Size = new Size(225, 22);
+            _contextOpenVanillaScriptDir.Text = "Open Vanilla Script Directory";
+            _contextOpenVanillaScriptDir.Click += ContextOpenDirectory_Click;
         }
 
         protected override void HandleCheckedChange()
@@ -51,7 +51,7 @@ namespace WitcherScriptMerger.Controls
                         modNode.Checked = ClickedNode.Checked;
                 }
             }
-            if (IsFileNode(ClickedNode))
+            else if (IsFileNode(ClickedNode))
             {
                 foreach (var modNode in ClickedNode.GetTreeNodes())
                     modNode.Checked = ClickedNode.Checked;
@@ -113,15 +113,21 @@ namespace WitcherScriptMerger.Controls
 
         protected override void SetContextItemAvailability()
         {
-            if (!this.IsEmpty())
+            base.SetContextItemAvailability();
+
+            if (ClickedNode != null && IsFileNode(ClickedNode) && ModFile.IsScript(ClickedNode.Text))
             {
-                if (ModNodes.Any(modNode => !modNode.Checked && ModFile.IsMergeable(modNode.Parent.Text)))
-                    ContextSelectAll.Available = true;
-                if (ModNodes.Any(modNode => modNode.Checked && ModFile.IsMergeable(modNode.Parent.Text)))
-                    ContextDeselectAll.Available = true;
+                _contextOpenVanillaScript.Available = true;
+                _contextOpenVanillaScriptDir.Available = true;
             }
 
-            base.SetContextItemAvailability();
+            if (!this.IsEmpty())
+            {
+                if (CategoryNodes.Any(catNode => !catNode.Checked && (catNode.Tag as ModFileCategory).IsSupported))
+                    ContextSelectAll.Available = true;
+                if (ModNodes.Any(modNode => modNode.Checked))
+                    ContextDeselectAll.Available = true;
+            }
         }
     }
 }
