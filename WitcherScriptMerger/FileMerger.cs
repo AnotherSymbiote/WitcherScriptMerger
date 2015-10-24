@@ -148,14 +148,14 @@ namespace WitcherScriptMerger
                     _file1 = mergedFile;
                     _modName1 = ModFile.GetModNameFromPath(_file1.FullName);
                 }
-                else
-                    HandleCanceledMerge(i, _nodesToMerge.Count(), merge);
+                else if (DialogResult.Abort == HandleCanceledMerge(i, _nodesToMerge.Count(), merge))
+                    break;
+            }
 
-                if (isNew && merge.ModNames.Count > 1)
-                {
-                    ReportProgress(string.Format("Adding script merge to inventory"));
-                    _inventory.Merges.Add(merge);
-                }
+            if (isNew && merge.ModNames.Count > 1)
+            {
+                ReportProgress(string.Format("Adding script merge to inventory"));
+                _inventory.Merges.Add(merge);
             }
         }
 
@@ -175,7 +175,8 @@ namespace WitcherScriptMerger
 
                 if (!GetUnpackedFiles(fileNode.Text))
                 {
-                    HandleCanceledMerge(i, _nodesToMerge.Count(), merge);
+                    if (DialogResult.Abort == HandleCanceledMerge(i, _nodesToMerge.Count(), merge))
+                        break;
                     continue;
                 }
 
@@ -185,8 +186,8 @@ namespace WitcherScriptMerger
                     _file1 = mergedFile;
                     _modName1 = ModFile.GetModNameFromPath(_file1.FullName);
                 }
-                else
-                    HandleCanceledMerge(i, _nodesToMerge.Count(), merge);
+                else if (DialogResult.Abort == HandleCanceledMerge(i, _nodesToMerge.Count(), merge))
+                    break;
             }
 
             if (_bundlePath != null && isNew && merge.ModNames.Count > 1)
@@ -304,9 +305,7 @@ namespace WitcherScriptMerger
             Program.MainForm.ActivateSafely(); // Focus window
             var result = Program.MainForm.ShowMessage(msg, "Skipped Merge", buttons, MessageBoxIcon.Information);
             if (result == DialogResult.No)
-            {
                 return DialogResult.Abort;
-            }
             return DialogResult.OK;
         }
 
