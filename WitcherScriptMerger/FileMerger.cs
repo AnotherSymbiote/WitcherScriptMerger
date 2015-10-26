@@ -215,7 +215,8 @@ namespace WitcherScriptMerger
             args += string.Format(
                 "\"{0}\" \"{1}\" -o \"{2}\" " +
                 "--cs \"WhiteSpace3FileMergeDefault=2\" " +
-                "--cs \"CreateBakFiles=0\"",
+                "--cs \"CreateBakFiles=0\" " +
+                "--cs \"LineEndStyle=1\"",
                 _file1.FullName, _file2.FullName, _outputPath);
 
             if (!Program.MainForm.PathsInKdiff3Setting)
