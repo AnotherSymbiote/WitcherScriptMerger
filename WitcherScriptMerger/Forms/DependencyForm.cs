@@ -128,7 +128,7 @@ namespace WitcherScriptMerger.Forms
 
         private void lnkWccLite_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("http://www.nexusmods.com/witcher3/news/12550/?");
+            Process.Start("http://www.nexusmods.com/witcher3/news/12625/?");
         }
 
         #endregion
