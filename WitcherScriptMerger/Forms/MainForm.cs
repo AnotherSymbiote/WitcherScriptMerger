@@ -74,7 +74,7 @@ namespace WitcherScriptMerger.Forms
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            this.Update();
+            Update();
 
             bool repackingBundle = false;
             if (!string.IsNullOrWhiteSpace(txtGameDir.Text) || !Paths.IsModsDirectoryDerived)
@@ -358,6 +358,7 @@ namespace WitcherScriptMerger.Forms
 
             PrepareProgressScreen("Detecting Conflicts", ProgressBarStyle.Continuous);
             pnlProgress.Visible = true;
+            lblStatus.Text = "Refreshing...";
 
             _modIndex = new ModFileIndex();
             _modIndex.BuildAsync(_inventory,
