@@ -148,7 +148,7 @@ namespace WitcherScriptMerger
                     _file1 = mergedFile;
                     _modName1 = ModFile.GetModNameFromPath(_file1.FullName);
                 }
-                else if (DialogResult.Abort == HandleCanceledMerge(i, _nodesToMerge.Count(), merge))
+                else if (DialogResult.Abort == HandleCanceledMerge(i, merge))
                     break;
             }
 
@@ -175,7 +175,7 @@ namespace WitcherScriptMerger
 
                 if (!GetUnpackedFiles(fileNode.Text))
                 {
-                    if (DialogResult.Abort == HandleCanceledMerge(i, _nodesToMerge.Count(), merge))
+                    if (DialogResult.Abort == HandleCanceledMerge(i, merge))
                         break;
                     continue;
                 }
@@ -186,7 +186,7 @@ namespace WitcherScriptMerger
                     _file1 = mergedFile;
                     _modName1 = ModFile.GetModNameFromPath(_file1.FullName);
                 }
-                else if (DialogResult.Abort == HandleCanceledMerge(i, _nodesToMerge.Count(), merge))
+                else if (DialogResult.Abort == HandleCanceledMerge(i, merge))
                     break;
             }
 
@@ -286,21 +286,18 @@ namespace WitcherScriptMerger
                 MessageBoxIcon.Exclamation));
         }
 
-        private DialogResult HandleCanceledMerge(int mergeNum, int mergeCount, Merge merge)
+        private DialogResult HandleCanceledMerge(int mergeNum, Merge merge)
         {
             string fileName = Path.GetFileName(merge.RelativePath);
             string msg = string.Format("Merge was canceled for {0}.", fileName);
             var buttons = MessageBoxButtons.OK;
-            if (_mergesToDo > 1 || mergeCount > 1)
+            if (_mergesToDo > 1)
             {
-                if (_mergesToDo > 1)
+                msg = string.Format("Merge {0} of {1} was canceled for {2}.", mergeNum, _mergesToDo, fileName);
+                if (mergeNum < _mergesToDo)
                 {
-                    msg = string.Format("Merge {0} of {1} was canceled for {2}.", mergeNum, _mergesToDo, fileName);
-                    if (mergeNum < _mergesToDo)
-                    {
-                        msg += "\n\nContinue with the remaining merges for this file?";
-                        buttons = MessageBoxButtons.YesNo;
-                    }
+                    msg += "\n\nContinue with the remaining merges for this file?";
+                    buttons = MessageBoxButtons.YesNo;
                 }
             }
             Program.MainForm.ActivateSafely(); // Focus window

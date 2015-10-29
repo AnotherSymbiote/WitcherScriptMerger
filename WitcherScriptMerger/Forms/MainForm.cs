@@ -164,8 +164,17 @@ namespace WitcherScriptMerger.Forms
         private void UpdateStatusText()
         {
             int solvableCount = treConflicts.FileNodes.Count(node => ModFile.IsMergeable(node.Text));
-            string conflictText = string.Format("{0} mergeable,  {1} unsupported",
-                solvableCount, (treConflicts.FileNodes.Count - solvableCount));
+
+            string conflictText;
+            if (treConflicts.IsEmpty())
+                conflictText = "0 conflicts";
+            else
+            {
+                conflictText = string.Format("{0} mergeable", solvableCount);
+                conflictText += solvableCount < treConflicts.FileNodes.Count
+                    ? string.Format(",  {0} unsupported", (treConflicts.FileNodes.Count - solvableCount))
+                    : string.Format(" conflict{0}", (solvableCount == 1 ? "" : "s"));
+            }
 
             lblStatus.Text = string.Format(
                 "{0}              {1} merge{2}",

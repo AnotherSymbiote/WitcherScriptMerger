@@ -405,8 +405,8 @@
             // 
             this.lblStatus.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(244, 14);
-            this.lblStatus.Text = "0 mergeable,  0 unsupported              0 merges";
+            this.lblStatus.Size = new System.Drawing.Size(58, 14);
+            this.lblStatus.Text = "Loading...";
             // 
             // MainForm
             // 
