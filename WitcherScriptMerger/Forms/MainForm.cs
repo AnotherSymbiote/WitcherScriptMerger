@@ -85,6 +85,8 @@ namespace WitcherScriptMerger.Forms
             if (!string.IsNullOrWhiteSpace(txtGameDir.Text) ||
                 (!Paths.IsScriptsDirectoryDerived && !Paths.IsModsDirectoryDerived))
                 RefreshConflictsTree();
+            else
+                lblStatus.Text = "Please locate your 'The Witcher 3 Wild Hunt' game directory.";
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -463,13 +465,24 @@ namespace WitcherScriptMerger.Forms
 
         private void btnRefreshMerged_Click(object sender, EventArgs e)
         {
-            if (Paths.ValidateModsDirectory())
+            if (string.IsNullOrWhiteSpace(txtGameDir.Text))
+            {
+                Program.MainForm.ShowMessage(
+                    "Please locate your 'The Witcher 3 Wild Hunt' game directory.");
+            }
+            else if (Paths.ValidateModsDirectory())
                 RefreshMergeInventory();
         }
 
         private void btnRefreshConflicts_Click(object sender, EventArgs e)
         {
-            RefreshTrees();
+            if (string.IsNullOrWhiteSpace(txtGameDir.Text))
+            {
+                Program.MainForm.ShowMessage(
+                    "Please locate your 'The Witcher 3 Wild Hunt' game directory.");
+            }
+            else
+                RefreshTrees();
         }
 
         private void btnMergeFiles_Click(object sender, EventArgs e)
