@@ -32,7 +32,7 @@
             this.txtGameDir = new System.Windows.Forms.TextBox();
             this.btnSelectGameDir = new System.Windows.Forms.Button();
             this.btnRefreshConflicts = new System.Windows.Forms.Button();
-            this.btnMergeFiles = new System.Windows.Forms.Button();
+            this.btnCreateMerges = new System.Windows.Forms.Button();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.lblConflicts = new System.Windows.Forms.Label();
             this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
@@ -106,19 +106,19 @@
             this.btnRefreshConflicts.UseVisualStyleBackColor = true;
             this.btnRefreshConflicts.Click += new System.EventHandler(this.btnRefreshConflicts_Click);
             // 
-            // btnMergeFiles
+            // btnCreateMerges
             // 
-            this.btnMergeFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnCreateMerges.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMergeFiles.Enabled = false;
-            this.btnMergeFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMergeFiles.Location = new System.Drawing.Point(12, 525);
-            this.btnMergeFiles.Name = "btnMergeFiles";
-            this.btnMergeFiles.Size = new System.Drawing.Size(312, 35);
-            this.btnMergeFiles.TabIndex = 6;
-            this.btnMergeFiles.Text = "&Merge Selected File";
-            this.btnMergeFiles.UseVisualStyleBackColor = true;
-            this.btnMergeFiles.Click += new System.EventHandler(this.btnMergeFiles_Click);
+            this.btnCreateMerges.Enabled = false;
+            this.btnCreateMerges.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCreateMerges.Location = new System.Drawing.Point(12, 525);
+            this.btnCreateMerges.Name = "btnCreateMerges";
+            this.btnCreateMerges.Size = new System.Drawing.Size(312, 35);
+            this.btnCreateMerges.TabIndex = 6;
+            this.btnCreateMerges.Text = "&Create Selected Merge";
+            this.btnCreateMerges.UseVisualStyleBackColor = true;
+            this.btnCreateMerges.Click += new System.EventHandler(this.btnMergeFiles_Click);
             // 
             // splitContainer
             // 
@@ -133,7 +133,7 @@
             this.splitContainer.Panel1.Controls.Add(this.lblConflicts);
             this.splitContainer.Panel1.Controls.Add(this.treConflicts);
             this.splitContainer.Panel1.Controls.Add(this.btnRefreshConflicts);
-            this.splitContainer.Panel1.Controls.Add(this.btnMergeFiles);
+            this.splitContainer.Panel1.Controls.Add(this.btnCreateMerges);
             this.splitContainer.Panel1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.splitContainer_Panel1_PreviewKeyDown);
             this.splitContainer.Panel1MinSize = 195;
             // 
@@ -162,8 +162,8 @@
             // treConflicts
             // 
             this.treConflicts.AllowDrop = true;
-            this.treConflicts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.treConflicts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treConflicts.CheckBoxes = true;
             this.treConflicts.Location = new System.Drawing.Point(12, 30);
@@ -178,11 +178,11 @@
             // 
             this.btnRefreshMerged.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRefreshMerged.Location = new System.Drawing.Point(112, 3);
+            this.btnRefreshMerged.Location = new System.Drawing.Point(73, 3);
             this.btnRefreshMerged.MaximumSize = new System.Drawing.Size(150, 23);
             this.btnRefreshMerged.MinimumSize = new System.Drawing.Size(100, 23);
             this.btnRefreshMerged.Name = "btnRefreshMerged";
-            this.btnRefreshMerged.Size = new System.Drawing.Size(117, 23);
+            this.btnRefreshMerged.Size = new System.Drawing.Size(150, 23);
             this.btnRefreshMerged.TabIndex = 0;
             this.btnRefreshMerged.Text = "Re&fresh";
             this.btnRefreshMerged.UseVisualStyleBackColor = true;
@@ -194,9 +194,9 @@
             this.lblMergeInventory.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMergeInventory.Location = new System.Drawing.Point(3, 6);
             this.lblMergeInventory.Name = "lblMergeInventory";
-            this.lblMergeInventory.Size = new System.Drawing.Size(103, 16);
+            this.lblMergeInventory.Size = new System.Drawing.Size(64, 16);
             this.lblMergeInventory.TabIndex = 7;
-            this.lblMergeInventory.Text = "Merged Files:";
+            this.lblMergeInventory.Text = "Merges:";
             // 
             // btnDeleteMerges
             // 
@@ -215,8 +215,8 @@
             // treMerges
             // 
             this.treMerges.AllowDrop = true;
-            this.treMerges.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.treMerges.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treMerges.CheckBoxes = true;
             this.treMerges.Location = new System.Drawing.Point(3, 30);
@@ -410,7 +410,7 @@
             // 
             // MainForm
             // 
-            this.AcceptButton = this.btnMergeFiles;
+            this.AcceptButton = this.btnCreateMerges;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(654, 674);
@@ -452,7 +452,7 @@
         private System.Windows.Forms.Button btnSelectGameDir;
         private Controls.ConflictTree treConflicts;
         private System.Windows.Forms.Button btnRefreshConflicts;
-        private System.Windows.Forms.Button btnMergeFiles;
+        private System.Windows.Forms.Button btnCreateMerges;
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.Label lblMergeInventory;
         private System.Windows.Forms.Button btnDeleteMerges;

@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WitcherScriptMerger.FileIndex;
 
@@ -22,6 +18,8 @@ namespace WitcherScriptMerger.Controls
                     var xCat = (ModFileCategory)xNode.Tag;
                     var yCat = (ModFileCategory)yNode.Tag;
                     return xCat.OrderIndex.CompareTo(yCat.OrderIndex);
+                case (int)SMTree.LevelType.Mods:
+                    return ModFile.GetLoadOrder(xNode.Text, yNode.Text);
                 default:
                     return xNode.Text.CompareTo(yNode.Text);
             }

@@ -188,10 +188,10 @@ namespace WitcherScriptMerger.Forms
         public void EnableMergeIfValidSelection()
         {
             int validFileNodeCount = treConflicts.FileNodes.Count(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
-            btnMergeFiles.Enabled = (validFileNodeCount > 0);
-            btnMergeFiles.Text = (validFileNodeCount > 1
-                ? "&Merge " + validFileNodeCount + " Selected Files"
-                : "&Merge Selected File");
+            btnCreateMerges.Enabled = (validFileNodeCount > 0);
+            btnCreateMerges.Text = (validFileNodeCount > 1
+                ? "&Create " + validFileNodeCount + " Selected Merges"
+                : "&Create Selected Merge");
         }
 
         public void EnableUnmergeIfValidSelection()
@@ -447,6 +447,9 @@ namespace WitcherScriptMerger.Forms
             string dirChoice = GetUserDirectoryChoice();
             if (!string.IsNullOrWhiteSpace(dirChoice))
             {
+                if (dirChoice.EndsWith("The Witcher 3 Wild Hunt\\Mods"))  // Auto-truncate "Mods"
+                    dirChoice = Path.GetDirectoryName(dirChoice);
+
                 txtGameDir.Text = dirChoice;
                 RefreshTrees();
             }
@@ -469,8 +472,13 @@ namespace WitcherScriptMerger.Forms
             {
                 Program.MainForm.ShowMessage(
                     "Please locate your 'The Witcher 3 Wild Hunt' game directory.");
+                return;
             }
-            else if (Paths.ValidateModsDirectory())
+
+            if (txtGameDir.Text.EndsWith("The Witcher 3 Wild Hunt\\Mods"))  // Auto-truncate "Mods"
+                txtGameDir.Text = Path.GetDirectoryName(txtGameDir.Text);
+
+            if (Paths.ValidateModsDirectory())
                 RefreshMergeInventory();
         }
 
@@ -480,9 +488,13 @@ namespace WitcherScriptMerger.Forms
             {
                 Program.MainForm.ShowMessage(
                     "Please locate your 'The Witcher 3 Wild Hunt' game directory.");
+                return;
             }
-            else
-                RefreshTrees();
+
+            if (txtGameDir.Text.EndsWith("The Witcher 3 Wild Hunt\\Mods"))  // Auto-truncate "Mods"
+                txtGameDir.Text = Path.GetDirectoryName(txtGameDir.Text);
+            
+            RefreshTrees();
         }
 
         private void btnMergeFiles_Click(object sender, EventArgs e)
@@ -561,7 +573,7 @@ namespace WitcherScriptMerger.Forms
         
         private void splitContainer_Panel1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && btnMergeFiles.Enabled)
+            if (e.KeyCode == Keys.Enter && btnCreateMerges.Enabled)
                 btnMergeFiles_Click(null, null);
         }
 
