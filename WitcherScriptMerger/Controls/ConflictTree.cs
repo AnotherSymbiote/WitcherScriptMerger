@@ -16,7 +16,7 @@ namespace WitcherScriptMerger.Controls
 
         public ConflictTree()
         {
-            FileNodeColor = Color.Red;
+            FileNodeForeColor = Color.Red;
 
             ContextOpenRegion.Items.AddRange(new ToolStripItem[]
             {

@@ -254,7 +254,7 @@ namespace WitcherScriptMerger.Forms
 
                 var fileNode = new TreeNode(merge.RelativePath);
                 fileNode.Tag = merge.GetMergedFile();
-                fileNode.ForeColor = treMerges.FileNodeColor;
+                fileNode.ForeColor = treMerges.FileNodeForeColor;
 
                 var categoryNode = treMerges.GetCategoryNode(merge.Category);
                 if (categoryNode == null)
@@ -391,7 +391,7 @@ namespace WitcherScriptMerger.Forms
                         fileNode.Tag = (conflict.Category == Categories.Script
                             ? conflict.GetVanillaFile()
                             : conflict.RelativePath);
-                        fileNode.ForeColor = treConflicts.FileNodeColor;
+                        fileNode.ForeColor = treConflicts.FileNodeForeColor;
 
                         var categoryNode = treConflicts.GetCategoryNode(conflict.Category);
                         if (categoryNode == null)

@@ -37,9 +37,13 @@ namespace WitcherScriptMerger.Controls
             get { return GetNodesAtLevel(LevelType.Mods); }
         }
 
-        ////public Color CategoryNodeColor;
-        public Color FileNodeColor;
-        ////public Color ModNodeColor;
+        public Color FileNodeForeColor
+        {
+            get { return NodeLevelForeColors[1]; }
+            set { NodeLevelForeColors[1] = value; }
+        }
+
+        private Color[] NodeLevelForeColors = new Color[] { Color.Black, Color.Black, Color.Black };
 
         protected TreeNode ClickedNode = null;
         protected bool IsUpdating = false;
@@ -116,13 +120,38 @@ namespace WitcherScriptMerger.Controls
         {
             base.OnMouseDown(e);
             ClickedNode = GetNodeAt(e.Location);
-            if (ClickedNode != null && !ClickedNode.Bounds.Contains(e.Location))
-                ClickedNode = null;
+            if (ClickedNode != null)
+            {
+                if (!ClickedNode.Bounds.Contains(e.Location))
+                    ClickedNode = null;
+                else if (e.Button == MouseButtons.Left)
+                {
+                    ClickedNode.BackColor = Color.CornflowerBlue;
+                    ClickedNode.ForeColor = Color.White;
+                }
+            }
 
             if (e.Button == MouseButtons.Right)
             {
                 BeginUpdate();
                 IsUpdating = true;
+            }
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            if (ClickedNode == null || e.Button == MouseButtons.Right)
+                return;
+            if (ClickedNode.Bounds.Contains(e.Location))
+            {
+                ClickedNode.BackColor = Color.CornflowerBlue;
+                ClickedNode.ForeColor = Color.White;
+            }
+            else
+            {
+                ClickedNode.ForeColor = NodeLevelForeColors[ClickedNode.Level];
+                ClickedNode.BackColor = Color.Transparent;
             }
         }
 
@@ -137,7 +166,15 @@ namespace WitcherScriptMerger.Controls
                 ClickedNode = null;
 
             if (e.Button == MouseButtons.Left)
+            {
                 OnLeftMouseUp(e);
+                if (lastClicked != null)
+                {
+                    lastClicked.ForeColor = NodeLevelForeColors[lastClicked.Level];
+                    lastClicked.BackColor = Color.Transparent;
+                }
+                ClickedNode = null;
+            }
             else if (e.Button == MouseButtons.Right)
                 OnRightMouseUp(e);
             EndUpdate();
@@ -412,11 +449,12 @@ namespace WitcherScriptMerger.Controls
 
         private void ContextMenu_Closing(object sender, ToolStripDropDownClosingEventArgs e)
         {
-            if (ClickedNode != null)
-            {
-                ClickedNode.BackColor = Color.Transparent;
-                ClickedNode.TreeView.Update();
-            }
+            if (ClickedNode == null)
+                return;
+            ClickedNode.ForeColor = NodeLevelForeColors[ClickedNode.Level];
+            ClickedNode.BackColor = Color.Transparent;
+            ClickedNode.TreeView.Update();
+            ClickedNode = null;
         }
 
         #endregion

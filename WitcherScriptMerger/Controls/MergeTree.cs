@@ -20,7 +20,7 @@ namespace WitcherScriptMerger.Controls
 
         public MergeTree()
         {
-            FileNodeColor = Color.Blue;
+            FileNodeForeColor = Color.Blue;
 
             ContextOpenRegion.Items.AddRange(new ToolStripItem[]
             {
