@@ -84,9 +84,10 @@
             this.lblKDiff3Msg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblKDiff3Msg.Location = new System.Drawing.Point(7, 52);
             this.lblKDiff3Msg.Name = "lblKDiff3Msg";
-            this.lblKDiff3Msg.Size = new System.Drawing.Size(360, 13);
+            this.lblKDiff3Msg.Size = new System.Drawing.Size(399, 13);
             this.lblKDiff3Msg.TabIndex = 4;
-            this.lblKDiff3Msg.Text = "Script Merger uses this open-source tool by Joachim Eibl to merge text files.";
+            this.lblKDiff3Msg.Text = "Script Merger uses this open-source tool by Joachim Eibl to create merged text fi" +
+    "les.";
             // 
             // lblKDiff3Path
             // 
@@ -356,6 +357,7 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnOK.Location = new System.Drawing.Point(251, 442);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(100, 23);

@@ -109,7 +109,7 @@
             this.lblPackedBundle.Name = "lblPackedBundle";
             this.lblPackedBundle.Size = new System.Drawing.Size(175, 20);
             this.lblPackedBundle.TabIndex = 8;
-            this.lblPackedBundle.Text = "Packed new bundle file.";
+            this.lblPackedBundle.Text = "Packed new bundle file!";
             // 
             // btnOK
             // 

@@ -105,9 +105,9 @@
             this.lblMergedFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMergedFiles.Location = new System.Drawing.Point(12, 11);
             this.lblMergedFiles.Name = "lblMergedFiles";
-            this.lblMergedFiles.Size = new System.Drawing.Size(99, 20);
+            this.lblMergedFiles.Size = new System.Drawing.Size(185, 20);
             this.lblMergedFiles.TabIndex = 5;
-            this.lblMergedFiles.Text = "Merged files!";
+            this.lblMergedFiles.Text = "Created new merged file!";
             // 
             // grpMergedFile
             // 
@@ -233,12 +233,12 @@
             // lblTempContentFiles
             // 
             this.lblTempContentFiles.AutoSize = true;
-            this.lblTempContentFiles.Location = new System.Drawing.Point(117, 16);
+            this.lblTempContentFiles.Location = new System.Drawing.Point(233, 9);
             this.lblTempContentFiles.Name = "lblTempContentFiles";
-            this.lblTempContentFiles.Size = new System.Drawing.Size(505, 13);
+            this.lblTempContentFiles.Size = new System.Drawing.Size(377, 26);
             this.lblTempContentFiles.TabIndex = 6;
-            this.lblTempContentFiles.Text = "The first 2 files were temporarily unpacked from .bundle files && will be deleted" +
-    " when all merges are finished.";
+            this.lblTempContentFiles.Text = "Note: The first 2 files listed below were temporarily unpacked from .bundle files" +
+    ".\r\nThey will be deleted when all merges are finished.";
             // 
             // MergeReportForm
             // 
