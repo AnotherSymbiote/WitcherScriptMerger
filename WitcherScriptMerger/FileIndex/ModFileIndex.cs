@@ -21,6 +21,12 @@ namespace WitcherScriptMerger.FileIndex
             get { return Files.Any(f => f.HasConflict); }
         }
 
+        public int ModCount { get; private set; }
+
+        public int ScriptCount { get; set; }
+
+        public int BundleCount { get; set; }
+
         public ModFileIndex()
         {
             Files = new List<ModFile>();
@@ -36,7 +42,8 @@ namespace WitcherScriptMerger.FileIndex
             var modDirPaths = Directory.GetDirectories(Paths.ModsDirectory, "mod*", SearchOption.TopDirectoryOnly)
                 .Where(path => !ignoredModNames.Any(name => name.EqualsIgnoreCase(new DirectoryInfo(path).Name)))
                 .ToList();
-            if (!modDirPaths.Any())
+            ModCount = modDirPaths.Count;
+            if (ModCount == 0)
             {
                 Program.MainForm.ShowMessage("Can't find any mods in the Mods directory.");
                 return;
@@ -49,18 +56,24 @@ namespace WitcherScriptMerger.FileIndex
             bgWorker.DoWork += (sender, e) =>
             {
                 int i = 0;
+                ScriptCount = BundleCount = 0;
                 foreach (var dirPath in modDirPaths)
                 {
                     string modName = Path.GetFileName(dirPath);
                     var filePaths = Directory.GetFiles(dirPath, "*", SearchOption.AllDirectories);
+                    var scriptPaths = filePaths.Where(path => ModFile.IsScript(path));
+                    var bundlePaths = filePaths.Where(path => ModFile.IsBundle(path));
+
+                    ScriptCount += scriptPaths.Count();
+                    BundleCount += bundlePaths.Count();
+
                     if (checkScripts)
                     {
-                        var scriptPaths = filePaths.Where(path => ModFile.IsScript(path));
                         Files.AddRange(GetModFilesFromPaths(scriptPaths, inventory, modName));
                     }
                     if (checkBundles)
                     {
-                        foreach (string bundlePath in filePaths.Where(path => ModFile.IsBundle(path)))
+                        foreach (string bundlePath in bundlePaths)
                         {
                             var contentPaths = GetBundleContentPaths(bundlePath);
                             Files.AddRange(GetModFilesFromPaths(contentPaths, inventory, modName, bundlePath));

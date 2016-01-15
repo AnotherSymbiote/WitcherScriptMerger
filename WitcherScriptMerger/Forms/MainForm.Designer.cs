@@ -35,11 +35,9 @@
             this.btnCreateMerges = new System.Windows.Forms.Button();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.lblConflicts = new System.Windows.Forms.Label();
-            this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
             this.btnRefreshMerged = new System.Windows.Forms.Button();
             this.lblMergeInventory = new System.Windows.Forms.Label();
             this.btnDeleteMerges = new System.Windows.Forms.Button();
-            this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
             this.pnlProgress = new System.Windows.Forms.Panel();
             this.lblProgressOf = new System.Windows.Forms.Label();
             this.lblProgressState = new System.Windows.Forms.Label();
@@ -59,7 +57,11 @@
             this.menuDependencies = new System.Windows.Forms.ToolStripMenuItem();
             this.menuShowStatusBar = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblStatusLeft = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblStatusSpring = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblStatusRight = new System.Windows.Forms.ToolStripStatusLabel();
+            this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
+            this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -159,21 +161,6 @@
             this.lblConflicts.TabIndex = 16;
             this.lblConflicts.Text = "Conflicts:";
             // 
-            // treConflicts
-            // 
-            this.treConflicts.AllowDrop = true;
-            this.treConflicts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.treConflicts.CheckBoxes = true;
-            this.treConflicts.Location = new System.Drawing.Point(12, 30);
-            this.treConflicts.Name = "treConflicts";
-            this.treConflicts.ShowNodeToolTips = true;
-            this.treConflicts.Size = new System.Drawing.Size(312, 489);
-            this.treConflicts.Sorted = true;
-            this.treConflicts.TabIndex = 1;
-            this.treConflicts.TabStop = false;
-            // 
             // btnRefreshMerged
             // 
             this.btnRefreshMerged.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -211,21 +198,6 @@
             this.btnDeleteMerges.Text = "&Delete Selected Merge";
             this.btnDeleteMerges.UseVisualStyleBackColor = true;
             this.btnDeleteMerges.Click += new System.EventHandler(this.btnDeleteMerges_Click);
-            // 
-            // treMerges
-            // 
-            this.treMerges.AllowDrop = true;
-            this.treMerges.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.treMerges.CheckBoxes = true;
-            this.treMerges.Location = new System.Drawing.Point(3, 30);
-            this.treMerges.Name = "treMerges";
-            this.treMerges.ShowNodeToolTips = true;
-            this.treMerges.Size = new System.Drawing.Size(310, 489);
-            this.treMerges.Sorted = true;
-            this.treMerges.TabIndex = 1;
-            this.treMerges.TabStop = false;
             // 
             // pnlProgress
             // 
@@ -394,19 +366,67 @@
             // 
             this.statusStrip.AutoSize = false;
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lblStatus});
+            this.lblStatusLeft,
+            this.lblStatusSpring,
+            this.lblStatusRight});
             this.statusStrip.Location = new System.Drawing.Point(0, 655);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(654, 19);
             this.statusStrip.TabIndex = 3;
             this.statusStrip.Text = "statusStrip1";
             // 
-            // lblStatus
+            // lblStatusLeft
             // 
-            this.lblStatus.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(58, 14);
-            this.lblStatus.Text = "Loading...";
+            this.lblStatusLeft.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.lblStatusLeft.Name = "lblStatusLeft";
+            this.lblStatusLeft.Size = new System.Drawing.Size(58, 14);
+            this.lblStatusLeft.Text = "Loading...";
+            // 
+            // lblStatusSpring
+            // 
+            this.lblStatusSpring.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.lblStatusSpring.Name = "lblStatusSpring";
+            this.lblStatusSpring.Size = new System.Drawing.Size(536, 14);
+            this.lblStatusSpring.Spring = true;
+            // 
+            // lblStatusRight
+            // 
+            this.lblStatusRight.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.lblStatusRight.Name = "lblStatusRight";
+            this.lblStatusRight.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.lblStatusRight.Size = new System.Drawing.Size(14, 14);
+            // 
+            // treConflicts
+            // 
+            this.treConflicts.AllowDrop = true;
+            this.treConflicts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.treConflicts.CheckBoxes = true;
+            this.treConflicts.FileNodeForeColor = System.Drawing.Color.Red;
+            this.treConflicts.Location = new System.Drawing.Point(12, 30);
+            this.treConflicts.Name = "treConflicts";
+            this.treConflicts.ShowNodeToolTips = true;
+            this.treConflicts.Size = new System.Drawing.Size(312, 489);
+            this.treConflicts.Sorted = true;
+            this.treConflicts.TabIndex = 1;
+            this.treConflicts.TabStop = false;
+            // 
+            // treMerges
+            // 
+            this.treMerges.AllowDrop = true;
+            this.treMerges.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.treMerges.CheckBoxes = true;
+            this.treMerges.FileNodeForeColor = System.Drawing.Color.Blue;
+            this.treMerges.Location = new System.Drawing.Point(3, 30);
+            this.treMerges.Name = "treMerges";
+            this.treMerges.ShowNodeToolTips = true;
+            this.treMerges.Size = new System.Drawing.Size(310, 489);
+            this.treMerges.Sorted = true;
+            this.treMerges.TabIndex = 1;
+            this.treMerges.TabStop = false;
             // 
             // MainForm
             // 
@@ -471,7 +491,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuPathsInKDiff3;
         private System.Windows.Forms.ToolStripMenuItem menuMergeReport;
         private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel lblStatus;
+        private System.Windows.Forms.ToolStripStatusLabel lblStatusLeft;
         private System.Windows.Forms.ToolStripMenuItem menuShowStatusBar;
         private System.Windows.Forms.Label lblProgressOf;
         private System.Windows.Forms.ToolStripMenuItem menuPackReport;
@@ -479,6 +499,8 @@
         private System.Windows.Forms.ToolStripMenuItem menuCheckingForConflicts;
         private System.Windows.Forms.ToolStripMenuItem menuMerging;
         private System.Windows.Forms.ToolStripMenuItem menuDependencies;
+        private System.Windows.Forms.ToolStripStatusLabel lblStatusSpring;
+        private System.Windows.Forms.ToolStripStatusLabel lblStatusRight;
     }
 }
 

@@ -37,6 +37,11 @@ namespace WitcherScriptMerger
             return new Regex("^[_a-zA-Z0-9]*$").IsMatch(s);
         }
 
+        public static string GetPlural(this int num)
+        {
+            return num == 1 ? "" : "s";
+        }
+
         public static IEnumerable<ToolStripItem> GetAvailableItems(this ContextMenuStrip menu)
         {
             return menu.Items.Cast<ToolStripItem>().Where(item => item.Available);

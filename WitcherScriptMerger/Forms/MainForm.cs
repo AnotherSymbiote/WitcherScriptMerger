@@ -86,7 +86,7 @@ namespace WitcherScriptMerger.Forms
                 (!Paths.IsScriptsDirectoryDerived && !Paths.IsModsDirectoryDerived))
                 RefreshConflictsTree();
             else
-                lblStatus.Text = "Please locate your 'The Witcher 3 Wild Hunt' game directory.";
+                lblStatusLeft.Text = "Please locate your 'The Witcher 3 Wild Hunt' game directory.";
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -167,22 +167,33 @@ namespace WitcherScriptMerger.Forms
         {
             int solvableCount = treConflicts.FileNodes.Count(node => ModFile.IsMergeable(node.Text));
 
-            string conflictText;
             if (treConflicts.IsEmpty())
-                conflictText = "0 conflicts";
+                lblStatusLeft.Text = "0 conflicts";
             else
             {
-                conflictText = string.Format("{0} mergeable", solvableCount);
-                conflictText += solvableCount < treConflicts.FileNodes.Count
+                lblStatusLeft.Text = string.Format("{0} mergeable", solvableCount);
+                lblStatusLeft.Text += solvableCount < treConflicts.FileNodes.Count
                     ? string.Format(",  {0} unsupported", (treConflicts.FileNodes.Count - solvableCount))
-                    : string.Format(" conflict{0}", (solvableCount == 1 ? "" : "s"));
+                    : string.Format(" conflict{0}", solvableCount.GetPlural());
             }
 
-            lblStatus.Text = string.Format(
-                "{0}              {1} merge{2}",
-                conflictText,
+            lblStatusLeft.Text += string.Format(
+                "           {0} merge{1}",
                 treMerges.FileNodes.Count,
-                (treMerges.FileNodes.Count == 1 ? "" : "s"));
+                treMerges.FileNodes.Count.GetPlural());
+
+            if (_modIndex != null)
+            {
+
+                lblStatusRight.Text = string.Format(
+                    "Found {0} mod{1}, {2} script{3}, {4} bundle{5}",
+                    _modIndex.ModCount,
+                    _modIndex.ModCount.GetPlural(),
+                    _modIndex.ScriptCount,
+                    _modIndex.ScriptCount.GetPlural(),
+                    _modIndex.BundleCount,
+                    _modIndex.BundleCount.GetPlural());
+            }
         }
 
         public void EnableMergeIfValidSelection()
@@ -360,7 +371,7 @@ namespace WitcherScriptMerger.Forms
 
             PrepareProgressScreen("Detecting Conflicts", ProgressBarStyle.Continuous);
             pnlProgress.Visible = true;
-            lblStatus.Text = "Refreshing...";
+            lblStatusLeft.Text = "Refreshing...";
 
             _modIndex = new ModFileIndex();
             _modIndex.BuildAsync(_inventory,
