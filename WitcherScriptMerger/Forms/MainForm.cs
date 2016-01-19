@@ -722,6 +722,8 @@ namespace WitcherScriptMerger.Forms
             MessageBoxButtons buttons = MessageBoxButtons.OK,
             MessageBoxIcon icon = MessageBoxIcon.None)
         {
+            this.ActivateSafely();
+
             if (this.InvokeRequired)
             {
                 return (DialogResult)this.Invoke(new Func<DialogResult>(
@@ -735,6 +737,8 @@ namespace WitcherScriptMerger.Forms
 
         public DialogResult ShowModal(Form form)
         {
+            this.ActivateSafely();
+
             if (this.InvokeRequired)
             {
                 return (DialogResult)this.Invoke(new Func<DialogResult>(
