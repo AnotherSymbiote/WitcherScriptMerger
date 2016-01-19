@@ -18,7 +18,7 @@ namespace WitcherScriptMerger.Forms
 
             if (mergeTotal > 1)
             {
-                this.Text += string.Format(" ({0} of {1})", mergeNum, mergeTotal);
+                Text += $" ({mergeNum} of {mergeTotal})";  // Window title
                 if (mergeNum < mergeTotal)
                     btnOK.Text = "Continue";
             }

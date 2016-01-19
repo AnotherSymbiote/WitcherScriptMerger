@@ -124,7 +124,7 @@ namespace WitcherScriptMerger.FileIndex
             var procInfo = new ProcessStartInfo
             {
                 FileName = Paths.Bms,
-                Arguments = string.Format("-l \"{0}\" \"{1}\"", Paths.BmsPlugin, bundlePath),
+                Arguments = $"-l \"{Paths.BmsPlugin}\" \"{bundlePath}\"",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,

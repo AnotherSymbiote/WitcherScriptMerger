@@ -145,7 +145,7 @@ namespace WitcherScriptMerger.Controls
                     if (IsModNode(ClickedNode))
                     {
                         _contextDeleteAssociatedMerges.Available = true;
-                        _contextDeleteAssociatedMerges.Text = string.Format("Delete All {0} Merges", ClickedNode.Text);
+                        _contextDeleteAssociatedMerges.Text = $"Delete All {ClickedNode.Text} Merges";
                     }
                 }
             }

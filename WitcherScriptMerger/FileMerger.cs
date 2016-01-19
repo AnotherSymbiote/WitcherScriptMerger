@@ -154,7 +154,7 @@ namespace WitcherScriptMerger
 
             if (isNew && merge.ModNames.Count > 1)
             {
-                ReportProgress(string.Format("Adding script merge to inventory"));
+                ReportProgress("Adding script merge to inventory");
                 _inventory.Merges.Add(merge);
             }
         }
@@ -200,7 +200,7 @@ namespace WitcherScriptMerger
 
         private FileInfo MergeText(int mergeNum, Merge merge)
         {
-            ReportProgress(string.Format("Using KDiff3 to merge {0} && {1}", _modName1, _modName2));
+            ReportProgress($"Using KDiff3 to merge {_modName1} && {_modName2}");
 
             string outputDir = Path.GetDirectoryName(_outputPath);
             if (!Directory.Exists(outputDir))
@@ -212,21 +212,21 @@ namespace WitcherScriptMerger
                 ? "\"" + _vanillaFile.FullName + "\" "
                 : "");
 
-            args += string.Format(
-                "\"{0}\" \"{1}\" -o \"{2}\" " +
+            args +=
+                $"\"{_file1.FullName}\" \"{_file2.FullName}\" " +
+                $"-o \"{_outputPath}\" " +
                 "--cs \"WhiteSpace3FileMergeDefault=2\" " +
                 "--cs \"CreateBakFiles=0\" " +
                 "--cs \"LineEndStyle=1\" " +
-                "--cs \"FollowDirLinks=1\" " +
-                "--cs \"FollowFileLinks=1\"",
-                _file1.FullName, _file2.FullName, _outputPath);
+                "--cs \"FollowFileLinks=1\" " +
+                "--cs \"FollowDirLinks=1\"";
 
             if (!Program.MainForm.PathsInKdiff3Setting)
             {
                 if (hasVanillaVersion)
-                    args += string.Format(" --L1 Vanilla --L2 \"{0}\" --L3 \"{1}\"", _modName1, _modName2);
+                    args += $" --L1 Vanilla --L2 \"{_modName1}\" --L3 \"{_modName2}\"";
                 else
-                    args += string.Format(" --L1 \"{0}\" --L2 \"{1}\"", _modName1, _modName2);
+                    args += $" --L1 \"{_modName1}\" --L2 \"{_modName2}\"";
             }
 
             if (!Program.MainForm.ReviewEachMergeSetting && hasVanillaVersion)
@@ -291,11 +291,11 @@ namespace WitcherScriptMerger
         private DialogResult HandleCanceledMerge(int mergeNum, Merge merge)
         {
             string fileName = Path.GetFileName(merge.RelativePath);
-            string msg = string.Format("Merge was canceled for {0}.", fileName);
+            string msg = $"Merge was canceled for {fileName}.";
             var buttons = MessageBoxButtons.OK;
             if (_mergesToDo > 1)
             {
-                msg = string.Format("Merge {0} of {1} was canceled for {2}.", mergeNum, _mergesToDo, fileName);
+                msg = $"Merge {mergeNum} of {_mergesToDo} was canceled for {fileName}.";
                 if (mergeNum < _mergesToDo)
                 {
                     msg += "\n\nContinue with the remaining merges for this file?";
@@ -366,11 +366,7 @@ namespace WitcherScriptMerger
             var procInfo = new ProcessStartInfo
             {
                 FileName = Paths.Bms,
-                Arguments = string.Format("-Y -f \"{0}\" \"{1}\" \"{2}\" \"{3}\"",
-                    contentRelativePath,
-                    Paths.BmsPlugin,
-                    bundlePath,
-                    outputDir),
+                Arguments = $"-Y -f \"{contentRelativePath}\" \"{Paths.BmsPlugin}\" \"{bundlePath}\" \"{outputDir}\"",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -430,9 +426,7 @@ namespace WitcherScriptMerger
             var procInfo = new ProcessStartInfo
             {
                 FileName = Paths.WccLite,
-                Arguments = string.Format("pack -dir=\"{0}\" -outdir=\"{1}\"",
-                    contentDir,
-                    outputDir),
+                Arguments = $"pack -dir=\"{contentDir}\" -outdir=\"{outputDir}\"",
                 WorkingDirectory = Path.GetDirectoryName(Paths.WccLite),
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -457,7 +451,7 @@ namespace WitcherScriptMerger
                 }
             }
             ReportProgress("Generating metadata.store for new blob0.bundle");
-            procInfo.Arguments = string.Format("metadatastore -path=\"{0}\"", outputDir);
+            procInfo.Arguments = $"metadatastore -path=\"{outputDir}\"";
             using (var wccLiteProc = new Process { StartInfo = procInfo })
             {
                 wccLiteProc.Start();

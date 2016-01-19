@@ -169,7 +169,7 @@ namespace WitcherScriptMerger.Forms
                 lblStatusLeft.Text = "0 conflicts";
             else
             {
-                lblStatusLeft.Text = string.Format("{0} mergeable", solvableCount);
+                lblStatusLeft.Text = $"{solvableCount} mergeable";
                 lblStatusLeft.Text += solvableCount < treConflicts.FileNodes.Count
                     ? string.Format(",  {0} unsupported", (treConflicts.FileNodes.Count - solvableCount))
                     : string.Format(" conflict{0}", solvableCount.GetPlural());
@@ -307,12 +307,16 @@ namespace WitcherScriptMerger.Forms
 
         private bool ConfirmPruneMissingMergeFile(Merge merge)
         {
-            string msg = "Can't find the merged version of the following file.\n\n{0}\n\nRemove from Merged Files list";
-            if (merge.IsBundleContent)
-                msg += " & repack merged bundle";
-            msg += "?";
+            string msg =
+                "Can't find the merged version of the following file.\n\n" +
+                $"{merge.RelativePath}\n\n";
+
+            msg += merge.IsBundleContent
+                ? "Remove from Merged Files list & repack merged bundle?"
+                : "Remove from Merged Files list?";
+
             return (DialogResult.Yes == ShowMessage(
-                string.Format(msg, merge.RelativePath),
+                msg,
                 "Missing Merge Inventory File",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question));
@@ -321,13 +325,16 @@ namespace WitcherScriptMerger.Forms
         private bool ConfirmDeleteChangedMerge(Merge merge, string missingModName)
         {
             string msg =
-                "Can't find the '{0}' version of the following file, " +
-                "perhaps because the mod was uninstalled or updated.\n\n{1}\n\nDelete the affected merge";
-            if (merge.IsBundleContent)
-                msg += " & repack merged bundle";
-            msg += "?";
+                $"Can't find the '{missingModName}' version of the following file, " +
+                "perhaps because the mod was uninstalled or updated.\n\n" +
+                $"{merge.RelativePath}\n\n";
+
+            msg += merge.IsBundleContent
+                ? "Delete the affected merge & repack the merged bundle?"
+                : "Delete the affected merge?";
+
             return (DialogResult.Yes == ShowMessage(
-                string.Format(msg, missingModName, merge.RelativePath),
+                msg,
                 "Missing Merge Inventory File",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question));
