@@ -115,11 +115,8 @@ namespace WitcherScriptMerger
                         }
                     }
                 }
-                if (Directory.Exists(Paths.TempBundleContent))
-                {
-                    ReportProgress("Deleting temporary unpacked bundle content");
-                    DeleteDirectory(Paths.TempBundleContent);
-                }
+                CleanUpTempFiles();
+                CleanUpEmptyDirectories();
             };
             _bgWorker.RunWorkerAsync();
         }
@@ -175,9 +172,9 @@ namespace WitcherScriptMerger
 
                 if (!GetUnpackedFiles(fileNode.Text))
                 {
-                    if (DialogResult.Abort == HandleCanceledMerge(i, merge))
-                        break;
-                    continue;
+                    if (DialogResult.Abort != HandleCanceledMerge(i, merge))
+                        continue;
+                    break;
                 }
 
                 var mergedFile = MergeText(i, merge);
@@ -302,7 +299,6 @@ namespace WitcherScriptMerger
                     buttons = MessageBoxButtons.YesNo;
                 }
             }
-            Program.MainForm.ActivateSafely(); // Focus window
             var result = Program.MainForm.ShowMessage(msg, "Skipped Merge", buttons, MessageBoxIcon.Information);
             if (result == DialogResult.No)
                 return DialogResult.Abort;
@@ -520,6 +516,46 @@ namespace WitcherScriptMerger
             _bgWorker.ReportProgress(0, _progressState);
         }
 
+        private void CleanUpTempFiles()
+        {
+            if (!Directory.Exists(Paths.TempBundleContent))
+                return;
+
+            try
+            {
+                ReportProgress("Deleting temporary unpacked bundle content");
+                DeleteDirectory(Paths.TempBundleContent);
+            }
+            catch (Exception ex)
+            {
+                Program.MainForm.ShowMessage(
+                    "Non-critical error: Failed to delete temporary unpacked bundle content.\n\n" + ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
+
+        private void CleanUpEmptyDirectories()
+        {
+            if (!Directory.Exists(Paths.MergedBundleContent))
+                return;
+
+            try
+            {
+                ReportProgress("Deleting empty Merged Bundle Content directories");
+                DeleteEmptyDirectories(Paths.MergedBundleContent);
+            }
+            catch (Exception ex)
+            {
+                Program.MainForm.ShowMessage(
+                        "Non-critical error: Failed to delete empty Merged Bundle Content directories.\n\n" + ex.Message,
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+            }
+        }
+
         /// <summary>
         /// Depth-first recursive delete, with handling for descendant 
         /// directories open in Windows Explorer.
@@ -547,13 +583,34 @@ namespace WitcherScriptMerger
                 System.Threading.Thread.Sleep(1);
                 Directory.Delete(path, true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Program.MainForm.ShowMessage(
-                    "Non-critical error: Failed to delete temporary unpacked bundle content.\n\n" + ex.Message,
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Deletes any subdirectories of the root that are empty, AS WELL AS the root itself, if it's empty.
+        /// </summary>
+        private void DeleteEmptyDirectories(string rootPath)
+        {
+            foreach (string directory in Directory.GetDirectories(rootPath))
+            {
+                System.Threading.Thread.Sleep(1);
+                DeleteEmptyDirectories(directory);
+            }
+
+            if (Directory.GetFiles(rootPath).Any() || Directory.GetDirectories(rootPath).Any())
+                return;
+            
+            try
+            {
+                System.Threading.Thread.Sleep(1);
+                DeleteDirectory(rootPath);
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }
