@@ -14,20 +14,11 @@ namespace WitcherScriptMerger.Forms
     {
         #region Members
 
-        public string GameDirectorySetting
-        {
-            get { return txtGameDir.Text; }
-        }
+        public string GameDirectorySetting => txtGameDir.Text;
 
-        public bool PathsInKdiff3Setting
-        {
-            get { return menuPathsInKDiff3.Checked; }
-        }
+        public bool PathsInKdiff3Setting => menuPathsInKDiff3.Checked;
 
-        public bool ReviewEachMergeSetting
-        {
-            get { return menuReviewEach.Checked; }
-        }
+        public bool ReviewEachMergeSetting => menuReviewEach.Checked;
 
         public bool MergeReportSetting
         {

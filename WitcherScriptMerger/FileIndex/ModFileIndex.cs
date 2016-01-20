@@ -11,15 +11,9 @@ namespace WitcherScriptMerger.FileIndex
     {
         public List<ModFile> Files;
 
-        public IEnumerable<ModFile> Conflicts
-        {
-            get { return Files.Where(f => f.HasConflict); }
-        }
+        public IEnumerable<ModFile> Conflicts => Files.Where(f => f.HasConflict);
 
-        public bool HasConflict
-        {
-            get { return Files.Any(f => f.HasConflict); }
-        }
+        public bool HasConflict => Files.Any(f => f.HasConflict);
 
         public int ModCount { get; private set; }
 

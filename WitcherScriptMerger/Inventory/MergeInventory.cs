@@ -19,7 +19,7 @@ namespace WitcherScriptMerger.Inventory
         public bool BundleChanged { get; private set; }
 
         [XmlIgnore]
-        public bool HasChanged { get { return ScriptsChanged || BundleChanged; } }
+        public bool HasChanged => (ScriptsChanged || BundleChanged);
 
         private static XmlSerializer _serializer = new XmlSerializer(typeof(MergeInventory));
 

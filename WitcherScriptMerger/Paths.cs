@@ -17,15 +17,9 @@ namespace WitcherScriptMerger
         public static string VanillaScriptBase = Path.Combine("content", "content0", "scripts");
         public static string BundleBase = "content";
 
-        public static string GameDirectory
-        {
-            get { return Program.MainForm.GameDirectorySetting; }
-        }
+        public static string GameDirectory => Program.MainForm.GameDirectorySetting;
 
-        public static string BundlesDirectory
-        {
-            get { return Path.Combine(GameDirectory, BundleBase); }
-        }
+        public static string BundlesDirectory => Path.Combine(GameDirectory, BundleBase);
 
         private static string _scriptsDirSetting = Program.Settings.Get("ScriptsDirectory");
         public static string ScriptsDirectory
@@ -49,15 +43,9 @@ namespace WitcherScriptMerger
             }
         }
 
-        public static bool IsScriptsDirectoryDerived
-        {
-            get { return string.IsNullOrWhiteSpace(_scriptsDirSetting); }
-        }
+        public static bool IsScriptsDirectoryDerived => string.IsNullOrWhiteSpace(_scriptsDirSetting);
 
-        public static bool IsModsDirectoryDerived
-        {
-            get { return string.IsNullOrWhiteSpace(_modsDirSetting); }
-        }
+        public static bool IsModsDirectoryDerived => string.IsNullOrWhiteSpace(_modsDirSetting);
 
         public static string GetRelativePath(string fullPath, string basePath)
         {

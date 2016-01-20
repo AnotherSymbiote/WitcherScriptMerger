@@ -10,6 +10,8 @@ namespace WitcherScriptMerger
 {
     internal static class Extensions
     {
+        #region Strings
+
         public static string ReplaceIgnoreCase(this string s, string oldValue, string newValue)
         {
             return Regex.Replace(s, Regex.Escape(oldValue), newValue.Replace("$", "$$"), RegexOptions.IgnoreCase);
@@ -42,6 +44,10 @@ namespace WitcherScriptMerger
             return num == 1 ? "" : "s";
         }
 
+        #endregion
+
+        #region Tree & Context Menu
+
         public static IEnumerable<ToolStripItem> GetAvailableItems(this ContextMenuStrip menu)
         {
             return menu.Items.Cast<ToolStripItem>().Where(item => item.Available);
@@ -62,6 +68,8 @@ namespace WitcherScriptMerger
         {
             return (tree.Nodes.Count == 0);
         }
+
+        #endregion
 
         #region Scrolling TreeView to Top
 

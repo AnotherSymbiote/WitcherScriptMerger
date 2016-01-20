@@ -9,20 +9,14 @@ namespace WitcherScriptMerger
         private string _assemblyPath;
         private Configuration _cachedConfig;
 
-        private bool IsBatching
-        {
-            get { return _cachedConfig != null; }
-        }
+        private bool IsBatching => (_cachedConfig != null);
 
         public AppSettings()
         {
             _assemblyPath = System.Reflection.Assembly.GetEntryAssembly().Location;
         }
 
-        private Configuration GetConfig()
-        {
-            return ConfigurationManager.OpenExeConfiguration(_assemblyPath);
-        }
+        private Configuration GetConfig() => ConfigurationManager.OpenExeConfiguration(_assemblyPath);
 
         public void StartBatch()
         {

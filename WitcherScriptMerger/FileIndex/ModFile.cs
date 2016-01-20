@@ -38,16 +38,10 @@ namespace WitcherScriptMerger.FileIndex
         }
 
         [XmlIgnore]
-        public bool IsBundleContent
-        {
-            get { return BundleName != null; }
-        }
+        public bool IsBundleContent => (BundleName != null);
 
         [XmlIgnore]
-        public bool HasConflict
-        {
-            get { return ModNames.Count > 1; }
-        }
+        public bool HasConflict => (ModNames.Count > 1);
 
         #endregion
 
@@ -90,25 +84,13 @@ namespace WitcherScriptMerger.FileIndex
             return name.Substring(name.LastIndexOf('\\') + 1);
         }
 
-        public static bool IsScript(string path)
-        {
-            return path.EndsWith(".ws");
-        }
+        public static bool IsScript(string path) => path.EndsWith(".ws");
 
-        public static bool IsBundle(string path)
-        {
-            return path.EndsWith(".bundle");
-        }
+        public static bool IsBundle(string path) => path.EndsWith(".bundle");
 
-        public static bool IsXml(string path)
-        {
-            return path.EndsWith(".xml");
-        }
+        public static bool IsXml(string path) => path.EndsWith(".xml");
 
-        public static bool IsMergeable(string path)
-        {
-            return (IsScript(path) || IsXml(path));
-        }
+        public static bool IsMergeable(string path) => (IsScript(path) || IsXml(path));
 
         public static int GetLoadOrder(string modName1, string modName2)
         {

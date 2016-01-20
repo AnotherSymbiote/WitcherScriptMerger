@@ -22,20 +22,11 @@ namespace WitcherScriptMerger.Controls
 
         #region Members
 
-        public List<TreeNode> CategoryNodes
-        {
-            get { return GetNodesAtLevel(LevelType.Categories); }
-        }
+        public List<TreeNode> CategoryNodes => GetNodesAtLevel(LevelType.Categories);
 
-        public List<TreeNode> FileNodes
-        {
-            get { return GetNodesAtLevel(LevelType.Files); }
-        }
+        public List<TreeNode> FileNodes => GetNodesAtLevel(LevelType.Files);
 
-        public List<TreeNode> ModNodes
-        {
-            get { return GetNodesAtLevel(LevelType.Mods); }
-        }
+        public List<TreeNode> ModNodes => GetNodesAtLevel(LevelType.Mods);
 
         public Color FileNodeForeColor
         {
@@ -222,25 +213,13 @@ namespace WitcherScriptMerger.Controls
                 EndUpdate();
         }
 
-        protected LevelType GetLevelType(TreeNode node)
-        {
-            return (LevelType)node.Level;
-        }
+        protected LevelType GetLevelType(TreeNode node) => (LevelType)node.Level;
 
-        protected bool IsCategoryNode(TreeNode node)
-        {
-            return GetLevelType(node) == LevelType.Categories;
-        }
+        protected bool IsCategoryNode(TreeNode node) => (GetLevelType(node) == LevelType.Categories);
 
-        protected bool IsFileNode(TreeNode node)
-        {
-            return GetLevelType(node) == LevelType.Files;
-        }
+        protected bool IsFileNode(TreeNode node) => (GetLevelType(node) == LevelType.Files);
 
-        protected bool IsModNode(TreeNode node)
-        {
-            return GetLevelType(node) == LevelType.Mods;
-        }
+        protected bool IsModNode(TreeNode node) => (GetLevelType(node) == LevelType.Mods);
 
         #region Context Menu
 
