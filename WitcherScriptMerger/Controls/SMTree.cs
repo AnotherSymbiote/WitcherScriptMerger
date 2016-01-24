@@ -59,6 +59,8 @@ namespace WitcherScriptMerger.Controls
         protected ToolStripMenuItem ContextSelectAll = new ToolStripMenuItem();
         protected ToolStripMenuItem ContextDeselectAll = new ToolStripMenuItem();
 
+        private TreeNode _rightClickedNode;
+
         #endregion
 
         public SMTree()
@@ -377,31 +379,40 @@ namespace WitcherScriptMerger.Controls
 
         protected void ContextOpenScript_Click(object sender, EventArgs e)
         {
-            if (ClickedNode == null)
+            if (_rightClickedNode == null)
                 return;
-            string filePath = ClickedNode.Tag as string;
+
+            string filePath = _rightClickedNode.Tag as string;
             if (!File.Exists(filePath))
                 Program.MainForm.ShowMessage("Can't find file: " + filePath);
             else
                 Process.Start(filePath);
+
+            _rightClickedNode = null;
         }
 
         protected void ContextOpenDirectory_Click(object sender, EventArgs e)
         {
-            if (ClickedNode == null)
+            if (_rightClickedNode == null)
                 return;
-            var dirPath = Path.GetDirectoryName(ClickedNode.Tag as string);
+
+            var dirPath = Path.GetDirectoryName(_rightClickedNode.Tag as string);
             if (!Directory.Exists(dirPath))
                 Program.MainForm.ShowMessage("Can't find directory: " + dirPath);
             else
                 Process.Start(dirPath);
+
+            _rightClickedNode = null;
         }
 
         private void ContextCopyPath_Click(object sender, EventArgs e)
         {
-            if (ClickedNode == null)
+            if (_rightClickedNode == null)
                 return;
-            Clipboard.SetText(ClickedNode.Tag as string);
+
+            Clipboard.SetText(_rightClickedNode.Tag as string);
+
+            _rightClickedNode = null;
         }
 
         protected void ContextSelectAll_Click(object sender, EventArgs e)
@@ -433,7 +444,9 @@ namespace WitcherScriptMerger.Controls
             ClickedNode.ForeColor = NodeLevelForeColors[ClickedNode.Level];
             ClickedNode.BackColor = Color.Transparent;
             ClickedNode.TreeView.Update();
-            ClickedNode = null;
+
+            _rightClickedNode = ClickedNode;  // Preserve reference to clicked node so context item handlers can access,
+            ClickedNode = null;               // but clear ClickedNode so mouseover doesn't change back color.
         }
 
         #endregion
