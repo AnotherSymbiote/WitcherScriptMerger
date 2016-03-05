@@ -80,7 +80,7 @@ namespace WitcherScriptMerger
                     _mergesToDo = checkedModNodes.Count - 1;
 
                     bool isNew = false;
-                    var merge = _inventory.Merges.FirstOrDefault(ms => ms.RelativePath.EqualsIgnoreCase(fileNode.Text));
+                    var merge = _inventory.Merges.FirstOrDefault(m => m.RelativePath.EqualsIgnoreCase(fileNode.Text));
                     if (merge == null)
                     {
                         isNew = true;
@@ -105,6 +105,10 @@ namespace WitcherScriptMerger
                         foreach (var bundleMerge in _pendingBundleMerges)
                             _inventory.Merges.Add(bundleMerge);
 
+                        if (Program.MainForm.CompletionSoundsSetting)
+                        {
+                            System.Media.SystemSounds.Asterisk.Play();
+                        }
                         if (Program.MainForm.PackReportSetting)
                         {
                             using (var reportForm = new PackReportForm(newBundlePath))
@@ -246,6 +250,10 @@ namespace WitcherScriptMerger
                     && !_file2.FullName.Contains(Paths.MergedBundleContent))
                     _inventory.AddModToMerge(_modName2, merge);
 
+                if (Program.MainForm.CompletionSoundsSetting)
+                {
+                    System.Media.SystemSounds.Asterisk.Play();
+                }
                 if (Program.MainForm.MergeReportSetting)
                 {
                     using (var reportForm = new MergeReportForm(
@@ -397,7 +405,14 @@ namespace WitcherScriptMerger
             _bgWorker.DoWork += (sender, e) =>
             {
                 string newBundlePath = PackNewBundle(bundlePath, true);
-                if (newBundlePath != null && Program.MainForm.PackReportSetting)
+                if (newBundlePath == null)
+                    return;
+
+                if (Program.MainForm.CompletionSoundsSetting)
+                {
+                    System.Media.SystemSounds.Asterisk.Play();
+                }
+                if (Program.MainForm.PackReportSetting)
                 {
                     using (var reportForm = new PackReportForm(bundlePath))
                     {

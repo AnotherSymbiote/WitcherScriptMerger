@@ -20,6 +20,12 @@ namespace WitcherScriptMerger.Forms
 
         public bool ReviewEachMergeSetting => menuReviewEach.Checked;
 
+        public bool CompletionSoundsSetting
+        {
+            get { return menuCompletionSounds.Checked; }
+            set { menuMergeReport.Checked = value; }
+        }
+
         public bool MergeReportSetting
         {
             get { return menuMergeReport.Checked; }
@@ -54,6 +60,7 @@ namespace WitcherScriptMerger.Forms
             menuCollapseUnsupported.Checked = Program.Settings.Get<bool>("CollapseUnsupported");
             menuReviewEach.Checked = Program.Settings.Get<bool>("ReviewEachMerge");
             menuPathsInKDiff3.Checked = Program.Settings.Get<bool>("ShowPathsInKDiff3");
+            menuCompletionSounds.Checked = Program.Settings.Get<bool>("PlayCompletionSounds");
             menuMergeReport.Checked = Program.Settings.Get<bool>("ReportAfterMerge");
             menuPackReport.Checked = Program.Settings.Get<bool>("ReportAfterPack");
             menuShowStatusBar.Checked = Program.Settings.Get<bool>("ShowStatusBar");
@@ -87,6 +94,7 @@ namespace WitcherScriptMerger.Forms
             Program.Settings.Set("CollapseUnsupported", menuCollapseUnsupported.Checked);
             Program.Settings.Set("ReviewEachMerge", menuReviewEach.Checked);
             Program.Settings.Set("ShowPathsInKDiff3", menuPathsInKDiff3.Checked);
+            Program.Settings.Set("PlayCompletionSounds", menuCompletionSounds.Checked);
             Program.Settings.Set("ReportAfterMerge", menuMergeReport.Checked);
             Program.Settings.Set("ReportAfterPack", menuPackReport.Checked);
             Program.Settings.Set("ShowStatusBar", menuShowStatusBar.Checked);
@@ -679,7 +687,7 @@ namespace WitcherScriptMerger.Forms
             if (dirPath.EqualsIgnoreCase(stopPath))
                 return;
             var dirInfo = new DirectoryInfo(dirPath);
-            if (dirInfo.GetFiles().Length > 0 || dirInfo.GetDirectories().Length > 0)
+            if (!dirInfo.Exists || dirInfo.GetFiles().Length > 0 || dirInfo.GetDirectories().Length > 0)
                 return;
             Directory.Delete(dirPath);
             DeleteEmptyDirs(dirInfo.Parent.FullName, stopPath);

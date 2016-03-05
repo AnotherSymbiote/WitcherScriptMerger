@@ -60,6 +60,7 @@
             this.lblStatusLeft = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusSpring = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusRight = new System.Windows.Forms.ToolStripStatusLabel();
+            this.menuCompletionSounds = new System.Windows.Forms.ToolStripMenuItem();
             this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
             this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -314,6 +315,7 @@
             this.menuMerging.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuReviewEach,
             this.menuPathsInKDiff3,
+            this.menuCompletionSounds,
             this.menuMergeReport,
             this.menuPackReport});
             this.menuMerging.Name = "menuMerging";
@@ -386,7 +388,7 @@
             // 
             this.lblStatusSpring.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.lblStatusSpring.Name = "lblStatusSpring";
-            this.lblStatusSpring.Size = new System.Drawing.Size(536, 14);
+            this.lblStatusSpring.Size = new System.Drawing.Size(567, 14);
             this.lblStatusSpring.Spring = true;
             // 
             // lblStatusRight
@@ -395,6 +397,13 @@
             this.lblStatusRight.Name = "lblStatusRight";
             this.lblStatusRight.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.lblStatusRight.Size = new System.Drawing.Size(14, 14);
+            // 
+            // menuCompletionSounds
+            // 
+            this.menuCompletionSounds.CheckOnClick = true;
+            this.menuCompletionSounds.Name = "menuCompletionSounds";
+            this.menuCompletionSounds.Size = new System.Drawing.Size(297, 22);
+            this.menuCompletionSounds.Text = "Play Completion &Sounds";
             // 
             // treConflicts
             // 
@@ -501,6 +510,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuDependencies;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusSpring;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusRight;
+        private System.Windows.Forms.ToolStripMenuItem menuCompletionSounds;
     }
 }
 
