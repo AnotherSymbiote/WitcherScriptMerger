@@ -82,10 +82,7 @@ namespace WitcherScriptMerger
                     (!IsScriptsDirectoryDerived
                      ? "Can't find the Scripts directory specified in the config file."
                      : "Can't find \\content\\content0\\scripts directory in the specified game directory.") +
-                    "\n\nIt was added in patch 1.08.1 and should contain the game's vanilla scripts. If you don't have it, try this workaround:\n\n" +
-                    "1) Open the folder where wcc_lite is located.\n" +
-                    "2) Open the 'r4data' folder.\n" +
-                    "3) Copy the 'scripts' folder to " + Path.Combine(GameDirectory, "content\\content0") + ".");
+                    "\n\nIt was added in patch 1.08.1 and should contain the game's vanilla scripts.");
                 return false;
             }
             return true;
