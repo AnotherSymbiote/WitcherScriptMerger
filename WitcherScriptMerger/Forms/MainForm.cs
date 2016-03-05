@@ -357,9 +357,9 @@ namespace WitcherScriptMerger.Forms
                 }
                 if (_inventory.BundleChanged || checkBundles || !menuCheckBundleContents.Checked)
                 {
-                    var xmlCatNode = treConflicts.GetCategoryNode(Categories.BundleXml);
-                    if (xmlCatNode != null)
-                        nodesToUpdate.Add(xmlCatNode);
+                    var bundleTextCatNode = treConflicts.GetCategoryNode(Categories.BundleText);
+                    if (bundleTextCatNode != null)
+                        nodesToUpdate.Add(bundleTextCatNode);
                     var unsupportedCatNode = treConflicts.GetCategoryNode(Categories.BundleUnsupported);
                     if (unsupportedCatNode != null)
                         nodesToUpdate.Add(unsupportedCatNode);

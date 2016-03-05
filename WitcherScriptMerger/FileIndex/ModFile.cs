@@ -27,8 +27,8 @@ namespace WitcherScriptMerger.FileIndex
                     return Categories.Script;
                 else if (BundleName != null)
                 {
-                    if (IsXml(RelativePath))
-                        return Categories.BundleXml;
+                    if (IsBundleText(RelativePath))
+                        return Categories.BundleText;
                     else
                         return Categories.BundleUnsupported;
                 }
@@ -76,7 +76,7 @@ namespace WitcherScriptMerger.FileIndex
 
         public static string GetModNameFromPath(string modFilePath)
         {
-            if (IsXml(modFilePath))           // Merged bundle content isn't in a mod folder
+            if (IsBundleText(modFilePath))           // Merged bundle content has internal path, not derived from mod folder
                 return Paths.MergedBundleContent;
             string nameStart = (IsScript(modFilePath) ? Paths.ModScriptBase : Paths.BundleBase);
             int nameEnd = modFilePath.IndexOfIgnoreCase(nameStart) - 1;
@@ -88,9 +88,9 @@ namespace WitcherScriptMerger.FileIndex
 
         public static bool IsBundle(string path) => path.EndsWith(".bundle");
 
-        public static bool IsXml(string path) => path.EndsWith(".xml");
+        public static bool IsBundleText(string path) => (path.EndsWith(".xml") || path.EndsWith(".csv"));
 
-        public static bool IsMergeable(string path) => (IsScript(path) || IsXml(path));
+        public static bool IsMergeable(string path) => (IsScript(path) || IsBundleText(path));
 
         public static int GetLoadOrder(string modName1, string modName2)
         {
