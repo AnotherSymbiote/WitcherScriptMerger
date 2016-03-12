@@ -388,7 +388,7 @@ namespace WitcherScriptMerger.Forms
         private void OnRefreshProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressBar.Value = e.ProgressPercentage;
-            lblProgressState.Text = e.UserState as string;
+            lblProgressCurrentAction.Text = e.UserState as string;
         }
 
         private void OnRefreshComplete(object sender, RunWorkerCompletedEventArgs e)
@@ -537,9 +537,9 @@ namespace WitcherScriptMerger.Forms
 
         private void OnMergeProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            string[] userState = e.UserState as string[];
-            lblProgressOf.Text = userState[0];
-            lblProgressState.Text = userState[1];
+            var mergeProgress = (MergeProgressInfo)e.UserState;
+            lblProgressCurrentPhase.Text = mergeProgress.CurrentPhase;
+            lblProgressCurrentAction.Text = mergeProgress.CurrentAction;
         }
 
         private void OnMergeComplete(object sender, RunWorkerCompletedEventArgs e)
@@ -701,7 +701,7 @@ namespace WitcherScriptMerger.Forms
         {
             grpGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = false;
             progressBar.Value = 0;
-            lblProgressOf.Text = progressOf;
+            lblProgressCurrentPhase.Text = progressOf;
             progressBar.Style = style;
         }
 

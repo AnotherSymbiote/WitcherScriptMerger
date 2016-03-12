@@ -39,8 +39,8 @@
             this.lblMergeInventory = new System.Windows.Forms.Label();
             this.btnDeleteMerges = new System.Windows.Forms.Button();
             this.pnlProgress = new System.Windows.Forms.Panel();
-            this.lblProgressOf = new System.Windows.Forms.Label();
-            this.lblProgressState = new System.Windows.Forms.Label();
+            this.lblProgressCurrentPhase = new System.Windows.Forms.Label();
+            this.lblProgressCurrentAction = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.grpGameDir = new System.Windows.Forms.GroupBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -52,6 +52,7 @@
             this.menuMerging = new System.Windows.Forms.ToolStripMenuItem();
             this.menuReviewEach = new System.Windows.Forms.ToolStripMenuItem();
             this.menuPathsInKDiff3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuCompletionSounds = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMergeReport = new System.Windows.Forms.ToolStripMenuItem();
             this.menuPackReport = new System.Windows.Forms.ToolStripMenuItem();
             this.menuDependencies = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,7 +61,6 @@
             this.lblStatusLeft = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusSpring = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusRight = new System.Windows.Forms.ToolStripStatusLabel();
-            this.menuCompletionSounds = new System.Windows.Forms.ToolStripMenuItem();
             this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
             this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -206,8 +206,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlProgress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlProgress.Controls.Add(this.lblProgressOf);
-            this.pnlProgress.Controls.Add(this.lblProgressState);
+            this.pnlProgress.Controls.Add(this.lblProgressCurrentPhase);
+            this.pnlProgress.Controls.Add(this.lblProgressCurrentAction);
             this.pnlProgress.Controls.Add(this.progressBar);
             this.pnlProgress.Location = new System.Drawing.Point(9, 30);
             this.pnlProgress.Name = "pnlProgress";
@@ -216,27 +216,27 @@
             this.pnlProgress.TabIndex = 8;
             this.pnlProgress.Visible = false;
             // 
-            // lblProgressOf
+            // lblProgressCurrentPhase
             // 
-            this.lblProgressOf.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblProgressOf.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProgressOf.Location = new System.Drawing.Point(11, 283);
-            this.lblProgressOf.Name = "lblProgressOf";
-            this.lblProgressOf.Size = new System.Drawing.Size(611, 20);
-            this.lblProgressOf.TabIndex = 2;
-            this.lblProgressOf.Text = "Initializing";
-            this.lblProgressOf.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lblProgressCurrentPhase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblProgressCurrentPhase.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProgressCurrentPhase.Location = new System.Drawing.Point(11, 233);
+            this.lblProgressCurrentPhase.Name = "lblProgressCurrentPhase";
+            this.lblProgressCurrentPhase.Size = new System.Drawing.Size(611, 70);
+            this.lblProgressCurrentPhase.TabIndex = 2;
+            this.lblProgressCurrentPhase.Text = "Initializing";
+            this.lblProgressCurrentPhase.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             // 
-            // lblProgressState
+            // lblProgressCurrentAction
             // 
-            this.lblProgressState.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblProgressState.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProgressState.Location = new System.Drawing.Point(11, 333);
-            this.lblProgressState.Name = "lblProgressState";
-            this.lblProgressState.Size = new System.Drawing.Size(611, 129);
-            this.lblProgressState.TabIndex = 1;
-            this.lblProgressState.Text = "...";
-            this.lblProgressState.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.lblProgressCurrentAction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblProgressCurrentAction.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProgressCurrentAction.Location = new System.Drawing.Point(11, 333);
+            this.lblProgressCurrentAction.Name = "lblProgressCurrentAction";
+            this.lblProgressCurrentAction.Size = new System.Drawing.Size(611, 129);
+            this.lblProgressCurrentAction.TabIndex = 1;
+            this.lblProgressCurrentAction.Text = "...";
+            this.lblProgressCurrentAction.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // progressBar
             // 
@@ -336,6 +336,13 @@
             this.menuPathsInKDiff3.Size = new System.Drawing.Size(297, 22);
             this.menuPathsInKDiff3.Text = "Show File Paths in &KDiff3";
             // 
+            // menuCompletionSounds
+            // 
+            this.menuCompletionSounds.CheckOnClick = true;
+            this.menuCompletionSounds.Name = "menuCompletionSounds";
+            this.menuCompletionSounds.Size = new System.Drawing.Size(297, 22);
+            this.menuCompletionSounds.Text = "Play Completion &Sounds";
+            // 
             // menuMergeReport
             // 
             this.menuMergeReport.CheckOnClick = true;
@@ -397,13 +404,6 @@
             this.lblStatusRight.Name = "lblStatusRight";
             this.lblStatusRight.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.lblStatusRight.Size = new System.Drawing.Size(14, 14);
-            // 
-            // menuCompletionSounds
-            // 
-            this.menuCompletionSounds.CheckOnClick = true;
-            this.menuCompletionSounds.Name = "menuCompletionSounds";
-            this.menuCompletionSounds.Size = new System.Drawing.Size(297, 22);
-            this.menuCompletionSounds.Text = "Play Completion &Sounds";
             // 
             // treConflicts
             // 
@@ -490,7 +490,7 @@
         private System.Windows.Forms.Label lblConflicts;
         private System.Windows.Forms.Button btnRefreshMerged;
         private System.Windows.Forms.Panel pnlProgress;
-        private System.Windows.Forms.Label lblProgressState;
+        private System.Windows.Forms.Label lblProgressCurrentAction;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
@@ -502,7 +502,7 @@
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusLeft;
         private System.Windows.Forms.ToolStripMenuItem menuShowStatusBar;
-        private System.Windows.Forms.Label lblProgressOf;
+        private System.Windows.Forms.Label lblProgressCurrentPhase;
         private System.Windows.Forms.ToolStripMenuItem menuPackReport;
         private System.Windows.Forms.ToolStripMenuItem menuCollapseUnsupported;
         private System.Windows.Forms.ToolStripMenuItem menuCheckingForConflicts;
