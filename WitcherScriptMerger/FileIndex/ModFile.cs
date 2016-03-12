@@ -88,7 +88,7 @@ namespace WitcherScriptMerger.FileIndex
 
         public static bool IsBundle(string path) => path.EndsWith(".bundle");
 
-        public static bool IsBundleText(string path) => (path.EndsWith(".xml") || path.EndsWith(".csv"));
+        public static bool IsBundleText(string path) => (path.EndsWith(".txt") || path.EndsWith(".xml") || path.EndsWith(".csv"));
 
         public static bool IsMergeable(string path) => (IsScript(path) || IsBundleText(path));
 
