@@ -102,24 +102,24 @@ namespace WitcherScriptMerger.Controls
 
         private void ContextDeleteMerge_Click(object sender, EventArgs e)
         {
-            if (ClickedNode == null)
+            if (RightClickedNode == null)
                 return;
 
-            if (IsModNode(ClickedNode))
-                Program.MainForm.DeleteMerges(new TreeNode[] { ClickedNode.Parent });
+            if (IsModNode(RightClickedNode))
+                Program.MainForm.DeleteMerges(new TreeNode[] { RightClickedNode.Parent });
             else
-                Program.MainForm.DeleteMerges(new TreeNode[] { ClickedNode });
+                Program.MainForm.DeleteMerges(new TreeNode[] { RightClickedNode });
         }
 
         private void ContextDeleteAssociatedMerges_Click(object sender, EventArgs e)
         {
-            if (ClickedNode == null || !IsModNode(ClickedNode))
+            if (RightClickedNode == null || !IsModNode(RightClickedNode))
                 return;
 
             // Find all file nodes that contain a node matching the clicked node
             var fileNodes = FileNodes.Where(node =>
                 node.GetTreeNodes().Any(modNode =>
-                    modNode.Text == ClickedNode.Text));
+                    modNode.Text == RightClickedNode.Text));
 
             Program.MainForm.DeleteMerges(fileNodes);
         }

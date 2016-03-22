@@ -45,6 +45,7 @@ namespace WitcherScriptMerger.Controls
 
         private ContextMenuStrip _contextMenu;
 
+        protected TreeNode RightClickedNode;
         protected ToolStripRegion ContextOpenRegion;
         protected ToolStripRegion ContextNodeRegion;
         protected List<ToolStripRegion> ContextRegions;
@@ -59,7 +60,6 @@ namespace WitcherScriptMerger.Controls
         protected ToolStripMenuItem ContextSelectAll = new ToolStripMenuItem();
         protected ToolStripMenuItem ContextDeselectAll = new ToolStripMenuItem();
 
-        private TreeNode _rightClickedNode;
 
         #endregion
 
@@ -379,40 +379,40 @@ namespace WitcherScriptMerger.Controls
 
         protected void ContextOpenScript_Click(object sender, EventArgs e)
         {
-            if (_rightClickedNode == null)
+            if (RightClickedNode == null)
                 return;
 
-            string filePath = _rightClickedNode.Tag as string;
+            string filePath = RightClickedNode.Tag as string;
             if (!File.Exists(filePath))
                 Program.MainForm.ShowMessage("Can't find file: " + filePath);
             else
                 Process.Start(filePath);
 
-            _rightClickedNode = null;
+            RightClickedNode = null;
         }
 
         protected void ContextOpenDirectory_Click(object sender, EventArgs e)
         {
-            if (_rightClickedNode == null)
+            if (RightClickedNode == null)
                 return;
 
-            var dirPath = Path.GetDirectoryName(_rightClickedNode.Tag as string);
+            var dirPath = Path.GetDirectoryName(RightClickedNode.Tag as string);
             if (!Directory.Exists(dirPath))
                 Program.MainForm.ShowMessage("Can't find directory: " + dirPath);
             else
                 Process.Start(dirPath);
 
-            _rightClickedNode = null;
+            RightClickedNode = null;
         }
 
         private void ContextCopyPath_Click(object sender, EventArgs e)
         {
-            if (_rightClickedNode == null)
+            if (RightClickedNode == null)
                 return;
 
-            Clipboard.SetText(_rightClickedNode.Tag as string);
+            Clipboard.SetText(RightClickedNode.Tag as string);
 
-            _rightClickedNode = null;
+            RightClickedNode = null;
         }
 
         protected void ContextSelectAll_Click(object sender, EventArgs e)
@@ -445,7 +445,7 @@ namespace WitcherScriptMerger.Controls
             ClickedNode.BackColor = Color.Transparent;
             ClickedNode.TreeView.Update();
 
-            _rightClickedNode = ClickedNode;  // Preserve reference to clicked node so context item handlers can access,
+            RightClickedNode = ClickedNode;  // Preserve reference to clicked node so context item handlers can access,
             ClickedNode = null;               // but clear ClickedNode so mouseover doesn't change back color.
         }
 
