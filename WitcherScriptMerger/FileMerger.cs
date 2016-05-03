@@ -396,6 +396,9 @@ namespace WitcherScriptMerger
                 return null;
 
             string outputDir = Path.Combine(Paths.TempBundleContent, outputDirName);
+            if (!Directory.Exists(outputDir))
+                Directory.CreateDirectory(outputDir);
+
             var procInfo = new ProcessStartInfo
             {
                 FileName = Paths.Bms,
