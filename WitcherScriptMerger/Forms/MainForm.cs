@@ -374,6 +374,11 @@ namespace WitcherScriptMerger.Forms
 
                 foreach (var node in nodesToUpdate)
                     treConflicts.Nodes.Remove(node);
+                foreach (var catNode in treConflicts.CategoryNodes) // Hack-fix for bug: Empty category remained on refresh after resolving conflicts outside of SM
+                {
+                    if (catNode.Nodes.Count == 0)
+                        treConflicts.Nodes.Remove(catNode);
+                }
             }
 
             PrepareProgressScreen("Detecting Conflicts", ProgressBarStyle.Continuous);
