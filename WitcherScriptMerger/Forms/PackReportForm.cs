@@ -22,7 +22,7 @@ namespace WitcherScriptMerger.Forms
             btnOK.Select();
         }
 
-        private void PackReportForm_FormClosing(object sender, FormClosingEventArgs e)
+        void PackReportForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Program.MainForm.PackReportSetting = chkShowAfterPack.Checked;
         }
@@ -31,24 +31,24 @@ namespace WitcherScriptMerger.Forms
 
         #region Button Clicks
 
-        private void btnOpenBundleDir_Click(object sender, EventArgs e)
+        void btnOpenBundleDir_Click(object sender, EventArgs e)
         {
             TryOpenDir(Path.GetDirectoryName(txtBundlePath.Text));
         }
 
-        private void btnOpenContentDir_Click(object sender, EventArgs e)
+        void btnOpenContentDir_Click(object sender, EventArgs e)
         {
             TryOpenDir(Paths.MergedBundleContent);
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        void btnOK_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
         }
 
         #endregion
 
-        private void TryOpenDir(string dirPath)
+        void TryOpenDir(string dirPath)
         {
             if (Directory.Exists(dirPath))
                 System.Diagnostics.Process.Start(dirPath);
@@ -56,7 +56,7 @@ namespace WitcherScriptMerger.Forms
                 Program.MainForm.ShowMessage("Can't find directory: " + dirPath);
         }
 
-        private void txt_KeyDown(object sender, KeyEventArgs e)
+        void txt_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.A)
                 (sender as TextBox).SelectAll();

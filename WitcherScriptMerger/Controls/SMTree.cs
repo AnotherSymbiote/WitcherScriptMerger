@@ -34,7 +34,7 @@ namespace WitcherScriptMerger.Controls
             set { NodeLevelForeColors[1] = value; }
         }
 
-        private Color[] NodeLevelForeColors = new Color[] { Color.Black, Color.Black, Color.Black };
+        Color[] NodeLevelForeColors = new Color[] { Color.Black, Color.Black, Color.Black };
 
         protected TreeNode ClickedNode = null;
         protected bool IsUpdating = false;
@@ -43,20 +43,20 @@ namespace WitcherScriptMerger.Controls
 
         #region Context Menu Members
 
-        private ContextMenuStrip _contextMenu;
+        ContextMenuStrip _contextMenu;
 
         protected TreeNode RightClickedNode;
         protected ToolStripRegion ContextOpenRegion;
         protected ToolStripRegion ContextNodeRegion;
         protected List<ToolStripRegion> ContextRegions;
 
-        private ToolStripMenuItem _contextOpenModScript = new ToolStripMenuItem();
-        private ToolStripMenuItem _contextOpenModScriptDir = new ToolStripMenuItem();
-        private ToolStripMenuItem _contextOpenModBundleDir = new ToolStripMenuItem();
-        private ToolStripMenuItem _contextCopyPath = new ToolStripMenuItem();
-        private ToolStripSeparator _contextOpenSeparator = new ToolStripSeparator();
-        private ToolStripMenuItem _contextExpandAll = new ToolStripMenuItem();
-        private ToolStripMenuItem _contextCollapseAll = new ToolStripMenuItem();
+        ToolStripMenuItem _contextOpenModScript = new ToolStripMenuItem();
+        ToolStripMenuItem _contextOpenModScriptDir = new ToolStripMenuItem();
+        ToolStripMenuItem _contextOpenModBundleDir = new ToolStripMenuItem();
+        ToolStripMenuItem _contextCopyPath = new ToolStripMenuItem();
+        ToolStripSeparator _contextOpenSeparator = new ToolStripSeparator();
+        ToolStripMenuItem _contextExpandAll = new ToolStripMenuItem();
+        ToolStripMenuItem _contextCollapseAll = new ToolStripMenuItem();
         protected ToolStripMenuItem ContextSelectAll = new ToolStripMenuItem();
         protected ToolStripMenuItem ContextDeselectAll = new ToolStripMenuItem();
 
@@ -225,7 +225,7 @@ namespace WitcherScriptMerger.Controls
 
         #region Context Menu
 
-        private void InitializeContextMenu()
+        void InitializeContextMenu()
         {
             _contextMenu = new ContextMenuStrip();
 
@@ -326,7 +326,7 @@ namespace WitcherScriptMerger.Controls
             _contextMenu.Items.AddRange(ContextNodeRegion.Items);
         }
 
-        private void ResetContextItemAvailability()
+        void ResetContextItemAvailability()
         {
             foreach (var menuItem in _contextMenu.Items.OfType<ToolStripItem>())
                 menuItem.Available = false;
@@ -364,7 +364,7 @@ namespace WitcherScriptMerger.Controls
             }
         }
 
-        private void SetContextMenuSize()
+        void SetContextMenuSize()
         {
             if (_contextMenu.Items.OfType<ToolStripItem>().Any(item => item.Available))
             {
@@ -405,7 +405,7 @@ namespace WitcherScriptMerger.Controls
             RightClickedNode = null;
         }
 
-        private void ContextCopyPath_Click(object sender, EventArgs e)
+        void ContextCopyPath_Click(object sender, EventArgs e)
         {
             if (RightClickedNode == null)
                 return;
@@ -427,17 +427,17 @@ namespace WitcherScriptMerger.Controls
 
         protected abstract void SetAllChecked(bool isChecked);
 
-        private void ContextExpandAll_Click(object sender, EventArgs e)
+        void ContextExpandAll_Click(object sender, EventArgs e)
         {
             ExpandAll();
         }
 
-        private void ContextCollapseAll_Click(object sender, EventArgs e)
+        void ContextCollapseAll_Click(object sender, EventArgs e)
         {
             CollapseAll();
         }
 
-        private void ContextMenu_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        void ContextMenu_Closing(object sender, ToolStripDropDownClosingEventArgs e)
         {
             if (ClickedNode == null)
                 return;

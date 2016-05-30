@@ -8,7 +8,7 @@ namespace WitcherScriptMerger.Forms
 {
     public partial class DependencyForm : Form
     {
-        private bool AreAnyPathsChanged
+        bool AreAnyPathsChanged
         {
             get
             {
@@ -24,7 +24,7 @@ namespace WitcherScriptMerger.Forms
             InitializeComponent();
         }
 
-        private void DependencyForm_Load(object sender, EventArgs e)
+        void DependencyForm_Load(object sender, EventArgs e)
         {
             txtKDiff3Path.Text = Paths.KDiff3;
             txtBmsPath.Text = Paths.Bms;
@@ -33,7 +33,7 @@ namespace WitcherScriptMerger.Forms
             btnOK.Select();
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        void btnOK_Click(object sender, EventArgs e)
         {
             bool allValid =
                 Color.LightGreen == txtKDiff3Path.BackColor &&
@@ -67,7 +67,7 @@ namespace WitcherScriptMerger.Forms
                 : DialogResult.Cancel);
         }
 
-        private string UpdatePathSetting(string oldPath, string newPath, string settingName)
+        string UpdatePathSetting(string oldPath, string newPath, string settingName)
         {
             if (oldPath.EqualsIgnoreCase(newPath))
                 return oldPath;
@@ -75,34 +75,34 @@ namespace WitcherScriptMerger.Forms
             return newPath;
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
         }
 
         #region Selecting Files
 
-        private void btnKDiff3Path_Click(object sender, EventArgs e)
+        void btnKDiff3Path_Click(object sender, EventArgs e)
         {
             GetUserFileChoice(txtKDiff3Path, "Executables|*.exe");
         }
 
-        private void btnBmsPath_Click(object sender, EventArgs e)
+        void btnBmsPath_Click(object sender, EventArgs e)
         {
             GetUserFileChoice(txtBmsPath, "Executables|*.exe");
         }
 
-        private void btnBmsPluginPath_Click(object sender, EventArgs e)
+        void btnBmsPluginPath_Click(object sender, EventArgs e)
         {
             GetUserFileChoice(txtBmsPluginPath, "QuickBMS Plugins|*.bms");
         }
 
-        private void btnWccLitePath_Click(object sender, EventArgs e)
+        void btnWccLitePath_Click(object sender, EventArgs e)
         {
             GetUserFileChoice(txtWccLitePath, "Executables|*.exe");
         }
 
-        private void GetUserFileChoice(TextBox txt, string filter)
+        void GetUserFileChoice(TextBox txt, string filter)
         {
             OpenFileDialog dlgSelectFile = new OpenFileDialog();
             dlgSelectFile.Filter = filter;
@@ -116,17 +116,17 @@ namespace WitcherScriptMerger.Forms
 
         #region Clicking Links
 
-        private void lnkKDiff3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        void lnkKDiff3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("http://kdiff3.sourceforge.net/");
         }
 
-        private void lnkBms_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        void lnkBms_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("http://aluigi.altervista.org/quickbms.htm");
         }
 
-        private void lnkWccLite_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        void lnkWccLite_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("http://www.nexusmods.com/witcher3/news/12625/?");
         }
@@ -135,17 +135,17 @@ namespace WitcherScriptMerger.Forms
 
         #region Validation
 
-        private void exe_TextChanged(object sender, EventArgs e)
+        void exe_TextChanged(object sender, EventArgs e)
         {
             ValidateTextBox(sender as TextBox, ".exe");
         }
 
-        private void bms_TextChanged(object sender, EventArgs e)
+        void bms_TextChanged(object sender, EventArgs e)
         {
             ValidateTextBox(sender as TextBox, ".bms");
         }
 
-        private void ValidateTextBox(TextBox txt, string validExtension)
+        void ValidateTextBox(TextBox txt, string validExtension)
         {
             string path = txt.Text;
             txt.BackColor = (path.EndsWith(validExtension) && File.Exists(path)

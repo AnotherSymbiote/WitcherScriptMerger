@@ -38,8 +38,8 @@ namespace WitcherScriptMerger.Forms
             set { menuPackReport.Checked = value; }
         }
 
-        private MergeInventory _inventory = null;
-        private ModFileIndex _modIndex = null;
+        MergeInventory _inventory = null;
+        ModFileIndex _modIndex = null;
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace WitcherScriptMerger.Forms
             this.Text += " v" + Application.ProductVersion;
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        void MainForm_Load(object sender, EventArgs e)
         {
             Program.Settings.StartBatch();
             txtGameDir.Text = Program.Settings.Get("GameDirectory");
@@ -68,7 +68,7 @@ namespace WitcherScriptMerger.Forms
             Program.Settings.EndBatch();
         }
 
-        private void MainForm_Shown(object sender, EventArgs e)
+        void MainForm_Shown(object sender, EventArgs e)
         {
             Update();
 
@@ -85,7 +85,7 @@ namespace WitcherScriptMerger.Forms
                 lblStatusLeft.Text = "Please locate your 'The Witcher 3 Wild Hunt' game directory.";
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Program.Settings.StartBatch();
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
@@ -114,7 +114,7 @@ namespace WitcherScriptMerger.Forms
             Program.Settings.EndBatch();
         }
 
-        private void LoadLastWindowConfiguration()
+        void LoadLastWindowConfiguration()
         {
             int top = Program.Settings.Get<int>("StartPosTop");
             int left = Program.Settings.Get<int>("StartPosLeft");
@@ -140,12 +140,12 @@ namespace WitcherScriptMerger.Forms
                 splitContainer.SplitterDistance = (int)(splitterPosPct / 100f * splitContainer.Width);
         }
 
-        private void txtGameDir_TextChanged(object sender, EventArgs e)
+        void txtGameDir_TextChanged(object sender, EventArgs e)
         {
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
         }
 
-        private void menuShowStatusBar_Click(object sender, EventArgs e)
+        void menuShowStatusBar_Click(object sender, EventArgs e)
         {
             statusStrip.Visible = menuShowStatusBar.Checked;
             if (statusStrip.Visible)
@@ -160,7 +160,7 @@ namespace WitcherScriptMerger.Forms
             }
         }
 
-        private void UpdateStatusText()
+        void UpdateStatusText()
         {
             int solvableCount = treConflicts.FileNodes.Count(node => ModFile.IsMergeable(node.Text));
 
@@ -215,13 +215,13 @@ namespace WitcherScriptMerger.Forms
 
         #region Refreshing Trees
 
-        private bool RefreshMergeInventory()
+        bool RefreshMergeInventory()
         {
             _inventory = MergeInventory.Load(Paths.Inventory);
             return RefreshMergeTree();
         }
         
-        private bool RefreshMergeTree()
+        bool RefreshMergeTree()
         {
             treMerges.Nodes.Clear();
             bool changed = false;
@@ -304,7 +304,7 @@ namespace WitcherScriptMerger.Forms
             return false;
         }
 
-        private bool ConfirmPruneMissingMergeFile(Merge merge)
+        bool ConfirmPruneMissingMergeFile(Merge merge)
         {
             string msg =
                 "Can't find the merged version of the following file.\n\n" +
@@ -321,7 +321,7 @@ namespace WitcherScriptMerger.Forms
                 MessageBoxIcon.Question));
         }
 
-        private bool ConfirmDeleteChangedMerge(Merge merge, string missingModName)
+        bool ConfirmDeleteChangedMerge(Merge merge, string missingModName)
         {
             string msg =
                 $"Can't find the '{missingModName}' version of the following file, " +
@@ -339,7 +339,7 @@ namespace WitcherScriptMerger.Forms
                 MessageBoxIcon.Question));
         }
 
-        private void RefreshConflictsTree(bool checkBundles = true)
+        void RefreshConflictsTree(bool checkBundles = true)
         {
             checkBundles = checkBundles && menuCheckBundleContents.Checked;
 
@@ -385,13 +385,13 @@ namespace WitcherScriptMerger.Forms
                 OnRefreshComplete);
         }
 
-        private void OnRefreshProgressChanged(object sender, ProgressChangedEventArgs e)
+        void OnRefreshProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressBar.Value = e.ProgressPercentage;
             lblProgressCurrentAction.Text = e.UserState as string;
         }
 
-        private void OnRefreshComplete(object sender, RunWorkerCompletedEventArgs e)
+        void OnRefreshComplete(object sender, RunWorkerCompletedEventArgs e)
         {
             if (_modIndex.HasConflict)
             {
@@ -457,7 +457,7 @@ namespace WitcherScriptMerger.Forms
 
         #region Button Clicks
 
-        private void btnSelectGameDirectory_Click(object sender, EventArgs e)
+        void btnSelectGameDirectory_Click(object sender, EventArgs e)
         {
             string dirChoice = GetUserDirectoryChoice();
             if (!string.IsNullOrWhiteSpace(dirChoice))
@@ -470,7 +470,7 @@ namespace WitcherScriptMerger.Forms
             }
         }
 
-        private string GetUserDirectoryChoice()
+        string GetUserDirectoryChoice()
         {
             FolderBrowserDialog dlgSelectRoot = new FolderBrowserDialog();
             if (Directory.Exists(txtGameDir.Text))
@@ -481,7 +481,7 @@ namespace WitcherScriptMerger.Forms
                 return null;
         }
 
-        private void btnRefreshMerged_Click(object sender, EventArgs e)
+        void btnRefreshMerged_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtGameDir.Text))
             {
@@ -497,7 +497,7 @@ namespace WitcherScriptMerger.Forms
                 RefreshMergeInventory();
         }
 
-        private void btnRefreshConflicts_Click(object sender, EventArgs e)
+        void btnRefreshConflicts_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtGameDir.Text))
             {
@@ -512,7 +512,7 @@ namespace WitcherScriptMerger.Forms
             RefreshTrees();
         }
 
-        private void btnMergeFiles_Click(object sender, EventArgs e)
+        void btnMergeFiles_Click(object sender, EventArgs e)
         {
             if (!Paths.ValidateModsDirectory() ||
                 (treConflicts.FileNodes.Any(node => ModFile.IsScript(node.Text)) && !Paths.ValidateScriptsDirectory()) ||
@@ -535,14 +535,14 @@ namespace WitcherScriptMerger.Forms
             merger.MergeByTreeNodesAsync(fileNodes, mergedModName);
         }
 
-        private void OnMergeProgressChanged(object sender, ProgressChangedEventArgs e)
+        void OnMergeProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             var mergeProgress = (MergeProgressInfo)e.UserState;
             lblProgressCurrentPhase.Text = mergeProgress.CurrentPhase;
             lblProgressCurrentAction.Text = mergeProgress.CurrentAction;
         }
 
-        private void OnMergeComplete(object sender, RunWorkerCompletedEventArgs e)
+        void OnMergeComplete(object sender, RunWorkerCompletedEventArgs e)
         {
             if (_inventory.HasChanged)
             {
@@ -556,13 +556,13 @@ namespace WitcherScriptMerger.Forms
             }
         }
 
-        private void btnDeleteMerges_Click(object sender, EventArgs e)
+        void btnDeleteMerges_Click(object sender, EventArgs e)
         {
             var fileNodes = treMerges.FileNodes.Where(node => node.Checked);
             DeleteMerges(fileNodes);
         }
 
-        private void RefreshTrees(bool checkBundles = true)
+        void RefreshTrees(bool checkBundles = true)
         {
             if (!Paths.ValidateModsDirectory() ||
                 (menuCheckScripts.Checked && !Paths.ValidateScriptsDirectory()) ||
@@ -580,19 +580,19 @@ namespace WitcherScriptMerger.Forms
         
         #region Key Input
 
-        private void txt_KeyDown(object sender, KeyEventArgs e)
+        void txt_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.A)
                 (sender as TextBox).SelectAll();
         }
         
-        private void splitContainer_Panel1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        void splitContainer_Panel1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && btnCreateMerges.Enabled)
                 btnMergeFiles_Click(null, null);
         }
 
-        private void splitContainer_Panel2_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        void splitContainer_Panel2_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.Delete && btnDeleteMerges.Enabled)
                 btnDeleteMerges_Click(null, null);
@@ -611,7 +611,7 @@ namespace WitcherScriptMerger.Forms
             DeleteMerges(merges);
         }
 
-        private bool DeleteMerges(List<Merge> merges)
+        bool DeleteMerges(List<Merge> merges)
         {
             var bundleMerges = new List<Merge>();
             foreach (var merge in merges)
@@ -661,7 +661,7 @@ namespace WitcherScriptMerger.Forms
             return false;
         }
 
-        private void HandleDeletedBundleMerges(List<Merge> bundleMerges)
+        void HandleDeletedBundleMerges(List<Merge> bundleMerges)
         {
             var affectedBundles = bundleMerges.Select(merge => merge.GetMergedBundle()).Distinct();
             foreach (var bundlePath in affectedBundles)
@@ -673,7 +673,7 @@ namespace WitcherScriptMerger.Forms
             }
         }
 
-        private void OnDeleteMergeComplete()
+        void OnDeleteMergeComplete()
         {
             RefreshTrees();
         }
@@ -682,7 +682,7 @@ namespace WitcherScriptMerger.Forms
 
         #region File/Dir Operations
 
-        private void DeleteEmptyDirs(string dirPath, string stopPath)
+        void DeleteEmptyDirs(string dirPath, string stopPath)
         {
             if (dirPath.EqualsIgnoreCase(stopPath))
                 return;
@@ -697,7 +697,7 @@ namespace WitcherScriptMerger.Forms
 
         #region Progress Screen
 
-        private void PrepareProgressScreen(string progressOf, ProgressBarStyle style)
+        void PrepareProgressScreen(string progressOf, ProgressBarStyle style)
         {
             txtGameDir.Enabled = btnSelectGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = false;
             progressBar.Value = 0;
@@ -705,7 +705,7 @@ namespace WitcherScriptMerger.Forms
             progressBar.Style = style;
         }
 
-        private void HideProgressScreen()
+        void HideProgressScreen()
         {
             pnlProgress.Visible = false;
             txtGameDir.Enabled = btnSelectGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = true;
@@ -764,7 +764,7 @@ namespace WitcherScriptMerger.Forms
 
         #endregion
 
-        private void menuDependencies_Click(object sender, EventArgs e)
+        void menuDependencies_Click(object sender, EventArgs e)
         {
             using (var dependencyForm = new DependencyForm())
             {

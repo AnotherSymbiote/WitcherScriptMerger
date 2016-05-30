@@ -73,11 +73,11 @@ namespace WitcherScriptMerger
 
         #region Scrolling TreeView to Top
 
-        private const int WM_VSCROLL = 0x0115;
-        private const int SB_THUMBPOSITION = 0x0004;
+        const int WM_VSCROLL = 0x0115;
+        const int SB_THUMBPOSITION = 0x0004;
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern int SetScrollPos(IntPtr hWnd, int nBar, int nPos, bool bRedraw);
+        static extern int SetScrollPos(IntPtr hWnd, int nBar, int nPos, bool bRedraw);
 
         [DllImport("User32.Dll", EntryPoint = "PostMessageA")]
         static extern bool PostMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
@@ -92,13 +92,13 @@ namespace WitcherScriptMerger
 
         #region Hiding TreeView Checkbox
 
-        private const int TVIF_STATE = 0x8;
-        private const int TVIS_STATEIMAGEMASK = 0xF000;
-        private const int TV_FIRST = 0x1100;
-        private const int TVM_SETITEM = TV_FIRST + 63;
+        const int TVIF_STATE = 0x8;
+        const int TVIS_STATEIMAGEMASK = 0xF000;
+        const int TV_FIRST = 0x1100;
+        const int TVM_SETITEM = TV_FIRST + 63;
 
         [StructLayout(LayoutKind.Sequential, Pack = 8, CharSet = CharSet.Auto)]
-        private struct TVITEM
+        struct TVITEM
         {
             public int mask;
             public IntPtr hItem;
@@ -114,7 +114,7 @@ namespace WitcherScriptMerger
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam,
+        static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam,
                                                  ref TVITEM lParam);
 
         /// <summary>

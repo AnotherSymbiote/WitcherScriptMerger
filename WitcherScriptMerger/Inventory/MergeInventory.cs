@@ -21,7 +21,7 @@ namespace WitcherScriptMerger.Inventory
         [XmlIgnore]
         public bool HasChanged => (ScriptsChanged || BundleChanged);
 
-        private static XmlSerializer _serializer = new XmlSerializer(typeof(MergeInventory));
+        static XmlSerializer _serializer = new XmlSerializer(typeof(MergeInventory));
 
         public MergeInventory()
         {
@@ -48,7 +48,7 @@ namespace WitcherScriptMerger.Inventory
             return inventory;
         }
 
-        private void Merges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        void Merges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if ((e.NewItems != null && e.NewItems.Cast<Merge>().Any(merge => merge.Category == Categories.Script)) ||
                 (e.OldItems != null && e.OldItems.Cast<Merge>().Any(merge => merge.Category == Categories.Script)))

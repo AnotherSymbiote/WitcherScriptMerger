@@ -16,21 +16,21 @@ namespace WitcherScriptMerger
         #region Members
         public MergeProgressInfo ProgressInfo { get; private set; }
 
-        private MergeInventory _inventory;
-        private TreeNode[] _checkedFileNodes;
-        private FileInfo _vanillaFile;
-        private FileInfo _file1;
-        private FileInfo _file2;
-        private string _modName1;
-        private string _modName2;
-        private string _mergedModName;
-        private string _outputPath;
+        MergeInventory _inventory;
+        TreeNode[] _checkedFileNodes;
+        FileInfo _vanillaFile;
+        FileInfo _file1;
+        FileInfo _file2;
+        string _modName1;
+        string _modName2;
+        string _mergedModName;
+        string _outputPath;
         
-        private string _bundlePath;
-        private bool _bundleChanged;
-        private List<Merge> _pendingBundleMerges = new List<Merge>();
+        string _bundlePath;
+        bool _bundleChanged;
+        List<Merge> _pendingBundleMerges = new List<Merge>();
 
-        private BackgroundWorker _bgWorker;
+        BackgroundWorker _bgWorker;
 
         #endregion
 
@@ -147,7 +147,7 @@ namespace WitcherScriptMerger
             _bgWorker.RunWorkerAsync();
         }
 
-        private void MergeScriptFileNode(TreeNode scriptNode, TreeNode[] checkedModNodes, Merge merge, bool isNew)
+        void MergeScriptFileNode(TreeNode scriptNode, TreeNode[] checkedModNodes, Merge merge, bool isNew)
         {
             string relPath = Paths.GetRelativePath(
                 _file1.FullName,
@@ -184,7 +184,7 @@ namespace WitcherScriptMerger
             }
         }
 
-        private void MergeBundleFileNode(TreeNode fileNode, TreeNode[] checkedModNodes, Merge merge, bool isNew)
+        void MergeBundleFileNode(TreeNode fileNode, TreeNode[] checkedModNodes, Merge merge, bool isNew)
         {
             _outputPath = Path.Combine(Paths.MergedBundleContent, fileNode.Text);
 
@@ -225,7 +225,7 @@ namespace WitcherScriptMerger
             }
         }
 
-        private FileInfo MergeText(Merge merge)
+        FileInfo MergeText(Merge merge)
         {
             ProgressInfo.CurrentAction = $"Using KDiff3 to merge {_modName1} && {_modName2}";
 
@@ -297,7 +297,7 @@ namespace WitcherScriptMerger
                 return null;
         }
 
-        private bool ConfirmRemainingConflict(string mergedModName)
+        bool ConfirmRemainingConflict(string mergedModName)
         {
             return (DialogResult.Yes == Program.MainForm.ShowMessage(
                 "There will still be a conflict if you use the merged mod name " + mergedModName + ".\n\n" +
@@ -310,7 +310,7 @@ namespace WitcherScriptMerger
                 MessageBoxIcon.Exclamation));
         }
 
-        private bool ConfirmOutputOverwrite(string outputPath)
+        bool ConfirmOutputOverwrite(string outputPath)
         {
             return (DialogResult.Yes == Program.MainForm.ShowMessage(
                 "The output file below already exists! Overwrite?\n\n" + outputPath,
@@ -319,7 +319,7 @@ namespace WitcherScriptMerger
                 MessageBoxIcon.Exclamation));
         }
 
-        private DialogResult HandleCanceledMerge(int remainingMergesForFile, Merge merge)
+        DialogResult HandleCanceledMerge(int remainingMergesForFile, Merge merge)
         {
             string msg = $"Merge {ProgressInfo.CurrentMergeNum} of {ProgressInfo.TotalMergeCount} was canceled.";
             var buttons = MessageBoxButtons.OK;
@@ -338,7 +338,7 @@ namespace WitcherScriptMerger
             return DialogResult.OK;
         }
 
-        private bool GetUnpackedFiles(string contentRelativePath)
+        bool GetUnpackedFiles(string contentRelativePath)
         {
             if (_vanillaFile == null)
             {
@@ -386,7 +386,7 @@ namespace WitcherScriptMerger
             return true;
         }
 
-        private string UnpackFile(string bundlePath, string contentRelativePath, string outputDirName)
+        string UnpackFile(string bundlePath, string contentRelativePath, string outputDirName)
         {
             if (!ValidateBmsResources(bundlePath))
                 return null;
@@ -451,7 +451,7 @@ namespace WitcherScriptMerger
             _bgWorker.RunWorkerAsync();
         }
 
-        private string PackNewBundle(string bundlePath, bool isRepack = false)
+        string PackNewBundle(string bundlePath, bool isRepack = false)
         {
             ProgressInfo.CurrentPhase = (!isRepack ? "Packing Bundle" : "Deleted Merge — Repacking Bundle");
             ProgressInfo.CurrentAction = "Packing merged content into new blob0.bundle";
@@ -511,7 +511,7 @@ namespace WitcherScriptMerger
             return bundlePath;
         }
 
-        private bool ValidateBmsResources(string bundlePath)
+        bool ValidateBmsResources(string bundlePath)
         {
             if (!File.Exists(bundlePath))
             {
@@ -531,7 +531,7 @@ namespace WitcherScriptMerger
             return true;
         }
 
-        private bool ValidateWccLiteResources(string contentDir)
+        bool ValidateWccLiteResources(string contentDir)
         {
             if (!Directory.Exists(contentDir))
             {
@@ -546,12 +546,12 @@ namespace WitcherScriptMerger
             return true;
         }
 
-        private void ShowError(string msg, string title = "Error")
+        void ShowError(string msg, string title = "Error")
         {
             Program.MainForm.ShowMessage(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void CleanUpTempFiles()
+        void CleanUpTempFiles()
         {
             if (!Directory.Exists(Paths.TempBundleContent))
                 return;
@@ -571,7 +571,7 @@ namespace WitcherScriptMerger
             }
         }
 
-        private void CleanUpEmptyDirectories()
+        void CleanUpEmptyDirectories()
         {
             if (!Directory.Exists(Paths.MergedBundleContent))
                 return;
@@ -595,7 +595,7 @@ namespace WitcherScriptMerger
         /// Depth-first recursive delete, with handling for descendant 
         /// directories open in Windows Explorer.
         /// </summary>
-        private void DeleteDirectory(string path)
+        void DeleteDirectory(string path)
         {
             foreach (string directory in Directory.GetDirectories(path))
             {
@@ -627,7 +627,7 @@ namespace WitcherScriptMerger
         /// <summary>
         /// Deletes any subdirectories of the root that are empty, AS WELL AS the root itself, if it's empty.
         /// </summary>
-        private void DeleteEmptyDirectories(string rootPath)
+        void DeleteEmptyDirectories(string rootPath)
         {
             foreach (string directory in Directory.GetDirectories(rootPath))
             {

@@ -37,7 +37,7 @@ namespace WitcherScriptMerger.Forms
             btnOK.Select();
         }
 
-        private void MergeReportForm_FormClosing(object sender, FormClosingEventArgs e)
+        void MergeReportForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Program.MainForm.MergeReportSetting = chkShowAfterMerge.Checked;
         }
@@ -46,44 +46,44 @@ namespace WitcherScriptMerger.Forms
 
         #region Button Clicks
 
-        private void btnOpenFile1_Click(object sender, EventArgs e)
+        void btnOpenFile1_Click(object sender, EventArgs e)
         {
             TryOpenFile(txtFilePath1.Text);
         }
 
-        private void btnOpenFile2_Click(object sender, EventArgs e)
+        void btnOpenFile2_Click(object sender, EventArgs e)
         {
             TryOpenFile(txtFilePath2.Text);
         }
 
-        private void btnOpenOutputFile_Click(object sender, EventArgs e)
+        void btnOpenOutputFile_Click(object sender, EventArgs e)
         {
             TryOpenFile(txtMergedPath.Text);
         }
 
-        private void btnOpenDir1_Click(object sender, EventArgs e)
+        void btnOpenDir1_Click(object sender, EventArgs e)
         {
             TryOpenFileDir(txtFilePath1.Text);
         }
 
-        private void btnOpenDir2_Click(object sender, EventArgs e)
+        void btnOpenDir2_Click(object sender, EventArgs e)
         {
             TryOpenFileDir(txtFilePath2.Text);
         }
 
-        private void btnOpenOutputDir_Click(object sender, EventArgs e)
+        void btnOpenOutputDir_Click(object sender, EventArgs e)
         {
             TryOpenFileDir(txtMergedPath.Text);
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        void btnOK_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
         }
 
         #endregion
 
-        private void TryOpenFile(string path)
+        void TryOpenFile(string path)
         {
             if (File.Exists(path))
                 System.Diagnostics.Process.Start(path);
@@ -91,7 +91,7 @@ namespace WitcherScriptMerger.Forms
                 Program.MainForm.ShowMessage("Can't find file: " + path);
         }
 
-        private void TryOpenFileDir(string filePath)
+        void TryOpenFileDir(string filePath)
         {
             string dirPath = Path.GetDirectoryName(filePath);
             if (Directory.Exists(dirPath))
@@ -100,7 +100,7 @@ namespace WitcherScriptMerger.Forms
                 Program.MainForm.ShowMessage("Can't find directory: " + dirPath);
         }
 
-        private void txt_KeyDown(object sender, KeyEventArgs e)
+        void txt_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.A)
                 (sender as TextBox).SelectAll();

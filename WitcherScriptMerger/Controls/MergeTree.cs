@@ -10,11 +10,11 @@ namespace WitcherScriptMerger.Controls
     {
         #region Context Menu Members
 
-        private ToolStripMenuItem _contextOpenMergedFile = new ToolStripMenuItem();
-        private ToolStripMenuItem _contextOpenMergedFileDir = new ToolStripMenuItem();
-        private ToolStripMenuItem _contextDeleteAssociatedMerges = new ToolStripMenuItem();
-        private ToolStripMenuItem _contextDeleteMerge = new ToolStripMenuItem();
-        private ToolStripSeparator _contextDeleteSeparator = new ToolStripSeparator();
+        ToolStripMenuItem _contextOpenMergedFile = new ToolStripMenuItem();
+        ToolStripMenuItem _contextOpenMergedFileDir = new ToolStripMenuItem();
+        ToolStripMenuItem _contextDeleteAssociatedMerges = new ToolStripMenuItem();
+        ToolStripMenuItem _contextDeleteMerge = new ToolStripMenuItem();
+        ToolStripSeparator _contextDeleteSeparator = new ToolStripSeparator();
 
         #endregion
 
@@ -100,7 +100,7 @@ namespace WitcherScriptMerger.Controls
             Program.MainForm.EnableUnmergeIfValidSelection();
         }
 
-        private void ContextDeleteMerge_Click(object sender, EventArgs e)
+        void ContextDeleteMerge_Click(object sender, EventArgs e)
         {
             if (RightClickedNode == null)
                 return;
@@ -111,7 +111,7 @@ namespace WitcherScriptMerger.Controls
                 Program.MainForm.DeleteMerges(new TreeNode[] { RightClickedNode });
         }
 
-        private void ContextDeleteAssociatedMerges_Click(object sender, EventArgs e)
+        void ContextDeleteAssociatedMerges_Click(object sender, EventArgs e)
         {
             if (RightClickedNode == null || !IsModNode(RightClickedNode))
                 return;

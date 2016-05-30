@@ -21,7 +21,7 @@ namespace WitcherScriptMerger
 
         public static string BundlesDirectory => Path.Combine(GameDirectory, BundleBase);
 
-        private static string _scriptsDirSetting = Program.Settings.Get("ScriptsDirectory");
+        static string _scriptsDirSetting = Program.Settings.Get("ScriptsDirectory");
         public static string ScriptsDirectory
         {
             get
@@ -32,7 +32,7 @@ namespace WitcherScriptMerger
             }
         }
 
-        private static string _modsDirSetting = Program.Settings.Get("ModsDirectory");
+        static string _modsDirSetting = Program.Settings.Get("ModsDirectory");
         public static string ModsDirectory
         {
             get
@@ -125,7 +125,7 @@ namespace WitcherScriptMerger
             return mergedModName;
         }
 
-        private static bool ConfirmInvalidModName(string mergedModName)
+        static bool ConfirmInvalidModName(string mergedModName)
         {
             return (DialogResult.Yes == Program.MainForm.ShowMessage(
                 "The Witcher 3 won't load the merged file if the mod name isn't \"mod\" followed by numbers, letters, or underscores.\n\nUse this name anyway?\n" + mergedModName

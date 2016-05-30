@@ -6,17 +6,17 @@ namespace WitcherScriptMerger
 {
     internal class AppSettings
     {
-        private string _assemblyPath;
-        private Configuration _cachedConfig;
+        string _assemblyPath;
+        Configuration _cachedConfig;
 
-        private bool IsBatching => (_cachedConfig != null);
+        bool IsBatching => (_cachedConfig != null);
 
         public AppSettings()
         {
             _assemblyPath = System.Reflection.Assembly.GetEntryAssembly().Location;
         }
 
-        private Configuration GetConfig() => ConfigurationManager.OpenExeConfiguration(_assemblyPath);
+        Configuration GetConfig() => ConfigurationManager.OpenExeConfiguration(_assemblyPath);
 
         public void StartBatch()
         {
@@ -75,7 +75,7 @@ namespace WitcherScriptMerger
             }
         }
 
-        private void TrySave(Configuration config)
+        void TrySave(Configuration config)
         {
             try
             {

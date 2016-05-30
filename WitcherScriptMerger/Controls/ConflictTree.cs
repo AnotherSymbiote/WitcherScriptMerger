@@ -9,8 +9,8 @@ namespace WitcherScriptMerger.Controls
     {
         #region Context Menu Members
 
-        private ToolStripMenuItem _contextOpenVanillaScript = new ToolStripMenuItem();
-        private ToolStripMenuItem _contextOpenVanillaScriptDir = new ToolStripMenuItem();
+        ToolStripMenuItem _contextOpenVanillaScript = new ToolStripMenuItem();
+        ToolStripMenuItem _contextOpenVanillaScriptDir = new ToolStripMenuItem();
 
         #endregion
 
