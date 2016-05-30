@@ -699,7 +699,7 @@ namespace WitcherScriptMerger.Forms
 
         private void PrepareProgressScreen(string progressOf, ProgressBarStyle style)
         {
-            grpGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = false;
+            txtGameDir.Enabled = btnSelectGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = false;
             progressBar.Value = 0;
             lblProgressCurrentPhase.Text = progressOf;
             progressBar.Style = style;
@@ -708,7 +708,7 @@ namespace WitcherScriptMerger.Forms
         private void HideProgressScreen()
         {
             pnlProgress.Visible = false;
-            grpGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = true;
+            txtGameDir.Enabled = btnSelectGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = true;
             treMerges.Select();
         }
 

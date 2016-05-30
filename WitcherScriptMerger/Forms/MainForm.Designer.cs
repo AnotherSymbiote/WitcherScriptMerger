@@ -42,7 +42,6 @@
             this.lblProgressCurrentPhase = new System.Windows.Forms.Label();
             this.lblProgressCurrentAction = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.grpGameDir = new System.Windows.Forms.GroupBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCheckingForConflicts = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,6 +60,7 @@
             this.lblStatusLeft = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusSpring = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusRight = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblGameDir = new System.Windows.Forms.Label();
             this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
             this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -68,7 +68,6 @@
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
             this.pnlProgress.SuspendLayout();
-            this.grpGameDir.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -77,9 +76,9 @@
             // 
             this.txtGameDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGameDir.Location = new System.Drawing.Point(6, 19);
+            this.txtGameDir.Location = new System.Drawing.Point(213, 3);
             this.txtGameDir.Name = "txtGameDir";
-            this.txtGameDir.Size = new System.Drawing.Size(589, 20);
+            this.txtGameDir.Size = new System.Drawing.Size(399, 20);
             this.txtGameDir.TabIndex = 0;
             this.txtGameDir.TextChanged += new System.EventHandler(this.txtGameDir_TextChanged);
             this.txtGameDir.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
@@ -87,7 +86,7 @@
             // btnSelectGameDir
             // 
             this.btnSelectGameDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSelectGameDir.Location = new System.Drawing.Point(601, 17);
+            this.btnSelectGameDir.Location = new System.Drawing.Point(618, 1);
             this.btnSelectGameDir.Name = "btnSelectGameDir";
             this.btnSelectGameDir.Size = new System.Drawing.Size(26, 23);
             this.btnSelectGameDir.TabIndex = 1;
@@ -115,7 +114,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCreateMerges.Enabled = false;
             this.btnCreateMerges.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCreateMerges.Location = new System.Drawing.Point(12, 525);
+            this.btnCreateMerges.Location = new System.Drawing.Point(12, 573);
             this.btnCreateMerges.Name = "btnCreateMerges";
             this.btnCreateMerges.Size = new System.Drawing.Size(312, 35);
             this.btnCreateMerges.TabIndex = 6;
@@ -128,7 +127,7 @@
             this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer.Location = new System.Drawing.Point(0, 86);
+            this.splitContainer.Location = new System.Drawing.Point(0, 38);
             this.splitContainer.Name = "splitContainer";
             // 
             // splitContainer.Panel1
@@ -148,7 +147,7 @@
             this.splitContainer.Panel2.Controls.Add(this.treMerges);
             this.splitContainer.Panel2.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.splitContainer_Panel2_PreviewKeyDown);
             this.splitContainer.Panel2MinSize = 225;
-            this.splitContainer.Size = new System.Drawing.Size(654, 563);
+            this.splitContainer.Size = new System.Drawing.Size(654, 611);
             this.splitContainer.SplitterDistance = 327;
             this.splitContainer.TabIndex = 1;
             // 
@@ -192,7 +191,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDeleteMerges.Enabled = false;
             this.btnDeleteMerges.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDeleteMerges.Location = new System.Drawing.Point(3, 525);
+            this.btnDeleteMerges.Location = new System.Drawing.Point(3, 573);
             this.btnDeleteMerges.Name = "btnDeleteMerges";
             this.btnDeleteMerges.Size = new System.Drawing.Size(310, 35);
             this.btnDeleteMerges.TabIndex = 2;
@@ -245,19 +244,6 @@
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(583, 20);
             this.progressBar.TabIndex = 0;
-            // 
-            // grpGameDir
-            // 
-            this.grpGameDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpGameDir.Controls.Add(this.txtGameDir);
-            this.grpGameDir.Controls.Add(this.btnSelectGameDir);
-            this.grpGameDir.Location = new System.Drawing.Point(9, 30);
-            this.grpGameDir.Name = "grpGameDir";
-            this.grpGameDir.Size = new System.Drawing.Size(633, 50);
-            this.grpGameDir.TabIndex = 0;
-            this.grpGameDir.TabStop = false;
-            this.grpGameDir.Text = "Witcher 3 Directory";
             // 
             // menuStrip
             // 
@@ -405,6 +391,15 @@
             this.lblStatusRight.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.lblStatusRight.Size = new System.Drawing.Size(14, 14);
             // 
+            // lblGameDir
+            // 
+            this.lblGameDir.AutoSize = true;
+            this.lblGameDir.Location = new System.Drawing.Point(106, 6);
+            this.lblGameDir.Name = "lblGameDir";
+            this.lblGameDir.Size = new System.Drawing.Size(101, 13);
+            this.lblGameDir.TabIndex = 9;
+            this.lblGameDir.Text = "Witcher 3 Directory:";
+            // 
             // treConflicts
             // 
             this.treConflicts.AllowDrop = true;
@@ -416,7 +411,7 @@
             this.treConflicts.Location = new System.Drawing.Point(12, 30);
             this.treConflicts.Name = "treConflicts";
             this.treConflicts.ShowNodeToolTips = true;
-            this.treConflicts.Size = new System.Drawing.Size(312, 489);
+            this.treConflicts.Size = new System.Drawing.Size(312, 537);
             this.treConflicts.Sorted = true;
             this.treConflicts.TabIndex = 1;
             this.treConflicts.TabStop = false;
@@ -432,7 +427,7 @@
             this.treMerges.Location = new System.Drawing.Point(3, 30);
             this.treMerges.Name = "treMerges";
             this.treMerges.ShowNodeToolTips = true;
-            this.treMerges.Size = new System.Drawing.Size(310, 489);
+            this.treMerges.Size = new System.Drawing.Size(310, 537);
             this.treMerges.Sorted = true;
             this.treMerges.TabIndex = 1;
             this.treMerges.TabStop = false;
@@ -443,10 +438,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(654, 674);
+            this.Controls.Add(this.lblGameDir);
+            this.Controls.Add(this.txtGameDir);
             this.Controls.Add(this.pnlProgress);
+            this.Controls.Add(this.btnSelectGameDir);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
-            this.Controls.Add(this.grpGameDir);
             this.Controls.Add(this.splitContainer);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip;
@@ -464,8 +461,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
             this.pnlProgress.ResumeLayout(false);
-            this.grpGameDir.ResumeLayout(false);
-            this.grpGameDir.PerformLayout();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);
@@ -486,7 +481,6 @@
         private System.Windows.Forms.Label lblMergeInventory;
         private System.Windows.Forms.Button btnDeleteMerges;
         private Controls.MergeTree treMerges;
-        private System.Windows.Forms.GroupBox grpGameDir;
         private System.Windows.Forms.Label lblConflicts;
         private System.Windows.Forms.Button btnRefreshMerged;
         private System.Windows.Forms.Panel pnlProgress;
@@ -511,6 +505,7 @@
         private System.Windows.Forms.ToolStripStatusLabel lblStatusSpring;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusRight;
         private System.Windows.Forms.ToolStripMenuItem menuCompletionSounds;
+        private System.Windows.Forms.Label lblGameDir;
     }
 }
 
