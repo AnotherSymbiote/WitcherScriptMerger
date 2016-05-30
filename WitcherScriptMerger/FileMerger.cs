@@ -24,13 +24,12 @@ namespace WitcherScriptMerger
         private string _modName1;
         private string _modName2;
         private string _mergedModName;
-        private int _conflictTotalCount;
         private string _outputPath;
         
         private string _bundlePath;
         private bool _bundleChanged;
         private List<Merge> _pendingBundleMerges = new List<Merge>();
-        
+
         private BackgroundWorker _bgWorker;
 
         #endregion
@@ -69,7 +68,6 @@ namespace WitcherScriptMerger
         {
             _bgWorker.DoWork += (sender, e) =>
             {
-                int conflictNum = 0;
                 _checkedFileNodes = fileNodesToMerge.ToArray();
                 _mergedModName = mergedModName;
 
@@ -82,28 +80,19 @@ namespace WitcherScriptMerger
                         ).ToArray()
                     ).ToArray();
 
-                _conflictTotalCount = checkedModNodesForFile.Sum(modNodes => modNodes.Length - 1);
+                ProgressInfo.TotalMergeCount = checkedModNodesForFile.Sum(modNodes => modNodes.Length - 1);
+                ProgressInfo.TotalFileCount = _checkedFileNodes.Length;
 
                 for (int i = 0; i < _checkedFileNodes.Length; ++i)
                 {
                     var fileNode = _checkedFileNodes[i];
-                    ++conflictNum;
+
+                    ProgressInfo.CurrentFileName = Path.GetFileName(fileNode.Text);
+                    ProgressInfo.CurrentFileNum = i + 1;
 
                     var checkedModNodes = checkedModNodesForFile[i];
 
                     ProgressInfo.CurrentAction = "Starting merge";
-                    ProgressInfo.CurrentPhase =
-                        "Resolving mod conflict" +
-                        (
-                            _conflictTotalCount > 1
-                            ? $" {conflictNum} of {_conflictTotalCount}" : ""
-                        ) +
-                        "\nFile" +
-                        (
-                            _checkedFileNodes.Length > 1 && _checkedFileNodes.Length != _conflictTotalCount
-                            ? $" {i + 1} of {_checkedFileNodes.Length}" : ""
-                        ) +
-                        $": {Path.GetFileName(fileNode.Text)}";
 
                     if (checkedModNodes.Any(node => ModFile.GetLoadOrder(node.Text, _mergedModName) < 0) &&
                         !ConfirmRemainingConflict(_mergedModName))
@@ -173,16 +162,18 @@ namespace WitcherScriptMerger
 
             for (int i = 1; i < checkedModNodes.Length; ++i)
             {
+                ++ProgressInfo.CurrentMergeNum;
+
                 _file2 = new FileInfo(checkedModNodes[i].Tag as string);
                 _modName2 = ModFile.GetModNameFromPath(_file2.FullName);
 
-                var mergedFile = MergeText(i, merge);
+                var mergedFile = MergeText(merge);
                 if (mergedFile != null)
                 {
                     _file1 = mergedFile;
                     _modName1 = ModFile.GetModNameFromPath(_file1.FullName);
                 }
-                else if (DialogResult.Abort == HandleCanceledMerge(i, checkedModNodes.Length - 1, merge))
+                else if (DialogResult.Abort == HandleCanceledMerge(checkedModNodes.Length - i - 1, merge))
                     break;
             }
 
@@ -204,23 +195,25 @@ namespace WitcherScriptMerger
 
             for (int i = 1; i < checkedModNodes.Length; ++i)
             {
+                ++ProgressInfo.CurrentMergeNum;
+
                 _file2 = new FileInfo(checkedModNodes[i].Tag as string);
                 _modName2 = ModFile.GetModNameFromPath(_file2.FullName);
 
                 if (!GetUnpackedFiles(fileNode.Text))
                 {
-                    if (DialogResult.Abort != HandleCanceledMerge(i, checkedModNodes.Length - 1, merge))
+                    if (DialogResult.Abort != HandleCanceledMerge(checkedModNodes.Length - i - 1, merge))
                         continue;
                     break;
                 }
 
-                var mergedFile = MergeText(i, merge);
+                var mergedFile = MergeText(merge);
                 if (mergedFile != null)
                 {
                     _file1 = mergedFile;
                     _modName1 = ModFile.GetModNameFromPath(_file1.FullName);
                 }
-                else if (DialogResult.Abort == HandleCanceledMerge(i, checkedModNodes.Length - 1, merge))
+                else if (DialogResult.Abort == HandleCanceledMerge(checkedModNodes.Length - i - 1, merge))
                     break;
             }
 
@@ -232,7 +225,7 @@ namespace WitcherScriptMerger
             }
         }
 
-        private FileInfo MergeText(int mergeNum, Merge merge)
+        private FileInfo MergeText(Merge merge)
         {
             ProgressInfo.CurrentAction = $"Using KDiff3 to merge {_modName1} && {_modName2}";
 
@@ -290,7 +283,7 @@ namespace WitcherScriptMerger
                 if (Program.MainForm.MergeReportSetting)
                 {
                     using (var reportForm = new MergeReportForm(
-                        mergeNum, _conflictTotalCount,
+                        ProgressInfo.CurrentMergeNum, ProgressInfo.TotalMergeCount,
                         _file1.FullName, _file2.FullName, _outputPath,
                         _modName1, _modName2))
                     {
@@ -326,19 +319,22 @@ namespace WitcherScriptMerger
                 MessageBoxIcon.Exclamation));
         }
 
-        private DialogResult HandleCanceledMerge(int mergeNum, int mergeCountForFile, Merge merge)
+        private DialogResult HandleCanceledMerge(int remainingMergesForFile, Merge merge)
         {
-            string fileName = Path.GetFileName(merge.RelativePath);
-            string msg = $"Merge was canceled for {fileName}.";
+            string msg = $"Merge {ProgressInfo.CurrentMergeNum} of {ProgressInfo.TotalMergeCount} was canceled.";
             var buttons = MessageBoxButtons.OK;
-            if (mergeNum < mergeCountForFile)
+            if (remainingMergesForFile > 0)
             {
-                msg += "\n\nContinue with the remaining merges for this file?";
+                string fileName = Path.GetFileName(merge.RelativePath);
+                msg += $"\n\nContinue with {remainingMergesForFile} remaining merge{remainingMergesForFile.GetPluralS()} for file {fileName}?";
                 buttons = MessageBoxButtons.YesNo;
             }
             var result = Program.MainForm.ShowMessage(msg, "Skipped Merge", buttons, MessageBoxIcon.Information);
             if (result == DialogResult.No)
+            {
+                ProgressInfo.CurrentMergeNum += remainingMergesForFile;
                 return DialogResult.Abort;
+            }
             return DialogResult.OK;
         }
 

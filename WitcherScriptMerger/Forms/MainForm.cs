@@ -171,13 +171,13 @@ namespace WitcherScriptMerger.Forms
                 lblStatusLeft.Text = $"{solvableCount} mergeable";
                 lblStatusLeft.Text += solvableCount < treConflicts.FileNodes.Count
                     ? string.Format(",  {0} unsupported", (treConflicts.FileNodes.Count - solvableCount))
-                    : string.Format(" conflict{0}", solvableCount.GetPlural());
+                    : string.Format(" conflict{0}", solvableCount.GetPluralS());
             }
 
             lblStatusLeft.Text += string.Format(
                 "           {0} merge{1}",
                 treMerges.FileNodes.Count,
-                treMerges.FileNodes.Count.GetPlural());
+                treMerges.FileNodes.Count.GetPluralS());
 
             if (_modIndex != null)
             {
@@ -185,11 +185,11 @@ namespace WitcherScriptMerger.Forms
                 lblStatusRight.Text = string.Format(
                     "Found {0} mod{1}, {2} script{3}, {4} bundle{5}",
                     _modIndex.ModCount,
-                    _modIndex.ModCount.GetPlural(),
+                    _modIndex.ModCount.GetPluralS(),
                     _modIndex.ScriptCount,
-                    _modIndex.ScriptCount.GetPlural(),
+                    _modIndex.ScriptCount.GetPluralS(),
                     _modIndex.BundleCount,
-                    _modIndex.BundleCount.GetPlural());
+                    _modIndex.BundleCount.GetPluralS());
             }
         }
 

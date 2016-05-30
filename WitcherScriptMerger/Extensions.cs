@@ -39,7 +39,7 @@ namespace WitcherScriptMerger
             return new Regex("^[_a-zA-Z0-9]*$").IsMatch(s);
         }
 
-        public static string GetPlural(this int num)
+        public static string GetPluralS(this int num)
         {
             return num == 1 ? "" : "s";
         }
