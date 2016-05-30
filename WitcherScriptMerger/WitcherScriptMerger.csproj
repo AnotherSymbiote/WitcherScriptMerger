@@ -95,6 +95,10 @@
     <Compile Include="Inventory\Merge.cs" />
     <Compile Include="Inventory\MergeInventory.cs" />
     <Compile Include="Inventory\MergeProgressInfo.cs" />
+    <Compile Include="LoadOrderValidation\CustomLoadOrder.cs" />
+    <Compile Include="LoadOrderValidation\LoadOrderValidator.cs" />
+    <Compile Include="LoadOrderValidation\MessageBoxManager.cs" />
+    <Compile Include="LoadOrderValidation\ModLoadSetting.cs" />
     <Compile Include="Paths.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

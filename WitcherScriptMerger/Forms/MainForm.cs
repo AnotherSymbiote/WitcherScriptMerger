@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using WitcherScriptMerger.Controls;
 using WitcherScriptMerger.FileIndex;
 using WitcherScriptMerger.Inventory;
+using WitcherScriptMerger.LoadOrderValidation;
 
 namespace WitcherScriptMerger.Forms
 {
@@ -218,6 +219,10 @@ namespace WitcherScriptMerger.Forms
         bool RefreshMergeInventory()
         {
             _inventory = MergeInventory.Load(Paths.Inventory);
+
+            if (_inventory.Merges.Any())
+                new LoadOrderValidator().ValidateAndFix();
+
             return RefreshMergeTree();
         }
         
@@ -230,8 +235,7 @@ namespace WitcherScriptMerger.Forms
             for (int i = _inventory.Merges.Count - 1; i >= 0; --i)
             {
                 var merge = _inventory.Merges[i];
-                if (!File.Exists(merge.GetMergedFile()) &&
-                    ConfirmPruneMissingMergeFile(merge))
+                if (!File.Exists(merge.GetMergedFile()) && ConfirmPruneMissingMergeFile(merge))
                 {
                     _inventory.Merges.RemoveAt(i);
                     changed = true;
@@ -246,8 +250,7 @@ namespace WitcherScriptMerger.Forms
                     foreach (string modName in merge.ModNames)
                     {
                         string modFilePath = merge.GetModFile(modName);
-                        if (!File.Exists(modFilePath) &&
-                            ConfirmDeleteChangedMerge(merge, modName))
+                        if (!File.Exists(modFilePath) && ConfirmDeleteChangedMerge(merge, modName))
                         {
                             missingModFile = true;
                             break;
