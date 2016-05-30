@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace WitcherScriptMerger
 {
@@ -13,7 +14,17 @@ namespace WitcherScriptMerger
 
         public AppSettings()
         {
-            _assemblyPath = System.Reflection.Assembly.GetEntryAssembly().Location;
+            _assemblyPath = Assembly.GetEntryAssembly().Location;
+
+            if (!GetConfig().HasFile)
+            {
+                MessageBox.Show(
+                    "Config file is missing.",
+                    "Script Merger Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                Environment.Exit(1);
+            }
         }
 
         Configuration GetConfig() => ConfigurationManager.OpenExeConfiguration(_assemblyPath);
@@ -51,10 +62,16 @@ namespace WitcherScriptMerger
             try
             {
                 var config = _cachedConfig ?? GetConfig();
-                string valueString = config.AppSettings.Settings[key].Value;
-                MethodInfo parseMethod = typeof(T).GetMethod("Parse", new Type[] { typeof(string) });
-                object valueObject = parseMethod.Invoke(null, new object[] { valueString });
-                return (T)valueObject;
+                if (config.HasFile)
+                {
+                    string valueString = config.AppSettings.Settings[key].Value;
+                    MethodInfo parseMethod = typeof(T).GetMethod("Parse", new Type[] { typeof(string) });
+                    object valueObject = parseMethod.Invoke(null, new object[] { valueString });
+                    return (T)valueObject;
+                }
+
+                Program.MainForm.ShowMessage($"Config file doesn't exist:\n\n{config.FilePath}");
+                return default(T);
             }
             catch
             {
@@ -67,7 +84,11 @@ namespace WitcherScriptMerger
             try
             {
                 var config = _cachedConfig ?? GetConfig();
-                return config.AppSettings.Settings[key].Value;
+                if (config.HasFile)
+                    return config.AppSettings.Settings[key].Value;
+
+                Program.MainForm.ShowMessage($"Config file doesn't exist:\n\n{config.FilePath}");
+                return string.Empty;
             }
             catch
             {
@@ -83,7 +104,7 @@ namespace WitcherScriptMerger
             }
             catch (Exception ex)
             {
-                Program.MainForm.ShowMessage($"Failed to save config due to error: {ex.Message}");
+                Program.MainForm.ShowMessage($"Failed to save config due to error:\n\n{ex.Message}");
             }
         }
     }

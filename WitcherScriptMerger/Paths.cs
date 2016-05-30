@@ -26,9 +26,9 @@ namespace WitcherScriptMerger
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(_scriptsDirSetting))
-                    return _scriptsDirSetting;
-                return Path.Combine(GameDirectory, VanillaScriptBase);
+                return (!string.IsNullOrWhiteSpace(_scriptsDirSetting)
+                        ? _scriptsDirSetting
+                        : Path.Combine(GameDirectory, VanillaScriptBase));
             }
         }
 
@@ -37,9 +37,9 @@ namespace WitcherScriptMerger
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(_modsDirSetting))
-                    return _modsDirSetting;
-                return Path.Combine(GameDirectory, "Mods");
+                return (!string.IsNullOrWhiteSpace(_modsDirSetting)
+                        ? _modsDirSetting
+                        : Path.Combine(GameDirectory, "Mods"));
             }
         }
 
@@ -128,7 +128,8 @@ namespace WitcherScriptMerger
         static bool ConfirmInvalidModName(string mergedModName)
         {
             return (DialogResult.Yes == Program.MainForm.ShowMessage(
-                "The Witcher 3 won't load the merged file if the mod name isn't \"mod\" followed by numbers, letters, or underscores.\n\nUse this name anyway?\n" + mergedModName
+                "The Witcher 3 won't load the merged file if the mod name isn't \"mod\" followed by numbers, letters, or underscores."
+                + "\n\nUse this name anyway?\n" + mergedModName
                 + "\n\nTo change the name: Click No, then edit \"MergedModName\" in the .config file.",
                 "Warning",
                 MessageBoxButtons.YesNo,
