@@ -282,6 +282,7 @@
             this.menuCheckScripts.Name = "menuCheckScripts";
             this.menuCheckScripts.Size = new System.Drawing.Size(222, 22);
             this.menuCheckScripts.Text = "Check &Scripts";
+            this.menuCheckScripts.ToolTipText = "Check for script file conflicts";
             // 
             // menuCheckBundleContents
             // 
@@ -289,6 +290,7 @@
             this.menuCheckBundleContents.Name = "menuCheckBundleContents";
             this.menuCheckBundleContents.Size = new System.Drawing.Size(222, 22);
             this.menuCheckBundleContents.Text = "Check &Bundle Contents";
+            this.menuCheckBundleContents.ToolTipText = "Check for conflicts in bundle file contents";
             // 
             // menuCollapseUnsupported
             // 
@@ -296,6 +298,7 @@
             this.menuCollapseUnsupported.Name = "menuCollapseUnsupported";
             this.menuCollapseUnsupported.Size = new System.Drawing.Size(222, 22);
             this.menuCollapseUnsupported.Text = "Auto-Collapse &Unsupported";
+            this.menuCollapseUnsupported.ToolTipText = "Auto-collapse conflicts that can\'t be merged (non-text files)";
             // 
             // menuMerging
             // 
@@ -315,6 +318,7 @@
             this.menuReviewEach.Name = "menuReviewEach";
             this.menuReviewEach.Size = new System.Drawing.Size(297, 22);
             this.menuReviewEach.Text = "&Review Each Merge (even if auto-solvable)";
+            this.menuReviewEach.ToolTipText = "Show text comparison UI for every merge";
             // 
             // menuPathsInKDiff3
             // 
@@ -322,6 +326,7 @@
             this.menuPathsInKDiff3.Name = "menuPathsInKDiff3";
             this.menuPathsInKDiff3.Size = new System.Drawing.Size(297, 22);
             this.menuPathsInKDiff3.Text = "Show File Paths in &KDiff3";
+            this.menuPathsInKDiff3.ToolTipText = "Show full file paths instead of just Vanilla, modName1, modName2";
             // 
             // menuCompletionSounds
             // 
@@ -329,6 +334,7 @@
             this.menuCompletionSounds.Name = "menuCompletionSounds";
             this.menuCompletionSounds.Size = new System.Drawing.Size(297, 22);
             this.menuCompletionSounds.Text = "Play Completion &Sounds";
+            this.menuCompletionSounds.ToolTipText = "Play a sound after merging or packing a bundle";
             // 
             // menuMergeReport
             // 
@@ -336,18 +342,21 @@
             this.menuMergeReport.Name = "menuMergeReport";
             this.menuMergeReport.Size = new System.Drawing.Size(297, 22);
             this.menuMergeReport.Text = "Show Report After Each &Merge";
+            this.menuMergeReport.ToolTipText = "Show a report with buttons to open files/directories";
             // 
             // menuPackReport
             // 
             this.menuPackReport.Name = "menuPackReport";
             this.menuPackReport.Size = new System.Drawing.Size(297, 22);
             this.menuPackReport.Text = "Show Report After &Packing Bundle";
+            this.menuPackReport.ToolTipText = "Show a report with list of contents and button to open content directory";
             // 
             // menuDependencies
             // 
             this.menuDependencies.Name = "menuDependencies";
             this.menuDependencies.Size = new System.Drawing.Size(203, 22);
             this.menuDependencies.Text = "&Dependency Locations...";
+            this.menuDependencies.ToolTipText = "Locate the 3rd-party tools that Script Merger depends on";
             this.menuDependencies.Click += new System.EventHandler(this.menuDependencies_Click);
             // 
             // menuShowStatusBar
@@ -356,6 +365,7 @@
             this.menuShowStatusBar.Name = "menuShowStatusBar";
             this.menuShowStatusBar.Size = new System.Drawing.Size(203, 22);
             this.menuShowStatusBar.Text = "&Show Status Bar";
+            this.menuShowStatusBar.ToolTipText = "Show bar with statistics at the bottom of the window";
             this.menuShowStatusBar.Click += new System.EventHandler(this.menuShowStatusBar_Click);
             // 
             // statusStrip
