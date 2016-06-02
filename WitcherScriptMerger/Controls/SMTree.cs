@@ -50,8 +50,8 @@ namespace WitcherScriptMerger.Controls
         protected ToolStripRegion ContextNodeRegion;
         protected List<ToolStripRegion> ContextRegions;
 
-        ToolStripMenuItem _contextOpenModScript = new ToolStripMenuItem();
-        ToolStripMenuItem _contextOpenModScriptDir = new ToolStripMenuItem();
+        ToolStripMenuItem _contextOpenModFile = new ToolStripMenuItem();
+        ToolStripMenuItem _contextOpenModFileDir = new ToolStripMenuItem();
         ToolStripMenuItem _contextOpenModBundleDir = new ToolStripMenuItem();
         ToolStripMenuItem _contextCopyPath = new ToolStripMenuItem();
         ToolStripSeparator _contextOpenSeparator = new ToolStripSeparator();
@@ -237,8 +237,8 @@ namespace WitcherScriptMerger.Controls
             ContextOpenRegion = new ToolStripRegion(_contextMenu as ToolStrip, new ToolStripItem[]
             {
                 _contextCopyPath,
-                _contextOpenModScript,
-                _contextOpenModScriptDir,
+                _contextOpenModFile,
+                _contextOpenModFileDir,
                 _contextOpenModBundleDir
             });
             ContextNodeRegion = new ToolStripRegion(_contextMenu as ToolStrip, new ToolStripItem[]
@@ -255,19 +255,19 @@ namespace WitcherScriptMerger.Controls
             _contextMenu.Size = new Size(239, 390);
             _contextMenu.Closing += ContextMenu_Closing;
             // 
-            // contextOpenModScript
+            // contextOpenModFile
             // 
-            _contextOpenModScript.Name = "contextOpenModScript";
-            _contextOpenModScript.Size = new Size(225, 22);
-            _contextOpenModScript.Text = "Open Mod Script";
-            _contextOpenModScript.Click += ContextOpenScript_Click;
+            _contextOpenModFile.Name = "contextOpenModFile";
+            _contextOpenModFile.Size = new Size(225, 22);
+            _contextOpenModFile.Text = "Open Mod File";
+            _contextOpenModFile.Click += ContextOpenFile_Click;
             // 
-            // contextOpenModScriptDir
+            // contextOpenModFileDir
             // 
-            _contextOpenModScriptDir.Name = "contextOpenModScriptDir";
-            _contextOpenModScriptDir.Size = new Size(225, 22);
-            _contextOpenModScriptDir.Text = "Open Mod Script Directory";
-            _contextOpenModScriptDir.Click += ContextOpenDirectory_Click;
+            _contextOpenModFileDir.Name = "contextOpenModFileDir";
+            _contextOpenModFileDir.Size = new Size(225, 22);
+            _contextOpenModFileDir.Text = "Open Mod File Directory";
+            _contextOpenModFileDir.Click += ContextOpenDirectory_Click;
 
             // 
             // contextOpenModBundleDir
@@ -343,8 +343,8 @@ namespace WitcherScriptMerger.Controls
                 if (IsModNode(ClickedNode))
                 {
                     string filePath = ClickedNode.Tag as string;
-                    if (ModFile.IsScript(filePath))
-                        _contextOpenModScript.Available = _contextOpenModScriptDir.Available = true;
+                    if (ModFile.IsFlatFile(filePath))
+                        _contextOpenModFile.Available = _contextOpenModFileDir.Available = true;
                     else
                         _contextOpenModBundleDir.Available = true;
                 }
@@ -377,7 +377,7 @@ namespace WitcherScriptMerger.Controls
             }
         }
 
-        protected void ContextOpenScript_Click(object sender, EventArgs e)
+        protected void ContextOpenFile_Click(object sender, EventArgs e)
         {
             if (RightClickedNode == null)
                 return;

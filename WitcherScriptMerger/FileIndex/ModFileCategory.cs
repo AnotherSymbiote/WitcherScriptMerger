@@ -14,6 +14,8 @@
         public string DisplayName { get; private set; }
         public string ToolTipText { get; private set; }
         public bool IsSupported { get; private set; }
+
+        public bool IsBundled => (this == Categories.BundleText || this == Categories.BundleUnsupported);
     }
 
     public static class Categories
@@ -21,13 +23,16 @@
         public static ModFileCategory Script = new ModFileCategory(
             1, "Scripts", "These plaintext .ws files can be merged", true);
 
+        public static ModFileCategory Xml = new ModFileCategory(
+            2, "XML", "These .xml text files can be merged", true);
+
         public static ModFileCategory BundleText = new ModFileCategory(
-            2, "Bundle Content - Text", "These bundled text files can be merged", true);
+            3, "Bundle Content - Text", "These bundled text files can be merged", true);
 
         public static ModFileCategory BundleUnsupported = new ModFileCategory(
-            3, "Bundle Content - Unsupported", "These bundled files can't be merged (usually because they're textures or models)", false);
+            4, "Bundle Content - Unsupported", "These bundled files can't be merged (usually because they're textures or models)", false);
 
         public static ModFileCategory OtherUnsupported = new ModFileCategory(
-            4, "Other Unsupported", "These files can't be merged", false);
+            5, "Other Unsupported", "These files can't be merged", false);
     }
 }

@@ -37,7 +37,7 @@ namespace WitcherScriptMerger.Controls
             _contextOpenMergedFile.Name = "contextOpenMergedFile";
             _contextOpenMergedFile.Size = new Size(225, 22);
             _contextOpenMergedFile.Text = "Open Merged File";
-            _contextOpenMergedFile.Click += ContextOpenScript_Click;
+            _contextOpenMergedFile.Click += ContextOpenFile_Click;
             // 
             // contextOpenMergedFileDir
             // 
@@ -133,10 +133,7 @@ namespace WitcherScriptMerger.Controls
                 if (ClickedNode.Tag != null && IsFileNode(ClickedNode))
                 {
                     string filePath = ClickedNode.Tag as string;
-                    if (ModFile.IsScript(filePath))
-                        _contextOpenMergedFile.Available = _contextOpenMergedFileDir.Available = true;
-                    else
-                        _contextOpenMergedFile.Available = _contextOpenMergedFileDir.Available = true;
+                    _contextOpenMergedFile.Available = _contextOpenMergedFileDir.Available = true;
                 }
 
                 if (!IsCategoryNode(ClickedNode))

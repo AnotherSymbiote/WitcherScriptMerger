@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -19,6 +20,8 @@ namespace WitcherScriptMerger.FileIndex
 
         public int ScriptCount { get; set; }
 
+        public int XmlCount { get; set; }
+
         public int BundleCount { get; set; }
 
         public ModFileIndex()
@@ -28,7 +31,7 @@ namespace WitcherScriptMerger.FileIndex
 
         public void BuildAsync(
             MergeInventory inventory,
-            bool checkScripts, bool checkBundles,
+            bool checkScripts, bool checkXml, bool checkBundles,
             ProgressChangedEventHandler progressHandler,
             RunWorkerCompletedEventHandler completedHandler)
         {
@@ -49,27 +52,33 @@ namespace WitcherScriptMerger.FileIndex
             bgWorker.DoWork += (sender, e) =>
             {
                 int i = 0;
-                ScriptCount = BundleCount = 0;
+                ScriptCount = XmlCount = BundleCount = 0;
                 foreach (var dirPath in modDirPaths)
                 {
                     string modName = Path.GetFileName(dirPath);
                     var filePaths = Directory.GetFiles(dirPath, "*", SearchOption.AllDirectories);
                     var scriptPaths = filePaths.Where(path => ModFile.IsScript(path));
+                    var xmlPaths = filePaths.Where(path => ModFile.IsXml(path));
                     var bundlePaths = filePaths.Where(path => ModFile.IsBundle(path));
 
                     ScriptCount += scriptPaths.Count();
+                    XmlCount += xmlPaths.Count();
                     BundleCount += bundlePaths.Count();
 
                     if (checkScripts)
                     {
-                        Files.AddRange(GetModFilesFromPaths(scriptPaths, inventory, modName));
+                        Files.AddRange(GetModFilesFromPaths(scriptPaths, Categories.Script, inventory, modName));
+                    }
+                    if (checkXml)
+                    {
+                        Files.AddRange(GetModFilesFromPaths(xmlPaths, Categories.Xml, inventory, modName));
                     }
                     if (checkBundles)
                     {
                         foreach (string bundlePath in bundlePaths)
                         {
                             var contentPaths = GetBundleContentPaths(bundlePath);
-                            Files.AddRange(GetModFilesFromPaths(contentPaths, inventory, modName, bundlePath));
+                            Files.AddRange(GetModFilesFromPaths(contentPaths, Categories.BundleText, inventory, modName, bundlePath));
                         }
                     }
                     int progressPct = (int)((float)++i / modDirPaths.Count * 100f);
@@ -83,14 +92,20 @@ namespace WitcherScriptMerger.FileIndex
             bgWorker.RunWorkerAsync();
         }
 
-        private List<ModFile> GetModFilesFromPaths(IEnumerable<string> filePaths, MergeInventory inventory, string modName, string bundlePath = null)
+        private List<ModFile> GetModFilesFromPaths(IEnumerable<string> filePaths, ModFileCategory category, MergeInventory inventory, string modName, string bundlePath = null)
         {
             var fileList = new List<ModFile>();
             foreach (var filePath in filePaths)
             {
-                string relPath = (Path.IsPathRooted(filePath)
-                    ? Paths.GetRelativePath(filePath, Paths.ModScriptBase)
-                    : filePath);
+                string relPath = null;
+                if (category == Categories.Script)
+                    relPath = Paths.GetRelativePath(filePath, Paths.ModScriptBase);
+                else if (category == Categories.Xml)
+                    relPath = Paths.GetRelativePath(filePath, modName);
+                else if (category == Categories.BundleText)
+                    relPath = filePath;
+                else
+                    throw new NotImplementedException();
 
                 if (inventory.HasResolvedConflict(relPath, modName))
                     continue;

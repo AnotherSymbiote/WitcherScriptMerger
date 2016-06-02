@@ -57,6 +57,7 @@ namespace WitcherScriptMerger.Forms
             Program.Settings.StartBatch();
             txtGameDir.Text = Program.Settings.Get("GameDirectory");
             menuCheckScripts.Checked = Program.Settings.Get<bool>("CheckScripts");
+            menuCheckXmlFiles.Checked = Program.Settings.Get<bool>("CheckXmlFiles");
             menuCheckBundleContents.Checked = Program.Settings.Get<bool>("CheckBundleContents");
             menuCollapseUnsupported.Checked = Program.Settings.Get<bool>("CollapseUnsupported");
             menuReviewEach.Checked = Program.Settings.Get<bool>("ReviewEachMerge");
@@ -91,6 +92,7 @@ namespace WitcherScriptMerger.Forms
             Program.Settings.StartBatch();
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
             Program.Settings.Set("CheckScripts", menuCheckScripts.Checked);
+            Program.Settings.Set("CheckXmlFiles", menuCheckXmlFiles.Checked);
             Program.Settings.Set("CheckBundleContents", menuCheckBundleContents.Checked);
             Program.Settings.Set("CollapseUnsupported", menuCollapseUnsupported.Checked);
             Program.Settings.Set("ReviewEachMerge", menuReviewEach.Checked);
@@ -163,7 +165,7 @@ namespace WitcherScriptMerger.Forms
 
         void UpdateStatusText()
         {
-            int solvableCount = treConflicts.FileNodes.Count(node => ModFile.IsMergeable(node.Text));
+            int solvableCount = treConflicts.FileNodes.Count(node => ModFile.IsTextFile(node.Text));
 
             if (treConflicts.IsEmpty())
                 lblStatusLeft.Text = "0 conflicts";
@@ -184,11 +186,13 @@ namespace WitcherScriptMerger.Forms
             {
 
                 lblStatusRight.Text = string.Format(
-                    "Found {0} mod{1}, {2} script{3}, {4} bundle{5}",
+                    "Found {0} mod{1}, {2} script{3}, {4} XML{5}, {6} bundle{7}",
                     _modIndex.ModCount,
                     _modIndex.ModCount.GetPluralS(),
                     _modIndex.ScriptCount,
                     _modIndex.ScriptCount.GetPluralS(),
+                    _modIndex.XmlCount,
+                    _modIndex.XmlCount.GetPluralS(),
                     _modIndex.BundleCount,
                     _modIndex.BundleCount.GetPluralS());
             }
@@ -358,6 +362,12 @@ namespace WitcherScriptMerger.Forms
                     if (scriptCatNode != null)
                         nodesToUpdate.Add(scriptCatNode);
                 }
+                if (_inventory.XmlChanged || !menuCheckXmlFiles.Checked)
+                {
+                    var xmlCatNode = treConflicts.GetCategoryNode(Categories.Xml);
+                    if (xmlCatNode != null)
+                        nodesToUpdate.Add(xmlCatNode);
+                }
                 if (_inventory.BundleChanged || checkBundles || !menuCheckBundleContents.Checked)
                 {
                     var bundleTextCatNode = treConflicts.GetCategoryNode(Categories.BundleText);
@@ -388,6 +398,7 @@ namespace WitcherScriptMerger.Forms
             _modIndex = new ModFileIndex();
             _modIndex.BuildAsync(_inventory,
                 menuCheckScripts.Checked,
+                menuCheckXmlFiles.Checked,
                 checkBundles,
                 OnRefreshProgressChanged,
                 OnRefreshComplete);
@@ -411,10 +422,10 @@ namespace WitcherScriptMerger.Forms
                     if (fileNode == null)
                     {
                         fileNode = new TreeNode(conflict.RelativePath);
-                        fileNode.Tag = (conflict.Category == Categories.Script
+                        fileNode.ForeColor = treConflicts.FileNodeForeColor;
+                        fileNode.Tag = (conflict.Category == Categories.Script || conflict.Category == Categories.Xml
                             ? conflict.GetVanillaFile()
                             : conflict.RelativePath);
-                        fileNode.ForeColor = treConflicts.FileNodeForeColor;
 
                         var categoryNode = treConflicts.GetCategoryNode(conflict.Category);
                         if (categoryNode == null)

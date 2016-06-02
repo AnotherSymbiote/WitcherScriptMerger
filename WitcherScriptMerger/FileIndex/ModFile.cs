@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
-using WitcherScriptMerger.FileIndex;
 
 namespace WitcherScriptMerger.FileIndex
 {
@@ -25,9 +25,11 @@ namespace WitcherScriptMerger.FileIndex
             {
                 if (IsScript(RelativePath))
                     return Categories.Script;
+                else if (IsXml(RelativePath))
+                    return Categories.Xml;
                 else if (BundleName != null)
                 {
-                    if (IsBundleText(RelativePath))
+                    if (IsTextFile(RelativePath))
                         return Categories.BundleText;
                     else
                         return Categories.BundleUnsupported;
@@ -62,35 +64,43 @@ namespace WitcherScriptMerger.FileIndex
         {
             if (Category == Categories.Script)
                 return Path.Combine(Paths.ScriptsDirectory, RelativePath);
+            else if (Category == Categories.Xml)
+                return Path.Combine(Paths.GameDirectory, RelativePath);
             else
-                throw new System.Exception("Can only get vanilla file for scripts.");
+                throw new Exception($"Can't get vanilla file for category '{Category}'.");
         }
 
         public string GetModFile(string modName)
         {
             if (Category == Categories.Script)
                 return Path.Combine(Paths.ModsDirectory, modName, Paths.ModScriptBase, RelativePath);
-            else
+            else if (Category == Categories.Xml)
+                return Path.Combine(Paths.ModsDirectory, modName, RelativePath);
+            else if (Category.IsBundled)
                 return Path.Combine(Paths.ModsDirectory, modName, Paths.BundleBase, BundleName);
+            else
+                throw new NotImplementedException();
         }
 
         public static string GetModNameFromPath(string modFilePath)
         {
-            if (IsBundleText(modFilePath))           // Merged bundle content has internal path, not derived from mod folder
+            if (!modFilePath.StartsWith(Paths.ModsDirectory))  // Merged bundle content has internal path, not derived from mod folder
                 return Paths.MergedBundleContent;
-            string nameStart = (IsScript(modFilePath) ? Paths.ModScriptBase : Paths.BundleBase);
-            int nameEnd = modFilePath.IndexOfIgnoreCase(nameStart) - 1;
-            string name = modFilePath.Substring(0, nameEnd);
-            return name.Substring(name.LastIndexOf('\\') + 1);
+
+            int nameStart = Paths.ModsDirectory.Length + 1;
+            string name = modFilePath.Substring(nameStart);
+            return name.Substring(0, name.IndexOf('\\'));
         }
 
         public static bool IsScript(string path) => path.EndsWith(".ws");
 
+        public static bool IsXml(string path) => path.EndsWith(".xml");
+
+        public static bool IsFlatFile(string path) => (IsScript(path) || IsXml(path));
+
         public static bool IsBundle(string path) => path.EndsWith(".bundle");
 
-        public static bool IsBundleText(string path) => (path.EndsWith(".txt") || path.EndsWith(".xml") || path.EndsWith(".csv"));
-
-        public static bool IsMergeable(string path) => (IsScript(path) || IsBundleText(path));
+        public static bool IsTextFile(string path) => (path.EndsWith(".txt") || path.EndsWith(".xml") || path.EndsWith(".csv"));
 
         public static int GetLoadOrder(string modName1, string modName2)
         {

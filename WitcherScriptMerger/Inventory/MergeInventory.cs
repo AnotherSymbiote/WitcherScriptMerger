@@ -16,10 +16,13 @@ namespace WitcherScriptMerger.Inventory
         public bool ScriptsChanged { get; private set; }
 
         [XmlIgnore]
+        public bool XmlChanged { get; private set; }
+
+        [XmlIgnore]
         public bool BundleChanged { get; private set; }
 
         [XmlIgnore]
-        public bool HasChanged => (ScriptsChanged || BundleChanged);
+        public bool HasChanged => (ScriptsChanged || XmlChanged || BundleChanged);
 
         static XmlSerializer _serializer = new XmlSerializer(typeof(MergeInventory));
 
@@ -44,7 +47,7 @@ namespace WitcherScriptMerger.Inventory
             {
                 inventory = new MergeInventory();
             }
-            inventory.ScriptsChanged = inventory.BundleChanged = false;
+            inventory.ScriptsChanged = inventory.XmlChanged = inventory.BundleChanged = false;
             return inventory;
         }
 
@@ -53,6 +56,9 @@ namespace WitcherScriptMerger.Inventory
             if ((e.NewItems != null && e.NewItems.Cast<Merge>().Any(merge => merge.Category == Categories.Script)) ||
                 (e.OldItems != null && e.OldItems.Cast<Merge>().Any(merge => merge.Category == Categories.Script)))
                 ScriptsChanged = true;
+            if ((e.NewItems != null && e.NewItems.Cast<Merge>().Any(merge => merge.Category == Categories.Xml)) ||
+                (e.OldItems != null && e.OldItems.Cast<Merge>().Any(merge => merge.Category == Categories.Xml)))
+                XmlChanged = true;
             if ((e.NewItems != null && e.NewItems.Cast<Merge>().Any(merge => merge.IsBundleContent)) ||
                 (e.OldItems != null && e.OldItems.Cast<Merge>().Any(merge => merge.IsBundleContent)))
                 BundleChanged = true;
@@ -63,6 +69,8 @@ namespace WitcherScriptMerger.Inventory
             m.ModNames.Add(modName);
             if (m.Category == Categories.Script)
                 ScriptsChanged = true;
+            else if (m.Category == Categories.Xml)
+                XmlChanged = true;
             else if (m.IsBundleContent)
                 BundleChanged = true;
         }

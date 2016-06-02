@@ -9,8 +9,8 @@ namespace WitcherScriptMerger.Controls
     {
         #region Context Menu Members
 
-        ToolStripMenuItem _contextOpenVanillaScript = new ToolStripMenuItem();
-        ToolStripMenuItem _contextOpenVanillaScriptDir = new ToolStripMenuItem();
+        ToolStripMenuItem _contextOpenVanillaFile = new ToolStripMenuItem();
+        ToolStripMenuItem _contextOpenVanillaFileDir = new ToolStripMenuItem();
 
         #endregion
 
@@ -20,24 +20,24 @@ namespace WitcherScriptMerger.Controls
 
             ContextOpenRegion.Items.AddRange(new ToolStripItem[]
             {
-                _contextOpenVanillaScript, _contextOpenVanillaScriptDir
+                _contextOpenVanillaFile, _contextOpenVanillaFileDir
             });
             BuildContextMenu();
 
             // 
-            // contextOpenVanillaScript
+            // contextOpenVanillaFile
             // 
-            _contextOpenVanillaScript.Name = "contextOpenVanillaScript";
-            _contextOpenVanillaScript.Size = new Size(225, 22);
-            _contextOpenVanillaScript.Text = "Open Vanilla Script";
-            _contextOpenVanillaScript.Click += ContextOpenScript_Click;
+            _contextOpenVanillaFile.Name = "contextOpenVanillaFile";
+            _contextOpenVanillaFile.Size = new Size(225, 22);
+            _contextOpenVanillaFile.Text = "Open Vanilla File";
+            _contextOpenVanillaFile.Click += ContextOpenFile_Click;
             // 
-            // contextOpenVanillaScriptDir
+            // contextOpenVanillaFileDir
             // 
-            _contextOpenVanillaScriptDir.Name = "contextOpenVanillaScriptDir";
-            _contextOpenVanillaScriptDir.Size = new Size(225, 22);
-            _contextOpenVanillaScriptDir.Text = "Open Vanilla Script Directory";
-            _contextOpenVanillaScriptDir.Click += ContextOpenDirectory_Click;
+            _contextOpenVanillaFileDir.Name = "contextOpenVanillaFileDir";
+            _contextOpenVanillaFileDir.Size = new Size(225, 22);
+            _contextOpenVanillaFileDir.Text = "Open Vanilla File Directory";
+            _contextOpenVanillaFileDir.Click += ContextOpenDirectory_Click;
         }
 
         protected override void HandleCheckedChange()
@@ -115,10 +115,12 @@ namespace WitcherScriptMerger.Controls
         {
             base.SetContextItemAvailability();
 
-            if (ClickedNode != null && IsFileNode(ClickedNode) && ModFile.IsScript(ClickedNode.Text))
+            if (ClickedNode != null
+                && IsFileNode(ClickedNode)
+                && !((ModFileCategory)ClickedNode.Tag).IsBundled)
             {
-                _contextOpenVanillaScript.Available = true;
-                _contextOpenVanillaScriptDir.Available = true;
+                _contextOpenVanillaFile.Available = true;
+                _contextOpenVanillaFileDir.Available = true;
             }
 
             if (!this.IsEmpty())

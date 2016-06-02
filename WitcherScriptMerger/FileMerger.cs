@@ -113,10 +113,10 @@ namespace WitcherScriptMerger
                         };
                     }
 
-                    if (ModFile.IsScript(fileNode.Text))
-                        MergeScriptFileNode(fileNode, checkedModNodes, merge, isNew);
-                    else
+                    if ((ModFileCategory)fileNode.Parent.Tag == Categories.BundleText)
                         MergeBundleFileNode(fileNode, checkedModNodes, merge, isNew);
+                    else
+                        MergeFlatFileNode(fileNode, checkedModNodes, merge, isNew);
                 }
                 if (_bundleChanged)
                 {
@@ -147,18 +147,14 @@ namespace WitcherScriptMerger
             _bgWorker.RunWorkerAsync();
         }
 
-        void MergeScriptFileNode(TreeNode scriptNode, TreeNode[] checkedModNodes, Merge merge, bool isNew)
+        void MergeFlatFileNode(TreeNode fileNode, TreeNode[] checkedModNodes, Merge merge, bool isNew)
         {
-            string relPath = Paths.GetRelativePath(
-                _file1.FullName,
-                Path.Combine(Paths.ModsDirectory, _modName1));
-
-            _outputPath = Path.Combine(Paths.ModsDirectory, _mergedModName, relPath);
+            _outputPath = Path.Combine(Paths.ModsDirectory, _mergedModName, merge.RelativePath);
 
             if (File.Exists(_outputPath) && !ConfirmOutputOverwrite(_outputPath))
                 return;
 
-            _vanillaFile = new FileInfo(scriptNode.Tag as string);
+            _vanillaFile = new FileInfo(fileNode.Tag as string);
 
             for (int i = 1; i < checkedModNodes.Length; ++i)
             {

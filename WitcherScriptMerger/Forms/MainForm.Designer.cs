@@ -61,6 +61,7 @@
             this.lblStatusSpring = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusRight = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblGameDir = new System.Windows.Forms.Label();
+            this.menuCheckXmlFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
             this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -270,6 +271,7 @@
             // 
             this.menuCheckingForConflicts.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuCheckScripts,
+            this.menuCheckXmlFiles,
             this.menuCheckBundleContents,
             this.menuCollapseUnsupported});
             this.menuCheckingForConflicts.Name = "menuCheckingForConflicts";
@@ -282,7 +284,7 @@
             this.menuCheckScripts.Name = "menuCheckScripts";
             this.menuCheckScripts.Size = new System.Drawing.Size(222, 22);
             this.menuCheckScripts.Text = "Check &Scripts";
-            this.menuCheckScripts.ToolTipText = "Check for script file conflicts";
+            this.menuCheckScripts.ToolTipText = "Check for mod conflicts in script files";
             // 
             // menuCheckBundleContents
             // 
@@ -290,7 +292,7 @@
             this.menuCheckBundleContents.Name = "menuCheckBundleContents";
             this.menuCheckBundleContents.Size = new System.Drawing.Size(222, 22);
             this.menuCheckBundleContents.Text = "Check &Bundle Contents";
-            this.menuCheckBundleContents.ToolTipText = "Check for conflicts in bundle file contents";
+            this.menuCheckBundleContents.ToolTipText = "Check for mod conflicts in bundle file contents";
             // 
             // menuCollapseUnsupported
             // 
@@ -411,6 +413,14 @@
             this.lblGameDir.TabIndex = 9;
             this.lblGameDir.Text = "Witcher 3 Directory:";
             // 
+            // menuCheckXmlFiles
+            // 
+            this.menuCheckXmlFiles.CheckOnClick = true;
+            this.menuCheckXmlFiles.Name = "menuCheckXmlFiles";
+            this.menuCheckXmlFiles.Size = new System.Drawing.Size(222, 22);
+            this.menuCheckXmlFiles.Text = "Check &XML Files";
+            this.menuCheckXmlFiles.ToolTipText = "Check for mod conflicts in XML files";
+            // 
             // treConflicts
             // 
             this.treConflicts.AllowDrop = true;
@@ -517,6 +527,7 @@
         private System.Windows.Forms.ToolStripStatusLabel lblStatusRight;
         private System.Windows.Forms.ToolStripMenuItem menuCompletionSounds;
         private System.Windows.Forms.Label lblGameDir;
+        private System.Windows.Forms.ToolStripMenuItem menuCheckXmlFiles;
     }
 }
 
