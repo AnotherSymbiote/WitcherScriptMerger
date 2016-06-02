@@ -45,6 +45,8 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.chkShowAfterMerge = new System.Windows.Forms.CheckBox();
             this.lblTempContentFiles = new System.Windows.Forms.Label();
+            this.lblPlusSign = new System.Windows.Forms.Label();
+            this.lblDownArrow = new System.Windows.Forms.Label();
             this.grpFile1.SuspendLayout();
             this.grpMergedFile.SuspendLayout();
             this.grpFile2.SuspendLayout();
@@ -55,6 +57,7 @@
             this.txtFilePath1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFilePath1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtFilePath1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtFilePath1.Location = new System.Drawing.Point(6, 19);
             this.txtFilePath1.Name = "txtFilePath1";
             this.txtFilePath1.ReadOnly = true;
@@ -65,6 +68,7 @@
             // btnOpenFile1
             // 
             this.btnOpenFile1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOpenFile1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnOpenFile1.Location = new System.Drawing.Point(7, 45);
             this.btnOpenFile1.Name = "btnOpenFile1";
             this.btnOpenFile1.Size = new System.Drawing.Size(290, 23);
@@ -80,7 +84,8 @@
             this.grpFile1.Controls.Add(this.btnOpenDir1);
             this.grpFile1.Controls.Add(this.btnOpenFile1);
             this.grpFile1.Controls.Add(this.txtFilePath1);
-            this.grpFile1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpFile1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpFile1.ForeColor = System.Drawing.Color.Red;
             this.grpFile1.Location = new System.Drawing.Point(12, 54);
             this.grpFile1.Name = "grpFile1";
             this.grpFile1.Size = new System.Drawing.Size(600, 79);
@@ -91,6 +96,7 @@
             // btnOpenDir1
             // 
             this.btnOpenDir1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOpenDir1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnOpenDir1.Location = new System.Drawing.Point(303, 45);
             this.btnOpenDir1.Name = "btnOpenDir1";
             this.btnOpenDir1.Size = new System.Drawing.Size(291, 23);
@@ -116,8 +122,9 @@
             this.grpMergedFile.Controls.Add(this.btnOpenMergedDir);
             this.grpMergedFile.Controls.Add(this.btnOpenMergedFile);
             this.grpMergedFile.Controls.Add(this.txtMergedPath);
-            this.grpMergedFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpMergedFile.Location = new System.Drawing.Point(12, 234);
+            this.grpMergedFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpMergedFile.ForeColor = System.Drawing.Color.Blue;
+            this.grpMergedFile.Location = new System.Drawing.Point(12, 274);
             this.grpMergedFile.Name = "grpMergedFile";
             this.grpMergedFile.Size = new System.Drawing.Size(600, 77);
             this.grpMergedFile.TabIndex = 2;
@@ -127,6 +134,7 @@
             // btnOpenMergedDir
             // 
             this.btnOpenMergedDir.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOpenMergedDir.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnOpenMergedDir.Location = new System.Drawing.Point(303, 45);
             this.btnOpenMergedDir.Name = "btnOpenMergedDir";
             this.btnOpenMergedDir.Size = new System.Drawing.Size(291, 23);
@@ -138,6 +146,7 @@
             // btnOpenMergedFile
             // 
             this.btnOpenMergedFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOpenMergedFile.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnOpenMergedFile.Location = new System.Drawing.Point(7, 45);
             this.btnOpenMergedFile.Name = "btnOpenMergedFile";
             this.btnOpenMergedFile.Size = new System.Drawing.Size(290, 23);
@@ -151,6 +160,7 @@
             this.txtMergedPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtMergedPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMergedPath.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtMergedPath.Location = new System.Drawing.Point(6, 19);
             this.txtMergedPath.Name = "txtMergedPath";
             this.txtMergedPath.ReadOnly = true;
@@ -165,8 +175,9 @@
             this.grpFile2.Controls.Add(this.btnOpenDir2);
             this.grpFile2.Controls.Add(this.btnOpenFile2);
             this.grpFile2.Controls.Add(this.txtFilePath2);
-            this.grpFile2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpFile2.Location = new System.Drawing.Point(12, 144);
+            this.grpFile2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpFile2.ForeColor = System.Drawing.Color.Red;
+            this.grpFile2.Location = new System.Drawing.Point(12, 164);
             this.grpFile2.Name = "grpFile2";
             this.grpFile2.Size = new System.Drawing.Size(600, 79);
             this.grpFile2.TabIndex = 1;
@@ -176,6 +187,7 @@
             // btnOpenDir2
             // 
             this.btnOpenDir2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOpenDir2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnOpenDir2.Location = new System.Drawing.Point(303, 45);
             this.btnOpenDir2.Name = "btnOpenDir2";
             this.btnOpenDir2.Size = new System.Drawing.Size(291, 23);
@@ -187,6 +199,7 @@
             // btnOpenFile2
             // 
             this.btnOpenFile2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOpenFile2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnOpenFile2.Location = new System.Drawing.Point(7, 45);
             this.btnOpenFile2.Name = "btnOpenFile2";
             this.btnOpenFile2.Size = new System.Drawing.Size(290, 23);
@@ -200,6 +213,7 @@
             this.txtFilePath2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFilePath2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtFilePath2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.txtFilePath2.Location = new System.Drawing.Point(6, 19);
             this.txtFilePath2.Name = "txtFilePath2";
             this.txtFilePath2.ReadOnly = true;
@@ -212,7 +226,7 @@
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOK.Location = new System.Drawing.Point(505, 327);
+            this.btnOK.Location = new System.Drawing.Point(505, 367);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(107, 23);
             this.btnOK.TabIndex = 4;
@@ -223,7 +237,7 @@
             // chkShowAfterMerge
             // 
             this.chkShowAfterMerge.AutoSize = true;
-            this.chkShowAfterMerge.Location = new System.Drawing.Point(16, 331);
+            this.chkShowAfterMerge.Location = new System.Drawing.Point(16, 371);
             this.chkShowAfterMerge.Name = "chkShowAfterMerge";
             this.chkShowAfterMerge.Size = new System.Drawing.Size(185, 17);
             this.chkShowAfterMerge.TabIndex = 3;
@@ -240,14 +254,38 @@
             this.lblTempContentFiles.Text = "Note: The first 2 files listed below were temporarily unpacked from .bundle files" +
     ".\r\nThey will be deleted when all merges are finished.";
             // 
+            // lblPlusSign
+            // 
+            this.lblPlusSign.AutoSize = true;
+            this.lblPlusSign.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPlusSign.Location = new System.Drawing.Point(297, 136);
+            this.lblPlusSign.Name = "lblPlusSign";
+            this.lblPlusSign.Size = new System.Drawing.Size(31, 31);
+            this.lblPlusSign.TabIndex = 7;
+            this.lblPlusSign.Text = "+";
+            this.lblPlusSign.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblDownArrow
+            // 
+            this.lblDownArrow.AutoSize = true;
+            this.lblDownArrow.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDownArrow.Location = new System.Drawing.Point(292, 246);
+            this.lblDownArrow.Name = "lblDownArrow";
+            this.lblDownArrow.Size = new System.Drawing.Size(42, 31);
+            this.lblDownArrow.TabIndex = 8;
+            this.lblDownArrow.Text = "↓";
+            this.lblDownArrow.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // MergeReportForm
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnOK;
-            this.ClientSize = new System.Drawing.Size(624, 362);
+            this.ClientSize = new System.Drawing.Size(624, 402);
             this.ControlBox = false;
+            this.Controls.Add(this.lblDownArrow);
+            this.Controls.Add(this.lblPlusSign);
             this.Controls.Add(this.lblTempContentFiles);
             this.Controls.Add(this.chkShowAfterMerge);
             this.Controls.Add(this.btnOK);
@@ -256,8 +294,8 @@
             this.Controls.Add(this.lblMergedFiles);
             this.Controls.Add(this.grpFile1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(1920, 400);
-            this.MinimumSize = new System.Drawing.Size(640, 400);
+            this.MaximumSize = new System.Drawing.Size(1920, 440);
+            this.MinimumSize = new System.Drawing.Size(640, 440);
             this.Name = "MergeReportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Merge Finished";
@@ -291,5 +329,7 @@
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.CheckBox chkShowAfterMerge;
         private System.Windows.Forms.Label lblTempContentFiles;
+        private System.Windows.Forms.Label lblPlusSign;
+        private System.Windows.Forms.Label lblDownArrow;
     }
 }
