@@ -149,7 +149,11 @@ namespace WitcherScriptMerger
 
         void MergeFlatFileNode(TreeNode fileNode, TreeNode[] checkedModNodes, Merge merge, bool isNew)
         {
-            _outputPath = Path.Combine(Paths.ModsDirectory, _mergedModName, merge.RelativePath);
+            string relPath = Paths.GetRelativePath(
+                _file1.FullName,
+                Path.Combine(Paths.ModsDirectory, _modName1));
+
+            _outputPath = Path.Combine(Paths.ModsDirectory, _mergedModName, relPath);
 
             if (File.Exists(_outputPath) && !ConfirmOutputOverwrite(_outputPath))
                 return;
