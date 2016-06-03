@@ -67,7 +67,7 @@ namespace WitcherScriptMerger.FileIndex
             else if (Category == Categories.Xml)
                 return Path.Combine(Paths.GameDirectory, RelativePath);
             else
-                throw new Exception($"Can't get vanilla file for category '{Category}'.");
+                throw new Exception($"Can't get vanilla file for category '{Category.DisplayName}'.");
         }
 
         public string GetModFile(string modName)
@@ -100,7 +100,7 @@ namespace WitcherScriptMerger.FileIndex
 
         public static bool IsBundle(string path) => path.EndsWith(".bundle");
 
-        public static bool IsTextFile(string path) => (path.EndsWith(".txt") || path.EndsWith(".xml") || path.EndsWith(".csv"));
+        public static bool IsTextFile(string path) => (path.EndsWith(".ws") || path.EndsWith(".xml") || path.EndsWith(".txt") || path.EndsWith(".csv"));
 
         public static int GetLoadOrder(string modName1, string modName2)
         {

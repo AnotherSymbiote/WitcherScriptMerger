@@ -26,7 +26,7 @@ namespace WitcherScriptMerger.Inventory
         public string GetMergedBundle()
         {
             if (Category != Categories.BundleText)
-                throw new Exception($"Can't get bundle for ModFile of category {Category}.");
+                throw new Exception($"Can't get bundle for file of category '{Category.DisplayName}'.");
 
             return Path.Combine(Paths.ModsDirectory, MergedModName, Paths.BundleBase, BundleName);
         }
