@@ -16,6 +16,11 @@
         public string ToolTipText { get; private set; }
         public bool IsSupported { get; private set; }
         public bool IsBundled { get; private set; }
+
+        public override string ToString()
+        {
+            return DisplayName;
+        }
     }
 
     public static class Categories

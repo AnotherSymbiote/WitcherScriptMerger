@@ -101,5 +101,10 @@ namespace WitcherScriptMerger.FileIndex
         public static bool IsBundle(string path) => path.EndsWith(".bundle");
 
         public static bool IsTextFile(string path) => (path.EndsWith(".ws") || path.EndsWith(".xml") || path.EndsWith(".txt") || path.EndsWith(".csv"));
+
+        public override string ToString()
+        {
+            return $"({ModNames.Count} mod{ModNames.Count.GetPluralS()}) {RelativePath}";
+        }
     }
 }
