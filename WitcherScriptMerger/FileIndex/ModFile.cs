@@ -101,14 +101,5 @@ namespace WitcherScriptMerger.FileIndex
         public static bool IsBundle(string path) => path.EndsWith(".bundle");
 
         public static bool IsTextFile(string path) => (path.EndsWith(".ws") || path.EndsWith(".xml") || path.EndsWith(".txt") || path.EndsWith(".csv"));
-
-        public static int GetLoadOrder(string modName1, string modName2)
-        {
-            // The game loads numbers first, then underscores, then letters (upper or lower).
-            // ASCII (ordinal) order is numbers, then uppercase letters, then underscores, then lowercase.
-            // To achieve the game's load order, we can convert uppercase letters to lowercase, then take ASCII order.
-
-            return string.Compare(modName1.ToLowerInvariant(), modName2.ToLowerInvariant(), System.StringComparison.Ordinal);
-        }
     }
 }

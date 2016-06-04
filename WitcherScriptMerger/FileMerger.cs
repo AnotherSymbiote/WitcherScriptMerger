@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using WitcherScriptMerger.FileIndex;
 using WitcherScriptMerger.Forms;
 using WitcherScriptMerger.Inventory;
+using WitcherScriptMerger.LoadOrderValidation;
 
 namespace WitcherScriptMerger
 {
@@ -94,7 +95,7 @@ namespace WitcherScriptMerger
 
                     ProgressInfo.CurrentAction = "Starting merge";
 
-                    if (checkedModNodes.Any(node => ModFile.GetLoadOrder(node.Text, _mergedModName) < 0) &&
+                    if (checkedModNodes.Any(node => LoadOrderValidator.GetLoadOrder(node.Text, _mergedModName) < 0) &&
                         !ConfirmRemainingConflict(_mergedModName))
                         continue;
 

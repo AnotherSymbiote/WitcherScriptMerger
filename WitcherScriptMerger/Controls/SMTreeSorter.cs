@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Windows.Forms;
 using WitcherScriptMerger.FileIndex;
+using WitcherScriptMerger.LoadOrderValidation;
 
 namespace WitcherScriptMerger.Controls
 {
@@ -19,7 +20,7 @@ namespace WitcherScriptMerger.Controls
                     var yCat = (ModFileCategory)yNode.Tag;
                     return xCat.OrderIndex.CompareTo(yCat.OrderIndex);
                 case (int)SMTree.LevelType.Mods:
-                    return ModFile.GetLoadOrder(xNode.Text, yNode.Text);
+                    return LoadOrderValidator.GetLoadOrder(xNode.Text, yNode.Text);
                 default:
                     return xNode.Text.CompareTo(yNode.Text);
             }

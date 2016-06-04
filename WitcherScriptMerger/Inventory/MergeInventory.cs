@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using WitcherScriptMerger.FileIndex;
+using WitcherScriptMerger.LoadOrderValidation;
 
 namespace WitcherScriptMerger.Inventory
 {
@@ -90,7 +91,7 @@ namespace WitcherScriptMerger.Inventory
             return Merges.Any(merge =>
                 merge.RelativePath.EqualsIgnoreCase(relPath) &&
                 merge.ModNames.Contains(modName) &&
-                ModFile.GetLoadOrder(merge.MergedModName, modName) < 0);
+                LoadOrderValidator.GetLoadOrder(merge.MergedModName, modName) < 0);
         }
     }
 }
