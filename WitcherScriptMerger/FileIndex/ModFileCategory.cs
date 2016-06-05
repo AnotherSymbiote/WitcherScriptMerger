@@ -32,12 +32,12 @@
             2, "XML", "These .xml text files can be merged", true, false);
 
         public static ModFileCategory BundleText = new ModFileCategory(
-            3, "Bundle Content - Text", "These bundled text files can be merged", true, true);
+            3, "Bundled Text", "These bundled text files can be merged", true, true);
 
         public static ModFileCategory BundleUnsupported = new ModFileCategory(
-            4, "Bundle Content - Unsupported Non-Text", "These bundled files aren't text and can't be merged", false, true);
+            4, "Bundled Non-text - Unsupported", "These bundled files aren't text and can't be merged", false, true);
 
         public static ModFileCategory OtherUnsupported = new ModFileCategory(
-            5, "Other Unsupported", "Script Merger doesn't know what these files are", false, false);
+            5, "Unsupported", "Script Merger doesn't know what these files are", false, false);
     }
 }
