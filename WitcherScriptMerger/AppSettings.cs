@@ -29,6 +29,8 @@ namespace WitcherScriptMerger
 
         Configuration GetConfig() => ConfigurationManager.OpenExeConfiguration(_assemblyPath);
 
+        public bool HasConfigFile => GetConfig().HasFile;
+
         public void StartBatch()
         {
             _cachedConfig = GetConfig();

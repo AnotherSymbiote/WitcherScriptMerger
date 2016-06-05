@@ -53,10 +53,10 @@ namespace WitcherScriptMerger.FileIndex
             {
                 int i = 0;
                 ScriptCount = XmlCount = BundleCount = 0;
-                foreach (var dirPath in modDirPaths)
+                foreach (var modDirPath in modDirPaths)
                 {
-                    string modName = Path.GetFileName(dirPath);
-                    var filePaths = Directory.GetFiles(dirPath, "*", SearchOption.AllDirectories);
+                    string modName = Path.GetFileName(modDirPath);
+                    var filePaths = Directory.GetFiles(modDirPath, "*", SearchOption.AllDirectories);
                     var scriptPaths = filePaths.Where(path => ModFile.IsScript(path));
                     var xmlPaths = filePaths.Where(path => ModFile.IsXml(path));
                     var bundlePaths = filePaths.Where(path => ModFile.IsBundle(path));

@@ -12,7 +12,7 @@ namespace WitcherScriptMerger.FileIndex
         [XmlElement]
         public string RelativePath { get; set; }
 
-        [XmlElement(ElementName = "IncludedMod")]
+        [XmlElement("IncludedMod")]
         public List<string> ModNames { get; private set; }
 
         [XmlElement]

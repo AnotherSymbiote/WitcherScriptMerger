@@ -18,17 +18,18 @@ namespace WitcherScriptMerger
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            if (!Settings.HasConfigFile)
+            {
+                ShowLaunchFailure("Config file is missing.");
+                return;
+            }
             if (!Paths.ValidateDependencyPaths())
             {
                 using (var dependencyForm = new DependencyForm())
                 {
                     if (dependencyForm.ShowDialog() != DialogResult.OK)
                     {
-                        MessageBox.Show(
-                            "Launch failed. A dependency is missing.",
-                            "Script Merger Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
+                        ShowLaunchFailure("A dependency is missing.");
                         return;
                     }
                 }
@@ -37,5 +38,14 @@ namespace WitcherScriptMerger
             MainForm = new MainForm();
             Application.Run(MainForm);
         }
+        static void ShowLaunchFailure(string message)
+        {
+            MessageBox.Show(
+                $"Launch failure: {message}",
+                "Script Merger Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+        }
     }
+
 }

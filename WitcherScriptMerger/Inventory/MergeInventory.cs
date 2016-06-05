@@ -10,7 +10,7 @@ namespace WitcherScriptMerger.Inventory
     [XmlRoot]
     public class MergeInventory
     {
-        [XmlElement(ElementName="Merge")]
+        [XmlElement("Merge")]
         public ObservableCollection<Merge> Merges { get; private set; }
 
         [XmlIgnore]
