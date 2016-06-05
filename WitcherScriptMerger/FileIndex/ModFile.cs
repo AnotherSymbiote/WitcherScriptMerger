@@ -23,17 +23,17 @@ namespace WitcherScriptMerger.FileIndex
         {
             get
             {
-                if (IsScript(RelativePath))
-                    return Categories.Script;
-                else if (IsXml(RelativePath))
-                    return Categories.Xml;
-                else if (BundleName != null)
+                if (BundleName != null)
                 {
                     if (IsTextFile(RelativePath))
                         return Categories.BundleText;
                     else
                         return Categories.BundleUnsupported;
                 }
+                else if (IsScript(RelativePath))
+                    return Categories.Script;
+                else if (IsXml(RelativePath))
+                    return Categories.Xml;
                 else
                     return Categories.OtherUnsupported;
             }
