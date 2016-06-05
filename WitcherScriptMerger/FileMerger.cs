@@ -228,7 +228,7 @@ namespace WitcherScriptMerger
 
         FileInfo MergeText(Merge merge)
         {
-            ProgressInfo.CurrentAction = $"Using KDiff3 to merge {_modName1} && {_modName2}";
+            ProgressInfo.CurrentAction = $"Merging {_modName1} && {_modName2} — waiting for KDiff3 to close";
 
             string outputDir = Path.GetDirectoryName(_outputPath);
             if (!Directory.Exists(outputDir))
