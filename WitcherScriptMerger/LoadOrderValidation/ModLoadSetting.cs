@@ -8,6 +8,9 @@
 
         public int Priority { get; set; }
 
+        public ModLoadSetting()
+        { }
+
         public ModLoadSetting(string modName)
         {
             ModName = modName;

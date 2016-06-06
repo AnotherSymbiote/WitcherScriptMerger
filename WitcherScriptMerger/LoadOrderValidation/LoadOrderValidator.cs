@@ -22,8 +22,7 @@ namespace WitcherScriptMerger.LoadOrderValidation
 
             var loadOrder = new CustomLoadOrder(_modsSettingsPath);
 
-            string mergedModName = Paths.RetrieveMergedModName();
-            var mergedMod = loadOrder.Mods.Find(m => m.ModName == mergedModName);
+            var mergedMod = loadOrder.Mods.Find(m => m.ModName == Paths.RetrieveMergedModName());
 
             bool isMergedModTopPriority =
                 mergedMod != null &&
@@ -71,7 +70,21 @@ namespace WitcherScriptMerger.LoadOrderValidation
 
         void PrioritizeMergedMod(CustomLoadOrder loadOrder, ModLoadSetting mergedModSetting)
         {
-            mergedModSetting.Priority = 0;  // Will increment to 1
+            // Priority 0 will be incremented to 1
+            if (mergedModSetting != null)
+            {
+                mergedModSetting.Priority = 0;
+                mergedModSetting.IsEnabled = true;
+            }
+            else
+            {
+                loadOrder.Mods.Insert(0, new ModLoadSetting
+                {
+                    ModName = Paths.RetrieveMergedModName(),
+                    IsEnabled = true,
+                    Priority = 0
+                });
+            }
 
             IncrementLeadingContiguousPriorities(loadOrder, 0);
 
@@ -84,14 +97,17 @@ namespace WitcherScriptMerger.LoadOrderValidation
             var modsToIncrement = loadOrder.Mods.Where(mod => mod.Priority == startingPriority).ToArray();
             var displacedMods = loadOrder.Mods.Where(mod => mod.Priority == nextPriority).ToArray();
 
-            foreach (var mod in modsToIncrement)
-                ++mod.Priority;
+            if (!modsToIncrement.Any())
+                return;
 
             if (displacedMods.Any() &&
                 nextPriority < CustomLoadOrder.MaxPriority)
             {
                 IncrementLeadingContiguousPriorities(loadOrder, nextPriority);
             }
+
+            foreach (var mod in modsToIncrement)
+                ++mod.Priority;
         }
 
         public static int GetLoadOrder(string modName1, string modName2)
