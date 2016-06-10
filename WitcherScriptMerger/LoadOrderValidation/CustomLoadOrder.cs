@@ -19,7 +19,11 @@ namespace WitcherScriptMerger.LoadOrderValidation
 
             var lines = 
                 File.ReadAllLines(modSettingsFilePath)
+                .Where(line => !string.IsNullOrWhiteSpace(line))
                 .Select(line => line.Trim());
+
+            if (!lines.Any())
+                return;
 
             foreach (string line in lines)
             {
@@ -45,7 +49,8 @@ namespace WitcherScriptMerger.LoadOrderValidation
                     currModSetting.Priority = int.Parse(priorityString);
                 }
             }
-            Mods.Add(currModSetting); // Final item
+            if (currModSetting != null)
+                Mods.Add(currModSetting); // Final item
 
             Mods.OrderBy(m => m.Priority)
                 .ThenBy(m => m.ModName);

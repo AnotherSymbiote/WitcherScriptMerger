@@ -22,6 +22,9 @@ namespace WitcherScriptMerger.LoadOrderValidation
 
             var loadOrder = new CustomLoadOrder(_modsSettingsPath);
 
+            if (!loadOrder.Mods.Any())
+                return;
+
             var mergedMod = loadOrder.Mods.Find(m => m.ModName == Paths.RetrieveMergedModName());
 
             bool isMergedModTopPriority =
@@ -34,20 +37,7 @@ namespace WitcherScriptMerger.LoadOrderValidation
 
             if (!isMergedModTopPriority)
             {
-                string msg =
-                    $"{_modsSettingsPath}\n\n" +
-                    "Detected custom load order in the file above, and merged files aren't configured to load first.\n\n" +
-                    "How would you like to fix this?\n\n" +
-                    "Disable (preferred)\nDisables custom load order.  Script Merger is designed for the game's default load order based on mod folder names.  With this option, your mods.settings file will be renamed to mods.settings.backup (will overwrite existing backup, if any).\n\n" +
-                    "Modify\nModifies custom load order to load merged files first.  With this option, only your merged files will be given priority 1.\n\n" +
-                    "Do nothing\nLeaves custom load order unchanged.  With this option, the game may ignore your merged files.";
-                MessageBoxManager.Abort = "&Disable";
-                MessageBoxManager.Retry = "&Modify";
-                MessageBoxManager.Ignore = "Do &nothing";
-                MessageBoxManager.Register();
-                var choice = MessageBox.Show(msg, "Custom Load Order Problem", MessageBoxButtons.AbortRetryIgnore);
-                MessageBoxManager.Unregister();
-
+                var choice = PromptForAction();
                 switch (choice)
                 {
                     case DialogResult.Abort:
@@ -58,6 +48,24 @@ namespace WitcherScriptMerger.LoadOrderValidation
                         break;
                 }
             }
+        }
+
+        DialogResult PromptForAction()
+        {
+            string msg =
+                $"{_modsSettingsPath}\n\n" +
+                "Detected custom load order in the file above, and merged files aren't configured to load first.\n\n" +
+                "How would you like to fix this?\n\n" +
+                "Disable (preferred)\nDisables custom load order.  Script Merger is designed for the game's default load order based on mod folder names.  With this option, your mods.settings file will be renamed to mods.settings.backup (will overwrite existing backup, if any).\n\n" +
+                "Modify\nModifies custom load order to load merged files first.  With this option, only your merged files will be given priority 1.\n\n" +
+                "Do nothing\nLeaves custom load order unchanged.  With this option, the game may ignore your merged files.";
+            MessageBoxManager.Abort = "&Disable";
+            MessageBoxManager.Retry = "&Modify";
+            MessageBoxManager.Ignore = "Do &nothing";
+            MessageBoxManager.Register();
+            var choice = MessageBox.Show(msg, "Custom Load Order Problem", MessageBoxButtons.AbortRetryIgnore);
+            MessageBoxManager.Unregister();
+            return choice;
         }
 
         void DisableCustomLoadOrder()
