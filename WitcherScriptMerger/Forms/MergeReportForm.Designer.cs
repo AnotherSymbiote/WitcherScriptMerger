@@ -45,8 +45,7 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.chkShowAfterMerge = new System.Windows.Forms.CheckBox();
             this.lblTempContentFiles = new System.Windows.Forms.Label();
-            this.lblPlusSign = new System.Windows.Forms.Label();
-            this.lblDownArrow = new System.Windows.Forms.Label();
+            this.lblPlusAndArrow = new System.Windows.Forms.Label();
             this.grpFile1.SuspendLayout();
             this.grpMergedFile.SuspendLayout();
             this.grpFile2.SuspendLayout();
@@ -124,7 +123,7 @@
             this.grpMergedFile.Controls.Add(this.txtMergedPath);
             this.grpMergedFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpMergedFile.ForeColor = System.Drawing.Color.Blue;
-            this.grpMergedFile.Location = new System.Drawing.Point(12, 274);
+            this.grpMergedFile.Location = new System.Drawing.Point(12, 296);
             this.grpMergedFile.Name = "grpMergedFile";
             this.grpMergedFile.Size = new System.Drawing.Size(600, 77);
             this.grpMergedFile.TabIndex = 2;
@@ -177,7 +176,7 @@
             this.grpFile2.Controls.Add(this.txtFilePath2);
             this.grpFile2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpFile2.ForeColor = System.Drawing.Color.Red;
-            this.grpFile2.Location = new System.Drawing.Point(12, 164);
+            this.grpFile2.Location = new System.Drawing.Point(12, 161);
             this.grpFile2.Name = "grpFile2";
             this.grpFile2.Size = new System.Drawing.Size(600, 79);
             this.grpFile2.TabIndex = 1;
@@ -226,7 +225,7 @@
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOK.Location = new System.Drawing.Point(505, 367);
+            this.btnOK.Location = new System.Drawing.Point(504, 387);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(107, 23);
             this.btnOK.TabIndex = 4;
@@ -237,7 +236,7 @@
             // chkShowAfterMerge
             // 
             this.chkShowAfterMerge.AutoSize = true;
-            this.chkShowAfterMerge.Location = new System.Drawing.Point(16, 371);
+            this.chkShowAfterMerge.Location = new System.Drawing.Point(16, 391);
             this.chkShowAfterMerge.Name = "chkShowAfterMerge";
             this.chkShowAfterMerge.Size = new System.Drawing.Size(185, 17);
             this.chkShowAfterMerge.TabIndex = 3;
@@ -254,27 +253,16 @@
             this.lblTempContentFiles.Text = "Note: The first 2 files listed below were temporarily unpacked from .bundle files" +
     ".\r\nThey will be deleted when all merges are finished.";
             // 
-            // lblPlusSign
+            // lblPlusAndArrow
             // 
-            this.lblPlusSign.AutoSize = true;
-            this.lblPlusSign.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPlusSign.Location = new System.Drawing.Point(297, 136);
-            this.lblPlusSign.Name = "lblPlusSign";
-            this.lblPlusSign.Size = new System.Drawing.Size(31, 31);
-            this.lblPlusSign.TabIndex = 7;
-            this.lblPlusSign.Text = "+";
-            this.lblPlusSign.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblDownArrow
-            // 
-            this.lblDownArrow.AutoSize = true;
-            this.lblDownArrow.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDownArrow.Location = new System.Drawing.Point(292, 246);
-            this.lblDownArrow.Name = "lblDownArrow";
-            this.lblDownArrow.Size = new System.Drawing.Size(42, 31);
-            this.lblDownArrow.TabIndex = 8;
-            this.lblDownArrow.Text = "↓";
-            this.lblDownArrow.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblPlusAndArrow.AutoSize = true;
+            this.lblPlusAndArrow.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPlusAndArrow.Location = new System.Drawing.Point(292, 133);
+            this.lblPlusAndArrow.Name = "lblPlusAndArrow";
+            this.lblPlusAndArrow.Size = new System.Drawing.Size(42, 155);
+            this.lblPlusAndArrow.TabIndex = 7;
+            this.lblPlusAndArrow.Text = "+\r\n\r\n\r\n\r\n↓";
+            this.lblPlusAndArrow.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MergeReportForm
             // 
@@ -282,10 +270,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnOK;
-            this.ClientSize = new System.Drawing.Size(624, 402);
+            this.ClientSize = new System.Drawing.Size(624, 422);
             this.ControlBox = false;
-            this.Controls.Add(this.lblDownArrow);
-            this.Controls.Add(this.lblPlusSign);
             this.Controls.Add(this.lblTempContentFiles);
             this.Controls.Add(this.chkShowAfterMerge);
             this.Controls.Add(this.btnOK);
@@ -293,9 +279,10 @@
             this.Controls.Add(this.grpMergedFile);
             this.Controls.Add(this.lblMergedFiles);
             this.Controls.Add(this.grpFile1);
+            this.Controls.Add(this.lblPlusAndArrow);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(1920, 440);
-            this.MinimumSize = new System.Drawing.Size(640, 440);
+            this.MaximumSize = new System.Drawing.Size(1920, 460);
+            this.MinimumSize = new System.Drawing.Size(640, 455);
             this.Name = "MergeReportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Merge Finished";
@@ -329,7 +316,6 @@
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.CheckBox chkShowAfterMerge;
         private System.Windows.Forms.Label lblTempContentFiles;
-        private System.Windows.Forms.Label lblPlusSign;
-        private System.Windows.Forms.Label lblDownArrow;
+        private System.Windows.Forms.Label lblPlusAndArrow;
     }
 }
