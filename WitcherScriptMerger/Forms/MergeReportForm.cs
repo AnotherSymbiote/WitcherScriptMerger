@@ -23,7 +23,7 @@ namespace WitcherScriptMerger.Forms
                     btnOK.Text = "Continue";
             }
 
-            lblTempContentFiles.Visible = !ModFile.IsFlatFile(outputFile);
+            lblTempContentFiles.Visible = outputFile.StartsWith(Paths.MergedBundleContent);
 
             grpFile1.Text = modName1;
             grpFile2.Text = modName2;
