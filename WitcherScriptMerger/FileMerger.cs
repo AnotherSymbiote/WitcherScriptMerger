@@ -95,7 +95,7 @@ namespace WitcherScriptMerger
 
                     ProgressInfo.CurrentAction = "Starting merge";
 
-                    if (checkedModNodes.Any(node => LoadOrderValidator.GetLoadOrder(node.Text, _mergedModName) < 0) &&
+                    if (checkedModNodes.Any(node => LoadOrderValidator.GetModNameLoadOrder(node.Text, _mergedModName) < 0) &&
                         !ConfirmRemainingConflict(_mergedModName))
                         continue;
 
@@ -270,11 +270,11 @@ namespace WitcherScriptMerger
             if (kdiff3Proc.ExitCode == 0)
             {
                 if (!_file1.FullName.EqualsIgnoreCase(_outputPath)
-                    && !_file1.FullName.Contains(Paths.MergedBundleContent))
+                    && !_file1.FullName.StartsWith(Paths.MergedBundleContent))
                     _inventory.AddModToMerge(_modName1, merge);
 
                 if (!_file2.FullName.EqualsIgnoreCase(_outputPath)
-                    && !_file2.FullName.Contains(Paths.MergedBundleContent))
+                    && !_file2.FullName.StartsWith(Paths.MergedBundleContent))
                     _inventory.AddModToMerge(_modName2, merge);
 
                 if (Program.MainForm.CompletionSoundsSetting)

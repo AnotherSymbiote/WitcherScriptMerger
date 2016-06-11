@@ -35,45 +35,20 @@ namespace WitcherScriptMerger.LoadOrderValidation
                     m.IsEnabled &&
                     m.Priority < mergedMod.Priority);
 
-            if (!isMergedModTopPriority)
+            if (!isMergedModTopPriority && DialogResult.Yes == PromptToPrioritizeMergedMod())
             {
-                var choice = PromptForAction();
-                switch (choice)
-                {
-                    case DialogResult.Abort:
-                        DisableCustomLoadOrder();
-                        break;
-                    case DialogResult.Retry:
-                        PrioritizeMergedMod(loadOrder, mergedMod);
-                        break;
-                }
+                PrioritizeMergedMod(loadOrder, mergedMod);
             }
         }
 
-        DialogResult PromptForAction()
+        DialogResult PromptToPrioritizeMergedMod()
         {
-            string msg =
+            return MessageBox.Show(
                 $"{_modsSettingsPath}\n\n" +
                 "Detected custom load order in the file above, and merged files aren't configured to load first.\n\n" +
-                "How would you like to fix this?\n\n" +
-                "Disable (preferred)\nDisables custom load order.  Script Merger is designed for the game's default load order based on mod folder names.  With this option, your mods.settings file will be renamed to mods.settings.backup (will overwrite existing backup, if any).\n\n" +
-                "Modify\nModifies custom load order to load merged files first.  With this option, only your merged files will be given priority 1.\n\n" +
-                "Do nothing\nLeaves custom load order unchanged.  With this option, the game may ignore your merged files.";
-            MessageBoxManager.Abort = "&Disable";
-            MessageBoxManager.Retry = "&Modify";
-            MessageBoxManager.Ignore = "Do &nothing";
-            MessageBoxManager.Register();
-            var choice = MessageBox.Show(msg, "Custom Load Order Problem", MessageBoxButtons.AbortRetryIgnore);
-            MessageBoxManager.Unregister();
-            return choice;
-        }
-
-        void DisableCustomLoadOrder()
-        {
-            var backupPath = $"{_modsSettingsPath}.backup";
-            if (File.Exists(backupPath))
-                File.Delete(backupPath);
-            File.Move(_modsSettingsPath, backupPath);
+                "Would you like Script Merger to modify your custom load order so that your merged files have top priority?",
+                "Custom Load Order Problem",
+                MessageBoxButtons.YesNo);
         }
 
         void PrioritizeMergedMod(CustomLoadOrder loadOrder, ModLoadSetting mergedModSetting)
@@ -118,13 +93,13 @@ namespace WitcherScriptMerger.LoadOrderValidation
                 ++mod.Priority;
         }
 
-        public static int GetLoadOrder(string modName1, string modName2)
+        public static int GetModNameLoadOrder(string name1, string name2)
         {
             // The game loads numbers first, then underscores, then letters (upper or lower).
             // ASCII (ordinal) order is numbers, then uppercase letters, then underscores, then lowercase.
             // To achieve the game's load order, we can convert uppercase letters to lowercase, then take ASCII order.
 
-            return string.Compare(modName1.ToLowerInvariant(), modName2.ToLowerInvariant(), System.StringComparison.Ordinal);
+            return string.Compare(name1.ToLowerInvariant(), name2.ToLowerInvariant(), StringComparison.Ordinal);
         }
     }
 }

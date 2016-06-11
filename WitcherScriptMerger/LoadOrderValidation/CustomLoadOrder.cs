@@ -27,9 +27,6 @@ namespace WitcherScriptMerger.LoadOrderValidation
 
             foreach (string line in lines)
             {
-                if (string.IsNullOrWhiteSpace(line))
-                    continue;
-
                 if (line.StartsWith("["))
                 {
                     if (currModSetting != null)
