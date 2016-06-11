@@ -35,20 +35,36 @@ namespace WitcherScriptMerger.LoadOrderValidation
                     m.IsEnabled &&
                     m.Priority < mergedMod.Priority);
 
-            if (!isMergedModTopPriority && DialogResult.Yes == PromptToPrioritizeMergedMod())
+            if (isMergedModTopPriority)
+                return;
+
+            var choice = PromptToPrioritizeMergedMod();
+            if (choice == DialogResult.Yes)
             {
                 PrioritizeMergedMod(loadOrder, mergedMod);
+            }
+            else if (choice == DialogResult.Cancel)  // Never
+            {
+                Program.MainForm.ValidateCustomLoadOrderSetting = false;
             }
         }
 
         DialogResult PromptToPrioritizeMergedMod()
         {
-            return MessageBox.Show(
+            MessageBoxManager.Cancel = "Ne&ver";
+            MessageBoxManager.Register();
+
+            var choice = MessageBox.Show(
                 $"{_modsSettingsPath}\n\n" +
                 "Detected custom load order in the file above, and merged files aren't configured to load first.\n\n" +
                 "Would you like Script Merger to modify your custom load order so that your merged files have top priority?",
                 "Custom Load Order Problem",
-                MessageBoxButtons.YesNo);
+                MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Exclamation,
+                MessageBoxDefaultButton.Button2);
+
+            MessageBoxManager.Unregister();
+            return choice;
         }
 
         void PrioritizeMergedMod(CustomLoadOrder loadOrder, ModLoadSetting mergedModSetting)

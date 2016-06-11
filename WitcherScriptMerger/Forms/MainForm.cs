@@ -21,11 +21,7 @@ namespace WitcherScriptMerger.Forms
 
         public bool ReviewEachMergeSetting => menuReviewEach.Checked;
 
-        public bool CompletionSoundsSetting
-        {
-            get { return menuCompletionSounds.Checked; }
-            set { menuMergeReport.Checked = value; }
-        }
+        public bool CompletionSoundsSetting => menuCompletionSounds.Checked;
 
         public bool MergeReportSetting
         {
@@ -37,6 +33,12 @@ namespace WitcherScriptMerger.Forms
         {
             get { return menuPackReport.Checked; }
             set { menuPackReport.Checked = value; }
+        }
+
+        public bool ValidateCustomLoadOrderSetting
+        {
+            get { return menuValidateCustomLoadOrder.Checked; }
+            set { menuValidateCustomLoadOrder.Checked = value; }
         }
 
         MergeInventory _inventory = null;
@@ -65,6 +67,7 @@ namespace WitcherScriptMerger.Forms
             menuCompletionSounds.Checked = Program.Settings.Get<bool>("PlayCompletionSounds");
             menuMergeReport.Checked = Program.Settings.Get<bool>("ReportAfterMerge");
             menuPackReport.Checked = Program.Settings.Get<bool>("ReportAfterPack");
+            menuValidateCustomLoadOrder.Checked = Program.Settings.Get<bool>("ValidateCustomLoadOrder");
             menuShowStatusBar.Checked = Program.Settings.Get<bool>("ShowStatusBar");
             LoadLastWindowConfiguration();
             Program.Settings.EndBatch();
@@ -100,6 +103,7 @@ namespace WitcherScriptMerger.Forms
             Program.Settings.Set("PlayCompletionSounds", menuCompletionSounds.Checked);
             Program.Settings.Set("ReportAfterMerge", menuMergeReport.Checked);
             Program.Settings.Set("ReportAfterPack", menuPackReport.Checked);
+            Program.Settings.Set("ValidateCustomLoadOrder", menuValidateCustomLoadOrder.Checked);
             Program.Settings.Set("ShowStatusBar", menuShowStatusBar.Checked);
             statusStrip.Visible = menuShowStatusBar.Checked;
 
@@ -224,7 +228,7 @@ namespace WitcherScriptMerger.Forms
         {
             _inventory = MergeInventory.Load(Paths.Inventory);
 
-            if (_inventory.Merges.Any())
+            if (menuValidateCustomLoadOrder.Checked && _inventory.Merges.Any())
                 new LoadOrderValidator().ValidateAndFix();
 
             return RefreshMergeTree();

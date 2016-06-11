@@ -46,6 +46,7 @@
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCheckingForConflicts = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCheckScripts = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuCheckXmlFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCheckBundleContents = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCollapseUnsupported = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMerging = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,7 +62,8 @@
             this.lblStatusSpring = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusRight = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblGameDir = new System.Windows.Forms.Label();
-            this.menuCheckXmlFiles = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuValidateCustomLoadOrder = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
             this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -261,8 +263,10 @@
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuCheckingForConflicts,
             this.menuMerging,
-            this.menuDependencies,
-            this.menuShowStatusBar});
+            this.menuValidateCustomLoadOrder,
+            this.menuShowStatusBar,
+            this.menuSeparator,
+            this.menuDependencies});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "&Options";
@@ -275,7 +279,7 @@
             this.menuCheckBundleContents,
             this.menuCollapseUnsupported});
             this.menuCheckingForConflicts.Name = "menuCheckingForConflicts";
-            this.menuCheckingForConflicts.Size = new System.Drawing.Size(203, 22);
+            this.menuCheckingForConflicts.Size = new System.Drawing.Size(223, 22);
             this.menuCheckingForConflicts.Text = "&Refreshing Conflicts...";
             // 
             // menuCheckScripts
@@ -285,6 +289,14 @@
             this.menuCheckScripts.Size = new System.Drawing.Size(222, 22);
             this.menuCheckScripts.Text = "Check &Scripts";
             this.menuCheckScripts.ToolTipText = "Check for mod conflicts in script files";
+            // 
+            // menuCheckXmlFiles
+            // 
+            this.menuCheckXmlFiles.CheckOnClick = true;
+            this.menuCheckXmlFiles.Name = "menuCheckXmlFiles";
+            this.menuCheckXmlFiles.Size = new System.Drawing.Size(222, 22);
+            this.menuCheckXmlFiles.Text = "Check &XML Files";
+            this.menuCheckXmlFiles.ToolTipText = "Check for mod conflicts in XML files";
             // 
             // menuCheckBundleContents
             // 
@@ -311,7 +323,7 @@
             this.menuMergeReport,
             this.menuPackReport});
             this.menuMerging.Name = "menuMerging";
-            this.menuMerging.Size = new System.Drawing.Size(203, 22);
+            this.menuMerging.Size = new System.Drawing.Size(223, 22);
             this.menuMerging.Text = "&Merging...";
             // 
             // menuReviewEach
@@ -356,7 +368,7 @@
             // menuDependencies
             // 
             this.menuDependencies.Name = "menuDependencies";
-            this.menuDependencies.Size = new System.Drawing.Size(203, 22);
+            this.menuDependencies.Size = new System.Drawing.Size(223, 22);
             this.menuDependencies.Text = "&Dependency Locations...";
             this.menuDependencies.ToolTipText = "Locate the 3rd-party tools that Script Merger depends on";
             this.menuDependencies.Click += new System.EventHandler(this.menuDependencies_Click);
@@ -365,7 +377,7 @@
             // 
             this.menuShowStatusBar.CheckOnClick = true;
             this.menuShowStatusBar.Name = "menuShowStatusBar";
-            this.menuShowStatusBar.Size = new System.Drawing.Size(203, 22);
+            this.menuShowStatusBar.Size = new System.Drawing.Size(223, 22);
             this.menuShowStatusBar.Text = "&Show Status Bar";
             this.menuShowStatusBar.ToolTipText = "Show bar with statistics at the bottom of the window";
             this.menuShowStatusBar.Click += new System.EventHandler(this.menuShowStatusBar_Click);
@@ -413,13 +425,19 @@
             this.lblGameDir.TabIndex = 9;
             this.lblGameDir.Text = "Witcher 3 Directory:";
             // 
-            // menuCheckXmlFiles
+            // menuValidateCustomLoadOrder
             // 
-            this.menuCheckXmlFiles.CheckOnClick = true;
-            this.menuCheckXmlFiles.Name = "menuCheckXmlFiles";
-            this.menuCheckXmlFiles.Size = new System.Drawing.Size(222, 22);
-            this.menuCheckXmlFiles.Text = "Check &XML Files";
-            this.menuCheckXmlFiles.ToolTipText = "Check for mod conflicts in XML files";
+            this.menuValidateCustomLoadOrder.CheckOnClick = true;
+            this.menuValidateCustomLoadOrder.Name = "menuValidateCustomLoadOrder";
+            this.menuValidateCustomLoadOrder.Size = new System.Drawing.Size(223, 22);
+            this.menuValidateCustomLoadOrder.Text = "Validate Custom Load Order";
+            this.menuValidateCustomLoadOrder.ToolTipText = "Whether to detect mods.settings file on refresh and make sure it loads merged fil" +
+    "es first";
+            // 
+            // menuSeparator
+            // 
+            this.menuSeparator.Name = "menuSeparator";
+            this.menuSeparator.Size = new System.Drawing.Size(220, 6);
             // 
             // treConflicts
             // 
@@ -528,6 +546,8 @@
         private System.Windows.Forms.ToolStripMenuItem menuCompletionSounds;
         private System.Windows.Forms.Label lblGameDir;
         private System.Windows.Forms.ToolStripMenuItem menuCheckXmlFiles;
+        private System.Windows.Forms.ToolStripMenuItem menuValidateCustomLoadOrder;
+        private System.Windows.Forms.ToolStripSeparator menuSeparator;
     }
 }
 
