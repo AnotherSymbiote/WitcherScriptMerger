@@ -635,8 +635,14 @@ namespace WitcherScriptMerger.Forms
         }
 
         #endregion
-        
+
         #region Key Input
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F5)
+                btnRefreshConflicts_Click(null, null);
+        }
 
         void txt_KeyDown(object sender, KeyEventArgs e)
         {
