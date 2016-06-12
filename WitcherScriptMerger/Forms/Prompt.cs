@@ -1,5 +1,6 @@
 ﻿// From http://stackoverflow.com/a/5427121/1641069
 
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -7,44 +8,43 @@ namespace WitcherScriptMerger.Forms
 {
     public static class Prompt
     {
+        const int Padding = 5;
+        const int ButtonSpacing = 2;
+
         public static string ShowDialog(string promptText, string caption)
         {
-            const int border = 5;
-
             var form = new Form()
             {
-                Width = 200,
-                Height = 120,
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 Text = caption,
                 StartPosition = FormStartPosition.CenterScreen
             };
             var prompt = new Label
             {
-                Left = border,
-                Top = border,
-                Width = form.Width - (5 * border),
+                Left = Padding,
+                Top = Padding,
+                Width = 200,
                 Height = 20,
                 Text = promptText
             };
             var textbox = new TextBox
             {
-                Left = border,
+                Left = prompt.Left,
                 Top = prompt.Top + prompt.Height,
                 Width = prompt.Width
             };
             var okButton = new Button
             {
-                Text = "&Ok",
-                Left = border,
-                Width = (textbox.Width - 2) / 2,
-                Top = textbox.Top + textbox.Height + border,
+                Text = "&OK",
+                Left = textbox.Left,
+                Width = (textbox.Width - ButtonSpacing) / 2,
+                Top = textbox.Top + textbox.Height + Padding,
                 DialogResult = DialogResult.OK
             };
             var cancelButton = new Button
             {
                 Text = "&Cancel",
-                Left = okButton.Left + okButton.Width + 2,
+                Left = okButton.Left + okButton.Width + ButtonSpacing,
                 Width = okButton.Width,
                 Top = okButton.Top,
                 DialogResult = DialogResult.Cancel
@@ -54,9 +54,16 @@ namespace WitcherScriptMerger.Forms
                 {
                     prompt,
                     textbox,
-                    okButton,
-                    cancelButton
+                    okButton
                 });
+            form.ClientSize =
+                new Size
+                {
+                    Width = form.Controls.Cast<Control>().Max(c => c.Width) + (Padding * 2),
+                    Height = form.Controls.Cast<Control>().Sum(c => c.Height) + (Padding * 3)
+                };
+            form.Controls.Add(cancelButton);
+
             form.AcceptButton = okButton;
             form.CancelButton = cancelButton;
             form.MinimizeBox = form.MaximizeBox = false;
