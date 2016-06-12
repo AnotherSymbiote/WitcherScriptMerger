@@ -1,4 +1,4 @@
-﻿namespace WitcherScriptMerger.LoadOrderValidation
+﻿namespace WitcherScriptMerger.LoadOrder
 {
     class ModLoadSetting
     {

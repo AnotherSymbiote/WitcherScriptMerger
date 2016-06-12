@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace WitcherScriptMerger.LoadOrderValidation
+namespace WitcherScriptMerger.LoadOrder
 {
     class CustomLoadOrder
     {

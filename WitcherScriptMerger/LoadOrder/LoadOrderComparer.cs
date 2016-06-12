@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WitcherScriptMerger.LoadOrderValidation
+namespace WitcherScriptMerger.LoadOrder
 {
     class LoadOrderComparer : IComparer<string>, IComparer<ModLoadSetting>
     {

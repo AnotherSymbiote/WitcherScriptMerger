@@ -95,11 +95,11 @@
     <Compile Include="Inventory\Merge.cs" />
     <Compile Include="Inventory\MergeInventory.cs" />
     <Compile Include="Inventory\MergeProgressInfo.cs" />
-    <Compile Include="LoadOrderValidation\CustomLoadOrder.cs" />
-    <Compile Include="LoadOrderValidation\LoadOrderComparer.cs" />
-    <Compile Include="LoadOrderValidation\LoadOrderValidator.cs" />
-    <Compile Include="LoadOrderValidation\MessageBoxManager.cs" />
-    <Compile Include="LoadOrderValidation\ModLoadSetting.cs" />
+    <Compile Include="LoadOrder\CustomLoadOrder.cs" />
+    <Compile Include="LoadOrder\LoadOrderComparer.cs" />
+    <Compile Include="LoadOrder\LoadOrderValidator.cs" />
+    <Compile Include="LoadOrder\MessageBoxManager.cs" />
+    <Compile Include="LoadOrder\ModLoadSetting.cs" />
     <Compile Include="Paths.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

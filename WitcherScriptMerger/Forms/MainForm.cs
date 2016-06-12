@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using WitcherScriptMerger.Controls;
 using WitcherScriptMerger.FileIndex;
 using WitcherScriptMerger.Inventory;
-using WitcherScriptMerger.LoadOrderValidation;
+using WitcherScriptMerger.LoadOrder;
 
 namespace WitcherScriptMerger.Forms
 {
