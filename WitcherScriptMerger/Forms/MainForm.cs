@@ -62,13 +62,14 @@ namespace WitcherScriptMerger.Forms
             menuCheckScripts.Checked = Program.Settings.Get<bool>("CheckScripts");
             menuCheckXmlFiles.Checked = Program.Settings.Get<bool>("CheckXmlFiles");
             menuCheckBundleContents.Checked = Program.Settings.Get<bool>("CheckBundleContents");
+            menuValidateCustomLoadOrder.Checked = Program.Settings.Get<bool>("ValidateCustomLoadOrder");
+            menuCollapseCustomLoadOrder.Checked = Program.Settings.Get<bool>("CollapseCustomLoadOrder");
             menuCollapseUnsupported.Checked = Program.Settings.Get<bool>("CollapseUnsupported");
             menuReviewEach.Checked = Program.Settings.Get<bool>("ReviewEachMerge");
             menuPathsInKDiff3.Checked = Program.Settings.Get<bool>("ShowPathsInKDiff3");
             menuCompletionSounds.Checked = Program.Settings.Get<bool>("PlayCompletionSounds");
             menuMergeReport.Checked = Program.Settings.Get<bool>("ReportAfterMerge");
             menuPackReport.Checked = Program.Settings.Get<bool>("ReportAfterPack");
-            menuValidateCustomLoadOrder.Checked = Program.Settings.Get<bool>("ValidateCustomLoadOrder");
             menuShowStatusBar.Checked = Program.Settings.Get<bool>("ShowStatusBar");
             LoadLastWindowConfiguration();
             Program.Settings.EndBatch();
@@ -98,13 +99,14 @@ namespace WitcherScriptMerger.Forms
             Program.Settings.Set("CheckScripts", menuCheckScripts.Checked);
             Program.Settings.Set("CheckXmlFiles", menuCheckXmlFiles.Checked);
             Program.Settings.Set("CheckBundleContents", menuCheckBundleContents.Checked);
+            Program.Settings.Set("ValidateCustomLoadOrder", menuValidateCustomLoadOrder.Checked);
+            Program.Settings.Set("CollapseCustomLoadOrder", menuCollapseCustomLoadOrder.Checked);
             Program.Settings.Set("CollapseUnsupported", menuCollapseUnsupported.Checked);
             Program.Settings.Set("ReviewEachMerge", menuReviewEach.Checked);
             Program.Settings.Set("ShowPathsInKDiff3", menuPathsInKDiff3.Checked);
             Program.Settings.Set("PlayCompletionSounds", menuCompletionSounds.Checked);
             Program.Settings.Set("ReportAfterMerge", menuMergeReport.Checked);
             Program.Settings.Set("ReportAfterPack", menuPackReport.Checked);
-            Program.Settings.Set("ValidateCustomLoadOrder", menuValidateCustomLoadOrder.Checked);
             Program.Settings.Set("ShowStatusBar", menuShowStatusBar.Checked);
             statusStrip.Visible = menuShowStatusBar.Checked;
 
@@ -177,9 +179,8 @@ namespace WitcherScriptMerger.Forms
             else
             {
                 lblStatusLeft.Text = $"{solvableCount} mergeable";
-                lblStatusLeft.Text += solvableCount < treConflicts.FileNodes.Count
-                    ? string.Format(",  {0} unsupported", (treConflicts.FileNodes.Count - solvableCount))
-                    : string.Format(" conflict{0}", solvableCount.GetPluralS());
+                if (solvableCount < treConflicts.FileNodes.Count)
+                    lblStatusLeft.Text += string.Format(",  {0} unsupported", (treConflicts.FileNodes.Count - solvableCount));
             }
 
             lblStatusLeft.Text += string.Format(
@@ -447,10 +448,10 @@ namespace WitcherScriptMerger.Forms
 
                     var topPriorityMod = _loadOrder.GetTopPriorityEnabledMod(conflict.ModNames);
 
-                    if (topPriorityMod != null)
-                    {
-                        fileNode.ForeColor = System.Drawing.Color.Purple;
-                    }
+                    fileNode.ForeColor =
+                        topPriorityMod != null
+                        ? System.Drawing.Color.Purple
+                        : treConflicts.FileNodeForeColor;
 
                     foreach (string modName in conflict.ModNames)
                     {
@@ -467,11 +468,20 @@ namespace WitcherScriptMerger.Forms
                         modNode.NodeFont = DefaultFont;
                         modNode.ForeColor = DefaultForeColor;
 
+
+                        var priority = _loadOrder.GetPriorityByName(modName);
+                        var priorityString =
+                            priority > -1
+                            ? $"Priority {priority}"
+                            : "No Priority";
+
                         if (modName.EqualsIgnoreCase(topPriorityMod))
-                            modNode.ToolTipText = "This mod has top priority in this conflict";
-                        else
                         {
-                            modNode.ToolTipText = "This mod is overridden by a higher-priority mod";
+                            modNode.ToolTipText = $"{priorityString} - This mod has top priority in this conflict";
+                        }
+                        else if (topPriorityMod != null)
+                        {
+                            modNode.ToolTipText = $"{priorityString} - This mod is overridden by a higher-priority mod";
                             modNode.ForeColor = System.Drawing.Color.Gray;
                         }
 
@@ -499,6 +509,11 @@ namespace WitcherScriptMerger.Forms
                         if (menuCollapseUnsupported.Checked)
                             catNode.Collapse();
                     }
+                }
+                foreach (var fileNode in treConflicts.FileNodes)
+                {
+                    if (menuCollapseCustomLoadOrder.Checked && fileNode.ForeColor == System.Drawing.Color.Purple)
+                        fileNode.Collapse();
                 }
             }
             treConflicts.ScrollToTop();
