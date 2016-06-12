@@ -92,6 +92,11 @@ namespace WitcherScriptMerger.LoadOrder
             }
         }
 
+        public bool Contains(string modName)
+        {
+            return Mods.Any(setting => setting.ModName.EqualsIgnoreCase(modName));
+        }
+
         public ModLoadSetting GetTopPriorityEnabledMod()
         {
             return Mods

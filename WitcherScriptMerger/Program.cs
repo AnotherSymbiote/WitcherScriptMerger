@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Windows.Forms;
 using WitcherScriptMerger.Forms;
+using WitcherScriptMerger.LoadOrder;
 
 namespace WitcherScriptMerger
 {
     static class Program
     {
         public static AppSettings Settings = new AppSettings();
+        public static CustomLoadOrder LoadOrder = null;
         public static MainForm MainForm;
         
         /// <summary>

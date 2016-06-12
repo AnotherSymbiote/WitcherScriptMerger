@@ -17,7 +17,7 @@ namespace WitcherScriptMerger.Controls
         ToolStripSeparator _contextCustomLoadOrderSeparator = new ToolStripSeparator();
         ToolStripMenuItem _contextPrioritizeMod = new ToolStripMenuItem();
         ToolStripMenuItem _contextToggleMod = new ToolStripMenuItem();
-
+        ToolStripMenuItem _contextRemoveFromCustomLoadOrder = new ToolStripMenuItem();
 
         #endregion
 
@@ -31,7 +31,8 @@ namespace WitcherScriptMerger.Controls
                 _contextOpenVanillaFileDir,
                 _contextCustomLoadOrderSeparator,
                 _contextPrioritizeMod,
-                _contextToggleMod
+                _contextToggleMod,
+                _contextRemoveFromCustomLoadOrder
             });
             BuildContextMenu();
 
@@ -61,6 +62,12 @@ namespace WitcherScriptMerger.Controls
             _contextToggleMod.Name = "contextToggleMod";
             _contextToggleMod.Size = new Size(225, 22);
             _contextToggleMod.Click += ContextToggleMod;
+
+            // contextRemoveFromCustomLoadOrder
+            _contextRemoveFromCustomLoadOrder.Name = "contextRemoveFromCustomLoadOrder";
+            _contextRemoveFromCustomLoadOrder.Size = new Size(225, 22);
+            _contextRemoveFromCustomLoadOrder.Click += ContextRemoveFromCustomLoadOrder;
+            _contextRemoveFromCustomLoadOrder.Text = "Remove from Custom Load Order";
         }
 
         protected override void HandleCheckedChange()
@@ -149,8 +156,10 @@ namespace WitcherScriptMerger.Controls
                 {
                     _contextCustomLoadOrderSeparator.Available = true;
                     _contextPrioritizeMod.Available = true;
+
                     _contextToggleMod.Available = true;
-                    _contextToggleMod.Text = $"{(new CustomLoadOrder().IsModDisabledByName(ClickedNode.Text) ? "Enable" : "Disable")} Mod";
+                    _contextToggleMod.Text = $"{(Program.LoadOrder.IsModDisabledByName(ClickedNode.Text) ? "Enable" : "Disable")} Mod";
+                    _contextRemoveFromCustomLoadOrder.Available = Program.LoadOrder.Contains(ClickedNode.Text);
                 }
             }
 
@@ -183,24 +192,40 @@ namespace WitcherScriptMerger.Controls
                 return;
             }
 
-            var loadOrder = new CustomLoadOrder();
-            loadOrder.SetPriorityByName(modName, inputInt);
-            loadOrder.AddMergedModIfMissing();
-            loadOrder.Save();
+            Program.LoadOrder = new CustomLoadOrder();
+            Program.LoadOrder.SetPriorityByName(modName, inputInt);
+            Program.LoadOrder.AddMergedModIfMissing();
+            Program.LoadOrder.Save();
 
-            Program.MainForm.SetStylesForCustomLoadOrder(loadOrder);
+            Program.MainForm.SetStylesForCustomLoadOrder();
         }
 
         void ContextToggleMod(object sender, EventArgs e)
         {
             var modName = RightClickedNode.Text;
 
-            var loadOrder = new CustomLoadOrder();
-            loadOrder.ToggleModByName(modName);
-            loadOrder.AddMergedModIfMissing();
-            loadOrder.Save();
+            Program.LoadOrder = new CustomLoadOrder();
+            Program.LoadOrder.ToggleModByName(modName);
+            Program.LoadOrder.AddMergedModIfMissing();
+            Program.LoadOrder.Save();
 
-            Program.MainForm.SetStylesForCustomLoadOrder(loadOrder);
+            Program.MainForm.SetStylesForCustomLoadOrder();
+        }
+
+        private void ContextRemoveFromCustomLoadOrder(object sender, EventArgs e)
+        {
+            var modName = RightClickedNode.Text;
+
+            Program.LoadOrder = new CustomLoadOrder();
+
+            int index = Program.LoadOrder.Mods.FindIndex(setting => setting.ModName.EqualsIgnoreCase(modName));
+
+            if (index > -1)
+                Program.LoadOrder.Mods.RemoveAt(index);
+
+            Program.LoadOrder.Save();
+
+            Program.MainForm.SetStylesForCustomLoadOrder();
         }
     }
 }

@@ -43,7 +43,6 @@ namespace WitcherScriptMerger.Forms
 
         MergeInventory _inventory = null;
         ModFileIndex _modIndex = null;
-        CustomLoadOrder _loadOrder = null;
 
         #endregion
 
@@ -230,10 +229,10 @@ namespace WitcherScriptMerger.Forms
         {
             _inventory = MergeInventory.Load(Paths.Inventory);
 
-            _loadOrder = new CustomLoadOrder();
+            Program.LoadOrder = new CustomLoadOrder();
 
             if (menuValidateCustomLoadOrder.Checked && _inventory.Merges.Any())
-                LoadOrderValidator.ValidateAndFix(_loadOrder);
+                LoadOrderValidator.ValidateAndFix(Program.LoadOrder);
 
             return RefreshMergeTree();
         }
@@ -459,7 +458,7 @@ namespace WitcherScriptMerger.Forms
                     }
                 }
 
-                SetStylesForCustomLoadOrder(_loadOrder);
+                SetStylesForCustomLoadOrder();
 
                 treConflicts.Sort();
                 treConflicts.ExpandAll();
@@ -492,7 +491,7 @@ namespace WitcherScriptMerger.Forms
             EnableMergeIfValidSelection();
         }
 
-        internal void SetStylesForCustomLoadOrder(CustomLoadOrder loadOrder)
+        internal void SetStylesForCustomLoadOrder()
         {
             foreach (var fileNode in treConflicts.FileNodes)
             {
@@ -500,10 +499,10 @@ namespace WitcherScriptMerger.Forms
 
                 bool isAffectedByLoadOrder =
                     modNames.Any(name =>
-                        loadOrder.Mods.Any(setting =>
+                        Program.LoadOrder.Mods.Any(setting =>
                             setting.ModName.EqualsIgnoreCase(name)));
 
-                var topPriorityMod = isAffectedByLoadOrder ? loadOrder.GetTopPriorityEnabledMod(modNames) : null;
+                var topPriorityMod = isAffectedByLoadOrder ? Program.LoadOrder.GetTopPriorityEnabledMod(modNames) : null;
 
                 fileNode.ForeColor =
                         isAffectedByLoadOrder
@@ -516,7 +515,7 @@ namespace WitcherScriptMerger.Forms
                     modNode.ForeColor = DefaultForeColor;
                     modNode.ToolTipText = "";
 
-                    var priority = loadOrder.GetPriorityByName(modNode.Text);
+                    var priority = Program.LoadOrder.GetPriorityByName(modNode.Text);
                     var priorityString =
                         priority > -1
                         ? $"Priority {priority}"
@@ -535,7 +534,7 @@ namespace WitcherScriptMerger.Forms
                         modNode.ForeColor = System.Drawing.Color.Gray;
                     }
 
-                    if (loadOrder.IsModDisabledByName(modNode.Text))
+                    if (Program.LoadOrder.IsModDisabledByName(modNode.Text))
                     {
                         modNode.SetFontItalic();
                         modNode.ToolTipText = "This mod is disabled in your custom load order";
@@ -664,7 +663,7 @@ namespace WitcherScriptMerger.Forms
                 RefreshMergeInventory();
             else
             {
-                _loadOrder = new CustomLoadOrder();
+                Program.LoadOrder = new CustomLoadOrder();
                 RefreshMergeTree();
             }
             RefreshConflictsTree(checkBundles);
