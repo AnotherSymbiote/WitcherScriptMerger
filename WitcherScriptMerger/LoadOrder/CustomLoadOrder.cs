@@ -9,7 +9,6 @@ namespace WitcherScriptMerger.LoadOrder
     class CustomLoadOrder
     {
         public const int MinPriority = 1;
-        public const int MaxPriority = 999;
         public readonly string FilePath =
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
@@ -25,7 +24,7 @@ namespace WitcherScriptMerger.LoadOrder
 
             ModLoadSetting currModSetting = null;
 
-            var lines = 
+            var lines =
                 File.ReadAllLines(FilePath)
                 .Where(line => !string.IsNullOrWhiteSpace(line))
                 .Select(line => line.Trim());

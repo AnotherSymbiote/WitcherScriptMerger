@@ -77,8 +77,7 @@ namespace WitcherScriptMerger.LoadOrder
             if (!modsToIncrement.Any())
                 return;
 
-            if (displacedMods.Any() &&
-                nextPriority < CustomLoadOrder.MaxPriority)
+            if (displacedMods.Any())
             {
                 IncrementLeadingContiguousPriorities(loadOrder, nextPriority);
             }
