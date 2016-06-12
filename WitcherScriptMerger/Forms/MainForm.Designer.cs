@@ -55,15 +55,14 @@
             this.menuCompletionSounds = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMergeReport = new System.Windows.Forms.ToolStripMenuItem();
             this.menuPackReport = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuDependencies = new System.Windows.Forms.ToolStripMenuItem();
             this.menuShowStatusBar = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuDependencies = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatusLeft = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusSpring = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusRight = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblGameDir = new System.Windows.Forms.Label();
             this.menuValidateCustomLoadOrder = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
             this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -263,10 +262,8 @@
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuCheckingForConflicts,
             this.menuMerging,
-            this.menuValidateCustomLoadOrder,
-            this.menuShowStatusBar,
-            this.menuSeparator,
-            this.menuDependencies});
+            this.menuDependencies,
+            this.menuShowStatusBar});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "&Options";
@@ -277,16 +274,17 @@
             this.menuCheckScripts,
             this.menuCheckXmlFiles,
             this.menuCheckBundleContents,
+            this.menuValidateCustomLoadOrder,
             this.menuCollapseUnsupported});
             this.menuCheckingForConflicts.Name = "menuCheckingForConflicts";
-            this.menuCheckingForConflicts.Size = new System.Drawing.Size(223, 22);
+            this.menuCheckingForConflicts.Size = new System.Drawing.Size(203, 22);
             this.menuCheckingForConflicts.Text = "&Refreshing Conflicts...";
             // 
             // menuCheckScripts
             // 
             this.menuCheckScripts.CheckOnClick = true;
             this.menuCheckScripts.Name = "menuCheckScripts";
-            this.menuCheckScripts.Size = new System.Drawing.Size(222, 22);
+            this.menuCheckScripts.Size = new System.Drawing.Size(223, 22);
             this.menuCheckScripts.Text = "Check &Scripts";
             this.menuCheckScripts.ToolTipText = "Check for mod conflicts in script files";
             // 
@@ -294,7 +292,7 @@
             // 
             this.menuCheckXmlFiles.CheckOnClick = true;
             this.menuCheckXmlFiles.Name = "menuCheckXmlFiles";
-            this.menuCheckXmlFiles.Size = new System.Drawing.Size(222, 22);
+            this.menuCheckXmlFiles.Size = new System.Drawing.Size(223, 22);
             this.menuCheckXmlFiles.Text = "Check &XML Files";
             this.menuCheckXmlFiles.ToolTipText = "Check for mod conflicts in XML files";
             // 
@@ -302,7 +300,7 @@
             // 
             this.menuCheckBundleContents.CheckOnClick = true;
             this.menuCheckBundleContents.Name = "menuCheckBundleContents";
-            this.menuCheckBundleContents.Size = new System.Drawing.Size(222, 22);
+            this.menuCheckBundleContents.Size = new System.Drawing.Size(223, 22);
             this.menuCheckBundleContents.Text = "Check &Bundle Contents";
             this.menuCheckBundleContents.ToolTipText = "Check for mod conflicts in bundle file contents";
             // 
@@ -310,7 +308,7 @@
             // 
             this.menuCollapseUnsupported.CheckOnClick = true;
             this.menuCollapseUnsupported.Name = "menuCollapseUnsupported";
-            this.menuCollapseUnsupported.Size = new System.Drawing.Size(222, 22);
+            this.menuCollapseUnsupported.Size = new System.Drawing.Size(223, 22);
             this.menuCollapseUnsupported.Text = "Auto-Collapse &Unsupported";
             this.menuCollapseUnsupported.ToolTipText = "Auto-collapse conflicts that can\'t be merged (non-text files)";
             // 
@@ -323,7 +321,7 @@
             this.menuMergeReport,
             this.menuPackReport});
             this.menuMerging.Name = "menuMerging";
-            this.menuMerging.Size = new System.Drawing.Size(223, 22);
+            this.menuMerging.Size = new System.Drawing.Size(203, 22);
             this.menuMerging.Text = "&Merging...";
             // 
             // menuReviewEach
@@ -365,22 +363,22 @@
             this.menuPackReport.Text = "Show Report After &Packing Bundle";
             this.menuPackReport.ToolTipText = "Show a report with list of contents and button to open content directory";
             // 
-            // menuDependencies
-            // 
-            this.menuDependencies.Name = "menuDependencies";
-            this.menuDependencies.Size = new System.Drawing.Size(223, 22);
-            this.menuDependencies.Text = "&Dependency Locations...";
-            this.menuDependencies.ToolTipText = "Locate the 3rd-party tools that Script Merger depends on";
-            this.menuDependencies.Click += new System.EventHandler(this.menuDependencies_Click);
-            // 
             // menuShowStatusBar
             // 
             this.menuShowStatusBar.CheckOnClick = true;
             this.menuShowStatusBar.Name = "menuShowStatusBar";
-            this.menuShowStatusBar.Size = new System.Drawing.Size(223, 22);
+            this.menuShowStatusBar.Size = new System.Drawing.Size(203, 22);
             this.menuShowStatusBar.Text = "&Show Status Bar";
             this.menuShowStatusBar.ToolTipText = "Show bar with statistics at the bottom of the window";
             this.menuShowStatusBar.Click += new System.EventHandler(this.menuShowStatusBar_Click);
+            // 
+            // menuDependencies
+            // 
+            this.menuDependencies.Name = "menuDependencies";
+            this.menuDependencies.Size = new System.Drawing.Size(203, 22);
+            this.menuDependencies.Text = "&Dependency Locations...";
+            this.menuDependencies.ToolTipText = "Locate the 3rd-party tools that Script Merger depends on";
+            this.menuDependencies.Click += new System.EventHandler(this.menuDependencies_Click);
             // 
             // statusStrip
             // 
@@ -433,11 +431,6 @@
             this.menuValidateCustomLoadOrder.Text = "Validate Custom Load Order";
             this.menuValidateCustomLoadOrder.ToolTipText = "Whether to detect mods.settings file on refresh and make sure it loads merged fil" +
     "es first";
-            // 
-            // menuSeparator
-            // 
-            this.menuSeparator.Name = "menuSeparator";
-            this.menuSeparator.Size = new System.Drawing.Size(220, 6);
             // 
             // treConflicts
             // 
@@ -547,7 +540,6 @@
         private System.Windows.Forms.Label lblGameDir;
         private System.Windows.Forms.ToolStripMenuItem menuCheckXmlFiles;
         private System.Windows.Forms.ToolStripMenuItem menuValidateCustomLoadOrder;
-        private System.Windows.Forms.ToolStripSeparator menuSeparator;
     }
 }
 
