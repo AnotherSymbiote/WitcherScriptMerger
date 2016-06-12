@@ -113,5 +113,24 @@ namespace WitcherScriptMerger.LoadOrder
                 ? mod.Priority
                 : -1;
         }
+
+        public void SetPriorityByName(string modName, int priority)
+        {
+            var mod = Mods.FirstOrDefault(setting => setting.ModName.EqualsIgnoreCase(modName));
+
+            if (mod != null)
+            {
+                mod.Priority = priority;
+            }
+            else
+            {
+                Mods.Add(new ModLoadSetting
+                {
+                    ModName = modName,
+                    IsEnabled = true,
+                    Priority = priority
+                });
+            }
+        }
     }
 }

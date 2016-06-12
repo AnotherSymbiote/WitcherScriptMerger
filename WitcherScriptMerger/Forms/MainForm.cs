@@ -430,7 +430,6 @@ namespace WitcherScriptMerger.Forms
                     if (fileNode == null)
                     {
                         fileNode = new TreeNode(conflict.RelativePath);
-                        fileNode.ForeColor = treConflicts.FileNodeForeColor;
                         fileNode.Tag = (conflict.Category == Categories.Script || conflict.Category == Categories.Xml
                             ? conflict.GetVanillaFile()
                             : conflict.RelativePath);
@@ -446,13 +445,6 @@ namespace WitcherScriptMerger.Forms
                         categoryNode.Nodes.Add(fileNode);
                     }
 
-                    var topPriorityMod = _loadOrder.GetTopPriorityEnabledMod(conflict.ModNames);
-
-                    fileNode.ForeColor =
-                        topPriorityMod != null
-                        ? System.Drawing.Color.Purple
-                        : treConflicts.FileNodeForeColor;
-
                     foreach (string modName in conflict.ModNames)
                     {
                         var modNode = fileNode.GetTreeNodes().FirstOrDefault(node =>
@@ -464,34 +456,11 @@ namespace WitcherScriptMerger.Forms
                             modNode.Tag = conflict.GetModFile(modName);
                             fileNode.Nodes.Add(modNode);
                         }
-
-                        modNode.NodeFont = DefaultFont;
-                        modNode.ForeColor = DefaultForeColor;
-
-
-                        var priority = _loadOrder.GetPriorityByName(modName);
-                        var priorityString =
-                            priority > -1
-                            ? $"Priority {priority}"
-                            : "No Priority";
-
-                        if (modName.EqualsIgnoreCase(topPriorityMod))
-                        {
-                            modNode.ToolTipText = $"{priorityString} - This mod has top priority in this conflict";
-                        }
-                        else if (topPriorityMod != null)
-                        {
-                            modNode.ToolTipText = $"{priorityString} - This mod is overridden by a higher-priority mod";
-                            modNode.ForeColor = System.Drawing.Color.Gray;
-                        }
-
-                        if (_loadOrder.IsModDisabled(modName))
-                        {
-                            modNode.SetFontItalic();
-                            modNode.ToolTipText = "This mod is disabled in your custom load order";
-                        }
                     }
                 }
+
+                SetStylesForCustomLoadOrder(_loadOrder);
+
                 treConflicts.Sort();
                 treConflicts.ExpandAll();
                 treConflicts.Select();
@@ -512,7 +481,7 @@ namespace WitcherScriptMerger.Forms
                 }
                 foreach (var fileNode in treConflicts.FileNodes)
                 {
-                    if (menuCollapseCustomLoadOrder.Checked && fileNode.ForeColor == System.Drawing.Color.Purple)
+                    if (menuCollapseCustomLoadOrder.Checked && fileNode.ForeColor != treConflicts.FileNodeForeColor)
                         fileNode.Collapse();
                 }
             }
@@ -521,6 +490,47 @@ namespace WitcherScriptMerger.Forms
             UpdateStatusText();
             HideProgressScreen();
             EnableMergeIfValidSelection();
+        }
+
+        internal void SetStylesForCustomLoadOrder(CustomLoadOrder loadOrder)
+        {
+            foreach (var fileNode in treConflicts.FileNodes)
+            {
+                var topPriorityMod = loadOrder.GetTopPriorityEnabledMod(fileNode.GetTreeNodes().Select(modNode => modNode.Text));
+
+                fileNode.ForeColor =
+                        topPriorityMod != null
+                        ? System.Drawing.Color.Purple
+                        : treConflicts.FileNodeForeColor;
+
+                foreach (var modNode in fileNode.GetTreeNodes())
+                {
+                    var priority = loadOrder.GetPriorityByName(modNode.Text);
+                    var priorityString =
+                        priority > -1
+                        ? $"Priority {priority}"
+                        : "No Priority";
+
+                    modNode.NodeFont = DefaultFont;
+                    modNode.ForeColor = DefaultForeColor;
+
+                    if (modNode.Text.EqualsIgnoreCase(topPriorityMod))
+                    {
+                        modNode.ToolTipText = $"{priorityString} - Top priority in this conflict";
+                    }
+                    else if (topPriorityMod != null)
+                    {
+                        modNode.ToolTipText = $"{priorityString} - Overridden by a higher-priority mod";
+                        modNode.ForeColor = System.Drawing.Color.Gray;
+                    }
+
+                    if (_loadOrder.IsModDisabled(modNode.Text))
+                    {
+                        modNode.SetFontItalic();
+                        modNode.ToolTipText = "This mod is disabled in your custom load order";
+                    }
+                }
+            }
         }
 
         #endregion

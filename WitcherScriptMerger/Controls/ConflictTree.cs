@@ -1,7 +1,10 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using WitcherScriptMerger.FileIndex;
+using WitcherScriptMerger.Forms;
+using WitcherScriptMerger.LoadOrder;
 
 namespace WitcherScriptMerger.Controls
 {
@@ -11,6 +14,9 @@ namespace WitcherScriptMerger.Controls
 
         ToolStripMenuItem _contextOpenVanillaFile = new ToolStripMenuItem();
         ToolStripMenuItem _contextOpenVanillaFileDir = new ToolStripMenuItem();
+        ToolStripSeparator _contextPrioritizeModSeparator = new ToolStripSeparator();
+        ToolStripMenuItem _contextPrioritizeMod = new ToolStripMenuItem();
+
 
         #endregion
 
@@ -20,24 +26,34 @@ namespace WitcherScriptMerger.Controls
 
             ContextOpenRegion.Items.AddRange(new ToolStripItem[]
             {
-                _contextOpenVanillaFile, _contextOpenVanillaFileDir
+                _contextOpenVanillaFile,
+                _contextOpenVanillaFileDir,
+                _contextPrioritizeModSeparator,
+                _contextPrioritizeMod
             });
             BuildContextMenu();
 
-            // 
             // contextOpenVanillaFile
-            // 
             _contextOpenVanillaFile.Name = "contextOpenVanillaFile";
             _contextOpenVanillaFile.Size = new Size(225, 22);
             _contextOpenVanillaFile.Text = "Open Vanilla File";
             _contextOpenVanillaFile.Click += ContextOpenFile_Click;
-            // 
+
             // contextOpenVanillaFileDir
-            // 
             _contextOpenVanillaFileDir.Name = "contextOpenVanillaFileDir";
             _contextOpenVanillaFileDir.Size = new Size(225, 22);
             _contextOpenVanillaFileDir.Text = "Open Vanilla File Directory";
             _contextOpenVanillaFileDir.Click += ContextOpenDirectory_Click;
+
+            // contextPrioritizeModSeparator
+            _contextPrioritizeModSeparator.Name = "contextPrioritizeModSeparator";
+            _contextPrioritizeModSeparator.Size = new Size(235, 6);
+            
+            // contextPrioritizeMod
+            _contextPrioritizeMod.Name = "contextPrioritizeMod";
+            _contextPrioritizeMod.Size = new Size(225, 22);
+            _contextPrioritizeMod.Click += ContextPrioritizeMod;
+
         }
 
         protected override void HandleCheckedChange()
@@ -115,12 +131,19 @@ namespace WitcherScriptMerger.Controls
         {
             base.SetContextItemAvailability();
 
-            if (ClickedNode != null
-                && IsFileNode(ClickedNode)
-                && !((ModFileCategory)ClickedNode.Tag).IsBundled)
+            if (ClickedNode != null)
             {
-                _contextOpenVanillaFile.Available = true;
-                _contextOpenVanillaFileDir.Available = true;
+                if (IsFileNode(ClickedNode) && !((ModFileCategory)ClickedNode.Parent.Tag).IsBundled)
+                {
+                    _contextOpenVanillaFile.Available = true;
+                    _contextOpenVanillaFileDir.Available = true;
+                }
+                else if (IsModNode(ClickedNode))
+                {
+                    _contextPrioritizeModSeparator.Available = true;
+                    _contextPrioritizeMod.Available = true;
+                    _contextPrioritizeMod.Text = $"Set Priority...";
+                }
             }
 
             if (!this.IsEmpty())
@@ -130,6 +153,46 @@ namespace WitcherScriptMerger.Controls
                 if (ModNodes.Any(modNode => modNode.Checked))
                     ContextDeselectAll.Available = true;
             }
+        }
+
+        private void ContextPrioritizeMod(object sender, EventArgs e)
+        {
+            var modName = RightClickedNode.Text;
+            var inputString = Prompt.ShowDialog("Priority:", modName);
+
+            if (inputString == null)
+                return;
+
+            int inputInt;
+            if (!int.TryParse(inputString, out inputInt))
+            {
+                Program.MainForm.ShowMessage($"Priority must be an integer.", "Invalid Priority");
+                return;
+            }
+            if (inputInt < CustomLoadOrder.MinPriority + 1)
+            {
+                Program.MainForm.ShowMessage($"Priority must be greater than {CustomLoadOrder.MinPriority}.  Merged files take priority {CustomLoadOrder.MinPriority}.", "Invalid Priority");
+                return;
+            }
+
+            var loadOrder = new CustomLoadOrder();
+            loadOrder.SetPriorityByName(modName, inputInt);
+
+            var mergedModName = Paths.RetrieveMergedModName();
+            if (!loadOrder.Mods.Any(setting => setting.ModName.EqualsIgnoreCase(mergedModName)))
+            {
+                loadOrder.Mods.Insert(0,
+                    new ModLoadSetting
+                    {
+                        ModName = mergedModName,
+                        IsEnabled = true,
+                        Priority = CustomLoadOrder.MinPriority
+                    });
+            }
+
+            loadOrder.Save();
+
+            Program.MainForm.SetStylesForCustomLoadOrder(loadOrder);
         }
     }
 }
