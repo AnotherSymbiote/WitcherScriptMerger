@@ -440,7 +440,6 @@ namespace WitcherScriptMerger.Controls
         {
             if (ClickedNode == null)
                 return;
-            ClickedNode.ForeColor = _clickedNodeForeColor;
             ClickedNode.BackColor = Color.Transparent;
             ClickedNode.TreeView.Update();
 
