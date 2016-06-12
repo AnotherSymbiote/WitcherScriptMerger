@@ -35,22 +35,22 @@
             this.btnCreateMerges = new System.Windows.Forms.Button();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.lblConflicts = new System.Windows.Forms.Label();
+            this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
             this.btnRefreshMerged = new System.Windows.Forms.Button();
             this.lblMergeInventory = new System.Windows.Forms.Label();
             this.btnDeleteMerges = new System.Windows.Forms.Button();
+            this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
             this.pnlProgress = new System.Windows.Forms.Panel();
             this.lblProgressCurrentPhase = new System.Windows.Forms.Label();
             this.lblProgressCurrentAction = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuCheckingForConflicts = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuRefreshingConflicts = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCheckScripts = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCheckXmlFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCheckBundleContents = new System.Windows.Forms.ToolStripMenuItem();
             this.menuValidateCustomLoadOrder = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuCollapseCustomLoadOrder = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuCollapseNotMergeable = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMerging = new System.Windows.Forms.ToolStripMenuItem();
             this.menuReviewEach = new System.Windows.Forms.ToolStripMenuItem();
             this.menuPathsInKDiff3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,8 +64,9 @@
             this.lblStatusSpring = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusRight = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblGameDir = new System.Windows.Forms.Label();
-            this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
-            this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
+            this.menuCollapseIf = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuCollapseNotMergeable = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuCollapseCustomLoadOrder = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -164,6 +165,22 @@
             this.lblConflicts.TabIndex = 16;
             this.lblConflicts.Text = "Conflicts:";
             // 
+            // treConflicts
+            // 
+            this.treConflicts.AllowDrop = true;
+            this.treConflicts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.treConflicts.CheckBoxes = true;
+            this.treConflicts.FileNodeForeColor = System.Drawing.Color.Red;
+            this.treConflicts.Location = new System.Drawing.Point(12, 30);
+            this.treConflicts.Name = "treConflicts";
+            this.treConflicts.ShowNodeToolTips = true;
+            this.treConflicts.Size = new System.Drawing.Size(312, 537);
+            this.treConflicts.Sorted = true;
+            this.treConflicts.TabIndex = 1;
+            this.treConflicts.TabStop = false;
+            // 
             // btnRefreshMerged
             // 
             this.btnRefreshMerged.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -201,6 +218,22 @@
             this.btnDeleteMerges.Text = "&Delete Selected Merge";
             this.btnDeleteMerges.UseVisualStyleBackColor = true;
             this.btnDeleteMerges.Click += new System.EventHandler(this.btnDeleteMerges_Click);
+            // 
+            // treMerges
+            // 
+            this.treMerges.AllowDrop = true;
+            this.treMerges.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.treMerges.CheckBoxes = true;
+            this.treMerges.FileNodeForeColor = System.Drawing.Color.Blue;
+            this.treMerges.Location = new System.Drawing.Point(3, 30);
+            this.treMerges.Name = "treMerges";
+            this.treMerges.ShowNodeToolTips = true;
+            this.treMerges.Size = new System.Drawing.Size(310, 537);
+            this.treMerges.Sorted = true;
+            this.treMerges.TabIndex = 1;
+            this.treMerges.TabStop = false;
             // 
             // pnlProgress
             // 
@@ -261,7 +294,7 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuCheckingForConflicts,
+            this.menuRefreshingConflicts,
             this.menuMerging,
             this.menuDependencies,
             this.menuShowStatusBar});
@@ -269,24 +302,23 @@
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "&Options";
             // 
-            // menuCheckingForConflicts
+            // menuRefreshingConflicts
             // 
-            this.menuCheckingForConflicts.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuRefreshingConflicts.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuCheckScripts,
             this.menuCheckXmlFiles,
             this.menuCheckBundleContents,
             this.menuValidateCustomLoadOrder,
-            this.menuCollapseCustomLoadOrder,
-            this.menuCollapseNotMergeable});
-            this.menuCheckingForConflicts.Name = "menuCheckingForConflicts";
-            this.menuCheckingForConflicts.Size = new System.Drawing.Size(203, 22);
-            this.menuCheckingForConflicts.Text = "&Refreshing Conflicts...";
+            this.menuCollapseIf});
+            this.menuRefreshingConflicts.Name = "menuRefreshingConflicts";
+            this.menuRefreshingConflicts.Size = new System.Drawing.Size(203, 22);
+            this.menuRefreshingConflicts.Text = "&Refreshing Conflicts...";
             // 
             // menuCheckScripts
             // 
             this.menuCheckScripts.CheckOnClick = true;
             this.menuCheckScripts.Name = "menuCheckScripts";
-            this.menuCheckScripts.Size = new System.Drawing.Size(275, 22);
+            this.menuCheckScripts.Size = new System.Drawing.Size(223, 22);
             this.menuCheckScripts.Text = "Check &Scripts";
             this.menuCheckScripts.ToolTipText = "Check for mod conflicts in script files";
             // 
@@ -294,7 +326,7 @@
             // 
             this.menuCheckXmlFiles.CheckOnClick = true;
             this.menuCheckXmlFiles.Name = "menuCheckXmlFiles";
-            this.menuCheckXmlFiles.Size = new System.Drawing.Size(275, 22);
+            this.menuCheckXmlFiles.Size = new System.Drawing.Size(223, 22);
             this.menuCheckXmlFiles.Text = "Check &XML Files";
             this.menuCheckXmlFiles.ToolTipText = "Check for mod conflicts in XML files";
             // 
@@ -302,7 +334,7 @@
             // 
             this.menuCheckBundleContents.CheckOnClick = true;
             this.menuCheckBundleContents.Name = "menuCheckBundleContents";
-            this.menuCheckBundleContents.Size = new System.Drawing.Size(275, 22);
+            this.menuCheckBundleContents.Size = new System.Drawing.Size(223, 22);
             this.menuCheckBundleContents.Text = "Check &Bundle Contents";
             this.menuCheckBundleContents.ToolTipText = "Check for mod conflicts in bundle file contents";
             // 
@@ -310,26 +342,10 @@
             // 
             this.menuValidateCustomLoadOrder.CheckOnClick = true;
             this.menuValidateCustomLoadOrder.Name = "menuValidateCustomLoadOrder";
-            this.menuValidateCustomLoadOrder.Size = new System.Drawing.Size(275, 22);
+            this.menuValidateCustomLoadOrder.Size = new System.Drawing.Size(223, 22);
             this.menuValidateCustomLoadOrder.Text = "&Validate Custom Load Order";
             this.menuValidateCustomLoadOrder.ToolTipText = "Whether to detect mods.settings file on refresh and make sure it loads merged fil" +
     "es first";
-            // 
-            // menuCollapseCustomLoadOrder
-            // 
-            this.menuCollapseCustomLoadOrder.CheckOnClick = true;
-            this.menuCollapseCustomLoadOrder.Name = "menuCollapseCustomLoadOrder";
-            this.menuCollapseCustomLoadOrder.Size = new System.Drawing.Size(275, 22);
-            this.menuCollapseCustomLoadOrder.Text = "Auto-Collapse for &Custom Load Order";
-            this.menuCollapseCustomLoadOrder.ToolTipText = "Auto-collapse conflicts that are resolved by your custom load order";
-            // 
-            // menuCollapseNotMergeable
-            // 
-            this.menuCollapseNotMergeable.CheckOnClick = true;
-            this.menuCollapseNotMergeable.Name = "menuCollapseNotMergeable";
-            this.menuCollapseNotMergeable.Size = new System.Drawing.Size(275, 22);
-            this.menuCollapseNotMergeable.Text = "Auto-Collapse &Not Mergeable";
-            this.menuCollapseNotMergeable.ToolTipText = "Auto-collapse conflicts that can\'t be merged (non-text files)";
             // 
             // menuMerging
             // 
@@ -442,37 +458,30 @@
             this.lblGameDir.TabIndex = 9;
             this.lblGameDir.Text = "Witcher 3 Directory:";
             // 
-            // treConflicts
+            // menuCollapseIf
             // 
-            this.treConflicts.AllowDrop = true;
-            this.treConflicts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.treConflicts.CheckBoxes = true;
-            this.treConflicts.FileNodeForeColor = System.Drawing.Color.Red;
-            this.treConflicts.Location = new System.Drawing.Point(12, 30);
-            this.treConflicts.Name = "treConflicts";
-            this.treConflicts.ShowNodeToolTips = true;
-            this.treConflicts.Size = new System.Drawing.Size(312, 537);
-            this.treConflicts.Sorted = true;
-            this.treConflicts.TabIndex = 1;
-            this.treConflicts.TabStop = false;
+            this.menuCollapseIf.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuCollapseNotMergeable,
+            this.menuCollapseCustomLoadOrder});
+            this.menuCollapseIf.Name = "menuCollapseIf";
+            this.menuCollapseIf.Size = new System.Drawing.Size(223, 22);
+            this.menuCollapseIf.Text = "Auto-&Collapse in Tree If...";
             // 
-            // treMerges
+            // menuCollapseNotMergeable
             // 
-            this.treMerges.AllowDrop = true;
-            this.treMerges.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.treMerges.CheckBoxes = true;
-            this.treMerges.FileNodeForeColor = System.Drawing.Color.Blue;
-            this.treMerges.Location = new System.Drawing.Point(3, 30);
-            this.treMerges.Name = "treMerges";
-            this.treMerges.ShowNodeToolTips = true;
-            this.treMerges.Size = new System.Drawing.Size(310, 537);
-            this.treMerges.Sorted = true;
-            this.treMerges.TabIndex = 1;
-            this.treMerges.TabStop = false;
+            this.menuCollapseNotMergeable.CheckOnClick = true;
+            this.menuCollapseNotMergeable.Name = "menuCollapseNotMergeable";
+            this.menuCollapseNotMergeable.Size = new System.Drawing.Size(244, 22);
+            this.menuCollapseNotMergeable.Text = "&Not Mergeable";
+            this.menuCollapseNotMergeable.ToolTipText = "Auto-collapse conflicts that can\'t be merged (non-text files)";
+            // 
+            // menuCollapseCustomLoadOrder
+            // 
+            this.menuCollapseCustomLoadOrder.CheckOnClick = true;
+            this.menuCollapseCustomLoadOrder.Name = "menuCollapseCustomLoadOrder";
+            this.menuCollapseCustomLoadOrder.Size = new System.Drawing.Size(244, 22);
+            this.menuCollapseCustomLoadOrder.Text = "Resolved by &Custom Load Order";
+            this.menuCollapseCustomLoadOrder.ToolTipText = "Auto-collapse conflicts that are resolved by your custom load order";
             // 
             // MainForm
             // 
@@ -542,8 +551,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuShowStatusBar;
         private System.Windows.Forms.Label lblProgressCurrentPhase;
         private System.Windows.Forms.ToolStripMenuItem menuPackReport;
-        private System.Windows.Forms.ToolStripMenuItem menuCollapseNotMergeable;
-        private System.Windows.Forms.ToolStripMenuItem menuCheckingForConflicts;
+        private System.Windows.Forms.ToolStripMenuItem menuRefreshingConflicts;
         private System.Windows.Forms.ToolStripMenuItem menuMerging;
         private System.Windows.Forms.ToolStripMenuItem menuDependencies;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusSpring;
@@ -552,6 +560,8 @@
         private System.Windows.Forms.Label lblGameDir;
         private System.Windows.Forms.ToolStripMenuItem menuCheckXmlFiles;
         private System.Windows.Forms.ToolStripMenuItem menuValidateCustomLoadOrder;
+        private System.Windows.Forms.ToolStripMenuItem menuCollapseIf;
+        private System.Windows.Forms.ToolStripMenuItem menuCollapseNotMergeable;
         private System.Windows.Forms.ToolStripMenuItem menuCollapseCustomLoadOrder;
     }
 }
