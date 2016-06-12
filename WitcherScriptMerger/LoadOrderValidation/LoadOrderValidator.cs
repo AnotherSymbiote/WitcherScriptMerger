@@ -25,17 +25,10 @@ namespace WitcherScriptMerger.LoadOrderValidation
             if (!loadOrder.Mods.Any())
                 return;
 
-            var mergedMod = loadOrder.Mods.Find(m => m.ModName == Paths.RetrieveMergedModName());
+            var mergedModName = Paths.RetrieveMergedModName();
+            var mergedMod = loadOrder.Mods.Find(m => m.ModName.EqualsIgnoreCase(mergedModName));
 
-            bool isMergedModTopPriority =
-                mergedMod != null &&
-                mergedMod.IsEnabled &&
-                !loadOrder.Mods.Any(m =>
-                    m != mergedMod &&
-                    m.IsEnabled &&
-                    m.Priority < mergedMod.Priority);
-
-            if (isMergedModTopPriority)
+            if (mergedMod != null && mergedMod == loadOrder.GetTopPriorityEnabledMod())
                 return;
 
             var choice = PromptToPrioritizeMergedMod();
@@ -107,15 +100,6 @@ namespace WitcherScriptMerger.LoadOrderValidation
 
             foreach (var mod in modsToIncrement)
                 ++mod.Priority;
-        }
-
-        public static int GetModNameLoadOrder(string name1, string name2)
-        {
-            // The game loads numbers first, then underscores, then letters (upper or lower).
-            // ASCII (ordinal) order is numbers, then uppercase letters, then underscores, then lowercase.
-            // To achieve the game's load order, we can convert uppercase letters to lowercase, then take ASCII order.
-
-            return string.Compare(name1.ToLowerInvariant(), name2.ToLowerInvariant(), StringComparison.Ordinal);
         }
     }
 }

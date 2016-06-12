@@ -95,7 +95,7 @@ namespace WitcherScriptMerger
 
                     ProgressInfo.CurrentAction = "Starting merge";
 
-                    if (checkedModNodes.Any(node => LoadOrderValidator.GetModNameLoadOrder(node.Text, _mergedModName) < 0) &&
+                    if (checkedModNodes.Any(node => (new LoadOrderComparer()).Compare(node.Text, _mergedModName) < 0) &&
                         !ConfirmRemainingConflict(_mergedModName))
                         continue;
 

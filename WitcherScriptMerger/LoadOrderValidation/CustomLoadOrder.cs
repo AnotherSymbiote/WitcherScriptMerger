@@ -12,7 +12,7 @@ namespace WitcherScriptMerger.LoadOrderValidation
         public const int MaxPriority = 999;
 
         public List<ModLoadSetting> Mods = new List<ModLoadSetting>();
-
+        
         public CustomLoadOrder(string modSettingsFilePath)
         {
             ModLoadSetting currModSetting = null;
@@ -67,6 +67,29 @@ namespace WitcherScriptMerger.LoadOrderValidation
             }
 
             File.WriteAllText(filePath, builder.ToString());
+        }
+
+        public ModLoadSetting GetTopPriorityEnabledMod()
+        {
+            return Mods
+                .OrderBy(setting => setting, new LoadOrderComparer())
+                .FirstOrDefault();
+        }
+
+        public string GetTopPriorityEnabledMod(IEnumerable<string> conflictingMods)
+        {
+            var conflictingModSettings =
+                Mods.Where(loadSetting =>
+                    conflictingMods.Any(modName =>
+                        modName.EqualsIgnoreCase(loadSetting.ModName)));
+
+            if (!conflictingModSettings.Any())
+                return null;
+
+            return conflictingModSettings
+                .OrderBy(setting => setting, new LoadOrderComparer())
+                .FirstOrDefault()
+                ?.ModName;
         }
     }
 }
