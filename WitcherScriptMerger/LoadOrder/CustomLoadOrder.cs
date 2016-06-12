@@ -76,6 +76,22 @@ namespace WitcherScriptMerger.LoadOrder
             File.WriteAllText(FilePath, builder.ToString());
         }
 
+        public void AddMergedModIfMissing()
+        {
+            var mergedModName = Paths.RetrieveMergedModName();
+
+            if (!Mods.Any(setting => setting.ModName.EqualsIgnoreCase(mergedModName)))
+            {
+                Mods.Insert(0,
+                    new ModLoadSetting
+                    {
+                        ModName = mergedModName,
+                        IsEnabled = true,
+                        Priority = MinPriority
+                    });
+            }
+        }
+
         public ModLoadSetting GetTopPriorityEnabledMod()
         {
             return Mods
@@ -83,30 +99,66 @@ namespace WitcherScriptMerger.LoadOrder
                 .FirstOrDefault();
         }
 
-        public string GetTopPriorityEnabledMod(IEnumerable<string> conflictingMods)
+        public string GetTopPriorityEnabledMod(IEnumerable<string> conflictMods)
         {
-            var conflictingModSettings =
-                Mods.Where(loadSetting =>
-                    loadSetting.IsEnabled
-                    && conflictingMods.Any(modName => modName.EqualsIgnoreCase(loadSetting.ModName)));
+            var conflictModSettings = Mods.Where(setting => conflictMods.Any(modName => modName.EqualsIgnoreCase(setting.ModName)));
+            var enabledModSettings = conflictModSettings.Where(setting => setting.IsEnabled);
 
-            if (!conflictingModSettings.Any())
-                return null;
+            if (!conflictModSettings.Any())
+                return conflictMods
+                    .OrderBy(name => name, new LoadOrderComparer())
+                    .FirstOrDefault();
 
-            return conflictingModSettings
+            if (!enabledModSettings.Any())
+                return conflictMods
+                    .Except(conflictModSettings.Select(setting => setting.ModName))
+                    .OrderBy(name => name, new LoadOrderComparer())
+                    .FirstOrDefault();
+
+            return enabledModSettings
                 .OrderBy(setting => setting, new LoadOrderComparer())
+                .ThenBy(setting => setting.ModName, new LoadOrderComparer())
                 .FirstOrDefault()
                 ?.ModName;
         }
 
-        public bool IsModDisabled(string modName)
+        public ModLoadSetting GetModLoadSettingByName(string modName)
         {
-            return Mods.Any(setting => !setting.IsEnabled && setting.ModName.EqualsIgnoreCase(modName));
+            return Mods.FirstOrDefault(setting => setting.ModName.EqualsIgnoreCase(modName));
+        }
+
+        public bool IsModDisabledByName(string modName)
+        {
+            var mod = GetModLoadSettingByName(modName);
+
+            return (mod != null && !mod.IsEnabled);
+        }
+
+        public void ToggleModByName(string modName)
+        {
+            var mod = GetModLoadSettingByName(modName);
+
+            if (mod != null)
+                mod.IsEnabled = !mod.IsEnabled;
+            else
+            {
+                int bottomPriority =
+                    Mods.Any()
+                    ? Mods.Max(setting => setting.Priority)
+                    : MinPriority;
+
+                Mods.Add(new ModLoadSetting
+                {
+                    ModName = modName,
+                    IsEnabled = false,
+                    Priority = bottomPriority + 1
+                });
+            }
         }
 
         public int GetPriorityByName(string modName)
         {
-            var mod = Mods.FirstOrDefault(setting => setting.ModName.EqualsIgnoreCase(modName));
+            var mod = GetModLoadSettingByName(modName);
 
             return
                 mod != null
@@ -116,7 +168,7 @@ namespace WitcherScriptMerger.LoadOrder
 
         public void SetPriorityByName(string modName, int priority)
         {
-            var mod = Mods.FirstOrDefault(setting => setting.ModName.EqualsIgnoreCase(modName));
+            var mod = GetModLoadSettingByName(modName);
 
             if (mod != null)
             {

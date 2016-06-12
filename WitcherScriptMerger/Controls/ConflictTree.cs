@@ -14,8 +14,9 @@ namespace WitcherScriptMerger.Controls
 
         ToolStripMenuItem _contextOpenVanillaFile = new ToolStripMenuItem();
         ToolStripMenuItem _contextOpenVanillaFileDir = new ToolStripMenuItem();
-        ToolStripSeparator _contextPrioritizeModSeparator = new ToolStripSeparator();
+        ToolStripSeparator _contextCustomLoadOrderSeparator = new ToolStripSeparator();
         ToolStripMenuItem _contextPrioritizeMod = new ToolStripMenuItem();
+        ToolStripMenuItem _contextToggleMod = new ToolStripMenuItem();
 
 
         #endregion
@@ -28,8 +29,9 @@ namespace WitcherScriptMerger.Controls
             {
                 _contextOpenVanillaFile,
                 _contextOpenVanillaFileDir,
-                _contextPrioritizeModSeparator,
-                _contextPrioritizeMod
+                _contextCustomLoadOrderSeparator,
+                _contextPrioritizeMod,
+                _contextToggleMod
             });
             BuildContextMenu();
 
@@ -45,15 +47,20 @@ namespace WitcherScriptMerger.Controls
             _contextOpenVanillaFileDir.Text = "Open Vanilla File Directory";
             _contextOpenVanillaFileDir.Click += ContextOpenDirectory_Click;
 
-            // contextPrioritizeModSeparator
-            _contextPrioritizeModSeparator.Name = "contextPrioritizeModSeparator";
-            _contextPrioritizeModSeparator.Size = new Size(235, 6);
+            // contextCustomLoadOrderSeparator
+            _contextCustomLoadOrderSeparator.Name = "contextCustomLoadOrderSeparator";
+            _contextCustomLoadOrderSeparator.Size = new Size(235, 6);
             
             // contextPrioritizeMod
             _contextPrioritizeMod.Name = "contextPrioritizeMod";
             _contextPrioritizeMod.Size = new Size(225, 22);
             _contextPrioritizeMod.Click += ContextPrioritizeMod;
+            _contextPrioritizeMod.Text = "Set Mod Priority...";
 
+            // contextToggleMod
+            _contextToggleMod.Name = "contextToggleMod";
+            _contextToggleMod.Size = new Size(225, 22);
+            _contextToggleMod.Click += ContextToggleMod;
         }
 
         protected override void HandleCheckedChange()
@@ -140,9 +147,10 @@ namespace WitcherScriptMerger.Controls
                 }
                 else if (IsModNode(ClickedNode))
                 {
-                    _contextPrioritizeModSeparator.Available = true;
+                    _contextCustomLoadOrderSeparator.Available = true;
                     _contextPrioritizeMod.Available = true;
-                    _contextPrioritizeMod.Text = $"Set Priority...";
+                    _contextToggleMod.Available = true;
+                    _contextToggleMod.Text = $"{(new CustomLoadOrder().IsModDisabledByName(ClickedNode.Text) ? "Enable" : "Disable")} Mod";
                 }
             }
 
@@ -155,7 +163,7 @@ namespace WitcherScriptMerger.Controls
             }
         }
 
-        private void ContextPrioritizeMod(object sender, EventArgs e)
+        void ContextPrioritizeMod(object sender, EventArgs e)
         {
             var modName = RightClickedNode.Text;
             var inputString = Prompt.ShowDialog("Priority:", modName);
@@ -177,19 +185,19 @@ namespace WitcherScriptMerger.Controls
 
             var loadOrder = new CustomLoadOrder();
             loadOrder.SetPriorityByName(modName, inputInt);
+            loadOrder.AddMergedModIfMissing();
+            loadOrder.Save();
 
-            var mergedModName = Paths.RetrieveMergedModName();
-            if (!loadOrder.Mods.Any(setting => setting.ModName.EqualsIgnoreCase(mergedModName)))
-            {
-                loadOrder.Mods.Insert(0,
-                    new ModLoadSetting
-                    {
-                        ModName = mergedModName,
-                        IsEnabled = true,
-                        Priority = CustomLoadOrder.MinPriority
-                    });
-            }
+            Program.MainForm.SetStylesForCustomLoadOrder(loadOrder);
+        }
 
+        void ContextToggleMod(object sender, EventArgs e)
+        {
+            var modName = RightClickedNode.Text;
+
+            var loadOrder = new CustomLoadOrder();
+            loadOrder.ToggleModByName(modName);
+            loadOrder.AddMergedModIfMissing();
             loadOrder.Save();
 
             Program.MainForm.SetStylesForCustomLoadOrder(loadOrder);
