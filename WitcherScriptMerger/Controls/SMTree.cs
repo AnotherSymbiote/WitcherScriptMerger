@@ -160,7 +160,7 @@ namespace WitcherScriptMerger.Controls
             if (e.Button == MouseButtons.Left)
             {
                 OnLeftMouseUp(e);
-                if (lastClicked != null)
+                if (lastClicked != null && ClickedNode != null)
                 {
                     lastClicked.ForeColor = _clickedNodeForeColor;
                     lastClicked.BackColor = Color.Transparent;
