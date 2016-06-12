@@ -92,6 +92,24 @@ namespace WitcherScriptMerger.LoadOrder
             }
         }
 
+        public bool HasResolvedConflict(IEnumerable<string> modNames)
+        {
+            var loadSettings = modNames
+                .Select(GetModLoadSettingByName)
+                .Where(setting => setting != null);
+
+            if (!loadSettings.Any())
+                return false;
+
+            if (loadSettings.Any(setting => setting.IsEnabled))
+                return true;
+
+            int numSettings = loadSettings.Count();
+            int numMods = modNames.Count();
+
+            return (numSettings >= numMods - 1);
+        }
+
         public bool Contains(string modName)
         {
             return Mods.Any(setting => setting.ModName.EqualsIgnoreCase(modName));

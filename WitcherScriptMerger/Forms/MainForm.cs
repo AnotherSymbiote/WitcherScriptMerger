@@ -497,17 +497,17 @@ namespace WitcherScriptMerger.Forms
             {
                 var modNames = fileNode.GetTreeNodes().Select(modNode => modNode.Text);
 
-                bool isAffectedByLoadOrder =
-                    modNames.Any(name =>
-                        Program.LoadOrder.Mods.Any(setting =>
-                            setting.ModName.EqualsIgnoreCase(name)));
+                bool isResolved = Program.LoadOrder.HasResolvedConflict(modNames);
 
-                var topPriorityMod = isAffectedByLoadOrder ? Program.LoadOrder.GetTopPriorityEnabledMod(modNames) : null;
+                var topPriorityMod =
+                    isResolved
+                    ? Program.LoadOrder.GetTopPriorityEnabledMod(modNames)
+                    : null;
 
                 fileNode.ForeColor =
-                        isAffectedByLoadOrder
-                        ? System.Drawing.Color.Purple
-                        : treConflicts.FileNodeForeColor;
+                    isResolved
+                    ? System.Drawing.Color.Purple
+                    : treConflicts.FileNodeForeColor;
 
                 foreach (var modNode in fileNode.GetTreeNodes())
                 {
@@ -516,28 +516,28 @@ namespace WitcherScriptMerger.Forms
                     modNode.ToolTipText = "";
 
                     var priority = Program.LoadOrder.GetPriorityByName(modNode.Text);
-                    var priorityString =
+
+                    modNode.ToolTipText = 
                         priority > -1
                         ? $"Priority {priority}"
                         : "No Priority";
 
                     if (modNode.Text.EqualsIgnoreCase(topPriorityMod))
                     {
-                        modNode.ToolTipText =
-                            priority > -1
-                            ? $"{priorityString} - Top priority in this conflict"
-                            : $"{priorityString} - Will load first by mod name";
+                        if (priority > -1)
+                            modNode.ToolTipText += " - Top priority in this conflict";
                     }
-                    else if (isAffectedByLoadOrder)
+                    else if (isResolved)
                     {
-                        modNode.ToolTipText = $"{priorityString} - Overridden by a higher-priority mod";
+                        modNode.ToolTipText += " - Overridden by a higher-priority mod";
                         modNode.ForeColor = System.Drawing.Color.Gray;
                     }
 
                     if (Program.LoadOrder.IsModDisabledByName(modNode.Text))
                     {
-                        modNode.SetFontItalic();
                         modNode.ToolTipText = "This mod is disabled in your custom load order";
+                        modNode.ForeColor = System.Drawing.Color.Gray;
+                        modNode.SetFontItalic();
                     }
                 }
             }
