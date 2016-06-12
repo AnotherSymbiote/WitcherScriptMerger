@@ -28,16 +28,14 @@ namespace WitcherScriptMerger.Controls
 
         public List<TreeNode> ModNodes => GetNodesAtLevel(LevelType.Mods);
 
-        public Color FileNodeForeColor
-        {
-            get { return NodeLevelForeColors[1]; }
-            set { NodeLevelForeColors[1] = value; }
-        }
+        public Color FileNodeForeColor { get; set; }
 
         Color[] NodeLevelForeColors = new Color[] { Color.Black, Color.Black, Color.Black };
 
         protected TreeNode ClickedNode = null;
         protected bool IsUpdating = false;
+
+        Color _clickedNodeForeColor;
 
         #endregion
 
@@ -119,8 +117,9 @@ namespace WitcherScriptMerger.Controls
                     ClickedNode = null;
                 else if (e.Button == MouseButtons.Left)
                 {
-                    ClickedNode.BackColor = Color.CornflowerBlue;
+                    _clickedNodeForeColor = ClickedNode.ForeColor;
                     ClickedNode.ForeColor = Color.White;
+                    ClickedNode.BackColor = Color.CornflowerBlue;
                 }
             }
 
@@ -143,7 +142,7 @@ namespace WitcherScriptMerger.Controls
             }
             else
             {
-                ClickedNode.ForeColor = NodeLevelForeColors[ClickedNode.Level];
+                ClickedNode.ForeColor = _clickedNodeForeColor;
                 ClickedNode.BackColor = Color.Transparent;
             }
         }
@@ -163,7 +162,7 @@ namespace WitcherScriptMerger.Controls
                 OnLeftMouseUp(e);
                 if (lastClicked != null)
                 {
-                    lastClicked.ForeColor = NodeLevelForeColors[lastClicked.Level];
+                    lastClicked.ForeColor = _clickedNodeForeColor;
                     lastClicked.BackColor = Color.Transparent;
                 }
                 ClickedNode = null;
@@ -441,7 +440,7 @@ namespace WitcherScriptMerger.Controls
         {
             if (ClickedNode == null)
                 return;
-            ClickedNode.ForeColor = NodeLevelForeColors[ClickedNode.Level];
+            ClickedNode.ForeColor = _clickedNodeForeColor;
             ClickedNode.BackColor = Color.Transparent;
             ClickedNode.TreeView.Update();
 

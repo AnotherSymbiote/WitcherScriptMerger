@@ -1,27 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Forms;
 
 namespace WitcherScriptMerger.LoadOrder
 {
-    class LoadOrderValidator
+    static class LoadOrderValidator
     {
-        string _modsSettingsPath;
-
-        public LoadOrderValidator()
+        public static void ValidateAndFix(CustomLoadOrder loadOrder)
         {
-            var userDocsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            _modsSettingsPath = Path.Combine(userDocsPath, "The Witcher 3", "mods.settings");
-        }
-
-        public void ValidateAndFix()
-        {
-            if (!File.Exists(_modsSettingsPath))
-                return;
-
-            var loadOrder = new CustomLoadOrder(_modsSettingsPath);
-
             if (!loadOrder.Mods.Any())
                 return;
 
@@ -31,7 +16,7 @@ namespace WitcherScriptMerger.LoadOrder
             if (mergedMod != null && mergedMod == loadOrder.GetTopPriorityEnabledMod())
                 return;
 
-            var choice = PromptToPrioritizeMergedMod();
+            var choice = PromptToPrioritizeMergedMod(loadOrder.FilePath);
             if (choice == DialogResult.Yes)
             {
                 PrioritizeMergedMod(loadOrder, mergedMod);
@@ -42,13 +27,13 @@ namespace WitcherScriptMerger.LoadOrder
             }
         }
 
-        DialogResult PromptToPrioritizeMergedMod()
+        static DialogResult PromptToPrioritizeMergedMod(string modsSettingsPath)
         {
             MessageBoxManager.Cancel = "Ne&ver";
             MessageBoxManager.Register();
 
             var choice = MessageBox.Show(
-                $"{_modsSettingsPath}\n\n" +
+                $"{modsSettingsPath}\n\n" +
                 "Detected custom load order in the file above, and merged files aren't configured to load first.\n\n" +
                 "Would you like Script Merger to modify your custom load order so that your merged files have top priority?",
                 "Custom Load Order Problem",
@@ -60,7 +45,7 @@ namespace WitcherScriptMerger.LoadOrder
             return choice;
         }
 
-        void PrioritizeMergedMod(CustomLoadOrder loadOrder, ModLoadSetting mergedModSetting)
+        static void PrioritizeMergedMod(CustomLoadOrder loadOrder, ModLoadSetting mergedModSetting)
         {
             // Priority 0 will be incremented to 1
             if (mergedModSetting != null)
@@ -80,10 +65,10 @@ namespace WitcherScriptMerger.LoadOrder
 
             IncrementLeadingContiguousPriorities(loadOrder, 0);
 
-            loadOrder.Write(_modsSettingsPath);
+            loadOrder.Save();
         }
 
-        void IncrementLeadingContiguousPriorities(CustomLoadOrder loadOrder, int startingPriority)
+        static void IncrementLeadingContiguousPriorities(CustomLoadOrder loadOrder, int startingPriority)
         {
             int nextPriority = startingPriority + 1;
             var modsToIncrement = loadOrder.Mods.Where(mod => mod.Priority == startingPriority).ToArray();

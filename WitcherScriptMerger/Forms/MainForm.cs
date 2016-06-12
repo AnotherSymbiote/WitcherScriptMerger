@@ -43,6 +43,7 @@ namespace WitcherScriptMerger.Forms
 
         MergeInventory _inventory = null;
         ModFileIndex _modIndex = null;
+        CustomLoadOrder _loadOrder = null;
 
         #endregion
 
@@ -228,8 +229,10 @@ namespace WitcherScriptMerger.Forms
         {
             _inventory = MergeInventory.Load(Paths.Inventory);
 
+            _loadOrder = new CustomLoadOrder();
+
             if (menuValidateCustomLoadOrder.Checked && _inventory.Merges.Any())
-                new LoadOrderValidator().ValidateAndFix();
+                LoadOrderValidator.ValidateAndFix(_loadOrder);
 
             return RefreshMergeTree();
         }
@@ -404,17 +407,17 @@ namespace WitcherScriptMerger.Forms
                 menuCheckScripts.Checked,
                 menuCheckXmlFiles.Checked,
                 checkBundles,
-                OnRefreshProgressChanged,
-                OnRefreshComplete);
+                OnRefreshConflictsProgressChanged,
+                OnRefreshConflictsComplete);
         }
 
-        void OnRefreshProgressChanged(object sender, ProgressChangedEventArgs e)
+        void OnRefreshConflictsProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressBar.Value = e.ProgressPercentage;
             lblProgressCurrentAction.Text = e.UserState as string;
         }
 
-        void OnRefreshComplete(object sender, RunWorkerCompletedEventArgs e)
+        void OnRefreshConflictsComplete(object sender, RunWorkerCompletedEventArgs e)
         {
             if (_modIndex.HasConflict)
             {
@@ -441,13 +444,42 @@ namespace WitcherScriptMerger.Forms
                         }
                         categoryNode.Nodes.Add(fileNode);
                     }
+
+                    var topPriorityMod = _loadOrder.GetTopPriorityEnabledMod(conflict.ModNames);
+
+                    if (topPriorityMod != null)
+                    {
+                        fileNode.ForeColor = System.Drawing.Color.Purple;
+                    }
+
                     foreach (string modName in conflict.ModNames)
                     {
-                        if (fileNode.GetTreeNodes().Any(node => node.Text.EqualsIgnoreCase(modName)))
-                            continue;
-                        var modNode = new TreeNode(modName);
-                        modNode.Tag = conflict.GetModFile(modName);
-                        fileNode.Nodes.Add(modNode);
+                        var modNode = fileNode.GetTreeNodes().FirstOrDefault(node =>
+                            node.Text.EqualsIgnoreCase(modName));
+
+                        if (modNode == null)
+                        {
+                            modNode = new TreeNode(modName);
+                            modNode.Tag = conflict.GetModFile(modName);
+                            fileNode.Nodes.Add(modNode);
+                        }
+
+                        modNode.NodeFont = DefaultFont;
+                        modNode.ForeColor = DefaultForeColor;
+
+                        if (modName.EqualsIgnoreCase(topPriorityMod))
+                            modNode.ToolTipText = "This mod has top priority in this conflict";
+                        else
+                        {
+                            modNode.ToolTipText = "This mod is overridden by a higher-priority mod";
+                            modNode.ForeColor = System.Drawing.Color.Gray;
+                        }
+
+                        if (_loadOrder.IsModDisabled(modName))
+                        {
+                            modNode.SetFontItalic();
+                            modNode.ToolTipText = "This mod is disabled in your custom load order";
+                        }
                     }
                 }
                 treConflicts.Sort();
@@ -595,7 +627,10 @@ namespace WitcherScriptMerger.Forms
             if (_inventory == null)
                 RefreshMergeInventory();
             else
+            {
+                _loadOrder = new CustomLoadOrder();
                 RefreshMergeTree();
+            }
             RefreshConflictsTree(checkBundles);
         }
 

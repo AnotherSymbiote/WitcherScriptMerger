@@ -59,6 +59,12 @@ namespace WitcherScriptMerger
             node.NodeFont = new Font(currFont, FontStyle.Bold);
         }
 
+        public static void SetFontItalic(this TreeNode node)
+        {
+            var currFont = node.NodeFont ?? Control.DefaultFont;
+            node.NodeFont = new Font(currFont, FontStyle.Italic);
+        }
+
         public static IEnumerable<TreeNode> GetTreeNodes(this TreeNode node)
         {
             return node.Nodes.Cast<TreeNode>();

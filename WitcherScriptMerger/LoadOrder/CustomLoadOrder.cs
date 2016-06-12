@@ -10,15 +10,23 @@ namespace WitcherScriptMerger.LoadOrder
     {
         public const int MinPriority = 1;
         public const int MaxPriority = 999;
+        public readonly string FilePath =
+            Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "The Witcher 3",
+                "mods.settings");
 
         public List<ModLoadSetting> Mods = new List<ModLoadSetting>();
         
-        public CustomLoadOrder(string modSettingsFilePath)
+        public CustomLoadOrder()
         {
+            if (!File.Exists(FilePath))
+                return;
+
             ModLoadSetting currModSetting = null;
 
             var lines = 
-                File.ReadAllLines(modSettingsFilePath)
+                File.ReadAllLines(FilePath)
                 .Where(line => !string.IsNullOrWhiteSpace(line))
                 .Select(line => line.Trim());
 
@@ -53,7 +61,7 @@ namespace WitcherScriptMerger.LoadOrder
                 .ThenBy(m => m.ModName);
         }
 
-        public void Write(string filePath)
+        public void Save()
         {
             var builder = new StringBuilder();
 
@@ -66,7 +74,7 @@ namespace WitcherScriptMerger.LoadOrder
                     .AppendLine();
             }
 
-            File.WriteAllText(filePath, builder.ToString());
+            File.WriteAllText(FilePath, builder.ToString());
         }
 
         public ModLoadSetting GetTopPriorityEnabledMod()
@@ -80,8 +88,8 @@ namespace WitcherScriptMerger.LoadOrder
         {
             var conflictingModSettings =
                 Mods.Where(loadSetting =>
-                    conflictingMods.Any(modName =>
-                        modName.EqualsIgnoreCase(loadSetting.ModName)));
+                    loadSetting.IsEnabled
+                    && conflictingMods.Any(modName => modName.EqualsIgnoreCase(loadSetting.ModName)));
 
             if (!conflictingModSettings.Any())
                 return null;
@@ -90,6 +98,11 @@ namespace WitcherScriptMerger.LoadOrder
                 .OrderBy(setting => setting, new LoadOrderComparer())
                 .FirstOrDefault()
                 ?.ModName;
+        }
+
+        public bool IsModDisabled(string modName)
+        {
+            return Mods.Any(setting => !setting.IsEnabled && setting.ModName.EqualsIgnoreCase(modName));
         }
     }
 }
