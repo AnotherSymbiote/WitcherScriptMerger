@@ -28,14 +28,14 @@ namespace WitcherScriptMerger.FileIndex
                     if (IsTextFile(RelativePath))
                         return Categories.BundleText;
                     else
-                        return Categories.BundleUnsupported;
+                        return Categories.BundleNotMergeable;
                 }
                 else if (IsScript(RelativePath))
                     return Categories.Script;
                 else if (IsXml(RelativePath))
                     return Categories.Xml;
                 else
-                    return Categories.OtherUnsupported;
+                    return Categories.FlatNotMergeable;
             }
         }
 

@@ -34,10 +34,10 @@
         public static ModFileCategory BundleText = new ModFileCategory(
             3, "Bundled Text", "These bundled text files can be merged", true, true);
 
-        public static ModFileCategory BundleUnsupported = new ModFileCategory(
-            4, "Bundled Non-text - Unsupported", "These bundled files aren't text and can't be merged", false, true);
+        public static ModFileCategory BundleNotMergeable = new ModFileCategory(
+            4, "Bundled Non-text - Not Mergeable", "These bundled files aren't text and can't be merged", false, true);
 
-        public static ModFileCategory OtherUnsupported = new ModFileCategory(
-            5, "Unsupported", "Script Merger doesn't know what these files are", false, false);
+        public static ModFileCategory FlatNotMergeable = new ModFileCategory(
+            5, "Not Mergeable", "Script Merger doesn't know what these files are", false, false);
     }
 }

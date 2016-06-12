@@ -64,7 +64,7 @@ namespace WitcherScriptMerger.Forms
             menuCheckBundleContents.Checked = Program.Settings.Get<bool>("CheckBundleContents");
             menuValidateCustomLoadOrder.Checked = Program.Settings.Get<bool>("ValidateCustomLoadOrder");
             menuCollapseCustomLoadOrder.Checked = Program.Settings.Get<bool>("CollapseCustomLoadOrder");
-            menuCollapseUnsupported.Checked = Program.Settings.Get<bool>("CollapseUnsupported");
+            menuCollapseNotMergeable.Checked = Program.Settings.Get<bool>("CollapseNotMergeable");
             menuReviewEach.Checked = Program.Settings.Get<bool>("ReviewEachMerge");
             menuPathsInKDiff3.Checked = Program.Settings.Get<bool>("ShowPathsInKDiff3");
             menuCompletionSounds.Checked = Program.Settings.Get<bool>("PlayCompletionSounds");
@@ -101,7 +101,7 @@ namespace WitcherScriptMerger.Forms
             Program.Settings.Set("CheckBundleContents", menuCheckBundleContents.Checked);
             Program.Settings.Set("ValidateCustomLoadOrder", menuValidateCustomLoadOrder.Checked);
             Program.Settings.Set("CollapseCustomLoadOrder", menuCollapseCustomLoadOrder.Checked);
-            Program.Settings.Set("CollapseUnsupported", menuCollapseUnsupported.Checked);
+            Program.Settings.Set("CollapseNotMergeable", menuCollapseNotMergeable.Checked);
             Program.Settings.Set("ReviewEachMerge", menuReviewEach.Checked);
             Program.Settings.Set("ShowPathsInKDiff3", menuPathsInKDiff3.Checked);
             Program.Settings.Set("PlayCompletionSounds", menuCompletionSounds.Checked);
@@ -180,7 +180,7 @@ namespace WitcherScriptMerger.Forms
             {
                 lblStatusLeft.Text = $"{solvableCount} mergeable";
                 if (solvableCount < treConflicts.FileNodes.Count)
-                    lblStatusLeft.Text += string.Format(",  {0} unsupported", (treConflicts.FileNodes.Count - solvableCount));
+                    lblStatusLeft.Text += string.Format(",  {0} not mergeable", (treConflicts.FileNodes.Count - solvableCount));
             }
 
             lblStatusLeft.Text += string.Format(
@@ -381,9 +381,9 @@ namespace WitcherScriptMerger.Forms
                     var bundleTextCatNode = treConflicts.GetCategoryNode(Categories.BundleText);
                     if (bundleTextCatNode != null)
                         nodesToUpdate.Add(bundleTextCatNode);
-                    var unsupportedCatNode = treConflicts.GetCategoryNode(Categories.BundleUnsupported);
-                    if (unsupportedCatNode != null)
-                        nodesToUpdate.Add(unsupportedCatNode);
+                    var bundleNotMergeableCatNode = treConflicts.GetCategoryNode(Categories.BundleNotMergeable);
+                    if (bundleNotMergeableCatNode != null)
+                        nodesToUpdate.Add(bundleNotMergeableCatNode);
                 }
 
                 var missingFileNodes = treConflicts.FileNodes.Where(node =>
@@ -506,7 +506,7 @@ namespace WitcherScriptMerger.Forms
                             foreach (var modNode in fileNode.GetTreeNodes())
                                 modNode.HideCheckBox();
                         }
-                        if (menuCollapseUnsupported.Checked)
+                        if (menuCollapseNotMergeable.Checked)
                             catNode.Collapse();
                     }
                 }
