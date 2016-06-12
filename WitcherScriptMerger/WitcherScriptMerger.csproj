@@ -99,7 +99,7 @@
     <Compile Include="LoadOrder\CustomLoadOrder.cs" />
     <Compile Include="LoadOrder\LoadOrderComparer.cs" />
     <Compile Include="LoadOrder\LoadOrderValidator.cs" />
-    <Compile Include="LoadOrder\MessageBoxManager.cs" />
+    <Compile Include="Forms\MessageBoxManager.cs" />
     <Compile Include="LoadOrder\ModLoadSetting.cs" />
     <Compile Include="Paths.cs" />
     <Compile Include="Program.cs" />
