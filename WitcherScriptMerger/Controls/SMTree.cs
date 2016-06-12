@@ -30,8 +30,6 @@ namespace WitcherScriptMerger.Controls
 
         public Color FileNodeForeColor { get; set; }
 
-        Color[] NodeLevelForeColors = new Color[] { Color.Black, Color.Black, Color.Black };
-
         protected TreeNode ClickedNode = null;
         protected bool IsUpdating = false;
 

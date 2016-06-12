@@ -132,7 +132,6 @@ namespace WitcherScriptMerger.Controls
             {
                 if (ClickedNode.Tag != null && IsFileNode(ClickedNode))
                 {
-                    string filePath = ClickedNode.Tag as string;
                     _contextOpenMergedFile.Available = _contextOpenMergedFileDir.Available = true;
                 }
 
