@@ -131,7 +131,7 @@ namespace WitcherScriptMerger.Controls
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            if (ClickedNode == null || e.Button == MouseButtons.Right)
+            if (ClickedNode == null || RightClickedNode != null || e.Button == MouseButtons.Right)
                 return;
             if (ClickedNode.Bounds.Contains(e.Location))
             {
@@ -442,7 +442,7 @@ namespace WitcherScriptMerger.Controls
             ClickedNode.TreeView.Update();
 
             RightClickedNode = ClickedNode;  // Preserve reference to clicked node so context item handlers can access,
-            ClickedNode = null;               // but clear ClickedNode so mouseover doesn't change back color.
+            ClickedNode = null;              // but clear ClickedNode so mouseover doesn't change back color.
         }
 
         #endregion
