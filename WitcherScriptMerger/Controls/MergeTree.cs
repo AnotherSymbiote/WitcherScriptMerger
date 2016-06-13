@@ -24,10 +24,14 @@ namespace WitcherScriptMerger.Controls
 
             ContextOpenRegion.Items.AddRange(new ToolStripItem[]
             {
-                _contextOpenMergedFile, _contextOpenMergedFileDir,
+                _contextOpenMergedFile,
+                _contextOpenMergedFileDir
+            });
+            ContextNodeRegion.Items.AddRange(new ToolStripItem[]
+            {
                 _contextDeleteSeparator,
                 _contextDeleteMerge,
-                _contextDeleteAssociatedMerges,
+                _contextDeleteAssociatedMerges
             });
             BuildContextMenu();
             
@@ -145,13 +149,11 @@ namespace WitcherScriptMerger.Controls
                     }
                 }
             }
-
-            if (!this.IsEmpty())
+            else if (!this.IsEmpty())
             {
-                if (CategoryNodes.Any(catNode => !catNode.Checked))
-                    ContextSelectAll.Available = true;
-                if (FileNodes.Any(fileNode => fileNode.Checked))
-                    ContextDeselectAll.Available = true;
+                ContextSelectAll.Available = CategoryNodes.Any(catNode => !catNode.Checked);
+
+                ContextDeselectAll.Available = FileNodes.Any(fileNode => fileNode.Checked);
             }
         }
     }

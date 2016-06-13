@@ -28,7 +28,10 @@ namespace WitcherScriptMerger.Controls
             ContextOpenRegion.Items.AddRange(new ToolStripItem[]
             {
                 _contextOpenVanillaFile,
-                _contextOpenVanillaFileDir,
+                _contextOpenVanillaFileDir
+            });
+            ContextNodeRegion.Items.AddRange(new ToolStripItem[]
+            {
                 _contextCustomLoadOrderSeparator,
                 _contextPrioritizeMod,
                 _contextToggleMod,
@@ -162,13 +165,11 @@ namespace WitcherScriptMerger.Controls
                     _contextRemoveFromCustomLoadOrder.Available = Program.LoadOrder.Contains(ClickedNode.Text);
                 }
             }
-
-            if (!this.IsEmpty())
+            else if (!this.IsEmpty())
             {
-                if (CategoryNodes.Any(catNode => !catNode.Checked && (catNode.Tag as ModFileCategory).IsSupported))
-                    ContextSelectAll.Available = true;
-                if (ModNodes.Any(modNode => modNode.Checked))
-                    ContextDeselectAll.Available = true;
+                ContextSelectAll.Available = CategoryNodes.Any(catNode => !catNode.Checked && (catNode.Tag as ModFileCategory).IsSupported);
+
+                ContextDeselectAll.Available = ModNodes.Any(modNode => modNode.Checked);
             }
         }
 

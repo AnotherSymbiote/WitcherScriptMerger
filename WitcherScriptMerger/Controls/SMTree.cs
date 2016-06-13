@@ -39,23 +39,24 @@ namespace WitcherScriptMerger.Controls
 
         #region Context Menu Members
 
+        protected TreeNode RightClickedNode;
+
         ContextMenuStrip _contextMenu;
 
-        protected TreeNode RightClickedNode;
         protected ToolStripRegion ContextOpenRegion;
-        protected ToolStripRegion ContextNodeRegion;
-        protected List<ToolStripRegion> ContextRegions;
-
         ToolStripMenuItem _contextOpenModFile = new ToolStripMenuItem();
         ToolStripMenuItem _contextOpenModFileDir = new ToolStripMenuItem();
         ToolStripMenuItem _contextOpenModBundleDir = new ToolStripMenuItem();
         ToolStripMenuItem _contextCopyPath = new ToolStripMenuItem();
-        ToolStripSeparator _contextOpenSeparator = new ToolStripSeparator();
+
+        protected ToolStripRegion ContextNodeRegion;
+
+        protected ToolStripRegion ContextAllRegion;
+        ToolStripSeparator _contextAllSeparator = new ToolStripSeparator();
         ToolStripMenuItem _contextExpandAll = new ToolStripMenuItem();
         ToolStripMenuItem _contextCollapseAll = new ToolStripMenuItem();
         protected ToolStripMenuItem ContextSelectAll = new ToolStripMenuItem();
         protected ToolStripMenuItem ContextDeselectAll = new ToolStripMenuItem();
-
 
         #endregion
 
@@ -183,13 +184,16 @@ namespace WitcherScriptMerger.Controls
         {
             ResetContextItemAvailability();
             SetContextItemAvailability();
-            SetContextMenuSize();
-
-            if (ClickedNode != null)
-                ClickedNode.BackColor = Color.Gainsboro;
 
             if (_contextMenu.Items.OfType<ToolStripMenuItem>().Any(item => item.Available))
+            {
+                if (ClickedNode != null)
+                    ClickedNode.BackColor = Color.Gainsboro;
+
+                SetContextMenuSize();
+
                 _contextMenu.Show(this, e.X, e.Y);
+            }
         }
 
         protected override void OnAfterCheck(TreeViewEventArgs e)
@@ -226,11 +230,6 @@ namespace WitcherScriptMerger.Controls
         {
             _contextMenu = new ContextMenuStrip();
 
-            ContextRegions = new List<ToolStripRegion>()
-            {
-                ContextOpenRegion, ContextNodeRegion
-            };
-
             ContextOpenRegion = new ToolStripRegion(_contextMenu as ToolStrip, new ToolStripItem[]
             {
                 _contextCopyPath,
@@ -238,10 +237,16 @@ namespace WitcherScriptMerger.Controls
                 _contextOpenModFileDir,
                 _contextOpenModBundleDir
             });
-            ContextNodeRegion = new ToolStripRegion(_contextMenu as ToolStrip, new ToolStripItem[]
+
+            ContextNodeRegion = new ToolStripRegion(_contextMenu as ToolStrip, new ToolStripItem[0]);
+
+            ContextAllRegion = new ToolStripRegion(_contextMenu as ToolStrip, new ToolStripItem[]
             {
-                ContextSelectAll, ContextDeselectAll,
-                _contextExpandAll, _contextCollapseAll
+                _contextAllSeparator,
+                ContextSelectAll,
+                ContextDeselectAll,
+                _contextExpandAll,
+                _contextCollapseAll
             });
 
             // 
@@ -281,10 +286,10 @@ namespace WitcherScriptMerger.Controls
             _contextCopyPath.Text = "Copy Path";
             _contextCopyPath.Click += ContextCopyPath_Click;
             // 
-            // contextOpenSeparator
+            // contextAllSeparator
             // 
-            _contextOpenSeparator.Name = "contextOpenSeparator";
-            _contextOpenSeparator.Size = new Size(235, 6);
+            _contextAllSeparator.Name = "contextAllSeparator";
+            _contextAllSeparator.Size = new Size(235, 6);
             // 
             // contextSelectAll
             // 
@@ -319,8 +324,8 @@ namespace WitcherScriptMerger.Controls
         {
             _contextMenu.Items.Clear();
             _contextMenu.Items.AddRange(ContextOpenRegion.Items);
-            _contextMenu.Items.Add(_contextOpenSeparator);
             _contextMenu.Items.AddRange(ContextNodeRegion.Items);
+            _contextMenu.Items.AddRange(ContextAllRegion.Items);
         }
 
         void ResetContextItemAvailability()
@@ -347,17 +352,17 @@ namespace WitcherScriptMerger.Controls
                 }
             }
 
-            // If can copy path, need separator above Select/Deselect All
-            if (_contextCopyPath.Available)
-                _contextOpenSeparator.Visible = true;
-
-            if (!this.IsEmpty())
+            if (ClickedNode == null && !this.IsEmpty())
             {
-                if (CategoryNodes.Any(catNode => !catNode.IsExpanded)
-                    || FileNodes.Any(fileNode => !fileNode.IsExpanded))
-                    _contextExpandAll.Available = true;
-                if (CategoryNodes.Any(node => node.IsExpanded))
-                    _contextCollapseAll.Available = true;
+                _contextExpandAll.Available =
+                    CategoryNodes.Any(catNode => !catNode.IsExpanded)
+                    || FileNodes.Any(fileNode => !fileNode.IsExpanded);
+
+                _contextCollapseAll.Available = CategoryNodes.Any(node => node.IsExpanded);
+
+                _contextAllSeparator.Visible =
+                    (_contextExpandAll.Available || _contextCollapseAll.Available)
+                    && (ContextOpenRegion.Available || ContextNodeRegion.Available);
             }
         }
 
