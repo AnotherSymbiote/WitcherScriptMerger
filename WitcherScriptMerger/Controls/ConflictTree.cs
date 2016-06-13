@@ -176,7 +176,12 @@ namespace WitcherScriptMerger.Controls
         void ContextPrioritizeMod(object sender, EventArgs e)
         {
             var modName = RightClickedNode.Text;
-            int? inputVal = NumericPrompt.ShowDialog("Set Priority", Program.LoadOrder.GetPriorityByName(modName));
+            int? inputVal;
+
+            using (var prompt = new NumericPrompt())
+            {
+                inputVal = prompt.ShowDialog("Set Priority", Program.LoadOrder.GetPriorityByName(modName));
+            }
 
             if (!inputVal.HasValue)
                 return;
