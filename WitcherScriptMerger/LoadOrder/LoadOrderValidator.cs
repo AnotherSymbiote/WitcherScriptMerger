@@ -47,11 +47,13 @@ namespace WitcherScriptMerger.LoadOrder
 
         static void PrioritizeMergedMod(CustomLoadOrder loadOrder, ModLoadSetting mergedModSetting)
         {
-            // Priority 0 will be incremented to 1
+            // Priority of min - 1 will be incremented to min
+            int priority = CustomLoadOrder.MinPriority - 1;
+
             if (mergedModSetting != null)
             {
-                mergedModSetting.Priority = 0;
                 mergedModSetting.IsEnabled = true;
+                mergedModSetting.Priority = priority;
             }
             else
             {
@@ -59,11 +61,11 @@ namespace WitcherScriptMerger.LoadOrder
                 {
                     ModName = Paths.RetrieveMergedModName(),
                     IsEnabled = true,
-                    Priority = 0
+                    Priority = priority
                 });
             }
 
-            IncrementLeadingContiguousPriorities(loadOrder, 0);
+            IncrementLeadingContiguousPriorities(loadOrder, priority);
 
             loadOrder.Save();
         }
@@ -77,7 +79,8 @@ namespace WitcherScriptMerger.LoadOrder
             if (!modsToIncrement.Any())
                 return;
 
-            if (displacedMods.Any())
+            if (displacedMods.Any() &&
+                nextPriority < CustomLoadOrder.MaxPriority)
             {
                 IncrementLeadingContiguousPriorities(loadOrder, nextPriority);
             }

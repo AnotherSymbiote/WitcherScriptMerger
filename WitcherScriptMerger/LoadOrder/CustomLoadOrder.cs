@@ -8,7 +8,9 @@ namespace WitcherScriptMerger.LoadOrder
 {
     class CustomLoadOrder
     {
-        public const int MinPriority = 1;
+        public const int MinPriority = 0;
+        public const int MaxPriority = 9999;
+
         public readonly string FilePath =
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),

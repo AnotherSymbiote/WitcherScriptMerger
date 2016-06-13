@@ -188,7 +188,12 @@ namespace WitcherScriptMerger.Controls
             }
             if (inputInt < CustomLoadOrder.MinPriority + 1)
             {
-                Program.MainForm.ShowMessage($"Priority must be greater than {CustomLoadOrder.MinPriority}.  Merged files take priority {CustomLoadOrder.MinPriority}.", "Invalid Priority");
+                Program.MainForm.ShowMessage($"Priority can't be less than {CustomLoadOrder.MinPriority + 1}.\n\nMerged files take priority {CustomLoadOrder.MinPriority}.", "Invalid Priority");
+                return;
+            }
+            if (inputInt > CustomLoadOrder.MaxPriority)
+            {
+                Program.MainForm.ShowMessage($"Priority can't be greater than {CustomLoadOrder.MaxPriority}.", "Invalid Priority");
                 return;
             }
 
