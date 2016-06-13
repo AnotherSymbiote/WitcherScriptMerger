@@ -176,30 +176,13 @@ namespace WitcherScriptMerger.Controls
         void ContextPrioritizeMod(object sender, EventArgs e)
         {
             var modName = RightClickedNode.Text;
-            var inputString = Prompt.ShowDialog("Priority:", modName);
+            int? inputVal = NumericPrompt.ShowDialog("Set Priority", Program.LoadOrder.GetPriorityByName(modName));
 
-            if (inputString == null)
+            if (!inputVal.HasValue)
                 return;
-
-            int inputInt;
-            if (!int.TryParse(inputString, out inputInt))
-            {
-                Program.MainForm.ShowMessage($"Priority must be an integer.", "Invalid Priority");
-                return;
-            }
-            if (inputInt < CustomLoadOrder.MinPriority + 1)
-            {
-                Program.MainForm.ShowMessage($"Priority can't be less than {CustomLoadOrder.MinPriority + 1}.\n\nMerged files take priority {CustomLoadOrder.MinPriority}.", "Invalid Priority");
-                return;
-            }
-            if (inputInt > CustomLoadOrder.MaxPriority)
-            {
-                Program.MainForm.ShowMessage($"Priority can't be greater than {CustomLoadOrder.MaxPriority}.", "Invalid Priority");
-                return;
-            }
 
             Program.LoadOrder = new CustomLoadOrder();
-            Program.LoadOrder.SetPriorityByName(modName, inputInt);
+            Program.LoadOrder.SetPriorityByName(modName, inputVal.Value);
             Program.LoadOrder.AddMergedModIfMissing();
             Program.LoadOrder.Save();
 
