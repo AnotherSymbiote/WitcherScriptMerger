@@ -804,7 +804,12 @@ namespace WitcherScriptMerger.Forms
 
         void InitializeProgressScreen(string progressOf, ProgressBarStyle style)
         {
-            txtGameDir.Enabled = btnSelectGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = false;
+            menuStrip.Enabled
+                = txtGameDir.Enabled
+                = btnSelectGameDir.Enabled
+                = splitContainer.Panel1.Enabled
+                = splitContainer.Panel2.Enabled
+                = false;
             progressBar.Value = 0;
             lblProgressCurrentPhase.Text = progressOf;
             progressBar.Style = style;
@@ -826,7 +831,12 @@ namespace WitcherScriptMerger.Forms
         void HideProgressScreen()
         {
             pnlProgress.Visible = false;
-            txtGameDir.Enabled = btnSelectGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = true;
+            menuStrip.Enabled
+                = txtGameDir.Enabled
+                = btnSelectGameDir.Enabled
+                = splitContainer.Panel1.Enabled
+                = splitContainer.Panel2.Enabled
+                = true;
             treMerges.Select();
 
             TaskbarProgress.SetState(this.Handle, TaskbarProgress.TaskbarStates.NoProgress);
