@@ -35,39 +35,37 @@ namespace WitcherScriptMerger.Controls
             });
             BuildContextMenu();
             
-            // 
             // contextOpenMergedFile
-            // 
             _contextOpenMergedFile.Name = "contextOpenMergedFile";
             _contextOpenMergedFile.Size = new Size(225, 22);
             _contextOpenMergedFile.Text = "Open Merged File";
+            _contextOpenMergedFile.ToolTipText = "Opens the merged version of the file";
             _contextOpenMergedFile.Click += ContextOpenFile_Click;
-            // 
+
             // contextOpenMergedFileDir
-            // 
             _contextOpenMergedFileDir.Name = "contextOpenMergedFileDir";
             _contextOpenMergedFileDir.Size = new Size(225, 22);
             _contextOpenMergedFileDir.Text = "Open Merged File Directory";
+            _contextOpenMergedFileDir.ToolTipText = "Opens the location of the merged version of the file";
             _contextOpenMergedFileDir.Click += ContextOpenDirectory_Click;
-            // 
+
+            // contextDeleteSeparator
+            _contextDeleteSeparator.Name = "contextDeleteSeparator";
+            _contextDeleteSeparator.Size = new Size(235, 6);
+
             // contextDeleteMerge
-            // 
             _contextDeleteMerge.Name = "contextDeleteMerge";
             _contextDeleteMerge.Size = new Size(225, 22);
             _contextDeleteMerge.Text = "Delete This Merge";
+            _contextDeleteMerge.ToolTipText = "Deletes the merged version of the file";
             _contextDeleteMerge.Click += ContextDeleteMerge_Click;
-            // 
+
             // contextDeleteAssociatedMerges
-            // 
             _contextDeleteAssociatedMerges.Name = "contextDeleteAssociatedMerges";
             _contextDeleteAssociatedMerges.Size = new Size(225, 22);
             _contextDeleteAssociatedMerges.Text = "Delete All {0} Merges";
+            _contextDeleteAssociatedMerges.ToolTipText = "Deletes all merges that contain this mod's files";
             _contextDeleteAssociatedMerges.Click += ContextDeleteAssociatedMerges_Click;
-            // 
-            // contextDeleteSeparator
-            // 
-            _contextDeleteSeparator.Name = "contextDeleteSeparator";
-            _contextDeleteSeparator.Size = new Size(235, 6);
         }
 
         protected override void HandleCheckedChange()

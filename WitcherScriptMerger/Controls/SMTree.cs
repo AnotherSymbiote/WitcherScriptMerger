@@ -249,71 +249,62 @@ namespace WitcherScriptMerger.Controls
                 _contextCollapseAll
             });
 
-            // 
             // treeContextMenu
-            // 
             _contextMenu.AutoSize = false;
             _contextMenu.Name = "treeContextMenu";
             _contextMenu.Size = new Size(239, 390);
             _contextMenu.Closing += ContextMenu_Closing;
-            // 
+
             // contextOpenModFile
-            // 
             _contextOpenModFile.Name = "contextOpenModFile";
             _contextOpenModFile.Size = new Size(225, 22);
             _contextOpenModFile.Text = "Open Mod File";
+            _contextOpenModFile.ToolTipText = "Opens this mod's version of the file";
             _contextOpenModFile.Click += ContextOpenFile_Click;
-            // 
+
             // contextOpenModFileDir
-            // 
             _contextOpenModFileDir.Name = "contextOpenModFileDir";
             _contextOpenModFileDir.Size = new Size(225, 22);
             _contextOpenModFileDir.Text = "Open Mod File Directory";
+            _contextOpenModFileDir.ToolTipText = "Opens the location of this mod's version of the file";
             _contextOpenModFileDir.Click += ContextOpenDirectory_Click;
 
-            // 
             // contextOpenModBundleDir
-            // 
             _contextOpenModBundleDir.Name = "contextOpenModBundleDir";
             _contextOpenModBundleDir.Size = new Size(225, 22);
             _contextOpenModBundleDir.Text = "Open Mod Bundle Directory";
+            _contextOpenModBundleDir.ToolTipText = "Opens the location of this mod's bundle file";
             _contextOpenModBundleDir.Click += ContextOpenDirectory_Click;
-            // 
+
             // contextCopyPath
-            // 
             _contextCopyPath.Name = "contextCopyPath";
             _contextCopyPath.Size = new Size(225, 22);
             _contextCopyPath.Text = "Copy Path";
             _contextCopyPath.Click += ContextCopyPath_Click;
-            // 
+
             // contextAllSeparator
-            // 
             _contextAllSeparator.Name = "contextAllSeparator";
             _contextAllSeparator.Size = new Size(235, 6);
-            // 
+
             // contextSelectAll
-            // 
             ContextSelectAll.Name = "contextSelectAll";
             ContextSelectAll.Size = new Size(225, 22);
             ContextSelectAll.Text = "Select All";
             ContextSelectAll.Click += ContextSelectAll_Click;
-            // 
+
             // contextDeselectAll
-            // 
             ContextDeselectAll.Name = "contextDeselectAll";
             ContextDeselectAll.Size = new Size(225, 22);
             ContextDeselectAll.Text = "Deselect All";
             ContextDeselectAll.Click += ContextDeselectAll_Click;
-            // 
+
             // contextExpandAll
-            // 
             _contextExpandAll.Name = "contextExpandAll";
             _contextExpandAll.Size = new Size(225, 22);
             _contextExpandAll.Text = "Expand All";
             _contextExpandAll.Click += ContextExpandAll_Click;
-            // 
+
             // contextCollapseAll
-            // 
             _contextCollapseAll.Name = "contextCollapseAll";
             _contextCollapseAll.Size = new Size(225, 22);
             _contextCollapseAll.Text = "Collapse All";

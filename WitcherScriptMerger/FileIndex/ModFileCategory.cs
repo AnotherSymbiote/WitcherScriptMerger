@@ -35,7 +35,7 @@
             3, "Bundled Text", "These bundled text files can be merged", true, true);
 
         public static ModFileCategory BundleNotMergeable = new ModFileCategory(
-            4, "Bundled Non-text - Not Mergeable", "These bundled files aren't text and can't be merged", false, true);
+            4, "Bundled Non-text - Not Mergeable", "Right-click mods to define your load order instead of merging", false, true);
 
         public static ModFileCategory FlatNotMergeable = new ModFileCategory(
             5, "Not Mergeable", "Script Merger doesn't know what these files are", false, false);

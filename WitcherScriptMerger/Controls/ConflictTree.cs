@@ -44,12 +44,14 @@ namespace WitcherScriptMerger.Controls
             _contextOpenVanillaFile.Name = "contextOpenVanillaFile";
             _contextOpenVanillaFile.Size = new Size(225, 22);
             _contextOpenVanillaFile.Text = "Open Vanilla File";
+            _contextOpenVanillaFile.ToolTipText = "Opens the unmodded version of the file";
             _contextOpenVanillaFile.Click += ContextOpenFile_Click;
 
             // contextOpenVanillaFileDir
             _contextOpenVanillaFileDir.Name = "contextOpenVanillaFileDir";
             _contextOpenVanillaFileDir.Size = new Size(225, 22);
             _contextOpenVanillaFileDir.Text = "Open Vanilla File Directory";
+            _contextOpenVanillaFileDir.ToolTipText = "Opens the location of the unmodded version of the file";
             _contextOpenVanillaFileDir.Click += ContextOpenDirectory_Click;
 
             // contextCustomLoadOrderSeparator
@@ -59,19 +61,22 @@ namespace WitcherScriptMerger.Controls
             // contextPrioritizeMod
             _contextPrioritizeMod.Name = "contextPrioritizeMod";
             _contextPrioritizeMod.Size = new Size(225, 22);
-            _contextPrioritizeMod.Click += ContextPrioritizeMod;
             _contextPrioritizeMod.Text = "Set Mod Priority...";
+            _contextPrioritizeMod.ToolTipText = "Lets you define the load order of your mods";
+            _contextPrioritizeMod.Click += ContextPrioritizeMod;
 
             // contextToggleMod
             _contextToggleMod.Name = "contextToggleMod";
             _contextToggleMod.Size = new Size(225, 22);
+            _contextToggleMod.ToolTipText = "Tells the game whether to load any of this mod's files";
             _contextToggleMod.Click += ContextToggleMod;
 
             // contextRemoveFromCustomLoadOrder
             _contextRemoveFromCustomLoadOrder.Name = "contextRemoveFromCustomLoadOrder";
             _contextRemoveFromCustomLoadOrder.Size = new Size(225, 22);
+            _contextRemoveFromCustomLoadOrder.Text = "Remove Mod Load Order Setting";
+            _contextRemoveFromCustomLoadOrder.ToolTipText = "Removes this mod's explicit priority and enabled/disabled state";
             _contextRemoveFromCustomLoadOrder.Click += ContextRemoveFromCustomLoadOrder;
-            _contextRemoveFromCustomLoadOrder.Text = "Remove from Custom Load Order";
         }
 
         protected override void HandleCheckedChange()
