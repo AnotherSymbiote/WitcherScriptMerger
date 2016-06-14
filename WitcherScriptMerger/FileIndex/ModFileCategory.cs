@@ -29,7 +29,7 @@
             1, "Scripts", "These plaintext .ws files can be merged", true, false);
 
         public static ModFileCategory Xml = new ModFileCategory(
-            2, "XML", "These .xml text files can be merged", true, false);
+            2, "Non-Bundled XML", "These .xml text files can be merged", true, false);
 
         public static ModFileCategory BundleText = new ModFileCategory(
             3, "Bundled Text", "These bundled text files can be merged", true, true);

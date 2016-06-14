@@ -60,7 +60,7 @@ namespace WitcherScriptMerger.Forms
             txtGameDir.Text = Program.Settings.Get("GameDirectory");
             menuCheckScripts.Checked = Program.Settings.Get<bool>("CheckScripts");
             menuCheckXmlFiles.Checked = Program.Settings.Get<bool>("CheckXmlFiles");
-            menuCheckBundleContents.Checked = Program.Settings.Get<bool>("CheckBundleContents");
+            menuCheckBundledFiles.Checked = Program.Settings.Get<bool>("CheckBundleContents");
             menuValidateCustomLoadOrder.Checked = Program.Settings.Get<bool>("ValidateCustomLoadOrder");
             menuCollapseCustomLoadOrder.Checked = Program.Settings.Get<bool>("CollapseCustomLoadOrder");
             menuCollapseNotMergeable.Checked = Program.Settings.Get<bool>("CollapseNotMergeable");
@@ -88,7 +88,7 @@ namespace WitcherScriptMerger.Forms
                 (!Paths.IsScriptsDirectoryDerived && !Paths.IsModsDirectoryDerived))
                 RefreshConflictsTree();
             else
-                lblStatusLeft.Text = "Please locate your 'The Witcher 3 Wild Hunt' game directory.";
+                lblStatusLeft1.Text = "Please locate your 'The Witcher 3 Wild Hunt' game directory.";
         }
 
         void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -97,7 +97,7 @@ namespace WitcherScriptMerger.Forms
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
             Program.Settings.Set("CheckScripts", menuCheckScripts.Checked);
             Program.Settings.Set("CheckXmlFiles", menuCheckXmlFiles.Checked);
-            Program.Settings.Set("CheckBundleContents", menuCheckBundleContents.Checked);
+            Program.Settings.Set("CheckBundleContents", menuCheckBundledFiles.Checked);
             Program.Settings.Set("ValidateCustomLoadOrder", menuValidateCustomLoadOrder.Checked);
             Program.Settings.Set("CollapseCustomLoadOrder", menuCollapseCustomLoadOrder.Checked);
             Program.Settings.Set("CollapseNotMergeable", menuCollapseNotMergeable.Checked);
@@ -174,22 +174,26 @@ namespace WitcherScriptMerger.Forms
             int solvableCount = treConflicts.FileNodes.Count(node => ModFile.IsTextFile(node.Text));
 
             if (treConflicts.IsEmpty())
-                lblStatusLeft.Text = "0 conflicts";
+                lblStatusLeft1.Text = "0 conflicts";
             else
             {
-                lblStatusLeft.Text = $"{solvableCount} mergeable";
+                lblStatusLeft1.Text = $"{solvableCount} mergeable";
                 if (solvableCount < treConflicts.FileNodes.Count)
-                    lblStatusLeft.Text += string.Format(",  {0} not mergeable", (treConflicts.FileNodes.Count - solvableCount));
+                {
+                    lblStatusLeft2.Text = $"{treConflicts.FileNodes.Count - solvableCount} not mergeable";
+                    lblStatusLeft2.Visible = true;
+                }
             }
 
-            lblStatusLeft.Text += string.Format(
-                "           {0} merge{1}",
+            lblStatusLeft3.Text = string.Format(
+                "{0} merge{1}",
                 treMerges.FileNodes.Count,
-                treMerges.FileNodes.Count.GetPluralS());
+                treMerges.FileNodes.Count.GetPluralS()
+                );
+            lblStatusLeft3.Visible = true;
 
             if (_modIndex != null)
             {
-
                 lblStatusRight.Text = string.Format(
                     "Found {0} mod{1}, {2} script{3}, {4} XML{5}, {6} bundle{7}",
                     _modIndex.ModCount,
@@ -355,7 +359,7 @@ namespace WitcherScriptMerger.Forms
 
         void RefreshConflictsTree(bool checkBundles = true)
         {
-            checkBundles = checkBundles && menuCheckBundleContents.Checked;
+            checkBundles = checkBundles && menuCheckBundledFiles.Checked;
 
             if (_inventory.ScriptsChanged && _inventory.BundleChanged)
                 treConflicts.Nodes.Clear();
@@ -375,7 +379,7 @@ namespace WitcherScriptMerger.Forms
                     if (xmlCatNode != null)
                         nodesToUpdate.Add(xmlCatNode);
                 }
-                if (_inventory.BundleChanged || checkBundles || !menuCheckBundleContents.Checked)
+                if (_inventory.BundleChanged || checkBundles || !menuCheckBundledFiles.Checked)
                 {
                     var bundleTextCatNode = treConflicts.GetCategoryNode(Categories.BundleText);
                     if (bundleTextCatNode != null)
@@ -400,7 +404,8 @@ namespace WitcherScriptMerger.Forms
 
             PrepareProgressScreen("Detecting Conflicts", ProgressBarStyle.Continuous);
             pnlProgress.Visible = true;
-            lblStatusLeft.Text = "Refreshing...";
+            lblStatusLeft1.Text = "Refreshing...";
+            lblStatusLeft2.Visible = lblStatusLeft3.Visible = false;
 
             _modIndex = new ModFileIndex();
             _modIndex.BuildAsync(_inventory,
@@ -656,7 +661,7 @@ namespace WitcherScriptMerger.Forms
         {
             if (!Paths.ValidateModsDirectory() ||
                 (menuCheckScripts.Checked && !Paths.ValidateScriptsDirectory()) ||
-                (menuCheckBundleContents.Checked && !Paths.ValidateBundlesDirectory()))
+                (menuCheckBundledFiles.Checked && !Paths.ValidateBundlesDirectory()))
                 return;
 
             if (_inventory == null)

@@ -1,6 +1,4 @@
-﻿// From http://stackoverflow.com/a/5427121/1641069
-
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using WitcherScriptMerger.LoadOrder;
 
