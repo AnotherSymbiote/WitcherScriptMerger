@@ -805,6 +805,7 @@ namespace WitcherScriptMerger.Forms
         void InitializeProgressScreen(string progressOf, ProgressBarStyle style)
         {
             menuStrip.Enabled
+                = lblGameDir.Enabled
                 = txtGameDir.Enabled
                 = btnSelectGameDir.Enabled
                 = splitContainer.Panel1.Enabled
@@ -832,6 +833,7 @@ namespace WitcherScriptMerger.Forms
         {
             pnlProgress.Visible = false;
             menuStrip.Enabled
+                = lblGameDir.Enabled
                 = txtGameDir.Enabled
                 = btnSelectGameDir.Enabled
                 = splitContainer.Panel1.Enabled

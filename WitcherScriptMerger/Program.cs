@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using WitcherScriptMerger.Forms;
@@ -54,7 +55,12 @@ namespace WitcherScriptMerger
         {
             if (File.Exists(path))
             {
-                System.Diagnostics.Process.Start(path);
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = path,
+                    WorkingDirectory = Path.GetDirectoryName(path)
+                };
+                Process.Start(startInfo);
                 return true;
             }
             else
