@@ -894,19 +894,6 @@ namespace WitcherScriptMerger.Forms
             }
         }
 
-        private void menuRepackBundle_Click(object sender, EventArgs e)
-        {
-            var mergedBundles = _inventory.Merges.Where(merge => merge.IsBundleContent).Select(merge => merge.GetMergedBundle()).Distinct();
-            int mergedBundleCount = mergedBundles.Count();
-            foreach (var bundlePath in mergedBundles)
-            {
-                InitializeProgressScreen($"Repacking Bundle{mergedBundleCount.GetPluralS()}", ProgressBarStyle.Marquee);
-
-                new FileMerger(_inventory, OnMergeProgressChanged, OnMergeComplete)
-                    .RepackBundleAsync(bundlePath);
-            }
-        }
-
         private void menuOpenLoadOrderFile_Click(object sender, EventArgs e)
         {
             Program.TryOpenFile(Program.LoadOrder.FilePath);
@@ -922,9 +909,30 @@ namespace WitcherScriptMerger.Forms
             Program.TryOpenDirectory(Paths.MergedBundleContent);
         }
 
+        private void menuRepackBundle_Click(object sender, EventArgs e)
+        {
+            var mergedBundles = _inventory.Merges.Where(merge => merge.IsBundleContent).Select(merge => merge.GetMergedBundle()).Distinct();
+            int mergedBundleCount = mergedBundles.Count();
+            foreach (var bundlePath in mergedBundles)
+            {
+                InitializeProgressScreen($"Repacking Bundle{mergedBundleCount.GetPluralS()}", ProgressBarStyle.Marquee);
+
+                new FileMerger(_inventory, OnMergeProgressChanged, OnMergeComplete)
+                    .RepackBundleAsync(bundlePath);
+            }
+        }
+
+        private void menuExitAndPlay_Click(object sender, EventArgs e)
+        {
+            if (Program.TryOpenFile(Paths.GameExe))
+                Environment.Exit(0);
+        }
+
         private void menuFile_DropDownOpening(object sender, EventArgs e)
         {
             menuRepackBundle.Enabled = Directory.Exists(Paths.MergedBundleContent);
+
+            menuExitAndPlay.Enabled = File.Exists(Paths.GameExe);
         }
 
         private void menuOpen_DropDownOpening(object sender, EventArgs e)

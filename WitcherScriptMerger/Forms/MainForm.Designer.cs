@@ -72,9 +72,11 @@
             this.menuOpenLoadOrderFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuOpenMergedModDir = new System.Windows.Forms.ToolStripMenuItem();
             this.menuOpenBundleContentDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuDependencies = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuExitAndPlay = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuFileSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
             this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
-            this.menuDependencies = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -482,7 +484,9 @@
             this.menuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuOpen,
             this.menuDependencies,
-            this.menuRepackBundle});
+            this.menuRepackBundle,
+            this.menuFileSeparator,
+            this.menuExitAndPlay});
             this.menuFile.Name = "menuFile";
             this.menuFile.Size = new System.Drawing.Size(37, 20);
             this.menuFile.Text = "&File";
@@ -531,6 +535,26 @@
             this.menuOpenBundleContentDir.ToolTipText = "Opens the location of your merged bundle content files";
             this.menuOpenBundleContentDir.Click += new System.EventHandler(this.menuOpenBundleContentDir_Click);
             // 
+            // menuDependencies
+            // 
+            this.menuDependencies.Name = "menuDependencies";
+            this.menuDependencies.Size = new System.Drawing.Size(203, 22);
+            this.menuDependencies.Text = "&Dependency Locations...";
+            this.menuDependencies.ToolTipText = "Locate the 3rd-party tools that Script Merger depends on";
+            // 
+            // menuExitAndPlay
+            // 
+            this.menuExitAndPlay.Name = "menuExitAndPlay";
+            this.menuExitAndPlay.Size = new System.Drawing.Size(203, 22);
+            this.menuExitAndPlay.Text = "E&xit && Launch Game";
+            this.menuExitAndPlay.ToolTipText = "Exits Script Merger & launches The Witcher 3";
+            this.menuExitAndPlay.Click += new System.EventHandler(this.menuExitAndPlay_Click);
+            // 
+            // menuFileSeparator
+            // 
+            this.menuFileSeparator.Name = "menuFileSeparator";
+            this.menuFileSeparator.Size = new System.Drawing.Size(200, 6);
+            // 
             // treConflicts
             // 
             this.treConflicts.AllowDrop = true;
@@ -562,13 +586,6 @@
             this.treMerges.Sorted = true;
             this.treMerges.TabIndex = 1;
             this.treMerges.TabStop = false;
-            // 
-            // menuDependencies
-            // 
-            this.menuDependencies.Name = "menuDependencies";
-            this.menuDependencies.Size = new System.Drawing.Size(203, 22);
-            this.menuDependencies.Text = "&Dependency Locations...";
-            this.menuDependencies.ToolTipText = "Locate the 3rd-party tools that Script Merger depends on";
             // 
             // MainForm
             // 
@@ -658,6 +675,8 @@
         private System.Windows.Forms.ToolStripMenuItem menuOpenMergedModDir;
         private System.Windows.Forms.ToolStripMenuItem menuOpenBundleContentDir;
         private System.Windows.Forms.ToolStripMenuItem menuDependencies;
+        private System.Windows.Forms.ToolStripSeparator menuFileSeparator;
+        private System.Windows.Forms.ToolStripMenuItem menuExitAndPlay;
     }
 }
 

@@ -19,6 +19,8 @@ namespace WitcherScriptMerger
 
         public static string GameDirectory => Program.MainForm.GameDirectorySetting;
 
+        public static string GameExe => Path.Combine(GameDirectory, "bin", "x64", "witcher3.exe");
+
         public static string BundlesDirectory => Path.Combine(GameDirectory, BundleBase);
 
         static string _scriptsDirSetting = Program.Settings.Get("VanillaScriptsDirectory");

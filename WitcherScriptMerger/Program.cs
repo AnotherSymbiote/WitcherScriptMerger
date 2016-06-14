@@ -50,28 +50,46 @@ namespace WitcherScriptMerger
                 MessageBoxIcon.Error);
         }
 
-        public static void TryOpenFile(string path)
+        public static bool TryOpenFile(string path)
         {
             if (File.Exists(path))
+            {
                 System.Diagnostics.Process.Start(path);
+                return true;
+            }
             else
+            {
                 MainForm.ShowMessage("Can't find file: " + path);
+                return false;
+            }
         }
-        public static void TryOpenFileLocation(string filePath)
+        public static bool TryOpenFileLocation(string filePath)
         {
             string dirPath = Path.GetDirectoryName(filePath);
             if (Directory.Exists(dirPath))
+            {
                 System.Diagnostics.Process.Start(dirPath);
+                return true;
+            }
             else
+            {
                 MainForm.ShowMessage("Can't find directory: " + dirPath);
+                return false;
+            }
         }
 
-        public static void TryOpenDirectory(string dirPath)
+        public static bool TryOpenDirectory(string dirPath)
         {
             if (Directory.Exists(dirPath))
+            {
                 System.Diagnostics.Process.Start(dirPath);
+                return true;
+            }
             else
+            {
                 MainForm.ShowMessage("Can't find directory: " + dirPath);
+                return false;
+            }
         }
     }
 
