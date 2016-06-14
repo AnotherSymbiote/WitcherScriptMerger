@@ -402,8 +402,7 @@ namespace WitcherScriptMerger.Forms
                 }
             }
 
-            PrepareProgressScreen("Detecting Conflicts", ProgressBarStyle.Continuous);
-            pnlProgress.Visible = true;
+            InitializeProgressScreen("Detecting Conflicts", ProgressBarStyle.Continuous);
             lblStatusLeft1.Text = "Refreshing...";
             lblStatusLeft2.Visible = lblStatusLeft3.Visible = false;
 
@@ -627,8 +626,7 @@ namespace WitcherScriptMerger.Forms
 
             var fileNodes = treConflicts.FileNodes.Where(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
 
-            PrepareProgressScreen("Merging", ProgressBarStyle.Marquee);
-            pnlProgress.Visible = true;
+            InitializeProgressScreen("Merging", ProgressBarStyle.Marquee);
 
             merger.MergeByTreeNodesAsync(fileNodes, mergedModName);
         }
@@ -773,10 +771,10 @@ namespace WitcherScriptMerger.Forms
             var affectedBundles = bundleMerges.Select(merge => merge.GetMergedBundle()).Distinct();
             foreach (var bundlePath in affectedBundles)
             {
-                PrepareProgressScreen("Merge Deleted — Repacking Bundle", ProgressBarStyle.Marquee);
-                pnlProgress.Visible = true;
+                InitializeProgressScreen("Merge Deleted", ProgressBarStyle.Marquee);
+
                 new FileMerger(_inventory, OnMergeProgressChanged, OnMergeComplete)
-                    .RepackBundleForDeleteAsync(bundlePath);
+                    .RepackBundleAsync(bundlePath);
             }
         }
 
@@ -804,7 +802,7 @@ namespace WitcherScriptMerger.Forms
 
         #region Progress Screen
 
-        void PrepareProgressScreen(string progressOf, ProgressBarStyle style)
+        void InitializeProgressScreen(string progressOf, ProgressBarStyle style)
         {
             txtGameDir.Enabled = btnSelectGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = false;
             progressBar.Value = 0;
@@ -821,6 +819,8 @@ namespace WitcherScriptMerger.Forms
                     TaskbarProgress.SetState(this.Handle, TaskbarProgress.TaskbarStates.Indeterminate);
                     break;
             }
+
+            pnlProgress.Visible = true;
         }
 
         void HideProgressScreen()
@@ -889,6 +889,19 @@ namespace WitcherScriptMerger.Forms
             using (var dependencyForm = new DependencyForm())
             {
                 ShowModal(dependencyForm);
+            }
+        }
+
+        private void menuRepackBundle_Click(object sender, EventArgs e)
+        {
+            var mergedBundles = _inventory.Merges.Where(merge => merge.IsBundleContent).Select(merge => merge.GetMergedBundle()).Distinct();
+            int mergedBundleCount = mergedBundles.Count();
+            foreach (var bundlePath in mergedBundles)
+            {
+                InitializeProgressScreen($"Repacking Bundle{mergedBundleCount.GetPluralS()}", ProgressBarStyle.Marquee);
+
+                new FileMerger(_inventory, OnMergeProgressChanged, OnMergeComplete)
+                    .RepackBundleAsync(bundlePath);
             }
         }
     }

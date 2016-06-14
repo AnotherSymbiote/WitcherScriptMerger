@@ -43,7 +43,7 @@
             this.lblProgressCurrentAction = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.menuRefreshingConflicts = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCheckScripts = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCheckXmlFiles = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,6 +69,8 @@
             this.lblGameDir = new System.Windows.Forms.Label();
             this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
             this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
+            this.menuFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuRepackBundle = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -82,9 +84,9 @@
             // 
             this.txtGameDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGameDir.Location = new System.Drawing.Point(213, 3);
+            this.txtGameDir.Location = new System.Drawing.Point(254, 3);
             this.txtGameDir.Name = "txtGameDir";
-            this.txtGameDir.Size = new System.Drawing.Size(399, 20);
+            this.txtGameDir.Size = new System.Drawing.Size(358, 20);
             this.txtGameDir.TabIndex = 0;
             this.txtGameDir.TextChanged += new System.EventHandler(this.txtGameDir_TextChanged);
             this.txtGameDir.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
@@ -255,22 +257,23 @@
             // 
             this.menuStrip.BackColor = System.Drawing.SystemColors.Control;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.optionsToolStripMenuItem});
+            this.menuFile,
+            this.menuOptions});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(654, 24);
             this.menuStrip.TabIndex = 2;
             // 
-            // optionsToolStripMenuItem
+            // menuOptions
             // 
-            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuRefreshingConflicts,
             this.menuMerging,
             this.menuDependencies,
             this.menuShowStatusBar});
-            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.optionsToolStripMenuItem.Text = "&Options";
+            this.menuOptions.Name = "menuOptions";
+            this.menuOptions.Size = new System.Drawing.Size(61, 20);
+            this.menuOptions.Text = "&Options";
             // 
             // menuRefreshingConflicts
             // 
@@ -473,7 +476,7 @@
             // lblGameDir
             // 
             this.lblGameDir.AutoSize = true;
-            this.lblGameDir.Location = new System.Drawing.Point(106, 6);
+            this.lblGameDir.Location = new System.Drawing.Point(147, 6);
             this.lblGameDir.Name = "lblGameDir";
             this.lblGameDir.Size = new System.Drawing.Size(101, 13);
             this.lblGameDir.TabIndex = 9;
@@ -510,6 +513,22 @@
             this.treMerges.Sorted = true;
             this.treMerges.TabIndex = 1;
             this.treMerges.TabStop = false;
+            // 
+            // menuFile
+            // 
+            this.menuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuRepackBundle});
+            this.menuFile.Name = "menuFile";
+            this.menuFile.Size = new System.Drawing.Size(37, 20);
+            this.menuFile.Text = "&File";
+            // 
+            // menuRepackBundle
+            // 
+            this.menuRepackBundle.Name = "menuRepackBundle";
+            this.menuRepackBundle.Size = new System.Drawing.Size(196, 22);
+            this.menuRepackBundle.Text = "Repack Merged &Bundle";
+            this.menuRepackBundle.ToolTipText = "Re-bundles the contents of your Merged Bundle Content folder";
+            this.menuRepackBundle.Click += new System.EventHandler(this.menuRepackBundle_Click);
             // 
             // MainForm
             // 
@@ -568,7 +587,7 @@
         private System.Windows.Forms.Label lblProgressCurrentAction;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuOptions;
         private System.Windows.Forms.ToolStripMenuItem menuCheckScripts;
         private System.Windows.Forms.ToolStripMenuItem menuCheckBundledFiles;
         private System.Windows.Forms.ToolStripMenuItem menuReviewEach;
@@ -593,6 +612,8 @@
         private System.Windows.Forms.ToolStripMenuItem menuCollapseCustomLoadOrder;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusLeft2;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusLeft3;
+        private System.Windows.Forms.ToolStripMenuItem menuFile;
+        private System.Windows.Forms.ToolStripMenuItem menuRepackBundle;
     }
 }
 

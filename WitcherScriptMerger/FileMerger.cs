@@ -427,7 +427,7 @@ namespace WitcherScriptMerger
             }
         }
 
-        public void RepackBundleForDeleteAsync(string bundlePath)
+        public void RepackBundleAsync(string bundlePath)
         {
             if (_bgWorker.IsBusy)
                 throw new Exception("BackgroundWorker can't run 2 tasks concurrently.");
@@ -454,7 +454,7 @@ namespace WitcherScriptMerger
 
         string PackNewBundle(string bundlePath, bool isRepack = false)
         {
-            ProgressInfo.CurrentPhase = (!isRepack ? "Packing Bundle" : "Deleted Merge — Repacking Bundle");
+            ProgressInfo.CurrentPhase = (!isRepack ? "Packing Bundle" : "Repacking Bundle");
             ProgressInfo.CurrentAction = "Packing merged content into new blob0.bundle";
 
             string contentDir = Path.Combine(Environment.CurrentDirectory, Paths.MergedBundleContent);
