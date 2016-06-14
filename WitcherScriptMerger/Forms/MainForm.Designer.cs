@@ -58,7 +58,6 @@
             this.menuCompletionSounds = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMergeReport = new System.Windows.Forms.ToolStripMenuItem();
             this.menuPackReport = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuDependencies = new System.Windows.Forms.ToolStripMenuItem();
             this.menuShowStatusBar = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatusLeft1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -67,10 +66,15 @@
             this.lblStatusSpring = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusRight = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblGameDir = new System.Windows.Forms.Label();
-            this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
-            this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
             this.menuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuRepackBundle = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuOpenLoadOrderFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuOpenMergedModDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuOpenBundleContentDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.treConflicts = new WitcherScriptMerger.Controls.ConflictTree();
+            this.treMerges = new WitcherScriptMerger.Controls.MergeTree();
+            this.menuDependencies = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -269,7 +273,6 @@
             this.menuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuRefreshingConflicts,
             this.menuMerging,
-            this.menuDependencies,
             this.menuShowStatusBar});
             this.menuOptions.Name = "menuOptions";
             this.menuOptions.Size = new System.Drawing.Size(61, 20);
@@ -284,7 +287,7 @@
             this.menuValidateCustomLoadOrder,
             this.menuCollapseIf});
             this.menuRefreshingConflicts.Name = "menuRefreshingConflicts";
-            this.menuRefreshingConflicts.Size = new System.Drawing.Size(203, 22);
+            this.menuRefreshingConflicts.Size = new System.Drawing.Size(189, 22);
             this.menuRefreshingConflicts.Text = "&Refreshing Conflicts...";
             // 
             // menuCheckScripts
@@ -353,7 +356,7 @@
             this.menuMergeReport,
             this.menuPackReport});
             this.menuMerging.Name = "menuMerging";
-            this.menuMerging.Size = new System.Drawing.Size(203, 22);
+            this.menuMerging.Size = new System.Drawing.Size(189, 22);
             this.menuMerging.Text = "&Merging...";
             // 
             // menuReviewEach
@@ -395,19 +398,11 @@
             this.menuPackReport.Text = "Show Report After &Packing Bundle";
             this.menuPackReport.ToolTipText = "Show a report with list of contents and button to open content directory";
             // 
-            // menuDependencies
-            // 
-            this.menuDependencies.Name = "menuDependencies";
-            this.menuDependencies.Size = new System.Drawing.Size(203, 22);
-            this.menuDependencies.Text = "&Dependency Locations...";
-            this.menuDependencies.ToolTipText = "Locate the 3rd-party tools that Script Merger depends on";
-            this.menuDependencies.Click += new System.EventHandler(this.menuDependencies_Click);
-            // 
             // menuShowStatusBar
             // 
             this.menuShowStatusBar.CheckOnClick = true;
             this.menuShowStatusBar.Name = "menuShowStatusBar";
-            this.menuShowStatusBar.Size = new System.Drawing.Size(203, 22);
+            this.menuShowStatusBar.Size = new System.Drawing.Size(189, 22);
             this.menuShowStatusBar.Text = "&Show Status Bar";
             this.menuShowStatusBar.ToolTipText = "Show bar with statistics at the bottom of the window";
             this.menuShowStatusBar.Click += new System.EventHandler(this.menuShowStatusBar_Click);
@@ -482,6 +477,60 @@
             this.lblGameDir.TabIndex = 9;
             this.lblGameDir.Text = "Witcher 3 Directory:";
             // 
+            // menuFile
+            // 
+            this.menuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuOpen,
+            this.menuDependencies,
+            this.menuRepackBundle});
+            this.menuFile.Name = "menuFile";
+            this.menuFile.Size = new System.Drawing.Size(37, 20);
+            this.menuFile.Text = "&File";
+            this.menuFile.DropDownOpening += new System.EventHandler(this.menuFile_DropDownOpening);
+            // 
+            // menuRepackBundle
+            // 
+            this.menuRepackBundle.Name = "menuRepackBundle";
+            this.menuRepackBundle.Size = new System.Drawing.Size(203, 22);
+            this.menuRepackBundle.Text = "Repack Merged &Bundle";
+            this.menuRepackBundle.ToolTipText = "Re-bundles the contents of your Merged Bundle Content folder";
+            this.menuRepackBundle.Click += new System.EventHandler(this.menuRepackBundle_Click);
+            // 
+            // menuOpen
+            // 
+            this.menuOpen.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuOpenLoadOrderFile,
+            this.menuOpenMergedModDir,
+            this.menuOpenBundleContentDir});
+            this.menuOpen.Name = "menuOpen";
+            this.menuOpen.Size = new System.Drawing.Size(203, 22);
+            this.menuOpen.Text = "&Open...";
+            this.menuOpen.DropDownOpening += new System.EventHandler(this.menuOpen_DropDownOpening);
+            // 
+            // menuOpenLoadOrderFile
+            // 
+            this.menuOpenLoadOrderFile.Name = "menuOpenLoadOrderFile";
+            this.menuOpenLoadOrderFile.Size = new System.Drawing.Size(252, 22);
+            this.menuOpenLoadOrderFile.Text = "&Load Order File";
+            this.menuOpenLoadOrderFile.ToolTipText = "Opens your mods.settings file";
+            this.menuOpenLoadOrderFile.Click += new System.EventHandler(this.menuOpenLoadOrderFile_Click);
+            // 
+            // menuOpenMergedModDir
+            // 
+            this.menuOpenMergedModDir.Name = "menuOpenMergedModDir";
+            this.menuOpenMergedModDir.Size = new System.Drawing.Size(252, 22);
+            this.menuOpenMergedModDir.Text = "Merged &Mod Directory";
+            this.menuOpenMergedModDir.ToolTipText = "Opens the location of your merged scripts, bundle, etc.";
+            this.menuOpenMergedModDir.Click += new System.EventHandler(this.menuOpenMergedModDir_Click);
+            // 
+            // menuOpenBundleContentDir
+            // 
+            this.menuOpenBundleContentDir.Name = "menuOpenBundleContentDir";
+            this.menuOpenBundleContentDir.Size = new System.Drawing.Size(252, 22);
+            this.menuOpenBundleContentDir.Text = "Merged &Bundle Content Directory";
+            this.menuOpenBundleContentDir.ToolTipText = "Opens the location of your merged bundle content files";
+            this.menuOpenBundleContentDir.Click += new System.EventHandler(this.menuOpenBundleContentDir_Click);
+            // 
             // treConflicts
             // 
             this.treConflicts.AllowDrop = true;
@@ -514,21 +563,12 @@
             this.treMerges.TabIndex = 1;
             this.treMerges.TabStop = false;
             // 
-            // menuFile
+            // menuDependencies
             // 
-            this.menuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuRepackBundle});
-            this.menuFile.Name = "menuFile";
-            this.menuFile.Size = new System.Drawing.Size(37, 20);
-            this.menuFile.Text = "&File";
-            // 
-            // menuRepackBundle
-            // 
-            this.menuRepackBundle.Name = "menuRepackBundle";
-            this.menuRepackBundle.Size = new System.Drawing.Size(196, 22);
-            this.menuRepackBundle.Text = "Repack Merged &Bundle";
-            this.menuRepackBundle.ToolTipText = "Re-bundles the contents of your Merged Bundle Content folder";
-            this.menuRepackBundle.Click += new System.EventHandler(this.menuRepackBundle_Click);
+            this.menuDependencies.Name = "menuDependencies";
+            this.menuDependencies.Size = new System.Drawing.Size(203, 22);
+            this.menuDependencies.Text = "&Dependency Locations...";
+            this.menuDependencies.ToolTipText = "Locate the 3rd-party tools that Script Merger depends on";
             // 
             // MainForm
             // 
@@ -600,7 +640,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuPackReport;
         private System.Windows.Forms.ToolStripMenuItem menuRefreshingConflicts;
         private System.Windows.Forms.ToolStripMenuItem menuMerging;
-        private System.Windows.Forms.ToolStripMenuItem menuDependencies;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusSpring;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusRight;
         private System.Windows.Forms.ToolStripMenuItem menuCompletionSounds;
@@ -614,6 +653,11 @@
         private System.Windows.Forms.ToolStripStatusLabel lblStatusLeft3;
         private System.Windows.Forms.ToolStripMenuItem menuFile;
         private System.Windows.Forms.ToolStripMenuItem menuRepackBundle;
+        private System.Windows.Forms.ToolStripMenuItem menuOpen;
+        private System.Windows.Forms.ToolStripMenuItem menuOpenLoadOrderFile;
+        private System.Windows.Forms.ToolStripMenuItem menuOpenMergedModDir;
+        private System.Windows.Forms.ToolStripMenuItem menuOpenBundleContentDir;
+        private System.Windows.Forms.ToolStripMenuItem menuDependencies;
     }
 }
 

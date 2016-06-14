@@ -125,6 +125,15 @@ namespace WitcherScriptMerger
             return mergedModName;
         }
 
+        public static string RetrieveMergedModDir()
+        {
+            var modName = RetrieveMergedModName();
+            return 
+                modName != null
+                ? Path.Combine(ModsDirectory, modName)
+                : null;
+        }
+
         static bool ConfirmInvalidModName(string mergedModName)
         {
             return (DialogResult.Yes == Program.MainForm.ShowMessage(

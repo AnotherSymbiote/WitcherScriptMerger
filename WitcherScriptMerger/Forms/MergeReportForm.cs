@@ -48,32 +48,32 @@ namespace WitcherScriptMerger.Forms
 
         void btnOpenFile1_Click(object sender, EventArgs e)
         {
-            TryOpenFile(txtFilePath1.Text);
+            Program.TryOpenFile(txtFilePath1.Text);
         }
 
         void btnOpenFile2_Click(object sender, EventArgs e)
         {
-            TryOpenFile(txtFilePath2.Text);
+            Program.TryOpenFile(txtFilePath2.Text);
         }
 
         void btnOpenOutputFile_Click(object sender, EventArgs e)
         {
-            TryOpenFile(txtMergedPath.Text);
+            Program.TryOpenFile(txtMergedPath.Text);
         }
 
         void btnOpenDir1_Click(object sender, EventArgs e)
         {
-            TryOpenFileDir(txtFilePath1.Text);
+            Program.TryOpenFileLocation(txtFilePath1.Text);
         }
 
         void btnOpenDir2_Click(object sender, EventArgs e)
         {
-            TryOpenFileDir(txtFilePath2.Text);
+            Program.TryOpenFileLocation(txtFilePath2.Text);
         }
 
         void btnOpenOutputDir_Click(object sender, EventArgs e)
         {
-            TryOpenFileDir(txtMergedPath.Text);
+            Program.TryOpenFileLocation(txtMergedPath.Text);
         }
 
         void btnOK_Click(object sender, EventArgs e)
@@ -82,23 +82,6 @@ namespace WitcherScriptMerger.Forms
         }
 
         #endregion
-
-        void TryOpenFile(string path)
-        {
-            if (File.Exists(path))
-                System.Diagnostics.Process.Start(path);
-            else
-                Program.MainForm.ShowMessage("Can't find file: " + path);
-        }
-
-        void TryOpenFileDir(string filePath)
-        {
-            string dirPath = Path.GetDirectoryName(filePath);
-            if (Directory.Exists(dirPath))
-                System.Diagnostics.Process.Start(dirPath);
-            else
-                Program.MainForm.ShowMessage("Can't find directory: " + dirPath);
-        }
 
         void txt_KeyDown(object sender, KeyEventArgs e)
         {

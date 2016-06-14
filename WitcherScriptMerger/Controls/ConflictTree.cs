@@ -61,7 +61,7 @@ namespace WitcherScriptMerger.Controls
             // contextPrioritizeMod
             _contextPrioritizeMod.Name = "contextPrioritizeMod";
             _contextPrioritizeMod.Size = new Size(225, 22);
-            _contextPrioritizeMod.Text = "Set Mod Priority...";
+            _contextPrioritizeMod.Text = "Set Overall Mod Priority...";
             _contextPrioritizeMod.ToolTipText = "Lets you define the load order of your mods";
             _contextPrioritizeMod.Click += ContextPrioritizeMod;
 
@@ -169,7 +169,7 @@ namespace WitcherScriptMerger.Controls
                     _contextPrioritizeMod.Available = true;
 
                     _contextToggleMod.Available = true;
-                    _contextToggleMod.Text = $"{(Program.LoadOrder.IsModDisabledByName(ClickedNode.Text) ? "Enable" : "Disable")} Mod";
+                    _contextToggleMod.Text = $"{(Program.LoadOrder.IsModDisabledByName(ClickedNode.Text) ? "Enable" : "Disable")} Mod Completely";
                     _contextRemoveFromCustomLoadOrder.Available = Program.LoadOrder.Contains(ClickedNode.Text);
                 }
             }

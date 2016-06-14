@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 using WitcherScriptMerger.Forms;
 using WitcherScriptMerger.LoadOrder;
@@ -47,6 +48,30 @@ namespace WitcherScriptMerger
                 "Script Merger Error",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
+        }
+
+        public static void TryOpenFile(string path)
+        {
+            if (File.Exists(path))
+                System.Diagnostics.Process.Start(path);
+            else
+                MainForm.ShowMessage("Can't find file: " + path);
+        }
+        public static void TryOpenFileLocation(string filePath)
+        {
+            string dirPath = Path.GetDirectoryName(filePath);
+            if (Directory.Exists(dirPath))
+                System.Diagnostics.Process.Start(dirPath);
+            else
+                MainForm.ShowMessage("Can't find directory: " + dirPath);
+        }
+
+        public static void TryOpenDirectory(string dirPath)
+        {
+            if (Directory.Exists(dirPath))
+                System.Diagnostics.Process.Start(dirPath);
+            else
+                MainForm.ShowMessage("Can't find directory: " + dirPath);
         }
     }
 

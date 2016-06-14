@@ -884,6 +884,8 @@ namespace WitcherScriptMerger.Forms
 
         #endregion
 
+        #region Menus
+
         void menuDependencies_Click(object sender, EventArgs e)
         {
             using (var dependencyForm = new DependencyForm())
@@ -904,5 +906,37 @@ namespace WitcherScriptMerger.Forms
                     .RepackBundleAsync(bundlePath);
             }
         }
+
+        private void menuOpenLoadOrderFile_Click(object sender, EventArgs e)
+        {
+            Program.TryOpenFile(Program.LoadOrder.FilePath);
+        }
+
+        private void menuOpenMergedModDir_Click(object sender, EventArgs e)
+        {
+            Program.TryOpenDirectory(Paths.RetrieveMergedModDir());
+        }
+
+        private void menuOpenBundleContentDir_Click(object sender, EventArgs e)
+        {
+            Program.TryOpenDirectory(Paths.MergedBundleContent);
+        }
+
+        private void menuFile_DropDownOpening(object sender, EventArgs e)
+        {
+            menuRepackBundle.Enabled = Directory.Exists(Paths.MergedBundleContent);
+        }
+
+        private void menuOpen_DropDownOpening(object sender, EventArgs e)
+        {
+            menuOpenLoadOrderFile.Enabled = File.Exists(Program.LoadOrder.FilePath);
+
+            var mergedModDir = Paths.RetrieveMergedModDir();
+            menuOpenMergedModDir.Enabled = (mergedModDir != null && Directory.Exists(mergedModDir));
+
+            menuOpenBundleContentDir.Enabled = Directory.Exists(Paths.MergedBundleContent);
+        }
+
+        #endregion
     }
 }
