@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using WitcherScriptMerger.FileIndex;
@@ -150,7 +151,9 @@ namespace WitcherScriptMerger.Controls
 
             if (ClickedNode != null)
             {
-                if (IsFileNode(ClickedNode) && !((ModFileCategory)ClickedNode.Parent.Tag).IsBundled)
+                if (IsFileNode(ClickedNode)
+                    && !((ModFileCategory)ClickedNode.Parent.Tag).IsBundled
+                    && File.Exists((string)ClickedNode.Tag))
                 {
                     _contextOpenVanillaFile.Available = true;
                     _contextOpenVanillaFileDir.Available = true;
