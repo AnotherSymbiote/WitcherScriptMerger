@@ -420,6 +420,9 @@ namespace WitcherScriptMerger.Forms
         {
             progressBar.Value = e.ProgressPercentage;
             lblProgressCurrentAction.Text = e.UserState as string;
+
+            TaskbarProgress.SetState(this.Handle, TaskbarProgress.TaskbarStates.Normal);
+            TaskbarProgress.SetValue(this.Handle, e.ProgressPercentage, 100);
         }
 
         void OnRefreshConflictsComplete(object sender, RunWorkerCompletedEventArgs e)
@@ -807,6 +810,17 @@ namespace WitcherScriptMerger.Forms
             progressBar.Value = 0;
             lblProgressCurrentPhase.Text = progressOf;
             progressBar.Style = style;
+
+            switch (style)
+            {
+                case ProgressBarStyle.Continuous:
+                    TaskbarProgress.SetValue(this.Handle, 0, 100);
+                    TaskbarProgress.SetState(this.Handle, TaskbarProgress.TaskbarStates.Normal);
+                    break;
+                case ProgressBarStyle.Marquee:
+                    TaskbarProgress.SetState(this.Handle, TaskbarProgress.TaskbarStates.Indeterminate);
+                    break;
+            }
         }
 
         void HideProgressScreen()
@@ -814,6 +828,8 @@ namespace WitcherScriptMerger.Forms
             pnlProgress.Visible = false;
             txtGameDir.Enabled = btnSelectGameDir.Enabled = splitContainer.Panel1.Enabled = splitContainer.Panel2.Enabled = true;
             treMerges.Select();
+
+            TaskbarProgress.SetState(this.Handle, TaskbarProgress.TaskbarStates.NoProgress);
         }
 
         #endregion
