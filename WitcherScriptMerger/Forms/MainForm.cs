@@ -265,7 +265,13 @@ namespace WitcherScriptMerger.Forms
                     foreach (string modName in merge.ModNames)
                     {
                         string modFilePath = merge.GetModFile(modName);
-                        if (!File.Exists(modFilePath) && ConfirmDeleteChangedMerge(merge, modName))
+                        if (!File.Exists(modFilePath) && ConfirmDeleteMergeForMissingMod(merge, modName))
+                        {
+                            missingModFile = true;
+                            break;
+                        }
+                        var modLoadSetting = Program.LoadOrder.GetModLoadSettingByName(modName);
+                        if (modLoadSetting != null && !modLoadSetting.IsEnabled && ConfirmDeleteMergeForDisabledMod(merge, modName))
                         {
                             missingModFile = true;
                             break;
@@ -339,10 +345,10 @@ namespace WitcherScriptMerger.Forms
                 MessageBoxIcon.Question));
         }
 
-        bool ConfirmDeleteChangedMerge(Merge merge, string missingModName)
+        bool ConfirmDeleteMergeForMissingMod(Merge merge, string modName)
         {
             string msg =
-                $"Can't find the '{missingModName}' version of the following file, " +
+                $"Can't find the '{modName}' version of the following file, " +
                 "perhaps because the mod was uninstalled or updated.\n\n" +
                 $"{merge.RelativePath}\n\n";
 
@@ -353,6 +359,21 @@ namespace WitcherScriptMerger.Forms
             return (DialogResult.Yes == ShowMessage(
                 msg,
                 "Missing Merge Inventory File",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question));
+        }
+
+        bool ConfirmDeleteMergeForDisabledMod(Merge merge, string modName)
+        {
+            string msg =
+                $"In your custom load order, {modName} is disabled." +
+                "\nDelete the following merge that includes the disabled mod?" +
+                $"\n\n{merge.RelativePath}" +
+                $"\n\n{string.Join("\n", merge.ModNames)}";
+
+            return (DialogResult.Yes == ShowMessage(
+                msg,
+                "Disabled Mod in Merge",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question));
         }

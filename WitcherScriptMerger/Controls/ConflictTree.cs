@@ -169,7 +169,10 @@ namespace WitcherScriptMerger.Controls
                     _contextPrioritizeMod.Available = true;
 
                     _contextToggleMod.Available = true;
-                    _contextToggleMod.Text = $"{(Program.LoadOrder.IsModDisabledByName(ClickedNode.Text) ? "Enable" : "Disable")} Mod Completely";
+                    _contextToggleMod.Text =
+                        Program.LoadOrder.IsModDisabledByName(ClickedNode.Text)
+                        ? "Enable Mod"
+                        : "Disable Mod";
                     _contextRemoveFromCustomLoadOrder.Available = Program.LoadOrder.Contains(ClickedNode.Text);
                 }
             }
