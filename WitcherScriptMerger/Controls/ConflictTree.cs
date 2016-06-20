@@ -147,7 +147,7 @@ namespace WitcherScriptMerger.Controls
                 {
                     fileNode.Checked = isChecked;
                     foreach (var modNode in fileNode.GetTreeNodes())
-                        modNode.Checked = isChecked;
+                        modNode.SetCheckedIfVisible(isChecked);
                 }
             }
             Program.MainForm.EnableMergeIfValidSelection();
