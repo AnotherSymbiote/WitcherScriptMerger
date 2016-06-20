@@ -77,7 +77,6 @@ namespace WitcherScriptMerger.Controls
             // contextRemoveFromCustomLoadOrder
             _contextRemoveFromCustomLoadOrder.Name = "contextRemoveFromCustomLoadOrder";
             _contextRemoveFromCustomLoadOrder.Size = new Size(225, 22);
-            _contextRemoveFromCustomLoadOrder.Text = "Clear Priority && Disabled State";
             _contextRemoveFromCustomLoadOrder.ToolTipText = "Removes this mod's custom load order settings";
             _contextRemoveFromCustomLoadOrder.Click += ContextRemoveFromCustomLoadOrder;
         }
@@ -171,12 +170,19 @@ namespace WitcherScriptMerger.Controls
                     _contextCustomLoadOrderSeparator.Available = true;
                     _contextPrioritizeMod.Available = true;
 
+                    bool isDisabled = Program.LoadOrder.IsModDisabledByName(ClickedNode.Text);
+
                     _contextToggleMod.Available = true;
                     _contextToggleMod.Text =
-                        Program.LoadOrder.IsModDisabledByName(ClickedNode.Text)
+                        isDisabled
                         ? "Enable Mod"
                         : "Disable Mod";
+
                     _contextRemoveFromCustomLoadOrder.Available = Program.LoadOrder.Contains(ClickedNode.Text);
+                    _contextRemoveFromCustomLoadOrder.Text =
+                        isDisabled
+                        ? "Clear Priority && Disabled State"
+                        : "Clear Priority";
                 }
             }
             else if (!this.IsEmpty())
@@ -199,6 +205,8 @@ namespace WitcherScriptMerger.Controls
                 inputVal = prompt.ShowDialog(Program.LoadOrder.GetPriorityByName(modName));
             }
 
+            RightClickedNode.BackColor = Color.Transparent;
+
             if (!inputVal.HasValue)
                 return;
 
@@ -206,8 +214,6 @@ namespace WitcherScriptMerger.Controls
             Program.LoadOrder.SetPriorityByName(modName, inputVal.Value);
             Program.LoadOrder.AddMergedModIfMissing();
             Program.LoadOrder.Save();
-
-            RightClickedNode.BackColor = Color.Transparent;
 
             Program.MainForm.SetStylesForCustomLoadOrder();
         }
