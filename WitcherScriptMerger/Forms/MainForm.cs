@@ -332,7 +332,9 @@ namespace WitcherScriptMerger.Forms
         {
             string msg =
                 "Can't find the merged version of the following file.\n\n" +
-                $"{merge.RelativePath}\n\n";
+                $"{merge.RelativePath}\n\n" +
+                "Expected path:\n" +
+                merge.GetMergedFile() + "\n\n";
 
             msg += merge.IsBundleContent
                 ? "Remove from Merged Files list & repack merged bundle?"
@@ -350,7 +352,9 @@ namespace WitcherScriptMerger.Forms
             string msg =
                 $"Can't find the '{modName}' version of the following file, " +
                 "perhaps because the mod was uninstalled or updated.\n\n" +
-                $"{merge.RelativePath}\n\n";
+                $"{merge.RelativePath}\n\n" +
+                "Expected path:\n" +
+                merge.GetModFile(modName) + "\n\n";
 
             msg += merge.IsBundleContent
                 ? "Delete the affected merge & repack the merged bundle?"
