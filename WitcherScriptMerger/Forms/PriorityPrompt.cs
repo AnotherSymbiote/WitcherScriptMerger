@@ -4,7 +4,7 @@ using WitcherScriptMerger.LoadOrder;
 
 namespace WitcherScriptMerger.Forms
 {
-    public class NumericPrompt : Form
+    public class PriorityPrompt : Form
     {
         const int Spacing = 5;
 
@@ -12,7 +12,7 @@ namespace WitcherScriptMerger.Forms
         TextBox _innerTextBox;
         Button _okButton;
 
-        public int? ShowDialog(string caption, int value = 0)
+        public int? ShowDialog(int value = 0)
         {
             _inputField = new NumericUpDown
             {
@@ -38,7 +38,7 @@ namespace WitcherScriptMerger.Forms
             _okButton.Top = _inputField.Top - (System.Math.Abs(_okButton.Height - _inputField.Height) / 2);
 
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Text = caption;
+            Text = "Set Priority";
             ClientSize = new Size
             {
                 Width = Spacing + _inputField.Width + Spacing + _okButton.Width + Spacing,
@@ -61,7 +61,7 @@ namespace WitcherScriptMerger.Forms
                 _inputField.Value = value;
 
             return
-                ShowDialog() == DialogResult.OK
+                base.ShowDialog() == DialogResult.OK
                 ? (int?)System.Convert.ToInt32(_inputField.Value)
                 : null;
         }

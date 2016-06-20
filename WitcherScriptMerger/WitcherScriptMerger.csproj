@@ -92,7 +92,9 @@
     <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\NumericPrompt.cs" />
+    <Compile Include="Forms\PriorityPrompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Inventory\Merge.cs" />
     <Compile Include="Inventory\MergeInventory.cs" />
     <Compile Include="Inventory\MergeProgressInfo.cs" />
