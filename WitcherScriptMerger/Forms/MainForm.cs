@@ -321,7 +321,7 @@ namespace WitcherScriptMerger.Forms
             treMerges.ScrollToTop();
             treMerges.SetFontBold(SMTree.LevelType.Categories);
             foreach (var modNode in treMerges.ModNodes)
-                modNode.HideCheckBox();
+                modNode.SetIsCheckBoxVisible(false);
 
             UpdateStatusText();
             EnableUnmergeIfValidSelection();
@@ -490,8 +490,6 @@ namespace WitcherScriptMerger.Forms
                     }
                 }
 
-                SetStylesForCustomLoadOrder();
-
                 treConflicts.Sort();
                 treConflicts.ExpandAll();
                 treConflicts.Select();
@@ -499,17 +497,20 @@ namespace WitcherScriptMerger.Forms
                 {
                     if (!(catNode.Tag as ModFileCategory).IsSupported)
                     {
-                        catNode.HideCheckBox();
+                        catNode.SetIsCheckBoxVisible(false);
                         foreach (var fileNode in catNode.GetTreeNodes())
                         {
-                            fileNode.HideCheckBox();
+                            fileNode.SetIsCheckBoxVisible(false);
                             foreach (var modNode in fileNode.GetTreeNodes())
-                                modNode.HideCheckBox();
+                                modNode.SetIsCheckBoxVisible(false);
                         }
                         if (menuCollapseNotMergeable.Checked)
                             catNode.Collapse();
                     }
                 }
+
+                SetStylesForCustomLoadOrder();
+
                 foreach (var fileNode in treConflicts.FileNodes)
                 {
                     if (menuCollapseCustomLoadOrder.Checked && fileNode.ForeColor == ConflictTree.ResolvedForeColor)
@@ -571,7 +572,11 @@ namespace WitcherScriptMerger.Forms
                         modNode.ToolTipText = "This mod is disabled in your custom load order";
                         modNode.ForeColor = System.Drawing.Color.Gray;
                         modNode.SetFontItalic();
+                        modNode.Checked = false;
+                        modNode.SetIsCheckBoxVisible(false);
                     }
+                    else if ((fileNode.Parent.Tag as ModFileCategory).IsSupported)
+                        modNode.SetIsCheckBoxVisible(true);
                 }
             }
         }

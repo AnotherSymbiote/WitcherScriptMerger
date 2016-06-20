@@ -77,8 +77,8 @@ namespace WitcherScriptMerger.Controls
             // contextRemoveFromCustomLoadOrder
             _contextRemoveFromCustomLoadOrder.Name = "contextRemoveFromCustomLoadOrder";
             _contextRemoveFromCustomLoadOrder.Size = new Size(225, 22);
-            _contextRemoveFromCustomLoadOrder.Text = "Remove Mod Load Order Setting";
-            _contextRemoveFromCustomLoadOrder.ToolTipText = "Removes this mod's explicit priority and enabled/disabled state";
+            _contextRemoveFromCustomLoadOrder.Text = "Clear Priority & Disabled State";
+            _contextRemoveFromCustomLoadOrder.ToolTipText = "Removes this mod's custom load order settings";
             _contextRemoveFromCustomLoadOrder.Click += ContextRemoveFromCustomLoadOrder;
         }
 
@@ -88,15 +88,15 @@ namespace WitcherScriptMerger.Controls
             {
                 foreach (var fileNode in ClickedNode.GetTreeNodes())
                 {
-                    fileNode.Checked = ClickedNode.Checked;
+                    fileNode.SetCheckedIfVisible(ClickedNode.Checked);
                     foreach (var modNode in fileNode.GetTreeNodes())
-                        modNode.Checked = ClickedNode.Checked;
+                        modNode.SetCheckedIfVisible(ClickedNode.Checked);
                 }
             }
             else if (IsFileNode(ClickedNode))
             {
                 foreach (var modNode in ClickedNode.GetTreeNodes())
-                    modNode.Checked = ClickedNode.Checked;
+                    modNode.SetCheckedIfVisible(ClickedNode.Checked);
 
                 var catNode = ClickedNode.Parent;
                 catNode.Checked = catNode.GetTreeNodes().All(node => node.Checked);
@@ -218,6 +218,14 @@ namespace WitcherScriptMerger.Controls
             Program.LoadOrder.Save();
 
             Program.MainForm.SetStylesForCustomLoadOrder();
+
+            var fileNode = RightClickedNode.Parent;
+
+            fileNode.Checked = fileNode.GetTreeNodes()
+                .Where(modNode => modNode.IsCheckBoxVisible())
+                .All(modNode => modNode.Checked);
+
+            Program.MainForm.EnableMergeIfValidSelection();
         }
 
         private void ContextRemoveFromCustomLoadOrder(object sender, EventArgs e)
