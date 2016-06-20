@@ -8,9 +8,13 @@ namespace WitcherScriptMerger.Forms
     {
         const int Spacing = 5;
 
+        NumericUpDown _inputField;
+        TextBox _innerTextBox;
+        Button _okButton;
+
         public int? ShowDialog(string caption, int value = 0)
         {
-            var inputField = new NumericUpDown
+            _inputField = new NumericUpDown
             {
                 Left = Spacing,
                 Top = Spacing,
@@ -20,42 +24,78 @@ namespace WitcherScriptMerger.Forms
                 Minimum = CustomLoadOrder.TopPriority + 1,
                 Maximum = CustomLoadOrder.BottomPriority,
             };
-            var okButton = new Button
+            _innerTextBox = (TextBox)_inputField.Controls[1];
+            _innerTextBox.KeyDown += InputField_KeyDown;
+            _innerTextBox.TextChanged += InputField_TextChanged;
+
+            _okButton = new Button
             {
                 Text = "&OK",
-                Left = inputField.Left + inputField.Width + Spacing,
+                Left = _inputField.Left + _inputField.Width + Spacing,
                 Width = 50,
                 DialogResult = DialogResult.OK
             };
-            okButton.Top = inputField.Top - (System.Math.Abs(okButton.Height - inputField.Height) / 2);
+            _okButton.Top = _inputField.Top - (System.Math.Abs(_okButton.Height - _inputField.Height) / 2);
 
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Text = caption;
             ClientSize = new Size
             {
-                Width = Spacing + inputField.Width + Spacing + okButton.Width + Spacing,
-                Height = Spacing + inputField.Height + Spacing
+                Width = Spacing + _inputField.Width + Spacing + _okButton.Width + Spacing,
+                Height = Spacing + _inputField.Height + Spacing
             };
             StartPosition = FormStartPosition.CenterParent;
             MinimizeBox = MaximizeBox = false;
-            AcceptButton = okButton;
+            AcceptButton = _okButton;
             Icon = Program.MainForm.Icon;
             Controls.AddRange(
                 new Control[]
                 {
-                    inputField,
-                    okButton
+                    _inputField,
+                    _okButton
                 });
             KeyPreview = true;
             KeyDown += OnKeyDown;
 
-            if (value >= inputField.Minimum && value <= inputField.Maximum)
-                inputField.Value = value;
+            if (value >= _inputField.Minimum && value <= _inputField.Maximum)
+                _inputField.Value = value;
 
             return
                 ShowDialog() == DialogResult.OK
-                ? (int?)System.Convert.ToInt32(inputField.Value)
+                ? (int?)System.Convert.ToInt32(_inputField.Value)
                 : null;
+        }
+
+        private void InputField_TextChanged(object sender, System.EventArgs e)
+        {
+            _okButton.Enabled = !string.IsNullOrWhiteSpace((sender as TextBox).Text);
+        }
+
+        void InputField_KeyDown(object sender, KeyEventArgs e)
+        {
+            var txtBox = sender as TextBox;
+
+            e.SuppressKeyPress =
+                (e.KeyCode == Keys.Subtract) ||
+                (IsCharacterCountMaxed() && !HasSelection() && IsNumeric(e.KeyCode)) ||
+                (_innerTextBox.SelectionStart == 0 && (e.KeyCode == Keys.D0 || e.KeyCode == Keys.NumPad0));
+        }
+
+        bool IsCharacterCountMaxed()
+        {
+            return _innerTextBox.Text.Length == _inputField.Maximum.ToString().Length;
+        }
+
+        bool HasSelection()
+        {
+            return _innerTextBox.SelectionLength > 0;
+        }
+
+        bool IsNumeric(Keys keyCode)
+        {
+            return
+                (keyCode >= Keys.D0 && keyCode <= Keys.D9) ||
+                (keyCode >= Keys.NumPad0 && keyCode <= Keys.NumPad9);
         }
 
         void OnKeyDown(object sender, KeyEventArgs e)

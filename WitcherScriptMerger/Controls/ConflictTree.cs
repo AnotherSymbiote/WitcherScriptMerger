@@ -77,7 +77,7 @@ namespace WitcherScriptMerger.Controls
             // contextRemoveFromCustomLoadOrder
             _contextRemoveFromCustomLoadOrder.Name = "contextRemoveFromCustomLoadOrder";
             _contextRemoveFromCustomLoadOrder.Size = new Size(225, 22);
-            _contextRemoveFromCustomLoadOrder.Text = "Clear Priority & Disabled State";
+            _contextRemoveFromCustomLoadOrder.Text = "Clear Priority && Disabled State";
             _contextRemoveFromCustomLoadOrder.ToolTipText = "Removes this mod's custom load order settings";
             _contextRemoveFromCustomLoadOrder.Click += ContextRemoveFromCustomLoadOrder;
         }
