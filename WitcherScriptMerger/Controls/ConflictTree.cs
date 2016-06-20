@@ -189,6 +189,8 @@ namespace WitcherScriptMerger.Controls
 
         void ContextPrioritizeMod(object sender, EventArgs e)
         {
+            RightClickedNode.BackColor = Color.Gainsboro;
+
             var modName = RightClickedNode.Text;
             int? inputVal;
 
@@ -204,6 +206,8 @@ namespace WitcherScriptMerger.Controls
             Program.LoadOrder.SetPriorityByName(modName, inputVal.Value);
             Program.LoadOrder.AddMergedModIfMissing();
             Program.LoadOrder.Save();
+
+            RightClickedNode.BackColor = Color.Transparent;
 
             Program.MainForm.SetStylesForCustomLoadOrder();
         }
