@@ -11,7 +11,12 @@ namespace WitcherScriptMerger.Controls
 {
     public class ConflictTree : SMTree
     {
-        #region Context Menu Members
+        #region Members
+
+        public static readonly Color UnresolvedForeColor = Color.Red;
+        public static readonly Color ResolvedForeColor = Color.Purple;
+
+        public static readonly new Color FileNodeForeColor = UnresolvedForeColor;
 
         ToolStripMenuItem _contextOpenVanillaFile = new ToolStripMenuItem();
         ToolStripMenuItem _contextOpenVanillaFileDir = new ToolStripMenuItem();
@@ -24,8 +29,6 @@ namespace WitcherScriptMerger.Controls
 
         public ConflictTree()
         {
-            FileNodeForeColor = Color.Red;
-
             ContextOpenRegion.Items.AddRange(new ToolStripItem[]
             {
                 _contextOpenVanillaFile,

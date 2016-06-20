@@ -562,7 +562,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treConflicts.CheckBoxes = true;
-            this.treConflicts.FileNodeForeColor = System.Drawing.Color.Red;
             this.treConflicts.Location = new System.Drawing.Point(12, 30);
             this.treConflicts.Name = "treConflicts";
             this.treConflicts.ShowNodeToolTips = true;
@@ -578,7 +577,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treMerges.CheckBoxes = true;
-            this.treMerges.FileNodeForeColor = System.Drawing.Color.Blue;
             this.treMerges.Location = new System.Drawing.Point(3, 30);
             this.treMerges.Name = "treMerges";
             this.treMerges.ShowNodeToolTips = true;

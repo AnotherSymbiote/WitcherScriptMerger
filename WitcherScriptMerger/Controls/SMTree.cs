@@ -22,13 +22,13 @@ namespace WitcherScriptMerger.Controls
 
         #region Members
 
+        public static readonly Color FileNodeForeColor = Color.Black;
+
         public List<TreeNode> CategoryNodes => GetNodesAtLevel(LevelType.Categories);
 
         public List<TreeNode> FileNodes => GetNodesAtLevel(LevelType.Files);
 
         public List<TreeNode> ModNodes => GetNodesAtLevel(LevelType.Mods);
-
-        public Color FileNodeForeColor { get; set; }
 
         protected TreeNode ClickedNode = null;
         protected bool IsUpdating = false;

@@ -8,7 +8,9 @@ namespace WitcherScriptMerger.Controls
 {
     public class MergeTree : SMTree
     {
-        #region Context Menu Members
+        #region Members
+
+        public static readonly new Color FileNodeForeColor = Color.Blue;
 
         ToolStripMenuItem _contextOpenMergedFile = new ToolStripMenuItem();
         ToolStripMenuItem _contextOpenMergedFileDir = new ToolStripMenuItem();
@@ -20,7 +22,6 @@ namespace WitcherScriptMerger.Controls
 
         public MergeTree()
         {
-            FileNodeForeColor = Color.Blue;
 
             ContextOpenRegion.Items.AddRange(new ToolStripItem[]
             {

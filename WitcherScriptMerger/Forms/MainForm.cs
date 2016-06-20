@@ -286,7 +286,7 @@ namespace WitcherScriptMerger.Forms
 
                 var fileNode = new TreeNode(merge.RelativePath);
                 fileNode.Tag = merge.GetMergedFile();
-                fileNode.ForeColor = treMerges.FileNodeForeColor;
+                fileNode.ForeColor = MergeTree.FileNodeForeColor;
 
                 var categoryNode = treMerges.GetCategoryNode(merge.Category);
                 if (categoryNode == null)
@@ -512,10 +512,11 @@ namespace WitcherScriptMerger.Forms
                 }
                 foreach (var fileNode in treConflicts.FileNodes)
                 {
-                    if (menuCollapseCustomLoadOrder.Checked && fileNode.ForeColor != treConflicts.FileNodeForeColor)
+                    if (menuCollapseCustomLoadOrder.Checked && fileNode.ForeColor == ConflictTree.ResolvedForeColor)
                         fileNode.Collapse();
                 }
             }
+
             treConflicts.ScrollToTop();
             treConflicts.SetFontBold(SMTree.LevelType.Categories);
             UpdateStatusText();
@@ -538,8 +539,8 @@ namespace WitcherScriptMerger.Forms
 
                 fileNode.ForeColor =
                     isResolved
-                    ? System.Drawing.Color.Purple
-                    : treConflicts.FileNodeForeColor;
+                    ? ConflictTree.ResolvedForeColor
+                    : ConflictTree.UnresolvedForeColor;
 
                 foreach (var modNode in fileNode.GetTreeNodes())
                 {
