@@ -8,8 +8,8 @@ namespace WitcherScriptMerger.LoadOrder
 {
     class CustomLoadOrder
     {
-        public const int MinPriority = 0;
-        public const int MaxPriority = 9999;
+        public const int TopPriority = 0;
+        public const int BottomPriority = 9999;
 
         public readonly string FilePath =
             Path.Combine(
@@ -89,7 +89,7 @@ namespace WitcherScriptMerger.LoadOrder
                     {
                         ModName = mergedModName,
                         IsEnabled = true,
-                        Priority = MinPriority
+                        Priority = TopPriority
                     });
             }
         }
@@ -167,16 +167,11 @@ namespace WitcherScriptMerger.LoadOrder
                 mod.IsEnabled = !mod.IsEnabled;
             else
             {
-                int bottomPriority =
-                    Mods.Any()
-                    ? Mods.Max(setting => setting.Priority)
-                    : MinPriority;
-
                 Mods.Add(new ModLoadSetting
                 {
                     ModName = modName,
                     IsEnabled = false,
-                    Priority = bottomPriority + 1
+                    Priority = BottomPriority
                 });
             }
         }

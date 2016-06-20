@@ -17,8 +17,8 @@ namespace WitcherScriptMerger.Forms
                 Width = 50,
                 Increment = 1,
                 DecimalPlaces = 0,
-                Minimum = CustomLoadOrder.MinPriority + 1,
-                Maximum = CustomLoadOrder.MaxPriority,
+                Minimum = CustomLoadOrder.TopPriority + 1,
+                Maximum = CustomLoadOrder.BottomPriority,
             };
             var okButton = new Button
             {
