@@ -153,10 +153,8 @@ namespace WitcherScriptMerger
         /// </summary>
         /// <param name="node">The tree node.</param>
         /// <param name="isVisible"><value>true</value> to make the checkbox visible on the tree node; otherwise <value>false</value>.</param>
-        public static void SetIsCheckBoxVisible(this TreeNode node, bool isVisible)
+        public static void SetIsCheckBoxVisible(this TreeNode node, bool isVisible, bool applyToSubtree = false)
         {
-            if (node == null)
-                throw new ArgumentNullException("node");
             if (node.TreeView == null)
                 throw new InvalidOperationException("The node does not belong to a tree.");
             var tvi = new TVITEM
@@ -169,6 +167,14 @@ namespace WitcherScriptMerger
             var result = SendMessage(node.TreeView.Handle, TVM_SETITEM, IntPtr.Zero, ref tvi);
             if (result == IntPtr.Zero)
                 throw new ApplicationException("Error setting TreeNode state.");
+
+            if (applyToSubtree)
+            {
+                foreach (var childNode in node.GetTreeNodes())
+                {
+                    childNode.SetIsCheckBoxVisible(isVisible, applyToSubtree);
+                }
+            }
         }
 
         public static void SetCheckedIfVisible(this TreeNode node, bool isChecked)

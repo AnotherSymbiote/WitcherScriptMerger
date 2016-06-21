@@ -215,7 +215,7 @@ namespace WitcherScriptMerger.Controls
             Program.LoadOrder.AddMergedModIfMissing();
             Program.LoadOrder.Save();
 
-            Program.MainForm.SetStylesForCustomLoadOrder();
+            SetStylesForCustomLoadOrder();
         }
 
         void ContextToggleMod(object sender, EventArgs e)
@@ -227,7 +227,7 @@ namespace WitcherScriptMerger.Controls
             Program.LoadOrder.AddMergedModIfMissing();
             Program.LoadOrder.Save();
 
-            Program.MainForm.SetStylesForCustomLoadOrder();
+            SetStylesForCustomLoadOrder();
 
             var fileNode = RightClickedNode.Parent;
 
@@ -241,7 +241,7 @@ namespace WitcherScriptMerger.Controls
             Program.MainForm.EnableMergeIfValidSelection();
         }
 
-        private void ContextRemoveFromCustomLoadOrder(object sender, EventArgs e)
+        void ContextRemoveFromCustomLoadOrder(object sender, EventArgs e)
         {
             var modName = RightClickedNode.Text;
 
@@ -255,7 +255,63 @@ namespace WitcherScriptMerger.Controls
                 Program.LoadOrder.Save();
             }
 
-            Program.MainForm.SetStylesForCustomLoadOrder();
+            SetStylesForCustomLoadOrder();
+        }
+
+        internal void SetStylesForCustomLoadOrder()
+        {
+            foreach (var fileNode in FileNodes)
+            {
+                var modNames = fileNode.GetTreeNodes().Select(modNode => modNode.Text);
+
+                bool isResolved = Program.LoadOrder.HasResolvedConflict(modNames);
+
+                var topPriorityMod =
+                    isResolved
+                    ? Program.LoadOrder.GetTopPriorityEnabledMod(modNames)
+                    : null;
+
+                fileNode.ForeColor =
+                    isResolved
+                    ? ResolvedForeColor
+                    : UnresolvedForeColor;
+
+                foreach (var modNode in fileNode.GetTreeNodes())
+                {
+                    modNode.NodeFont = DefaultFont;
+                    modNode.ForeColor = DefaultForeColor;
+                    modNode.ToolTipText = "";
+
+                    var priority = Program.LoadOrder.GetPriorityByName(modNode.Text);
+
+                    modNode.ToolTipText =
+                        priority > -1
+                        ? $"Priority {priority}"
+                        : "No Priority";
+
+                    if (modNode.Text.EqualsIgnoreCase(topPriorityMod))
+                    {
+                        if (priority > -1)
+                            modNode.ToolTipText += " - Top priority in this conflict";
+                    }
+                    else if (isResolved)
+                    {
+                        modNode.ToolTipText += " - Overridden by a higher-priority mod";
+                        modNode.ForeColor = Color.Gray;
+                    }
+
+                    if (Program.LoadOrder.IsModDisabledByName(modNode.Text))
+                    {
+                        modNode.ToolTipText = "This mod is disabled in your custom load order";
+                        modNode.ForeColor = Color.Gray;
+                        modNode.SetFontItalic();
+                        modNode.Checked = false;
+                        modNode.SetIsCheckBoxVisible(false);
+                    }
+                    else if ((fileNode.Parent.Tag as ModFileCategory).IsSupported)
+                        modNode.SetIsCheckBoxVisible(true);
+                }
+            }
         }
     }
 }
