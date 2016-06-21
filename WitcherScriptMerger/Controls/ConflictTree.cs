@@ -231,9 +231,12 @@ namespace WitcherScriptMerger.Controls
 
             var fileNode = RightClickedNode.Parent;
 
-            fileNode.Checked = fileNode.GetTreeNodes()
-                .Where(modNode => modNode.IsCheckBoxVisible())
-                .All(modNode => modNode.Checked);
+            if ((fileNode.Parent.Tag as ModFileCategory).IsSupported)
+            {
+                fileNode.Checked = fileNode.GetTreeNodes()
+                    .Where(modNode => modNode.IsCheckBoxVisible())
+                    .All(modNode => modNode.Checked);
+            }
 
             Program.MainForm.EnableMergeIfValidSelection();
         }
