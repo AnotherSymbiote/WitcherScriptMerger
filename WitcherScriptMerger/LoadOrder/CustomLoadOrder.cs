@@ -52,11 +52,11 @@ namespace WitcherScriptMerger.LoadOrder
                     string modName = line.Substring(1, line.Length - 2);  // Trim brackets
                     currModSetting = new ModLoadSetting(modName);
                 }
-                else if (line.StartsWith("Enabled"))
+                else if (line.StartsWithIgnoreCase("Enabled"))
                 {
                     currModSetting.IsEnabled = line.EndsWith("1");
                 }
-                else if (line.StartsWith("Priority"))
+                else if (line.StartsWithIgnoreCase("Priority"))
                 {
                     string priorityString = line.Substring(line.IndexOf('=') + 1);
                     currModSetting.Priority = int.Parse(priorityString);

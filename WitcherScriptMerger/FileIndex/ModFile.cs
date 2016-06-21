@@ -84,7 +84,7 @@ namespace WitcherScriptMerger.FileIndex
 
         public static string GetModNameFromPath(string modFilePath)
         {
-            if (!modFilePath.StartsWith(Paths.ModsDirectory))  // Merged bundle content has internal path, not derived from mod folder
+            if (!modFilePath.StartsWithIgnoreCase(Paths.ModsDirectory))  // Merged bundle content has internal path, not derived from mod folder
                 return Paths.MergedBundleContent;
 
             int nameStart = Paths.ModsDirectory.Length + 1;
@@ -92,15 +92,15 @@ namespace WitcherScriptMerger.FileIndex
             return name.Substring(0, name.IndexOf('\\'));
         }
 
-        public static bool IsScript(string path) => path.EndsWith(".ws");
+        public static bool IsScript(string path) => path.EndsWithIgnoreCase(".ws");
 
-        public static bool IsXml(string path) => path.EndsWith(".xml");
+        public static bool IsXml(string path) => path.EndsWithIgnoreCase(".xml");
 
         public static bool IsFlatFile(string path) => (IsScript(path) || IsXml(path));
 
-        public static bool IsBundle(string path) => path.EndsWith(".bundle");
+        public static bool IsBundle(string path) => path.EndsWithIgnoreCase(".bundle");
 
-        public static bool IsTextFile(string path) => (path.EndsWith(".ws") || path.EndsWith(".xml") || path.EndsWith(".txt") || path.EndsWith(".csv"));
+        public static bool IsTextFile(string path) => (path.EndsWithIgnoreCase(".ws") || path.EndsWithIgnoreCase(".xml") || path.EndsWithIgnoreCase(".txt") || path.EndsWithIgnoreCase(".csv"));
 
         public override string ToString()
         {

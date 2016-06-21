@@ -34,6 +34,16 @@ namespace WitcherScriptMerger
             return s.LastIndexOf(value, startIndex, StringComparison.InvariantCultureIgnoreCase);
         }
 
+        public static bool StartsWithIgnoreCase(this string s, string value)
+        {
+            return s.StartsWith(value, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public static bool EndsWithIgnoreCase(this string s, string value)
+        {
+            return s.EndsWith(value, StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public static bool IsAlphaNumeric(this string s)
         {
             return new Regex("^[_a-zA-Z0-9]*$").IsMatch(s);

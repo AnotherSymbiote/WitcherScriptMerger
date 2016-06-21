@@ -528,7 +528,7 @@ namespace WitcherScriptMerger.Forms
             string dirChoice = GetUserDirectoryChoice();
             if (!string.IsNullOrWhiteSpace(dirChoice))
             {
-                if (dirChoice.EndsWith("The Witcher 3 Wild Hunt\\Mods"))  // Auto-truncate "Mods"
+                if (dirChoice.EndsWithIgnoreCase("The Witcher 3 Wild Hunt\\Mods"))  // Auto-truncate "Mods"
                     dirChoice = Path.GetDirectoryName(dirChoice);
 
                 txtGameDir.Text = dirChoice;
@@ -556,7 +556,7 @@ namespace WitcherScriptMerger.Forms
                 return;
             }
 
-            if (txtGameDir.Text.EndsWith("The Witcher 3 Wild Hunt\\Mods"))  // Auto-truncate "Mods"
+            if (txtGameDir.Text.EndsWithIgnoreCase("The Witcher 3 Wild Hunt\\Mods"))  // Auto-truncate "Mods"
                 txtGameDir.Text = Path.GetDirectoryName(txtGameDir.Text);
 
             if (Paths.ValidateModsDirectory())
@@ -572,7 +572,7 @@ namespace WitcherScriptMerger.Forms
                 return;
             }
 
-            if (txtGameDir.Text.EndsWith("The Witcher 3 Wild Hunt\\Mods"))  // Auto-truncate "Mods"
+            if (txtGameDir.Text.EndsWithIgnoreCase("The Witcher 3 Wild Hunt\\Mods"))  // Auto-truncate "Mods"
                 txtGameDir.Text = Path.GetDirectoryName(txtGameDir.Text);
             
             RefreshTrees();

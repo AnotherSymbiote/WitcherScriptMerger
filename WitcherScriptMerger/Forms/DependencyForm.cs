@@ -148,7 +148,7 @@ namespace WitcherScriptMerger.Forms
         void ValidateTextBox(TextBox txt, string validExtension)
         {
             string path = txt.Text;
-            txt.BackColor = (path.EndsWith(validExtension) && File.Exists(path)
+            txt.BackColor = (path.EndsWithIgnoreCase(validExtension) && File.Exists(path)
                 ? Color.LightGreen
                 : Color.LightPink);
         }
