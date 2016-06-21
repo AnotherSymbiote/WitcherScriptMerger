@@ -17,10 +17,17 @@ namespace WitcherScriptMerger.LoadOrder
                 "The Witcher 3",
                 "mods.settings");
 
-        public List<ModLoadSetting> Mods = new List<ModLoadSetting>();
+        public List<ModLoadSetting> Mods;
         
         public CustomLoadOrder()
         {
+            Refresh();
+        }
+
+        public void Refresh()
+        {
+            Mods = new List<ModLoadSetting>();
+
             if (!File.Exists(FilePath))
                 return;
 
@@ -58,8 +65,9 @@ namespace WitcherScriptMerger.LoadOrder
             if (currModSetting != null)
                 Mods.Add(currModSetting); // Final item
 
-            Mods.OrderBy(m => m.Priority)
-                .ThenBy(m => m.ModName);
+            Mods = Mods.OrderBy(m => m.Priority)
+                .ThenBy(m => m.ModName)
+                .ToList();
         }
 
         public void Save()

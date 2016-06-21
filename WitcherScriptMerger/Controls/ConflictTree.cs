@@ -210,7 +210,7 @@ namespace WitcherScriptMerger.Controls
             if (!inputVal.HasValue)
                 return;
 
-            Program.LoadOrder = new CustomLoadOrder();
+            Program.LoadOrder.Refresh();
             Program.LoadOrder.SetPriorityByName(modName, inputVal.Value);
             Program.LoadOrder.AddMergedModIfMissing();
             Program.LoadOrder.Save();
@@ -222,7 +222,7 @@ namespace WitcherScriptMerger.Controls
         {
             var modName = RightClickedNode.Text;
 
-            Program.LoadOrder = new CustomLoadOrder();
+            Program.LoadOrder.Refresh();
             Program.LoadOrder.ToggleModByName(modName);
             Program.LoadOrder.AddMergedModIfMissing();
             Program.LoadOrder.Save();
@@ -245,14 +245,15 @@ namespace WitcherScriptMerger.Controls
         {
             var modName = RightClickedNode.Text;
 
-            Program.LoadOrder = new CustomLoadOrder();
+            Program.LoadOrder.Refresh();
 
             int index = Program.LoadOrder.Mods.FindIndex(setting => setting.ModName.EqualsIgnoreCase(modName));
 
             if (index > -1)
+            {
                 Program.LoadOrder.Mods.RemoveAt(index);
-
-            Program.LoadOrder.Save();
+                Program.LoadOrder.Save();
+            }
 
             Program.MainForm.SetStylesForCustomLoadOrder();
         }

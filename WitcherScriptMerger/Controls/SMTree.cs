@@ -336,10 +336,10 @@ namespace WitcherScriptMerger.Controls
                 if (IsModNode(ClickedNode))
                 {
                     string filePath = ClickedNode.Tag as string;
-                    if (ModFile.IsFlatFile(filePath))
-                        _contextOpenModFile.Available = _contextOpenModFileDir.Available = true;
-                    else
+                    if (ModFile.IsBundle(filePath))
                         _contextOpenModBundleDir.Available = true;
+                    else
+                        _contextOpenModFile.Available = _contextOpenModFileDir.Available = true;
                 }
             }
 

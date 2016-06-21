@@ -332,7 +332,7 @@ namespace WitcherScriptMerger.Forms
         {
             string msg =
                 "Can't find the merged version of the following file.\n\n" +
-                $"{merge.RelativePath}\n\n" +
+                merge.RelativePath + "\n\n" +
                 "Expected path:\n" +
                 merge.GetMergedFile() + "\n\n";
 
@@ -352,7 +352,7 @@ namespace WitcherScriptMerger.Forms
             string msg =
                 $"Can't find the '{modName}' version of the following file, " +
                 "perhaps because the mod was uninstalled or updated.\n\n" +
-                $"{merge.RelativePath}\n\n" +
+                merge.RelativePath + "\n\n" +
                 "Expected path:\n" +
                 merge.GetModFile(modName) + "\n\n";
 
@@ -370,10 +370,10 @@ namespace WitcherScriptMerger.Forms
         bool ConfirmDeleteMergeForDisabledMod(Merge merge, string modName)
         {
             string msg =
-                $"In your custom load order, {modName} is disabled." +
-                "\nDelete the following merge that includes the disabled mod?" +
-                $"\n\n{merge.RelativePath}" +
-                $"\n\n{string.Join("\n", merge.ModNames)}";
+                $"In your custom load order, {modName} is disabled.\n" +
+                "Delete the following merge that includes the disabled mod?\n\n" +
+                merge.RelativePath + "\n\n" +
+                string.Join("\n", merge.ModNames);
 
             return (DialogResult.Yes == ShowMessage(
                 msg,
@@ -700,7 +700,7 @@ namespace WitcherScriptMerger.Forms
                 RefreshMergeInventory();
             else
             {
-                Program.LoadOrder = new CustomLoadOrder();
+                Program.LoadOrder.Refresh();
                 RefreshMergeTree();
             }
             RefreshConflictsTree(checkBundles);
