@@ -18,14 +18,14 @@ namespace WitcherScriptMerger.LoadOrder
 
         public int Compare(ModLoadSetting x, ModLoadSetting y)
         {
-            if (x.IsEnabled)
+            if (x.IsEnabled.Value)
             {
-                if (y.IsEnabled)
-                    return x.Priority.CompareTo(y.Priority);
+                if (y.IsEnabled.Value)
+                    return x.Priority.Value.CompareTo(y.Priority.Value);
                 else
                     return -1;  // Only x is enabled
             }
-            else if (y.IsEnabled)
+            else if (y.IsEnabled.Value)
                 return 1;  // Only y is enabled
             else
                 return Compare(x.ModName, y.ModName);  // Neither is enabled

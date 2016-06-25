@@ -4,9 +4,9 @@
     {
         public string ModName { get; set; }
 
-        public bool IsEnabled { get; set; }
+        public bool? IsEnabled { get; set; }
 
-        public int Priority { get; set; }
+        public int? Priority { get; set; }
 
         public ModLoadSetting()
         { }
@@ -18,7 +18,7 @@
 
         public override string ToString()
         {
-            return $"{ModName}, priority {Priority}, {(IsEnabled ? "enabled" : "disabled")}";
+            return $"{ModName}, priority {Priority}, {(!IsEnabled.HasValue || IsEnabled.Value ? "enabled" : "disabled")}";
         }
     }
 }

@@ -170,6 +170,11 @@ namespace WitcherScriptMerger.Controls
                     _contextCustomLoadOrderSeparator.Available = true;
                     _contextPrioritizeMod.Available = true;
 
+                    foreach (var item in ContextNodeRegion.Items.Cast<ToolStripItem>())
+                    {
+                        item.Enabled = Program.LoadOrder.IsValid;
+                    }
+
                     bool isDisabled = Program.LoadOrder.IsModDisabledByName(ClickedNode.Text);
 
                     _contextToggleMod.Available = true;

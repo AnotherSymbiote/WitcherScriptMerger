@@ -271,7 +271,7 @@ namespace WitcherScriptMerger.Forms
                             break;
                         }
                         var modLoadSetting = Program.LoadOrder.GetModLoadSettingByName(modName);
-                        if (modLoadSetting != null && !modLoadSetting.IsEnabled && ConfirmDeleteMergeForDisabledMod(merge, modName))
+                        if (modLoadSetting != null && !modLoadSetting.IsEnabled.Value && ConfirmDeleteMergeForDisabledMod(merge, modName))
                         {
                             missingModFile = true;
                             break;
@@ -337,8 +337,8 @@ namespace WitcherScriptMerger.Forms
                 merge.GetMergedFile() + "\n\n";
 
             msg += merge.IsBundleContent
-                ? "Remove from Merged Files list & repack merged bundle?"
-                : "Remove from Merged Files list?";
+                ? "Remove from Merges list & repack merged bundle?"
+                : "Remove from Merges list?";
 
             return (DialogResult.Yes == ShowMessage(
                 msg,
