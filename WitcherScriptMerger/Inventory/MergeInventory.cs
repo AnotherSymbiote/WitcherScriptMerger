@@ -39,10 +39,12 @@ namespace WitcherScriptMerger.Inventory
             try
             {
                 _serializer = new XmlSerializer(typeof(MergeInventory));
-                using (var stream = new FileStream(path, FileMode.Open))
+                using (var stream = File.OpenRead(path))
                 {
                     inventory = (MergeInventory)_serializer.Deserialize(stream);
                 }
+
+                AddMissingHashes(inventory);
             }
             catch
             {
@@ -65,9 +67,15 @@ namespace WitcherScriptMerger.Inventory
                 BundleChanged = true;
         }
 
-        public void AddModToMerge(string modName, Merge m)
+        public void AddModToMerge(string modName, string modFilePath, Merge m)
         {
-            m.ModNames.Add(modName);
+            m.Mods.Add(
+                new FileHash
+                {
+                    Hash = xxHash.ComputeHashHex(modFilePath),
+                    Name = modName
+                });
+
             if (m.Category == Categories.Script)
                 ScriptsChanged = true;
             else if (m.Category == Categories.Xml)
@@ -88,10 +96,40 @@ namespace WitcherScriptMerger.Inventory
 
         public bool HasResolvedConflict(string relPath, string modName)
         {
-            return Merges.Any(merge =>
-                merge.RelativePath.EqualsIgnoreCase(relPath) &&
-                merge.ModNames.Contains(modName) &&
-                (new LoadOrderComparer()).Compare(merge.MergedModName, modName) < 0);
+            var merge = Merges.FirstOrDefault(mrg => mrg.RelativePath.EqualsIgnoreCase(relPath));
+            if (merge == null)
+                return false;
+
+            var mod = merge.Mods.FirstOrDefault(m => m.Name.EqualsIgnoreCase(modName));
+            if (mod == null)
+                return false;
+
+            if (new LoadOrderComparer().Compare(merge.MergedModName, modName) > 0)
+                return false;
+
+            var latestHash = xxHash.ComputeHashHex(merge.GetModFile(modName));
+            return (mod.Hash == latestHash);
+        }
+
+        // Adds file hashes to old inventories that don't have them
+        static void AddMissingHashes(MergeInventory inventory)
+        {
+            bool anyMissing = false;
+
+            foreach (var merge in inventory.Merges)
+            {
+                foreach (var mod in merge.Mods)
+                {
+                    if (mod.Hash == null)
+                    {
+                        anyMissing = true;
+                        mod.Hash = xxHash.ComputeHashHex(merge.GetModFile(mod.Name));
+                    }
+                }
+            }
+
+            if (anyMissing)
+                inventory.Save();
         }
     }
 }

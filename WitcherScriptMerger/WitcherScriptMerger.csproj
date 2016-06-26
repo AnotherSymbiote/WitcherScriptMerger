@@ -63,6 +63,7 @@
     </Compile>
     <Compile Include="Controls\SMTreeSorter.cs" />
     <Compile Include="Controls\ToolStripRegion.cs" />
+    <Compile Include="Inventory\xxHash.cs" />
     <Compile Include="FileIndex\ModFile.cs" />
     <Compile Include="FileIndex\ModFileCategory.cs" />
     <Compile Include="FileIndex\ModFileIndex.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Forms\PriorityPrompt.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Inventory\FileHash.cs" />
     <Compile Include="Inventory\Merge.cs" />
     <Compile Include="Inventory\MergeInventory.cs" />
     <Compile Include="Inventory\MergeProgressInfo.cs" />
@@ -149,6 +151,7 @@
   <ItemGroup>
     <Content Include="WolfMedallion.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if exist "$(TargetPath).locked" del "$(TargetPath).locked"

@@ -246,7 +246,7 @@ namespace WitcherScriptMerger.Forms
             treMerges.Nodes.Clear();
             bool changed = false;
             var bundleMergesPruned = new List<Merge>();
-            var missingModMerges = new List<Merge>();
+            var mergesToDelete = new List<Merge>();
             for (int i = _inventory.Merges.Count - 1; i >= 0; --i)
             {
                 var merge = _inventory.Merges[i];
@@ -261,25 +261,31 @@ namespace WitcherScriptMerger.Forms
                 }
                 else
                 {
-                    bool missingModFile = false;
-                    foreach (string modName in merge.ModNames)
+                    bool willDelete = false;
+                    foreach (var mod in merge.Mods)
                     {
-                        string modFilePath = merge.GetModFile(modName);
-                        if (!File.Exists(modFilePath) && ConfirmDeleteMergeForMissingMod(merge, modName))
+                        string modFilePath = merge.GetModFile(mod.Name);
+                        if (!File.Exists(modFilePath) && ConfirmDeleteMergeForMissingMod(merge, mod.Name))
                         {
-                            missingModFile = true;
+                            willDelete = true;
                             break;
                         }
-                        var modLoadSetting = Program.LoadOrder.GetModLoadSettingByName(modName);
-                        if (modLoadSetting != null && !modLoadSetting.IsEnabled.Value && ConfirmDeleteMergeForDisabledMod(merge, modName))
+                        var modLoadSetting = Program.LoadOrder.GetModLoadSettingByName(mod.Name);
+                        if (modLoadSetting != null && !modLoadSetting.IsEnabled.Value && ConfirmDeleteMergeForDisabledMod(merge, mod.Name))
                         {
-                            missingModFile = true;
+                            willDelete = true;
+                            break;
+                        }
+                        var latestHash = xxHash.ComputeHashHex(modFilePath);
+                        if (latestHash != null && mod.Hash != latestHash && ConfirmDeleteForChangedHash(merge, mod.Hash, latestHash, mod.Name))
+                        {
+                            willDelete = true;
                             break;
                         }
                     }
-                    if (missingModFile)
+                    if (willDelete)
                     {
-                        missingModMerges.Add(merge);
+                        mergesToDelete.Add(merge);
                         continue;
                     }
                 }
@@ -298,16 +304,16 @@ namespace WitcherScriptMerger.Forms
                 }
                 categoryNode.Nodes.Add(fileNode);
 
-                foreach (var modName in merge.ModNames)
+                foreach (var mod in merge.Mods)
                 {
-                    var modNode = new TreeNode(modName);
-                    modNode.Tag = merge.GetModFile(modName);
+                    var modNode = new TreeNode(mod.Name);
+                    modNode.Tag = merge.GetModFile(mod.Name);
                     fileNode.Nodes.Add(modNode);
                 }
             }
-            if (missingModMerges.Any())
+            if (mergesToDelete.Any())
             {
-                if (DeleteMerges(missingModMerges))
+                if (DeleteMerges(mergesToDelete))
                     return true;
             }
             if (changed)
@@ -332,7 +338,8 @@ namespace WitcherScriptMerger.Forms
         {
             string msg =
                 "Can't find the merged version of the following file.\n\n" +
-                merge.RelativePath + "\n\n" +
+                merge.RelativePath + "\n        " +
+                string.Join("\n        ", merge.Mods.Select(mod => mod.Name)) + "\n\n" +
                 "Expected path:\n" +
                 merge.GetMergedFile() + "\n\n";
 
@@ -352,13 +359,14 @@ namespace WitcherScriptMerger.Forms
             string msg =
                 $"Can't find the '{modName}' version of the following file, " +
                 "perhaps because the mod was uninstalled or updated.\n\n" +
-                merge.RelativePath + "\n\n" +
+                merge.RelativePath + "\n        " +
+                string.Join("\n        ", merge.Mods.Select(mod => mod.Name)) + "\n\n" +
                 "Expected path:\n" +
                 merge.GetModFile(modName) + "\n\n";
 
             msg += merge.IsBundleContent
-                ? "Delete the affected merge & repack the merged bundle?"
-                : "Delete the affected merge?";
+                ? "Delete this affected merge & repack the merged bundle?"
+                : "Delete this affected merge?";
 
             return (DialogResult.Yes == ShowMessage(
                 msg,
@@ -372,12 +380,32 @@ namespace WitcherScriptMerger.Forms
             string msg =
                 $"In your custom load order, {modName} is disabled.\n" +
                 "Delete the following merge that includes the disabled mod?\n\n" +
-                merge.RelativePath + "\n\n" +
-                string.Join("\n", merge.ModNames);
+                merge.RelativePath + "\n        " +
+                string.Join("\n        ", merge.Mods.Select(mod => mod.Name));
 
             return (DialogResult.Yes == ShowMessage(
                 msg,
                 "Disabled Mod in Merge",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question));
+        }
+
+        private bool ConfirmDeleteForChangedHash(Merge merge, string oldHash, string latestHash, string modName)
+        {
+            string msg =
+                $"The '{modName}' version of the following file is different from " +
+                "when it was merged, perhaps because the mod has been updated.  " +
+                $"The file's hash changed from {oldHash} to {latestHash}.\n\n" +
+                merge.RelativePath + "\n        " +
+                string.Join("\n        ", merge.Mods.Select(mod => mod.Name)) + "\n\n";
+
+            msg += merge.IsBundleContent
+                ? "Delete this affected merge & repack the merged bundle?"
+                : "Delete this affected merge?";
+
+            return (DialogResult.Yes == ShowMessage(
+                msg,
+                "Merged Mod File Changed",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question));
         }
@@ -392,18 +420,14 @@ namespace WitcherScriptMerger.Forms
             {
                 var nodesToUpdate = new List<TreeNode>();
 
-                if (_inventory.ScriptsChanged || !menuCheckScripts.Checked)
-                {
-                    var scriptCatNode = treConflicts.GetCategoryNode(Categories.Script);
-                    if (scriptCatNode != null)
-                        nodesToUpdate.Add(scriptCatNode);
-                }
-                if (_inventory.XmlChanged || !menuCheckXmlFiles.Checked)
-                {
-                    var xmlCatNode = treConflicts.GetCategoryNode(Categories.Xml);
-                    if (xmlCatNode != null)
-                        nodesToUpdate.Add(xmlCatNode);
-                }
+                var scriptCatNode = treConflicts.GetCategoryNode(Categories.Script);
+                if (scriptCatNode != null)
+                    nodesToUpdate.Add(scriptCatNode);
+
+                var xmlCatNode = treConflicts.GetCategoryNode(Categories.Xml);
+                if (xmlCatNode != null)
+                    nodesToUpdate.Add(xmlCatNode);
+
                 if (_inventory.BundleChanged || checkBundles || !menuCheckBundledFiles.Checked)
                 {
                     var bundleTextCatNode = treConflicts.GetCategoryNode(Categories.BundleText);
@@ -476,15 +500,15 @@ namespace WitcherScriptMerger.Forms
                         categoryNode.Nodes.Add(fileNode);
                     }
 
-                    foreach (string modName in conflict.ModNames)
+                    foreach (var mod in conflict.Mods)
                     {
                         var modNode = fileNode.GetTreeNodes().FirstOrDefault(node =>
-                            node.Text.EqualsIgnoreCase(modName));
+                            node.Text.EqualsIgnoreCase(mod.Name));
 
                         if (modNode == null)
                         {
-                            modNode = new TreeNode(modName);
-                            modNode.Tag = conflict.GetModFile(modName);
+                            modNode = new TreeNode(mod.Name);
+                            modNode.Tag = conflict.GetModFile(mod.Name);
                             fileNode.Nodes.Add(modNode);
                         }
                     }

@@ -178,7 +178,7 @@ namespace WitcherScriptMerger
                     break;
             }
 
-            if (isNew && merge.ModNames.Count > 1)
+            if (isNew && merge.Mods.Count > 1)
             {
                 ProgressInfo.CurrentAction = "Adding script merge to inventory";
                 _inventory.Merges.Add(merge);
@@ -218,7 +218,7 @@ namespace WitcherScriptMerger
                     break;
             }
 
-            if (_bundlePath != null && isNew && merge.ModNames.Count > 1)
+            if (_bundlePath != null && isNew && merge.Mods.Count > 1)
             {
                 merge.BundleName = Path.GetFileName(_bundlePath);
                 _bundleChanged = true;
@@ -271,11 +271,11 @@ namespace WitcherScriptMerger
             {
                 if (!_file1.FullName.EqualsIgnoreCase(_outputPath)
                     && !_file1.FullName.StartsWithIgnoreCase(Paths.MergedBundleContentAbsolute))
-                    _inventory.AddModToMerge(_modName1, merge);
+                    _inventory.AddModToMerge(_modName1, _file1.FullName, merge);
 
                 if (!_file2.FullName.EqualsIgnoreCase(_outputPath)
                     && !_file2.FullName.StartsWithIgnoreCase(Paths.MergedBundleContentAbsolute))
-                    _inventory.AddModToMerge(_modName2, merge);
+                    _inventory.AddModToMerge(_modName2, _file2.FullName, merge);
 
                 if (Program.MainForm.CompletionSoundsSetting)
                 {

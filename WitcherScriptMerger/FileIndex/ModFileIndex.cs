@@ -117,11 +117,11 @@ namespace WitcherScriptMerger.FileIndex
                     var newFile = (bundlePath != null
                         ? new ModFile(relPath, bundlePath)
                         : new ModFile(relPath));
-                    newFile.ModNames.Add(modName);
+                    newFile.Mods.Add(new FileHash { Name = modName });
                     fileList.Add(newFile);
                 }
                 else
-                    existingFile.ModNames.Add(modName);
+                    existingFile.Mods.Add(new FileHash { Name = modName });
             }
             return fileList;
         }

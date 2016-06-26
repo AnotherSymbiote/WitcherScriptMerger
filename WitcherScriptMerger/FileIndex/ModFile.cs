@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using WitcherScriptMerger.Inventory;
 
 namespace WitcherScriptMerger.FileIndex
 {
@@ -13,7 +14,7 @@ namespace WitcherScriptMerger.FileIndex
         public string RelativePath { get; set; }
 
         [XmlElement("IncludedMod")]
-        public List<string> ModNames { get; private set; }
+        public List<FileHash> Mods { get; private set; }
 
         [XmlElement]
         public string BundleName { get; set; }
@@ -43,21 +44,21 @@ namespace WitcherScriptMerger.FileIndex
         public bool IsBundleContent => (BundleName != null);
 
         [XmlIgnore]
-        public bool HasConflict => (ModNames.Count > 1);
+        public bool HasConflict => (Mods.Count > 1);
 
         #endregion
 
         public ModFile(string relPath, string bundlePath = null)
         {
             RelativePath = relPath;
-            ModNames = new List<string>();
+            Mods = new List<FileHash>();
             if (bundlePath != null)
                 BundleName = Path.GetFileName(bundlePath);
         }
 
         public ModFile()
         {
-            ModNames = new List<string>();
+            Mods = new List<FileHash>();
         }
 
         public string GetVanillaFile()
@@ -104,7 +105,7 @@ namespace WitcherScriptMerger.FileIndex
 
         public override string ToString()
         {
-            return $"({ModNames.Count} mod{ModNames.Count.GetPluralS()}) {RelativePath}";
+            return $"({Mods.Count} mod{Mods.Count.GetPluralS()}) {RelativePath}";
         }
     }
 }
