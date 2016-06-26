@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace WitcherScriptMerger
@@ -12,6 +13,7 @@ namespace WitcherScriptMerger
 
         public const string TempBundleContent = "tempbundlecontent";
         public static string MergedBundleContent = "Merged Bundle Content";
+        public static string MergedBundleContentAbsolute = Path.Combine(Environment.CurrentDirectory, MergedBundleContent);
         public const string Inventory = "MergeInventory.xml";
         public static string ModScriptBase = Path.Combine("content", "scripts");
         public static string VanillaScriptBase = Path.Combine("content", "content0", "scripts");

@@ -270,11 +270,11 @@ namespace WitcherScriptMerger
             if (kdiff3Proc.ExitCode == 0)
             {
                 if (!_file1.FullName.EqualsIgnoreCase(_outputPath)
-                    && !_file1.FullName.StartsWithIgnoreCase(Paths.MergedBundleContent))
+                    && !_file1.FullName.StartsWithIgnoreCase(Paths.MergedBundleContentAbsolute))
                     _inventory.AddModToMerge(_modName1, merge);
 
                 if (!_file2.FullName.EqualsIgnoreCase(_outputPath)
-                    && !_file2.FullName.StartsWithIgnoreCase(Paths.MergedBundleContent))
+                    && !_file2.FullName.StartsWithIgnoreCase(Paths.MergedBundleContentAbsolute))
                     _inventory.AddModToMerge(_modName2, merge);
 
                 if (Program.MainForm.CompletionSoundsSetting)
