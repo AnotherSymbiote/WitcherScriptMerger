@@ -93,6 +93,12 @@ namespace WitcherScriptMerger.Forms
 
         void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (pnlProgress.Visible)
+            {
+                e.Cancel = true;
+                return;
+            }
+
             Program.Settings.StartBatch();
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
             Program.Settings.Set("CheckScripts", menuCheckScripts.Checked);
