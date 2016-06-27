@@ -55,12 +55,18 @@ namespace WitcherScriptMerger
         {
             if (File.Exists(path))
             {
-                var startInfo = new ProcessStartInfo
+                if (path.EndsWithIgnoreCase(".exe"))
                 {
-                    FileName = path,
-                    WorkingDirectory = Path.GetDirectoryName(path)
-                };
-                Process.Start(startInfo);
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = path,
+                        WorkingDirectory = Path.GetDirectoryName(path)
+                    };
+                    Process.Start(startInfo);
+                }
+                else
+                    Process.Start(path);
+
                 return true;
             }
             else
@@ -69,6 +75,7 @@ namespace WitcherScriptMerger
                 return false;
             }
         }
+
         public static bool TryOpenFileLocation(string filePath)
         {
             string dirPath = Path.GetDirectoryName(filePath);
