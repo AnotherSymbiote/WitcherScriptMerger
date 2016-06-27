@@ -12,22 +12,43 @@ using WitcherScriptMerger.LoadOrder;
 
 namespace WitcherScriptMerger
 {
-    internal class FileMerger
+    public class FileMerger
     {
+        #region Types
+
+        public struct MergeSource
+        {
+            public FileInfo TextFile;
+            public string Name;
+            public FileInfo Bundle;
+
+            public static MergeSource FromFlatFile(FileInfo file)
+                => Create(file, false);
+
+            public static MergeSource FromBundle(FileInfo file)
+                => Create(file, true);
+
+            static MergeSource Create(FileInfo file, bool isBundle)
+                => new MergeSource
+                {
+                    TextFile = isBundle ? null : file,
+                    Bundle   = isBundle ? file : null,
+                    Name     = ModFile.GetModNameFromPath(file.FullName)
+                };
+        }
+
+        #endregion
+
         #region Members
+
         public MergeProgressInfo ProgressInfo { get; private set; }
 
         MergeInventory _inventory;
         TreeNode[] _checkedFileNodes;
         FileInfo _vanillaFile;
-        FileInfo _file1;
-        FileInfo _file2;
-        string _modName1;
-        string _modName2;
         string _mergedModName;
         string _outputPath;
         
-        string _bundlePath;
         bool _bundleChanged;
         List<Merge> _pendingBundleMerges = new List<Merge>();
 
@@ -53,8 +74,6 @@ namespace WitcherScriptMerger
                 _bgWorker.ReportProgress(0, ProgressInfo);
             };
             _bgWorker.RunWorkerCompleted += completedHandler;
-
-            _bundlePath = Paths.RetrieveMergedBundlePath();
         }
 
         ~FileMerger()
@@ -99,9 +118,6 @@ namespace WitcherScriptMerger
                         !ConfirmRemainingConflict(_mergedModName))
                         continue;
 
-                    _file1 = new FileInfo(checkedModNodes[0].Tag as string);
-                    _modName1 = ModFile.GetModNameFromPath(_file1.FullName);
-
                     bool isNew = false;
                     var merge = _inventory.Merges.FirstOrDefault(m => m.RelativePath.EqualsIgnoreCase(fileNode.Text));
                     if (merge == null)
@@ -110,18 +126,21 @@ namespace WitcherScriptMerger
                         merge = new Merge
                         {
                             RelativePath = fileNode.Text,
-                            MergedModName = _mergedModName,
+                            MergedModName = _mergedModName
                         };
                     }
 
                     if ((ModFileCategory)fileNode.Parent.Tag == Categories.BundleText)
+                    {
+                        merge.BundleName = Path.GetFileName(Paths.RetrieveMergedBundlePath());
                         MergeBundleFileNode(fileNode, checkedModNodes, merge, isNew);
+                    }
                     else
                         MergeFlatFileNode(fileNode, checkedModNodes, merge, isNew);
                 }
                 if (_bundleChanged)
                 {
-                    string newBundlePath = PackNewBundle(_bundlePath);
+                    string newBundlePath = PackNewBundle(Paths.RetrieveMergedBundlePath());
                     if (newBundlePath != null)
                     {
                         ProgressInfo.CurrentAction = "Adding bundle merge to inventory";
@@ -150,9 +169,11 @@ namespace WitcherScriptMerger
 
         void MergeFlatFileNode(TreeNode fileNode, TreeNode[] checkedModNodes, Merge merge, bool isNew)
         {
+            var source1 = MergeSource.FromFlatFile(new FileInfo(checkedModNodes[0].Tag as string));
+            
             string relPath = Paths.GetRelativePath(
-                _file1.FullName,
-                Path.Combine(Paths.ModsDirectory, _modName1));
+                source1.TextFile.FullName,
+                Path.Combine(Paths.ModsDirectory, source1.Name));
 
             _outputPath = Path.Combine(Paths.ModsDirectory, _mergedModName, relPath);
 
@@ -165,14 +186,12 @@ namespace WitcherScriptMerger
             {
                 ++ProgressInfo.CurrentMergeNum;
 
-                _file2 = new FileInfo(checkedModNodes[i].Tag as string);
-                _modName2 = ModFile.GetModNameFromPath(_file2.FullName);
+                var source2 = MergeSource.FromFlatFile(new FileInfo(checkedModNodes[i].Tag as string));
 
-                var mergedFile = MergeText(merge);
+                var mergedFile = MergeText(merge, source1, source2);
                 if (mergedFile != null)
                 {
-                    _file1 = mergedFile;
-                    _modName1 = ModFile.GetModNameFromPath(_file1.FullName);
+                    source1 = MergeSource.FromFlatFile(mergedFile);
                 }
                 else if (DialogResult.Abort == HandleCanceledMerge(checkedModNodes.Length - i - 1, merge))
                     break;
@@ -194,41 +213,40 @@ namespace WitcherScriptMerger
 
             _vanillaFile = null;
 
+            var source1 = MergeSource.FromBundle(new FileInfo(checkedModNodes[0].Tag as string));
+
             for (int i = 1; i < checkedModNodes.Length; ++i)
             {
                 ++ProgressInfo.CurrentMergeNum;
 
-                _file2 = new FileInfo(checkedModNodes[i].Tag as string);
-                _modName2 = ModFile.GetModNameFromPath(_file2.FullName);
+                var source2 = MergeSource.FromBundle(new FileInfo(checkedModNodes[i].Tag as string));
 
-                if (!GetUnpackedFiles(fileNode.Text))
+                if (!GetUnpackedFiles(fileNode.Text, ref source1, ref source2))
                 {
                     if (DialogResult.Abort != HandleCanceledMerge(checkedModNodes.Length - i - 1, merge))
                         continue;
                     break;
                 }
 
-                var mergedFile = MergeText(merge);
+                var mergedFile = MergeText(merge, source1, source2);
                 if (mergedFile != null)
                 {
-                    _file1 = mergedFile;
-                    _modName1 = ModFile.GetModNameFromPath(_file1.FullName);
+                    source1 = MergeSource.FromFlatFile(mergedFile);
                 }
                 else if (DialogResult.Abort == HandleCanceledMerge(checkedModNodes.Length - i - 1, merge))
                     break;
             }
 
-            if (_bundlePath != null && isNew && merge.Mods.Count > 1)
+            if (merge.BundleName != null && isNew && merge.Mods.Count > 1)
             {
-                merge.BundleName = Path.GetFileName(_bundlePath);
                 _bundleChanged = true;
                 _pendingBundleMerges.Add(merge);
             }
         }
 
-        FileInfo MergeText(Merge merge)
+        FileInfo MergeText(Merge merge, MergeSource source1, MergeSource source2)
         {
-            ProgressInfo.CurrentAction = $"Merging {_modName1} && {_modName2} — waiting for KDiff3 to close";
+            ProgressInfo.CurrentAction = $"Merging {source1.Name} && {source2.Name} — waiting for KDiff3 to close";
 
             string outputDir = Path.GetDirectoryName(_outputPath);
             if (!Directory.Exists(outputDir))
@@ -241,7 +259,7 @@ namespace WitcherScriptMerger
                 : "");
 
             args +=
-                $"\"{_file1.FullName}\" \"{_file2.FullName}\" " +
+                $"\"{source1.TextFile.FullName}\" \"{source2.TextFile.FullName}\" " +
                 $"-o \"{_outputPath}\" " +
                 "--cs \"WhiteSpace3FileMergeDefault=2\" " +
                 "--cs \"CreateBakFiles=0\" " +
@@ -252,9 +270,9 @@ namespace WitcherScriptMerger
             if (!Program.MainForm.PathsInKdiff3Setting)
             {
                 if (hasVanillaVersion)
-                    args += $" --L1 Vanilla --L2 \"{_modName1}\" --L3 \"{_modName2}\"";
+                    args += $" --L1 Vanilla --L2 \"{source1.Name}\" --L3 \"{source2.Name}\"";
                 else
-                    args += $" --L1 \"{_modName1}\" --L2 \"{_modName2}\"";
+                    args += $" --L1 \"{source1.Name}\" --L2 \"{source2.Name}\"";
             }
 
             if (!Program.MainForm.ReviewEachMergeSetting && hasVanillaVersion)
@@ -269,13 +287,17 @@ namespace WitcherScriptMerger
 
             if (kdiff3Proc.ExitCode == 0)
             {
-                if (!_file1.FullName.EqualsIgnoreCase(_outputPath)
-                    && !_file1.FullName.StartsWithIgnoreCase(Paths.MergedBundleContentAbsolute))
-                    _inventory.AddModToMerge(_modName1, _file1.FullName, merge);
+                if (!source1.TextFile.FullName.EqualsIgnoreCase(_outputPath)
+                    && !source1.TextFile.FullName.StartsWithIgnoreCase(Paths.MergedBundleContentAbsolute))
+                {
+                    _inventory.AddModToMerge(source1, merge);
+                }
 
-                if (!_file2.FullName.EqualsIgnoreCase(_outputPath)
-                    && !_file2.FullName.StartsWithIgnoreCase(Paths.MergedBundleContentAbsolute))
-                    _inventory.AddModToMerge(_modName2, _file2.FullName, merge);
+                if (!source2.TextFile.FullName.EqualsIgnoreCase(_outputPath)
+                    && !source2.TextFile.FullName.StartsWithIgnoreCase(Paths.MergedBundleContentAbsolute))
+                {
+                    _inventory.AddModToMerge(source2, merge);
+                }
 
                 if (Program.MainForm.CompletionSoundsSetting)
                 {
@@ -285,8 +307,8 @@ namespace WitcherScriptMerger
                 {
                     using (var reportForm = new MergeReportForm(
                         ProgressInfo.CurrentMergeNum, ProgressInfo.TotalMergeCount,
-                        _file1.FullName, _file2.FullName, _outputPath,
-                        _modName1, _modName2))
+                        source1.TextFile.FullName, source2.TextFile.FullName, _outputPath,
+                        source1.Name, source2.Name))
                     {
                         ProgressInfo.CurrentAction = "Showing merge report";
                         Program.MainForm.ShowModal(reportForm);
@@ -339,7 +361,7 @@ namespace WitcherScriptMerger
             return DialogResult.OK;
         }
 
-        bool GetUnpackedFiles(string contentRelativePath)
+        bool GetUnpackedFiles(string contentRelativePath, ref MergeSource source1, ref MergeSource source2)
         {
             if (_vanillaFile == null)
             {
@@ -351,7 +373,7 @@ namespace WitcherScriptMerger
                 for (int i = bundleDirs.Count - 1; i >= 0; --i)  // Search vanilla directories in reverse
                 {                                                // order, as patches override content.
                     var bundleFiles = Directory.GetFiles(bundleDirs[i], "*.bundle");
-                    foreach (var bundle in bundleFiles)  
+                    foreach (var bundle in bundleFiles)
                     {
                         var contentPaths = ModFileIndex.GetBundleContentPaths(bundle);
                         if (contentPaths.Any(path => path.EqualsIgnoreCase(contentRelativePath)))
@@ -371,19 +393,19 @@ namespace WitcherScriptMerger
                 }
             }
 
-            if (ModFile.IsBundle(_file1.FullName))
+            if (source1.TextFile == null)
             {
-                ProgressInfo.CurrentAction = $"Unpacking bundle content file for {_modName1}";
-                string modContentFile1 = UnpackFile(_file1.FullName, contentRelativePath, "Mod 1");
+                ProgressInfo.CurrentAction = $"Unpacking bundle content file for {source1.Name}";
+                string modContentFile1 = UnpackFile(source1.Bundle.FullName, contentRelativePath, "Mod 1");
                 if (modContentFile1 == null)
                     return false;
-                _file1 = new FileInfo(modContentFile1);
+                source1.TextFile = new FileInfo(modContentFile1);
             }
-            ProgressInfo.CurrentAction = $"Unpacking bundle content file for {_modName2}";
-            string modContentFile2 = UnpackFile(_file2.FullName, contentRelativePath, "Mod 2");
+            ProgressInfo.CurrentAction = $"Unpacking bundle content file for {source2.Name}";
+            string modContentFile2 = UnpackFile(source2.Bundle.FullName, contentRelativePath, "Mod 2");
             if (modContentFile2 == null)
                 return false;
-            _file2 = new FileInfo(modContentFile2);
+            source2.TextFile = new FileInfo(modContentFile2);
             return true;
         }
 
@@ -455,7 +477,7 @@ namespace WitcherScriptMerger
         string PackNewBundle(string bundlePath, bool isRepack = false)
         {
             ProgressInfo.CurrentPhase = (!isRepack ? "Packing Bundle" : "Repacking Bundle");
-            ProgressInfo.CurrentAction = "Packing merged content into new blob0.bundle";
+            ProgressInfo.CurrentAction = "Packing merged bundle content into new blob0.bundle";
 
             string contentDir = Path.Combine(Environment.CurrentDirectory, Paths.MergedBundleContent);
             
