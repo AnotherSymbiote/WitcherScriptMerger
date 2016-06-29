@@ -33,12 +33,12 @@ namespace WitcherScriptMerger.Forms
 
         void btnOpenBundleDir_Click(object sender, EventArgs e)
         {
-            TryOpenDir(Path.GetDirectoryName(txtBundlePath.Text));
+            Program.TryOpenFileLocation(txtBundlePath.Text);
         }
 
         void btnOpenContentDir_Click(object sender, EventArgs e)
         {
-            TryOpenDir(Paths.MergedBundleContent);
+            Program.TryOpenDirectory(Paths.MergedBundleContent);
         }
 
         void btnOK_Click(object sender, EventArgs e)
@@ -47,14 +47,6 @@ namespace WitcherScriptMerger.Forms
         }
 
         #endregion
-
-        void TryOpenDir(string dirPath)
-        {
-            if (Directory.Exists(dirPath))
-                System.Diagnostics.Process.Start(dirPath);
-            else
-                Program.MainForm.ShowMessage("Can't find directory: " + dirPath);
-        }
 
         void txt_KeyDown(object sender, KeyEventArgs e)
         {

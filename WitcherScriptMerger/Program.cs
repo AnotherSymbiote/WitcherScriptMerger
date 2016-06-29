@@ -78,24 +78,14 @@ namespace WitcherScriptMerger
 
         public static bool TryOpenFileLocation(string filePath)
         {
-            string dirPath = Path.GetDirectoryName(filePath);
-            if (Directory.Exists(dirPath))
-            {
-                System.Diagnostics.Process.Start(dirPath);
-                return true;
-            }
-            else
-            {
-                MainForm.ShowMessage("Can't find directory: " + dirPath);
-                return false;
-            }
+            return TryOpenDirectory(Path.GetDirectoryName(filePath));
         }
 
         public static bool TryOpenDirectory(string dirPath)
         {
             if (Directory.Exists(dirPath))
             {
-                System.Diagnostics.Process.Start(dirPath);
+                Process.Start(dirPath);
                 return true;
             }
             else

@@ -43,7 +43,7 @@ namespace WitcherScriptMerger.Forms
 
             if (!allValid &&
                 DialogResult.No == MessageBox.Show(
-                    "Not all the files are located and valid. Save settings anyway?",
+                    "Not all the files are located & valid. Save settings anyway?",
                     "Missing Dependency",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning))

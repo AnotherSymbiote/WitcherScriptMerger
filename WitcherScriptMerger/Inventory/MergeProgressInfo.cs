@@ -40,17 +40,6 @@ namespace WitcherScriptMerger.Inventory
             }
         }
 
-        int _currentFileNum;
-        public int CurrentFileNum
-        {
-            get { return _currentFileNum; }
-            set
-            {
-                _currentFileNum = value;
-                UpdatePhase();
-            }
-        }
-
         string _currentFileName;
         public string CurrentFileName
         {
@@ -58,6 +47,17 @@ namespace WitcherScriptMerger.Inventory
             set
             {
                 _currentFileName = value;
+                UpdatePhase();
+            }
+        }
+
+        int _currentFileNum;
+        public int CurrentFileNum
+        {
+            get { return _currentFileNum; }
+            set
+            {
+                _currentFileNum = value;
                 UpdatePhase();
             }
         }
@@ -72,7 +72,6 @@ namespace WitcherScriptMerger.Inventory
                 UpdatePhase();
             }
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -73,8 +73,6 @@ namespace WitcherScriptMerger.Forms
 
         void InputField_KeyDown(object sender, KeyEventArgs e)
         {
-            var txtBox = sender as TextBox;
-
             e.SuppressKeyPress =
                 (e.KeyCode == Keys.Subtract) ||
                 (IsCharacterCountMaxed() && !HasSelection() && IsNumeric(e.KeyCode)) ||

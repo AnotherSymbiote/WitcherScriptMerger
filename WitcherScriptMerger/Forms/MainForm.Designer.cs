@@ -505,7 +505,7 @@
             this.menuPackReport.Name = "menuPackReport";
             this.menuPackReport.Size = new System.Drawing.Size(297, 22);
             this.menuPackReport.Text = "Show Report After &Packing Bundle";
-            this.menuPackReport.ToolTipText = "Show a report with list of contents and button to open content directory";
+            this.menuPackReport.ToolTipText = "Show a report with list of contents & button to open content directory";
             // 
             // menuShowStatusBar
             // 

@@ -18,11 +18,11 @@ namespace WitcherScriptMerger.FileIndex
 
         public int ModCount { get; private set; }
 
-        public int ScriptCount { get; set; }
+        public int ScriptCount { get; private set; }
 
-        public int XmlCount { get; set; }
+        public int XmlCount { get; private set; }
 
-        public int BundleCount { get; set; }
+        public int BundleCount { get; private set; }
 
         public ModFileIndex()
         {

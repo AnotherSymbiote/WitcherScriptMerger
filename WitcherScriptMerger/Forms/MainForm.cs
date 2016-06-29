@@ -283,7 +283,7 @@ namespace WitcherScriptMerger.Forms
                             break;
                         }
                         var latestHash = xxHash.ComputeHashHex(modFilePath);
-                        if (latestHash != null && mod.Hash != latestHash && ConfirmDeleteForChangedHash(merge, mod.Hash, latestHash, mod.Name))
+                        if (latestHash != null && mod.Hash != latestHash && ConfirmDeleteForChangedHash(merge, modFilePath, mod.Name))
                         {
                             willDelete = true;
                             break;
@@ -396,13 +396,13 @@ namespace WitcherScriptMerger.Forms
                 MessageBoxIcon.Question));
         }
 
-        private bool ConfirmDeleteForChangedHash(Merge merge, string oldHash, string latestHash, string modName)
+        private bool ConfirmDeleteForChangedHash(Merge merge, string modFilePath, string modName)
         {
             string msg =
-                $"The '{modName}' version of the following file is different from " +
-                "when it was merged, perhaps because the mod has been updated.  " +
-                $"The file's hash changed from {oldHash} to {latestHash}.\n\n" +
-                merge.RelativePath + "\n        " +
+                $"The '{modName}' {(merge.IsBundleContent ? "bundle" : "version of the following file")} " +
+                "is different from when it was used in a merge, perhaps because the mod has been updated.\n\n" +
+                $"This file has changed:\n\n{modFilePath}\n\n" +
+                $"This merge is affected:\n\n{merge.RelativePath}\n        " +
                 string.Join("\n        ", merge.Mods.Select(mod => mod.Name)) + "\n\n";
 
             msg += merge.IsBundleContent
@@ -775,11 +775,6 @@ namespace WitcherScriptMerger.Forms
                 new FileMerger(_inventory, OnMergeProgressChanged, OnMergeComplete)
                     .RepackBundleAsync(bundlePath);
             }
-        }
-
-        void OnDeleteMergeComplete()
-        {
-            RefreshTrees();
         }
 
         #endregion
