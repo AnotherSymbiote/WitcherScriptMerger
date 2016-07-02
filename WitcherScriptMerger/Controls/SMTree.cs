@@ -176,8 +176,8 @@ namespace WitcherScriptMerger.Controls
         {
             if (ClickedNode == null)
                 return;
-            ClickedNode.Checked = !ClickedNode.Checked;
-            HandleCheckedChange();
+            if (ClickedNode.SetCheckedIfVisible(!ClickedNode.Checked))
+                HandleCheckedChange();
         }
 
         protected virtual void OnRightMouseUp(MouseEventArgs e)

@@ -187,12 +187,21 @@ namespace WitcherScriptMerger
             }
         }
 
-        public static void SetCheckedIfVisible(this TreeNode node, bool isChecked)
+        public static bool SetCheckedIfVisible(this TreeNode node, bool isChecked)
         {
             if (node.IsCheckBoxVisible())
             {
                 node.Checked = isChecked;
+                return true;
             }
+            return false;
+        }
+
+        public static bool AreAllVisibleCheckboxesChecked(this TreeNode node)
+        {
+            return node.GetTreeNodes()
+                .Where(child => child.IsCheckBoxVisible())
+                .All(child => child.Checked);
         }
 
         #endregion

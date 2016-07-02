@@ -98,15 +98,15 @@ namespace WitcherScriptMerger.Controls
                     modNode.SetCheckedIfVisible(ClickedNode.Checked);
 
                 var catNode = ClickedNode.Parent;
-                catNode.Checked = catNode.GetTreeNodes().All(node => node.Checked);
+                catNode.Checked = catNode.AreAllVisibleCheckboxesChecked();
             }
             else if (IsModNode(ClickedNode))
             {
                 var fileNode = ClickedNode.Parent;
-                fileNode.Checked = fileNode.GetTreeNodes().All(node => node.Checked);
+                fileNode.Checked = fileNode.AreAllVisibleCheckboxesChecked();
 
                 var catNode = fileNode.Parent;
-                catNode.Checked = catNode.GetTreeNodes().All(node => node.Checked);
+                catNode.Checked = catNode.AreAllVisibleCheckboxesChecked();
             }
             Program.MainForm.EnableMergeIfValidSelection();
         }
