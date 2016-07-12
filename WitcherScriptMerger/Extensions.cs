@@ -63,16 +63,10 @@ namespace WitcherScriptMerger
             return menu.Items.Cast<ToolStripItem>().Where(item => item.Available);
         }
 
-        public static void SetFontBold(this TreeNode node)
+        public static void SetFontStyle(this TreeNode node, FontStyle style)
         {
             var currFont = node.NodeFont ?? Control.DefaultFont;
-            node.NodeFont = new Font(currFont, FontStyle.Bold);
-        }
-
-        public static void SetFontItalic(this TreeNode node)
-        {
-            var currFont = node.NodeFont ?? Control.DefaultFont;
-            node.NodeFont = new Font(currFont, FontStyle.Italic);
+            node.NodeFont = new Font(currFont, style);
         }
 
         public static IEnumerable<TreeNode> GetTreeNodes(this TreeNode node)

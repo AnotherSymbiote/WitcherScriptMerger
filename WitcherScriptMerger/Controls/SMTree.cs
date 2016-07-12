@@ -103,7 +103,7 @@ namespace WitcherScriptMerger.Controls
         {
             BeginUpdate();
             foreach (var node in GetNodesAtLevel(level))
-                node.SetFontBold();
+                node.SetFontStyle(FontStyle.Bold);
             EndUpdate();
         }
 

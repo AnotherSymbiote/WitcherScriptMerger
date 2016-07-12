@@ -309,7 +309,7 @@ namespace WitcherScriptMerger.Controls
                     {
                         modNode.ToolTipText = "This mod is disabled in your custom load order";
                         modNode.ForeColor = Color.Gray;
-                        modNode.SetFontItalic();
+                        modNode.SetFontStyle(FontStyle.Strikeout);
                         modNode.Checked = false;
                         modNode.SetIsCheckBoxVisible(false);
                     }
