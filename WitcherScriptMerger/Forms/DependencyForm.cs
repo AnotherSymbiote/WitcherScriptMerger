@@ -35,7 +35,7 @@ namespace WitcherScriptMerger.Forms
 
         void btnOK_Click(object sender, EventArgs e)
         {
-            bool allValid =
+            var allValid =
                 Color.LightGreen == txtKDiff3Path.BackColor &&
                 Color.LightGreen == txtBmsPath.BackColor &&
                 Color.LightGreen == txtBmsPluginPath.BackColor &&
@@ -104,7 +104,7 @@ namespace WitcherScriptMerger.Forms
 
         void GetUserFileChoice(TextBox txt, string filter)
         {
-            OpenFileDialog dlgSelectFile = new OpenFileDialog();
+            var dlgSelectFile = new OpenFileDialog();
             dlgSelectFile.Filter = filter;
             if (!string.IsNullOrWhiteSpace(txt.Text) && File.Exists(txt.Text))
                 dlgSelectFile.FileName = txt.Text;
@@ -147,7 +147,7 @@ namespace WitcherScriptMerger.Forms
 
         void ValidateTextBox(TextBox txt, string validExtension)
         {
-            string path = txt.Text;
+            var path = txt.Text;
             txt.BackColor = (path.EndsWithIgnoreCase(validExtension) && File.Exists(path)
                 ? Color.LightGreen
                 : Color.LightPink);

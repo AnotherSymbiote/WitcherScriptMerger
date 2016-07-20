@@ -88,8 +88,8 @@ namespace WitcherScriptMerger.FileIndex
             if (!modFilePath.StartsWithIgnoreCase(Paths.ModsDirectory))  // Merged bundle content has internal path, not derived from mod folder
                 return Paths.MergedBundleContent;
 
-            int nameStart = Paths.ModsDirectory.Length + 1;
-            string name = modFilePath.Substring(nameStart);
+            var nameStart = Paths.ModsDirectory.Length + 1;
+            var name = modFilePath.Substring(nameStart);
             return name.Substring(0, name.IndexOf('\\'));
         }
 

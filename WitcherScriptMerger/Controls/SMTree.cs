@@ -354,7 +354,7 @@ namespace WitcherScriptMerger.Controls
                 _contextCopyPath.Available = true;
                 if (IsModNode(ClickedNode))
                 {
-                    string filePath = ClickedNode.Tag as string;
+                    var filePath = ClickedNode.Tag as string;
                     if (ModFile.IsBundle(filePath))
                         _contextOpenModBundleDir.Available = true;
                     else
@@ -380,9 +380,9 @@ namespace WitcherScriptMerger.Controls
         {
             if (_contextMenu.Items.OfType<ToolStripItem>().Any(item => item.Available))
             {
-                int width = _contextMenu.Items.OfType<ToolStripMenuItem>().Where(item => item.Available)
+                var width = _contextMenu.Items.OfType<ToolStripMenuItem>().Where(item => item.Available)
                     .Max(item => TextRenderer.MeasureText(item.Text, item.Font).Width);
-                int height = _contextMenu.GetAvailableItems()
+                var height = _contextMenu.GetAvailableItems()
                     .Sum(item => item.Height);
                 _contextMenu.Width = width + 45;
                 _contextMenu.Height = height + 5;

@@ -51,11 +51,11 @@ namespace WitcherScriptMerger.FileIndex
             };
             bgWorker.DoWork += (sender, e) =>
             {
-                int i = 0;
+                var i = 0;
                 ScriptCount = XmlCount = BundleCount = 0;
                 foreach (var modDirPath in modDirPaths)
                 {
-                    string modName = Path.GetFileName(modDirPath);
+                    var modName = Path.GetFileName(modDirPath);
                     var filePaths = Directory.GetFiles(modDirPath, "*", SearchOption.AllDirectories);
                     var scriptPaths = filePaths.Where(path => ModFile.IsScript(path));
                     var xmlPaths = filePaths.Where(path => ModFile.IsXml(path));
@@ -75,13 +75,13 @@ namespace WitcherScriptMerger.FileIndex
                     }
                     if (checkBundles)
                     {
-                        foreach (string bundlePath in bundlePaths)
+                        foreach (var bundlePath in bundlePaths)
                         {
                             var contentPaths = GetBundleContentPaths(bundlePath);
                             Files.AddRange(GetModFilesFromPaths(contentPaths, Categories.BundleText, inventory, modName, bundlePath));
                         }
                     }
-                    int progressPct = (int)((float)++i / modDirPaths.Count * 100f);
+                    var progressPct = (int)((float)++i / modDirPaths.Count * 100f);
                     bgWorker.ReportProgress(progressPct, modName as object);
                 }
                 if (checkBundles)
@@ -142,8 +142,8 @@ namespace WitcherScriptMerger.FileIndex
             using (var bmsProc = new Process { StartInfo = procInfo })
             {
                 bmsProc.Start();
-                string output = bmsProc.StandardOutput.ReadToEnd() + "\n\n" + bmsProc.StandardError.ReadToEnd();
-                int footerPos = output.LastIndexOf("QuickBMS generic");
+                var output = bmsProc.StandardOutput.ReadToEnd() + "\n\n" + bmsProc.StandardError.ReadToEnd();
+                var footerPos = output.LastIndexOf("QuickBMS generic");
                 var outputLines = output.Substring(0, footerPos).Split('\n');
                 var paths = outputLines
                     .Where(line => line.Length > 5)
@@ -155,7 +155,7 @@ namespace WitcherScriptMerger.FileIndex
 
         private IEnumerable<string> GetIgnoredModNames()
         {
-            string ignoredNames = Program.Settings.Get("IgnoreModNames");
+            var ignoredNames = Program.Settings.Get("IgnoreModNames");
             return ignoredNames.Split(',')
                 .Where(name => !string.IsNullOrWhiteSpace(name))
                 .Select(name => name.Trim());

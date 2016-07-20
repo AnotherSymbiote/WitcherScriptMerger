@@ -78,7 +78,7 @@ namespace WitcherScriptMerger.Forms
         {
             Update();
 
-            bool repackingBundle = false;
+            var repackingBundle = false;
             if (!string.IsNullOrWhiteSpace(txtGameDir.Text) || !Paths.IsModsDirectoryDerived)
                 repackingBundle = RefreshMergeInventory();
             if (repackingBundle)
@@ -131,8 +131,8 @@ namespace WitcherScriptMerger.Forms
 
         void LoadLastWindowConfiguration()
         {
-            int top = Program.Settings.Get<int>("StartPosTop");
-            int left = Program.Settings.Get<int>("StartPosLeft");
+            var top = Program.Settings.Get<int>("StartPosTop");
+            var left = Program.Settings.Get<int>("StartPosLeft");
             if (top > 0)
                 Top = top;
             if (left > 0)
@@ -140,8 +140,8 @@ namespace WitcherScriptMerger.Forms
             if (Top > 0 || Left > 0)
                 StartPosition = FormStartPosition.Manual;
             
-            int startWidth = Program.Settings.Get<int>("StartWidth");
-            int startHeight = Program.Settings.Get<int>("StartHeight");
+            var startWidth = Program.Settings.Get<int>("StartWidth");
+            var startHeight = Program.Settings.Get<int>("StartHeight");
             if (startWidth > 0)
                 Width = startWidth;
             if (startHeight > 0)
@@ -150,7 +150,7 @@ namespace WitcherScriptMerger.Forms
             if (Program.Settings.Get<bool>("StartMaximized"))
                 WindowState = FormWindowState.Maximized;
 
-            int splitterPosPct = Program.Settings.Get<int>("StartSplitterPosPct");
+            var splitterPosPct = Program.Settings.Get<int>("StartSplitterPosPct");
             if (splitterPosPct > 0)
                 splitContainer.SplitterDistance = (int)(splitterPosPct / 100f * splitContainer.Width);
         }
@@ -177,7 +177,7 @@ namespace WitcherScriptMerger.Forms
 
         void UpdateStatusText()
         {
-            int solvableCount = treConflicts.FileNodes.Count(node => ModFile.IsTextFile(node.Text));
+            var solvableCount = treConflicts.FileNodes.Count(node => ModFile.IsTextFile(node.Text));
 
             if (treConflicts.IsEmpty())
                 lblStatusLeft1.Text = "0 conflicts";
@@ -215,7 +215,7 @@ namespace WitcherScriptMerger.Forms
 
         public void EnableMergeIfValidSelection()
         {
-            int validFileNodeCount = treConflicts.FileNodes.Count(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
+            var validFileNodeCount = treConflicts.FileNodes.Count(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
             btnCreateMerges.Enabled = (validFileNodeCount > 0);
             btnCreateMerges.Text = (validFileNodeCount > 1
                 ? "&Create " + validFileNodeCount + " Selected Merges"
@@ -224,10 +224,10 @@ namespace WitcherScriptMerger.Forms
 
         public void EnableUnmergeIfValidSelection()
         {
-            int selectedNodes = treMerges.FileNodes.Count(node => node.Checked);
-            btnDeleteMerges.Enabled = (selectedNodes > 0);
-            btnDeleteMerges.Text = (selectedNodes > 1
-                ? "&Delete " + selectedNodes + " Selected Merges"
+            var selectedCount = treMerges.FileNodes.Count(node => node.Checked);
+            btnDeleteMerges.Enabled = (selectedCount > 0);
+            btnDeleteMerges.Text = (selectedCount > 1
+                ? "&Delete " + selectedCount + " Selected Merges"
                 : "&Delete Selected Merge");
         }
 
@@ -250,7 +250,7 @@ namespace WitcherScriptMerger.Forms
         bool RefreshMergeTree()
         {
             treMerges.Nodes.Clear();
-            bool changed = false;
+            var changed = false;
             var bundleMergesPruned = new List<Merge>();
             var mergesToDelete = new List<Merge>();
             for (int i = _inventory.Merges.Count - 1; i >= 0; --i)
@@ -267,10 +267,10 @@ namespace WitcherScriptMerger.Forms
                 }
                 else
                 {
-                    bool willDelete = false;
+                    var willDelete = false;
                     foreach (var mod in merge.Mods)
                     {
-                        string modFilePath = merge.GetModFile(mod.Name);
+                        var modFilePath = merge.GetModFile(mod.Name);
                         if (!File.Exists(modFilePath) && ConfirmDeleteMergeForMissingMod(merge, mod.Name))
                         {
                             willDelete = true;
@@ -342,7 +342,7 @@ namespace WitcherScriptMerger.Forms
 
         bool ConfirmPruneMissingMergeFile(Merge merge)
         {
-            string msg =
+            var msg =
                 "Can't find the merged version of the following file.\n\n" +
                 merge.RelativePath + "\n        " +
                 string.Join("\n        ", merge.Mods.Select(mod => mod.Name)) + "\n\n" +
@@ -362,7 +362,7 @@ namespace WitcherScriptMerger.Forms
 
         bool ConfirmDeleteMergeForMissingMod(Merge merge, string modName)
         {
-            string msg =
+            var msg =
                 $"Can't find the '{modName}' version of the following file, " +
                 "perhaps because the mod was uninstalled or updated.\n\n" +
                 merge.RelativePath + "\n        " +
@@ -383,7 +383,7 @@ namespace WitcherScriptMerger.Forms
 
         bool ConfirmDeleteMergeForDisabledMod(Merge merge, string modName)
         {
-            string msg =
+            var msg =
                 $"In your custom load order, {modName} is disabled.\n" +
                 "Delete the following merge that includes the disabled mod?\n\n" +
                 merge.RelativePath + "\n        " +
@@ -398,7 +398,7 @@ namespace WitcherScriptMerger.Forms
 
         private bool ConfirmDeleteForChangedHash(Merge merge, string modFilePath, string modName)
         {
-            string msg =
+            var msg =
                 $"The '{modName}' {(merge.IsBundleContent ? "bundle" : "version of the following file")} " +
                 "is different from when it was used in a merge, perhaps because the mod has been updated.\n\n" +
                 $"This file has changed:\n\n{modFilePath}\n\n" +
@@ -555,7 +555,7 @@ namespace WitcherScriptMerger.Forms
 
         void btnSelectGameDirectory_Click(object sender, EventArgs e)
         {
-            string dirChoice = GetUserDirectoryChoice();
+            var dirChoice = GetUserDirectoryChoice();
             if (!string.IsNullOrWhiteSpace(dirChoice))
             {
                 if (dirChoice.EndsWithIgnoreCase("The Witcher 3 Wild Hunt\\Mods"))  // Auto-truncate "Mods"
@@ -568,7 +568,7 @@ namespace WitcherScriptMerger.Forms
 
         string GetUserDirectoryChoice()
         {
-            FolderBrowserDialog dlgSelectRoot = new FolderBrowserDialog();
+            var dlgSelectRoot = new FolderBrowserDialog();
             if (Directory.Exists(txtGameDir.Text))
                 dlgSelectRoot.SelectedPath = txtGameDir.Text;
             if (DialogResult.OK == dlgSelectRoot.ShowDialog())
@@ -615,7 +615,7 @@ namespace WitcherScriptMerger.Forms
                 (treConflicts.FileNodes.Any(node => ModFile.IsBundle(node.Text)) && !Paths.ValidateBundlesDirectory()))
                 return;
 
-            string mergedModName = Paths.RetrieveMergedModName();
+            var mergedModName = Paths.RetrieveMergedModName();
             if (mergedModName == null)
                 return;
             
@@ -720,7 +720,7 @@ namespace WitcherScriptMerger.Forms
             var bundleMerges = new List<Merge>();
             foreach (var merge in merges)
             {
-                string mergePath = merge.GetMergedFile();
+                var mergePath = merge.GetMergedFile();
                 if (File.Exists(mergePath))
                 {
                     File.Delete(mergePath);
@@ -734,11 +734,11 @@ namespace WitcherScriptMerger.Forms
                     m.BundleName.EqualsIgnoreCase(merge.BundleName));
                     if (mergesForBundle.All(m => merges.Contains(m)))
                     {
-                        string bundlePath = merge.GetMergedBundle();
+                        var bundlePath = merge.GetMergedBundle();
                         if (File.Exists(bundlePath))
                             File.Delete(bundlePath);
 
-                        string metadataPath = Path.Combine(Path.GetDirectoryName(bundlePath), "metadata.store");
+                        var metadataPath = Path.Combine(Path.GetDirectoryName(bundlePath), "metadata.store");
                         if (File.Exists(metadataPath))
                             File.Delete(metadataPath);
                         
@@ -918,7 +918,7 @@ namespace WitcherScriptMerger.Forms
         private void menuRepackBundle_Click(object sender, EventArgs e)
         {
             var mergedBundles = _inventory.Merges.Where(merge => merge.IsBundleContent).Select(merge => merge.GetMergedBundle()).Distinct();
-            int mergedBundleCount = mergedBundles.Count();
+            var mergedBundleCount = mergedBundles.Count();
             foreach (var bundlePath in mergedBundles)
             {
                 InitializeProgressScreen($"Repacking Bundle{mergedBundleCount.GetPluralS()}", ProgressBarStyle.Marquee);

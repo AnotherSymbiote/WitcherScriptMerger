@@ -53,7 +53,7 @@ namespace WitcherScriptMerger
 
         public static string GetRelativePath(string fullPath, string basePath)
         {
-            int startIndex = fullPath.IndexOfIgnoreCase(basePath) + basePath.Length + 1;
+            var startIndex = fullPath.IndexOfIgnoreCase(basePath) + basePath.Length + 1;
             return fullPath.Substring(startIndex);
         }
 
@@ -104,7 +104,7 @@ namespace WitcherScriptMerger
 
         public static string RetrieveMergedBundlePath()
         {
-            string mergedModName = RetrieveMergedModName();
+            var mergedModName = RetrieveMergedModName();
             if (mergedModName != null)
                 return Path.Combine(ModsDirectory, mergedModName, BundleBase, "blob0.bundle");
             else
@@ -113,7 +113,7 @@ namespace WitcherScriptMerger
 
         public static string RetrieveMergedModName()
         {
-            string mergedModName = Program.Settings.Get("MergedModName");
+            var mergedModName = Program.Settings.Get("MergedModName");
             if (string.IsNullOrWhiteSpace(mergedModName))
             {
                 Program.MainForm.ShowMessage("The MergedModName setting isn't configured in the .config file.");

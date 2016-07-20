@@ -66,9 +66,9 @@ namespace WitcherScriptMerger
                 var config = _cachedConfig ?? GetConfig();
                 if (config.HasFile)
                 {
-                    string valueString = config.AppSettings.Settings[key].Value;
-                    MethodInfo parseMethod = typeof(T).GetMethod("Parse", new Type[] { typeof(string) });
-                    object valueObject = parseMethod.Invoke(null, new object[] { valueString });
+                    var valueString = config.AppSettings.Settings[key].Value;
+                    var parseMethod = typeof(T).GetMethod("Parse", new Type[] { typeof(string) });
+                    var valueObject = parseMethod.Invoke(null, new object[] { valueString });
                     return (T)valueObject;
                 }
 

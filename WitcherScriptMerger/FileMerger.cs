@@ -118,7 +118,7 @@ namespace WitcherScriptMerger
                         !ConfirmRemainingConflict(_mergedModName))
                         continue;
 
-                    bool isNew = false;
+                    var isNew = false;
                     var merge = _inventory.Merges.FirstOrDefault(m => m.RelativePath.EqualsIgnoreCase(fileNode.Text));
                     if (merge == null)
                     {
@@ -140,7 +140,7 @@ namespace WitcherScriptMerger
                 }
                 if (_bundleChanged)
                 {
-                    string newBundlePath = PackNewBundle(Paths.RetrieveMergedBundlePath());
+                    var newBundlePath = PackNewBundle(Paths.RetrieveMergedBundlePath());
                     if (newBundlePath != null)
                     {
                         ProgressInfo.CurrentAction = "Adding bundle merge to inventory";
@@ -171,7 +171,7 @@ namespace WitcherScriptMerger
         {
             var source1 = MergeSource.FromFlatFile(new FileInfo(checkedModNodes[0].Tag as string));
             
-            string relPath = Paths.GetRelativePath(
+            var relPath = Paths.GetRelativePath(
                 source1.TextFile.FullName,
                 Path.Combine(Paths.ModsDirectory, source1.Name));
 
@@ -248,13 +248,13 @@ namespace WitcherScriptMerger
         {
             ProgressInfo.CurrentAction = $"Merging {source1.Name} && {source2.Name} — waiting for KDiff3 to close";
 
-            string outputDir = Path.GetDirectoryName(_outputPath);
+            var outputDir = Path.GetDirectoryName(_outputPath);
             if (!Directory.Exists(outputDir))
                 Directory.CreateDirectory(outputDir);
 
-            bool hasVanillaVersion = (_vanillaFile != null && _vanillaFile.Exists);
+            var hasVanillaVersion = (_vanillaFile != null && _vanillaFile.Exists);
 
-            string args = (hasVanillaVersion
+            var args = (hasVanillaVersion
                 ? "\"" + _vanillaFile.FullName + "\" "
                 : "");
 
@@ -278,7 +278,7 @@ namespace WitcherScriptMerger
             if (!Program.MainForm.ReviewEachMergeSetting && hasVanillaVersion)
                 args += " --auto";
 
-            string kdiff3Path = (Path.IsPathRooted(Paths.KDiff3)
+            var kdiff3Path = (Path.IsPathRooted(Paths.KDiff3)
                 ? Paths.KDiff3
                 : Path.Combine(Environment.CurrentDirectory, Paths.KDiff3));
 
@@ -344,11 +344,11 @@ namespace WitcherScriptMerger
 
         DialogResult HandleCanceledMerge(int remainingMergesForFile, Merge merge)
         {
-            string msg = $"Merge {ProgressInfo.CurrentMergeNum} of {ProgressInfo.TotalMergeCount} was canceled.";
+            var msg = $"Merge {ProgressInfo.CurrentMergeNum} of {ProgressInfo.TotalMergeCount} was canceled.";
             var buttons = MessageBoxButtons.OK;
             if (remainingMergesForFile > 0)
             {
-                string fileName = Path.GetFileName(merge.RelativePath);
+                var fileName = Path.GetFileName(merge.RelativePath);
                 msg += $"\n\nContinue with {remainingMergesForFile} remaining merge{remainingMergesForFile.GetPluralS()} for file {fileName}?";
                 buttons = MessageBoxButtons.YesNo;
             }
@@ -388,21 +388,21 @@ namespace WitcherScriptMerger
                 if (_vanillaFile != null)
                 {
                     ProgressInfo.CurrentAction = "Unpacking vanilla bundle content file";
-                    string vanillaContentFile = UnpackFile(_vanillaFile.FullName, contentRelativePath, "Vanilla");
-                    _vanillaFile = new FileInfo(vanillaContentFile);
+                    var vanillaContentPath = UnpackFile(_vanillaFile.FullName, contentRelativePath, "Vanilla");
+                    _vanillaFile = new FileInfo(vanillaContentPath);
                 }
             }
 
             if (source1.TextFile == null)
             {
                 ProgressInfo.CurrentAction = $"Unpacking bundle content file for {source1.Name}";
-                string modContentFile1 = UnpackFile(source1.Bundle.FullName, contentRelativePath, "Mod 1");
+                var modContentFile1 = UnpackFile(source1.Bundle.FullName, contentRelativePath, "Mod 1");
                 if (modContentFile1 == null)
                     return false;
                 source1.TextFile = new FileInfo(modContentFile1);
             }
             ProgressInfo.CurrentAction = $"Unpacking bundle content file for {source2.Name}";
-            string modContentFile2 = UnpackFile(source2.Bundle.FullName, contentRelativePath, "Mod 2");
+            var modContentFile2 = UnpackFile(source2.Bundle.FullName, contentRelativePath, "Mod 2");
             if (modContentFile2 == null)
                 return false;
             source2.TextFile = new FileInfo(modContentFile2);
@@ -414,7 +414,7 @@ namespace WitcherScriptMerger
             if (!ValidateBmsResources(bundlePath))
                 return null;
 
-            string outputDir = Path.Combine(Paths.TempBundleContent, outputDirName);
+            var outputDir = Path.Combine(Paths.TempBundleContent, outputDirName);
             if (!Directory.Exists(outputDir))
                 Directory.CreateDirectory(outputDir);
 
@@ -430,12 +430,12 @@ namespace WitcherScriptMerger
             using (var bmsProc = new Process { StartInfo = procInfo })
             {
                 bmsProc.Start();
-                string output = bmsProc.StandardError.ReadToEnd();  // QuickBMS prints results to std error, even if successful
+                var output = bmsProc.StandardError.ReadToEnd();  // QuickBMS prints results to std error, even if successful
 
                 if (output.Contains("- 0 files found"))
                 {
-                    string errorMsg = "Error unpacking bundle content file using QuickBMS.\nIts output is below.";
-                    int outputStart = output.IndexOf("- filter string");
+                    var errorMsg = "Error unpacking bundle content file using QuickBMS.\nIts output is below.";
+                    var outputStart = output.IndexOf("- filter string");
                     if (outputStart != -1)
                     {
                         output = output.Substring(outputStart);
@@ -455,7 +455,7 @@ namespace WitcherScriptMerger
                 throw new Exception("BackgroundWorker can't run 2 tasks concurrently.");
             _bgWorker.DoWork += (sender, e) =>
             {
-                string newBundlePath = PackNewBundle(bundlePath, true);
+                var newBundlePath = PackNewBundle(bundlePath, true);
                 if (newBundlePath == null)
                     return;
 
@@ -479,12 +479,12 @@ namespace WitcherScriptMerger
             ProgressInfo.CurrentPhase = (!isRepack ? "Packing Bundle" : "Repacking Bundle");
             ProgressInfo.CurrentAction = "Packing merged bundle content into new blob0.bundle";
 
-            string contentDir = Path.Combine(Environment.CurrentDirectory, Paths.MergedBundleContent);
+            var contentDir = Path.Combine(Environment.CurrentDirectory, Paths.MergedBundleContent);
             
             if (!ValidateWccLiteResources(contentDir))
                 return null;
 
-            string outputDir = Path.GetDirectoryName(bundlePath);
+            var outputDir = Path.GetDirectoryName(bundlePath);
             var procInfo = new ProcessStartInfo
             {
                 FileName = Paths.WccLite,
@@ -498,8 +498,8 @@ namespace WitcherScriptMerger
             using (var wccLiteProc = new Process { StartInfo = procInfo })
             {
                 wccLiteProc.Start();
-                string stdOutput = wccLiteProc.StandardOutput.ReadToEnd().Trim();
-                string stdError = wccLiteProc.StandardError.ReadToEnd().Trim();
+                var stdOutput = wccLiteProc.StandardOutput.ReadToEnd().Trim();
+                var stdError = wccLiteProc.StandardError.ReadToEnd().Trim();
 
                 string errorMsg = null;
                 if (!string.IsNullOrWhiteSpace(stdError))
@@ -517,8 +517,8 @@ namespace WitcherScriptMerger
             using (var wccLiteProc = new Process { StartInfo = procInfo })
             {
                 wccLiteProc.Start();
-                string stdOutput = wccLiteProc.StandardOutput.ReadToEnd();
-                string stdError = wccLiteProc.StandardError.ReadToEnd();
+                var stdOutput = wccLiteProc.StandardOutput.ReadToEnd();
+                var stdError = wccLiteProc.StandardError.ReadToEnd();
 
                 string errorMsg = null;
                 if (!string.IsNullOrWhiteSpace(stdError))
@@ -620,10 +620,10 @@ namespace WitcherScriptMerger
         /// </summary>
         void DeleteDirectory(string path)
         {
-            foreach (string directory in Directory.GetDirectories(path))
+            foreach (var subdirPath in Directory.GetDirectories(path))
             {
                 System.Threading.Thread.Sleep(1);
-                DeleteDirectory(directory);
+                DeleteDirectory(subdirPath);
             }
 
             try

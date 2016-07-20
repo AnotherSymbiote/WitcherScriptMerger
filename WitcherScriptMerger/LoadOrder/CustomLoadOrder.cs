@@ -47,7 +47,7 @@ namespace WitcherScriptMerger.LoadOrder
 
             for (int i = 0; i < lines.Length; ++i)
             {
-                string line = lines[i].Trim();
+                var line = lines[i].Trim();
 
                 if (line.StartsWith("[") && line.EndsWith("]"))
                 {
@@ -95,7 +95,7 @@ namespace WitcherScriptMerger.LoadOrder
                 return false;
             }
 
-            string modName = line.Substring(1, line.Length - 2);  // Trim brackets
+            var modName = line.Substring(1, line.Length - 2);  // Trim brackets
             setting = new ModLoadSetting(modName);
             return true;
         }
@@ -125,7 +125,7 @@ namespace WitcherScriptMerger.LoadOrder
                 return false;
             }
 
-            string priorityString = line.Substring(line.IndexOf('=') + 1);
+            var priorityString = line.Substring(line.IndexOf('=') + 1);
             int parsedPriority;
 
             if (!int.TryParse(priorityString, out parsedPriority))
@@ -200,8 +200,8 @@ namespace WitcherScriptMerger.LoadOrder
             if (loadSettings.Any(setting => setting.IsEnabled.Value))
                 return true;
 
-            int numSettings = loadSettings.Count();
-            int numMods = modNames.Count();
+            var numSettings = loadSettings.Count();
+            var numMods = modNames.Count();
 
             return (numSettings >= numMods - 1);
         }

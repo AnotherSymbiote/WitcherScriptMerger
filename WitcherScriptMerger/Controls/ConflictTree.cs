@@ -175,7 +175,7 @@ namespace WitcherScriptMerger.Controls
                         item.Enabled = Program.LoadOrder.IsValid;
                     }
 
-                    bool isDisabled = Program.LoadOrder.IsModDisabledByName(ClickedNode.Text);
+                    var isDisabled = Program.LoadOrder.IsModDisabledByName(ClickedNode.Text);
 
                     _contextToggleMod.Available = true;
                     _contextToggleMod.Text =
@@ -252,7 +252,7 @@ namespace WitcherScriptMerger.Controls
 
             Program.LoadOrder.Refresh();
 
-            int index = Program.LoadOrder.Mods.FindIndex(setting => setting.ModName.EqualsIgnoreCase(modName));
+            var index = Program.LoadOrder.Mods.FindIndex(setting => setting.ModName.EqualsIgnoreCase(modName));
 
             if (index > -1)
             {
@@ -269,7 +269,7 @@ namespace WitcherScriptMerger.Controls
             {
                 var modNames = fileNode.GetTreeNodes().Select(modNode => modNode.Text);
 
-                bool isResolved = Program.LoadOrder.HasResolvedConflict(modNames);
+                var isResolved = Program.LoadOrder.HasResolvedConflict(modNames);
 
                 var topPriorityMod =
                     isResolved
