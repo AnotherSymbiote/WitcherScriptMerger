@@ -237,13 +237,21 @@ namespace WitcherScriptMerger.Forms
 
         bool RefreshMergeInventory()
         {
+            InitializeProgressScreen("Loading Merges");
+
+            UpdateProgressAction("Loading MergeInventory.xml file");
             _inventory = MergeInventory.Load(Paths.Inventory);
 
+            UpdateProgressAction("Loading mods.settings file");
             Program.LoadOrder = new CustomLoadOrder();
 
             if (menuValidateCustomLoadOrder.Checked && _inventory.Merges.Any())
+            {
+                UpdateProgressAction("Validating load order");
                 LoadOrderValidator.ValidateAndFix(Program.LoadOrder);
+            }
 
+            UpdateProgressAction("Refreshing merge tree");
             return RefreshMergeTree();
         }
         
@@ -420,6 +428,10 @@ namespace WitcherScriptMerger.Forms
         {
             checkBundles = checkBundles && menuCheckBundledFiles.Checked;
 
+            InitializeProgressScreen("Detecting Conflicts", ProgressBarStyle.Continuous);
+            lblStatusLeft1.Text = "Refreshing...";
+            lblStatusLeft2.Visible = lblStatusLeft3.Visible = false;
+
             if (_inventory.ScriptsChanged && _inventory.BundleChanged)
                 treConflicts.Nodes.Clear();
             else
@@ -456,10 +468,6 @@ namespace WitcherScriptMerger.Forms
                         treConflicts.Nodes.Remove(catNode);
                 }
             }
-
-            InitializeProgressScreen("Detecting Conflicts", ProgressBarStyle.Continuous);
-            lblStatusLeft1.Text = "Refreshing...";
-            lblStatusLeft2.Visible = lblStatusLeft3.Visible = false;
 
             _modIndex = new ModFileIndex();
             _modIndex.BuildAsync(_inventory,
@@ -591,6 +599,8 @@ namespace WitcherScriptMerger.Forms
 
             if (Paths.ValidateModsDirectory())
                 RefreshMergeInventory();
+
+            HideProgressScreen();
         }
 
         void btnRefreshConflicts_Click(object sender, EventArgs e)
@@ -619,13 +629,13 @@ namespace WitcherScriptMerger.Forms
             if (mergedModName == null)
                 return;
             
+            InitializeProgressScreen("Merging");
+
             _inventory = MergeInventory.Load(Paths.Inventory);
 
             var merger = new FileMerger(_inventory, OnMergeProgressChanged, OnMergeComplete);
 
             var fileNodes = treConflicts.FileNodes.Where(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
-
-            InitializeProgressScreen("Merging", ProgressBarStyle.Marquee);
 
             merger.MergeByTreeNodesAsync(fileNodes, mergedModName);
         }
@@ -668,6 +678,7 @@ namespace WitcherScriptMerger.Forms
                 RefreshMergeInventory();
             else
             {
+                InitializeProgressScreen("Loading Merges");
                 Program.LoadOrder.Refresh();
                 RefreshMergeTree();
             }
@@ -770,7 +781,7 @@ namespace WitcherScriptMerger.Forms
             var affectedBundles = bundleMerges.Select(merge => merge.GetMergedBundle()).Distinct();
             foreach (var bundlePath in affectedBundles)
             {
-                InitializeProgressScreen("Merge Deleted", ProgressBarStyle.Marquee);
+                InitializeProgressScreen("Merge Deleted");
 
                 new FileMerger(_inventory, OnMergeProgressChanged, OnMergeComplete)
                     .RepackBundleAsync(bundlePath);
@@ -796,7 +807,7 @@ namespace WitcherScriptMerger.Forms
 
         #region Progress Screen
 
-        void InitializeProgressScreen(string progressOf, ProgressBarStyle style)
+        void InitializeProgressScreen(string progressOf, ProgressBarStyle style = ProgressBarStyle.Marquee)
         {
             menuStrip.Enabled
                 = lblGameDir.Enabled
@@ -807,6 +818,7 @@ namespace WitcherScriptMerger.Forms
                 = false;
             progressBar.Value = 0;
             lblProgressCurrentPhase.Text = progressOf;
+            lblProgressCurrentAction.Text = string.Empty;
             progressBar.Style = style;
 
             switch (style)
@@ -821,6 +833,13 @@ namespace WitcherScriptMerger.Forms
             }
 
             pnlProgress.Visible = true;
+            Update();
+        }
+
+        void UpdateProgressAction(string action)
+        {
+            lblProgressCurrentAction.Text = action;
+            Update();
         }
 
         void HideProgressScreen()
@@ -921,7 +940,7 @@ namespace WitcherScriptMerger.Forms
             var mergedBundleCount = mergedBundles.Count();
             foreach (var bundlePath in mergedBundles)
             {
-                InitializeProgressScreen($"Repacking Bundle{mergedBundleCount.GetPluralS()}", ProgressBarStyle.Marquee);
+                InitializeProgressScreen($"Repacking Bundle{mergedBundleCount.GetPluralS()}");
 
                 new FileMerger(_inventory, OnMergeProgressChanged, OnMergeComplete)
                     .RepackBundleAsync(bundlePath);
