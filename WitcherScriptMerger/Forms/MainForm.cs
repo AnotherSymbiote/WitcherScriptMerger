@@ -290,11 +290,14 @@ namespace WitcherScriptMerger.Forms
                             willDelete = true;
                             break;
                         }
-                        var latestHash = xxHash.ComputeHashHex(modFilePath);
-                        if (latestHash != null && mod.Hash != latestHash && ConfirmDeleteForChangedHash(merge, modFilePath, mod.Name))
+                        var latestHash = Hasher.ComputeHash(modFilePath);
+                        if (latestHash != null && mod.Hash != latestHash)
                         {
-                            willDelete = true;
-                            break;
+                            if (ConfirmDeleteForChangedHash(merge, modFilePath, mod.Name))
+                            {
+                                willDelete = true;
+                                break;
+                            }
                         }
                     }
                     if (willDelete)

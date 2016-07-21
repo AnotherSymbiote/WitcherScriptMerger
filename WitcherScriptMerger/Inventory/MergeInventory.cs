@@ -77,7 +77,7 @@ namespace WitcherScriptMerger.Inventory
             m.Mods.Add(
                 new FileHash
                 {
-                    Hash = xxHash.ComputeHashHex(modFilePath),
+                    Hash = Hasher.ComputeHash(modFilePath),
                     Name = source.Name
                 });
 
@@ -128,7 +128,7 @@ namespace WitcherScriptMerger.Inventory
                     if (mod.Hash == null)
                     {
                         anyMissing = true;
-                        mod.Hash = xxHash.ComputeHashHex(merge.GetModFile(mod.Name));
+                        mod.Hash = Hasher.ComputeHash(merge.GetModFile(mod.Name));
                     }
                 }
             }
