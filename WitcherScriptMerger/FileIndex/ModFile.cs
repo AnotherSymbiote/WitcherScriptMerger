@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 using WitcherScriptMerger.Inventory;
 
@@ -59,6 +60,11 @@ namespace WitcherScriptMerger.FileIndex
         public ModFile()
         {
             Mods = new List<FileHash>();
+        }
+
+        public bool ContainsMod(string modName)
+        {
+            return Mods.Any(mod => mod.Name.EqualsIgnoreCase(modName));
         }
 
         public string GetVanillaFile()

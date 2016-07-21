@@ -496,6 +496,9 @@ namespace WitcherScriptMerger.Forms
             {
                 foreach (var conflict in _modIndex.Conflicts)
                 {
+                    if (_inventory.HasResolvedConflict(conflict))
+                        continue;
+
                     var fileNode = treConflicts.FileNodes.FirstOrDefault(node =>
                         node.Text.EqualsIgnoreCase(conflict.RelativePath));
 

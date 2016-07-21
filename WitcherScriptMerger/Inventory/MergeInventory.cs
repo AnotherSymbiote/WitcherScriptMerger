@@ -98,22 +98,21 @@ namespace WitcherScriptMerger.Inventory
                 _serializer.Serialize(writer, this);
             }
         }
-
-        public bool HasResolvedConflict(string relPath, string modName)
+        
+        public bool HasResolvedConflict(ModFile conflict)
         {
-            var merge = Merges.FirstOrDefault(mrg => mrg.RelativePath.EqualsIgnoreCase(relPath));
+            var merge = Merges.FirstOrDefault(mrg => mrg.RelativePath.EqualsIgnoreCase(conflict.RelativePath));
             if (merge == null)
                 return false;
 
-            var mod = merge.Mods.FirstOrDefault(m => m.Name.EqualsIgnoreCase(modName));
-            if (mod == null)
+            if (conflict.Mods.Any(mod => !mod.Name.EqualsIgnoreCase(merge.MergedModName) && !merge.ContainsMod(mod.Name)))
                 return false;
 
-            if (new LoadOrderComparer().Compare(merge.MergedModName, modName) > 0)
+            if (merge.Mods.Any(mod => new LoadOrderComparer().Compare(merge.MergedModName, mod.Name) > 0))
                 return false;
 
-            var latestHash = xxHash.ComputeHashHex(merge.GetModFile(modName));
-            return (mod.Hash == latestHash);
+            return
+                merge.Mods.All(mod => mod.Hash == Hasher.ComputeHash(merge.GetModFile(mod.Name)));
         }
 
         // Adds file hashes to old inventories that don't have them

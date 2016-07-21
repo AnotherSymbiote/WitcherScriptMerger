@@ -107,9 +107,6 @@ namespace WitcherScriptMerger.FileIndex
                 else
                     throw new NotImplementedException();
 
-                if (inventory.HasResolvedConflict(relPath, modName))
-                    continue;
-
                 var existingFile = Files.FirstOrDefault(file =>
                     file.RelativePath.EqualsIgnoreCase(relPath));
                 if (existingFile == null)
