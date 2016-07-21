@@ -885,6 +885,11 @@ namespace WitcherScriptMerger.Forms
             }
         }
 
+        public DialogResult ShowError(string text, string title = "Error")
+        {
+            return ShowMessage(text, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
         public DialogResult ShowModal(Form form)
         {
             this.ActivateSafely();

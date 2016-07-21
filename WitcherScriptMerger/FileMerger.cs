@@ -441,7 +441,7 @@ namespace WitcherScriptMerger
                         output = output.Substring(outputStart);
                         errorMsg += "\n\n" + output;
                     }
-                    ShowError(errorMsg);
+                    Program.MainForm.ShowError(errorMsg);
                     return null;
                 }
 
@@ -508,7 +508,7 @@ namespace WitcherScriptMerger
                     errorMsg = stdOutput;
                 if (errorMsg != null)
                 {
-                    ShowError("Error packing merged content into a new bundle using wcc_lite.\nIts error output is below.\n\n" + errorMsg);
+                    Program.MainForm.ShowError("Error packing merged content into a new bundle using wcc_lite.\nIts error output is below.\n\n" + errorMsg);
                     return null;
                 }
             }
@@ -527,7 +527,7 @@ namespace WitcherScriptMerger
                     errorMsg = stdOutput;
                 if (errorMsg != null)
                 {
-                    ShowError("Error generating metadata.store for new merged bundle using wcc_lite.\nIts error output is below.\n\n" + errorMsg);
+                    Program.MainForm.ShowError("Error generating metadata.store for new merged bundle using wcc_lite.\nIts error output is below.\n\n" + errorMsg);
                     return null;
                 }
             }
@@ -538,17 +538,17 @@ namespace WitcherScriptMerger
         {
             if (!File.Exists(bundlePath))
             {
-                ShowError("Can't find bundle file:\n\n" + bundlePath, "Missing Bundle");
+                Program.MainForm.ShowError("Can't find bundle file:\n\n" + bundlePath, "Missing Bundle");
                 return false;
             }
             if (!File.Exists(Paths.Bms))
             {
-                ShowError("Can't find QuickBMS at this location:\n\n" + Paths.Bms, "Missing QuickBMS");
+                Program.MainForm.ShowError("Can't find QuickBMS at this location:\n\n" + Paths.Bms, "Missing QuickBMS");
                 return false;
             }
             if (!File.Exists(Paths.BmsPlugin))
             {
-                ShowError("Can't find QuickBMS plugin at this location:\n\n" + Paths.BmsPlugin, "Missing QuickBMS Plugin");
+                Program.MainForm.ShowError("Can't find QuickBMS plugin at this location:\n\n" + Paths.BmsPlugin, "Missing QuickBMS Plugin");
                 return false;
             }
             return true;
@@ -558,20 +558,15 @@ namespace WitcherScriptMerger
         {
             if (!Directory.Exists(contentDir))
             {
-                ShowError("Can't find Merged Bundle Content directory:\n\n" + contentDir, "Missing Directory");
+                Program.MainForm.ShowError("Can't find Merged Bundle Content directory:\n\n" + contentDir, "Missing Directory");
                 return false;
             }
             if (!File.Exists(Paths.WccLite))
             {
-                ShowError("Can't find wcc_lite at this location:\n\n" + Paths.WccLite, "Missing wcc_lite");
+                Program.MainForm.ShowError("Can't find wcc_lite at this location:\n\n" + Paths.WccLite, "Missing wcc_lite");
                 return false;
             }
             return true;
-        }
-
-        void ShowError(string msg, string title = "Error")
-        {
-            Program.MainForm.ShowMessage(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         void CleanUpTempFiles()

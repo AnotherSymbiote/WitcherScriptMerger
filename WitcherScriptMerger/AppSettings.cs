@@ -72,7 +72,7 @@ namespace WitcherScriptMerger
                     return (T)valueObject;
                 }
 
-                Program.MainForm.ShowMessage($"Config file doesn't exist:\n\n{config.FilePath}");
+                Program.MainForm.ShowError($"Config file doesn't exist:\n\n{config.FilePath}");
                 return default(T);
             }
             catch
@@ -89,7 +89,7 @@ namespace WitcherScriptMerger
                 if (config.HasFile)
                     return config.AppSettings.Settings[key].Value;
 
-                Program.MainForm.ShowMessage($"Config file doesn't exist:\n\n{config.FilePath}");
+                Program.MainForm.ShowError($"Config file doesn't exist:\n\n{config.FilePath}");
                 return string.Empty;
             }
             catch
@@ -106,7 +106,7 @@ namespace WitcherScriptMerger
             }
             catch (Exception ex)
             {
-                Program.MainForm.ShowMessage($"Failed to save config due to error:\n\n{ex.Message}");
+                Program.MainForm.ShowError($"Failed to save config due to error:\n\n{ex.Message}");
             }
         }
     }

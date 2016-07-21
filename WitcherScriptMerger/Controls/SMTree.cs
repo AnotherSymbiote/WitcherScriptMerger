@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -394,11 +392,7 @@ namespace WitcherScriptMerger.Controls
             if (RightClickedNode == null)
                 return;
 
-            string filePath = RightClickedNode.Tag as string;
-            if (!File.Exists(filePath))
-                Program.MainForm.ShowMessage("Can't find file: " + filePath);
-            else
-                Process.Start(filePath);
+            Program.TryOpenFile(RightClickedNode.Tag as string);
 
             RightClickedNode = null;
         }
@@ -408,11 +402,7 @@ namespace WitcherScriptMerger.Controls
             if (RightClickedNode == null)
                 return;
 
-            var dirPath = Path.GetDirectoryName(RightClickedNode.Tag as string);
-            if (!Directory.Exists(dirPath))
-                Program.MainForm.ShowMessage("Can't find directory: " + dirPath);
-            else
-                Process.Start(dirPath);
+            Program.TryOpenFileLocation(RightClickedNode.Tag as string);
 
             RightClickedNode = null;
         }

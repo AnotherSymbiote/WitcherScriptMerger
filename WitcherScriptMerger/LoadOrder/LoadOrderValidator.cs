@@ -48,7 +48,7 @@ namespace WitcherScriptMerger.LoadOrder
         static void PrioritizeMergedMod(CustomLoadOrder loadOrder, ModLoadSetting mergedModSetting)
         {
             // Priority of min - 1 will be incremented to min
-            int priority = CustomLoadOrder.TopPriority - 1;
+            var priority = CustomLoadOrder.TopPriority - 1;
 
             if (mergedModSetting != null)
             {
@@ -72,7 +72,7 @@ namespace WitcherScriptMerger.LoadOrder
 
         static void IncrementLeadingContiguousPriorities(CustomLoadOrder loadOrder, int startingPriority)
         {
-            int nextPriority = startingPriority + 1;
+            var nextPriority = startingPriority + 1;
             var modsToIncrement = loadOrder.Mods.Where(mod => mod.Priority == startingPriority).ToArray();
             var displacedMods = loadOrder.Mods.Where(mod => mod.Priority == nextPriority).ToArray();
 

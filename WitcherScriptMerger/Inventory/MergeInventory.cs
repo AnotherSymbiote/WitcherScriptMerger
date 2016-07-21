@@ -69,7 +69,7 @@ namespace WitcherScriptMerger.Inventory
 
         public void AddModToMerge(FileMerger.MergeSource source, Merge m)
         {
-            string modFilePath =
+            var modFilePath =
                 m.IsBundleContent
                 ? source.Bundle.FullName
                 : source.TextFile.FullName;
@@ -118,7 +118,7 @@ namespace WitcherScriptMerger.Inventory
         // Adds file hashes to old inventories that don't have them
         static void AddMissingHashes(MergeInventory inventory)
         {
-            bool anyMissing = false;
+            var anyMissing = false;
 
             foreach (var merge in inventory.Merges)
             {
