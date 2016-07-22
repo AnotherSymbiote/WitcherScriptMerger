@@ -47,28 +47,8 @@ namespace WitcherScriptMerger.LoadOrder
 
             for (int i = 0; i < lines.Length; ++i)
             {
-                var line = lines[i].Trim();
-
-                if (line.StartsWith("[") && line.EndsWith("]"))
-                {
-                    if (!ProcessModNameLine(line, ref currModSetting))
-                        return;
-                }
-                else if (line.StartsWith("Enabled="))
-                {
-                    if (!ProcessIsEnabledLine(line, i + 1, currModSetting))
-                        return;
-                }
-                else if (line.StartsWith("Priority="))
-                {
-                    if (!ProcessPriorityLine(line, i + 1, currModSetting))
-                        return;
-                }
-                else if (!string.IsNullOrWhiteSpace(line) && !line.StartsWith(";"))
-                {
-                    ShowWarningForMalformedFile($"Unrecognized value on line {i + 1}:\n\n{line}");
+                if (!ProcessLine(lines[i], i + 1, ref currModSetting))
                     return;
-                }
 
                 if (currModSetting != null
                     && currModSetting.IsEnabled.HasValue
@@ -85,6 +65,33 @@ namespace WitcherScriptMerger.LoadOrder
                 .OrderBy(m => m.Priority)
                 .ThenBy(m => m.ModName)
                 .ToList();
+        }
+
+        bool ProcessLine(string line, int lineNum, ref ModLoadSetting setting)
+        {
+            line = line.Replace(" ", "").Replace("\t", "");
+
+            if (line.StartsWith("[") && line.EndsWith("]"))
+            {
+                if (!ProcessModNameLine(line, ref setting))
+                    return false;
+            }
+            else if (line.StartsWith("Enabled="))
+            {
+                if (!ProcessIsEnabledLine(line, lineNum, setting))
+                    return false;
+            }
+            else if (line.StartsWith("Priority="))
+            {
+                if (!ProcessPriorityLine(line, lineNum, setting))
+                    return false;
+            }
+            else if (!string.IsNullOrWhiteSpace(line) && !line.StartsWith(";"))
+            {
+                ShowWarningForMalformedFile($"Unrecognized value on line {lineNum}:\n\n{line}");
+                return false;
+            }
+            return true;
         }
 
         bool ProcessModNameLine(string line, ref ModLoadSetting setting)
