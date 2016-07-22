@@ -167,8 +167,8 @@ namespace WitcherScriptMerger.LoadOrder
             {
                 builder
                     .Append("[").Append(modSetting.ModName).AppendLine("]")
-                    .Append("Enabled=").AppendLine(Convert.ToInt32(modSetting.IsEnabled).ToString())
-                    .Append("Priority=").AppendLine(modSetting.Priority.ToString());
+                    .Append("Enabled = ").AppendLine(Convert.ToInt32(modSetting.IsEnabled).ToString())
+                    .Append("Priority = ").AppendLine(modSetting.Priority.ToString());
 
                 if (modSetting != Mods.Last())
                     builder.AppendLine();
