@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WitcherScriptMerger.Controls;
 using WitcherScriptMerger.FileIndex;
@@ -74,13 +75,13 @@ namespace WitcherScriptMerger.Forms
             Program.Settings.EndBatch();
         }
 
-        void MainForm_Shown(object sender, EventArgs e)
+        async void MainForm_Shown(object sender, EventArgs e)
         {
             Update();
 
             var repackingBundle = false;
             if (!string.IsNullOrWhiteSpace(txtGameDir.Text) || !Paths.IsModsDirectoryDerived)
-                repackingBundle = RefreshMergeInventory();
+                repackingBundle = await RefreshMergeInventory();
             if (repackingBundle)
                 return;
 
@@ -235,29 +236,43 @@ namespace WitcherScriptMerger.Forms
 
         #region Refreshing Trees
 
-        bool RefreshMergeInventory()
+        async Task<bool> RefreshMergeInventory()
         {
-            InitializeProgressScreen("Loading Merges");
+            InitializeProgressScreen("Loading Merges", ProgressBarStyle.Continuous);
 
-            UpdateProgressAction("Loading MergeInventory.xml file");
-            _inventory = MergeInventory.Load(Paths.Inventory);
+            lblProgressCurrentAction.Text = "Loading MergeInventory.xml file";
+            _inventory = await Task.Run(() =>
+                MergeInventory.Load(Paths.Inventory)
+            );
+            progressBar.Value = 25;
 
-            UpdateProgressAction("Loading mods.settings file");
-            Program.LoadOrder = new CustomLoadOrder();
+            lblProgressCurrentAction.Text = "Loading mods.settings file";
+            Program.LoadOrder = await Task.Run(() =>
+                new CustomLoadOrder()
+            );
+            progressBar.Value = 50;
 
             if (menuValidateCustomLoadOrder.Checked && _inventory.Merges.Any())
             {
-                UpdateProgressAction("Validating load order");
-                LoadOrderValidator.ValidateAndFix(Program.LoadOrder);
+                lblProgressCurrentAction.Text = "Validating load order";
+                await Task.Run(() =>
+                    LoadOrderValidator.ValidateAndFix(Program.LoadOrder)
+                );
             }
+            progressBar.Value = 75;
 
-            UpdateProgressAction("Refreshing merge tree");
-            return RefreshMergeTree();
+            lblProgressCurrentAction.Text = "Refreshing merge tree";
+            return await Task.Run(() =>
+                RefreshMergeTree()
+            );
         }
         
         bool RefreshMergeTree()
         {
-            treMerges.Nodes.Clear();
+            this.Invoke((MethodInvoker)delegate
+            {
+                treMerges.Nodes.Clear();
+            });
             var changed = false;
             var bundleMergesPruned = new List<Merge>();
             var mergesToDelete = new List<Merge>();
@@ -311,22 +326,25 @@ namespace WitcherScriptMerger.Forms
                 fileNode.Tag = merge.GetMergedFile();
                 fileNode.ForeColor = MergeTree.FileNodeForeColor;
 
-                var categoryNode = treMerges.GetCategoryNode(merge.Category);
-                if (categoryNode == null)
+                this.Invoke((MethodInvoker)delegate
                 {
-                    categoryNode = new TreeNode(merge.Category.DisplayName);
-                    categoryNode.ToolTipText = merge.Category.ToolTipText;
-                    categoryNode.Tag = merge.Category;
-                    treMerges.Nodes.Add(categoryNode);
-                }
-                categoryNode.Nodes.Add(fileNode);
+                    var categoryNode = treMerges.GetCategoryNode(merge.Category);
+                    if (categoryNode == null)
+                    {
+                        categoryNode = new TreeNode(merge.Category.DisplayName);
+                        categoryNode.ToolTipText = merge.Category.ToolTipText;
+                        categoryNode.Tag = merge.Category;
+                        treMerges.Nodes.Add(categoryNode);
+                    }
+                    categoryNode.Nodes.Add(fileNode);
 
-                foreach (var mod in merge.Mods)
-                {
-                    var modNode = new TreeNode(mod.Name);
-                    modNode.Tag = merge.GetModFile(mod.Name);
-                    fileNode.Nodes.Add(modNode);
-                }
+                    foreach (var mod in merge.Mods)
+                    {
+                        var modNode = new TreeNode(mod.Name);
+                        modNode.Tag = merge.GetModFile(mod.Name);
+                        fileNode.Nodes.Add(modNode);
+                    }
+                });
             }
             if (mergesToDelete.Any())
             {
@@ -339,15 +357,20 @@ namespace WitcherScriptMerger.Forms
                 if (bundleMergesPruned.Any())
                     return DeleteMerges(bundleMergesPruned);
             }
-            treMerges.Sort();
-            treMerges.ExpandAll();
-            treMerges.ScrollToTop();
-            treMerges.SetFontBold(SMTree.LevelType.Categories);
-            foreach (var modNode in treMerges.ModNodes)
-                modNode.SetIsCheckBoxVisible(false);
+            this.Invoke((MethodInvoker)delegate
+            {
+                treMerges.Sort();
+                treMerges.ExpandAll();
+                treMerges.ScrollToTop();
+                treMerges.SetFontBold(SMTree.LevelType.Categories);
+                foreach (var modNode in treMerges.ModNodes)
+                    modNode.SetIsCheckBoxVisible(false);
 
-            UpdateStatusText();
-            EnableUnmergeIfValidSelection();
+                UpdateStatusText();
+                EnableUnmergeIfValidSelection();
+
+                progressBar.Value = 100;
+            });
             return false;
         }
 
@@ -591,7 +614,7 @@ namespace WitcherScriptMerger.Forms
                 return null;
         }
 
-        void btnRefreshMerged_Click(object sender, EventArgs e)
+        async void btnRefreshMerged_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtGameDir.Text))
             {
@@ -604,7 +627,7 @@ namespace WitcherScriptMerger.Forms
                 txtGameDir.Text = Path.GetDirectoryName(txtGameDir.Text);
 
             if (Paths.ValidateModsDirectory())
-                RefreshMergeInventory();
+                await RefreshMergeInventory();
 
             HideProgressScreen();
         }
@@ -673,7 +696,7 @@ namespace WitcherScriptMerger.Forms
             DeleteMerges(fileNodes);
         }
 
-        void RefreshTrees(bool checkBundles = true)
+        async void RefreshTrees(bool checkBundles = true)
         {
             if (!Paths.ValidateModsDirectory() ||
                 (menuCheckScripts.Checked && !Paths.ValidateScriptsDirectory()) ||
@@ -681,7 +704,7 @@ namespace WitcherScriptMerger.Forms
                 return;
 
             if (_inventory == null)
-                RefreshMergeInventory();
+                await RefreshMergeInventory();
             else
             {
                 InitializeProgressScreen("Loading Merges");
@@ -842,12 +865,6 @@ namespace WitcherScriptMerger.Forms
             Update();
         }
 
-        void UpdateProgressAction(string action)
-        {
-            lblProgressCurrentAction.Text = action;
-            Update();
-        }
-
         void HideProgressScreen()
         {
             pnlProgress.Visible = false;
@@ -896,8 +913,11 @@ namespace WitcherScriptMerger.Forms
 
             if (this.InvokeRequired)
             {
-                return (DialogResult)this.Invoke(new Func<DialogResult>(
-                    () => { return form.ShowDialog(this); }));
+                return (DialogResult)this.Invoke(
+                    new Func<DialogResult>(
+                        () => { return form.ShowDialog(this); }
+                    )
+                );
             }
             else
             {
