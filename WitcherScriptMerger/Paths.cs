@@ -1,16 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using WitcherScriptMerger.Tools;
 
 namespace WitcherScriptMerger
 {
     internal static class Paths
     {
-        public static string KDiff3 = Program.Settings.Get("KDiff3Path");
-        public static string Bms = Program.Settings.Get("QuickBmsPath");
-        public static string BmsPlugin = Program.Settings.Get("QuickBmsPluginPath");
-        public static string WccLite = Program.Settings.Get("WccLitePath");
-
         public const string TempBundleContent = "tempbundlecontent";
         public static string MergedBundleContent = "Merged Bundle Content";
         public static string MergedBundleContentAbsolute = Path.Combine(Environment.CurrentDirectory, MergedBundleContent);
@@ -59,10 +55,10 @@ namespace WitcherScriptMerger
 
         public static bool ValidateDependencyPaths()
         {
-            return (File.Exists(KDiff3) &&
-                    File.Exists(Bms) &&
-                    File.Exists(BmsPlugin) &&
-                    File.Exists(WccLite));
+            return (File.Exists(KDiff3.ExePath) &&
+                    File.Exists(QuickBms.ExePath) &&
+                    File.Exists(QuickBms.PluginPath) &&
+                    File.Exists(WccLite.ExePath));
         }
 
         public static bool ValidateModsDirectory()

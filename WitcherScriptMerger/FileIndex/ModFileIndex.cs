@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using WitcherScriptMerger.Inventory;
+using WitcherScriptMerger.Tools;
 
 namespace WitcherScriptMerger.FileIndex
 {
@@ -77,7 +77,7 @@ namespace WitcherScriptMerger.FileIndex
                     {
                         foreach (var bundlePath in bundlePaths)
                         {
-                            var contentPaths = GetBundleContentPaths(bundlePath);
+                            var contentPaths = QuickBms.GetBundleContentPaths(bundlePath);
                             Files.AddRange(GetModFilesFromPaths(contentPaths, Categories.BundleText, inventory, modName, bundlePath));
                         }
                     }
@@ -121,33 +121,6 @@ namespace WitcherScriptMerger.FileIndex
                     existingFile.Mods.Add(new FileHash { Name = modName });
             }
             return fileList;
-        }
-
-        public static List<string> GetBundleContentPaths(string bundlePath)
-        {
-            var contentPaths = new List<string>();
-
-            var procInfo = new ProcessStartInfo
-            {
-                FileName = Paths.Bms,
-                Arguments = $"-l \"{Paths.BmsPlugin}\" \"{bundlePath}\"",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
-            using (var bmsProc = new Process { StartInfo = procInfo })
-            {
-                bmsProc.Start();
-                var output = bmsProc.StandardOutput.ReadToEnd() + "\n\n" + bmsProc.StandardError.ReadToEnd();
-                var footerPos = output.LastIndexOf("QuickBMS generic");
-                var outputLines = output.Substring(0, footerPos).Split('\n');
-                var paths = outputLines
-                    .Where(line => line.Length > 5)
-                    .Select(line => line.Substring(line.LastIndexOf(' ')).Trim());
-                contentPaths.AddRange(paths);
-            }
-            return contentPaths;
         }
 
         private IEnumerable<string> GetIgnoredModNames()

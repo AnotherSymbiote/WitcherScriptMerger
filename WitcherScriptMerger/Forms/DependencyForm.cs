@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using WitcherScriptMerger.Tools;
 
 namespace WitcherScriptMerger.Forms
 {
@@ -12,10 +13,10 @@ namespace WitcherScriptMerger.Forms
         {
             get
             {
-                return (!txtKDiff3Path.Text.EqualsIgnoreCase(Paths.KDiff3) ||
-                        !txtBmsPath.Text.EqualsIgnoreCase(Paths.Bms) ||
-                        !txtBmsPluginPath.Text.EqualsIgnoreCase(Paths.BmsPlugin) ||
-                        !txtWccLitePath.Text.EqualsIgnoreCase(Paths.WccLite));
+                return (!txtKDiff3Path.Text.EqualsIgnoreCase(KDiff3.ExePath) ||
+                        !txtBmsPath.Text.EqualsIgnoreCase(QuickBms.ExePath) ||
+                        !txtBmsPluginPath.Text.EqualsIgnoreCase(QuickBms.PluginPath) ||
+                        !txtWccLitePath.Text.EqualsIgnoreCase(WccLite.ExePath));
             }
         }
 
@@ -26,10 +27,10 @@ namespace WitcherScriptMerger.Forms
 
         void DependencyForm_Load(object sender, EventArgs e)
         {
-            txtKDiff3Path.Text = Paths.KDiff3;
-            txtBmsPath.Text = Paths.Bms;
-            txtBmsPluginPath.Text = Paths.BmsPlugin;
-            txtWccLitePath.Text = Paths.WccLite;
+            txtKDiff3Path.Text = KDiff3.ExePath;
+            txtBmsPath.Text = QuickBms.ExePath;
+            txtBmsPluginPath.Text = QuickBms.PluginPath;
+            txtWccLitePath.Text = WccLite.ExePath;
             btnOK.Select();
         }
 
@@ -55,10 +56,10 @@ namespace WitcherScriptMerger.Forms
             if (AreAnyPathsChanged)
             {
                 Program.Settings.StartBatch();
-                Paths.KDiff3 = UpdatePathSetting(Paths.KDiff3, txtKDiff3Path.Text, "Kdiff3Path");
-                Paths.Bms = UpdatePathSetting(Paths.Bms, txtBmsPath.Text, "QuickBmsPath");
-                Paths.BmsPlugin = UpdatePathSetting(Paths.BmsPlugin, txtBmsPluginPath.Text, "QuickBmsPluginPath");
-                Paths.WccLite = UpdatePathSetting(Paths.WccLite, txtWccLitePath.Text, "WccLitePath");
+                KDiff3.ExePath = UpdatePathSetting(KDiff3.ExePath, txtKDiff3Path.Text, "Kdiff3Path");
+                QuickBms.ExePath = UpdatePathSetting(QuickBms.ExePath, txtBmsPath.Text, "QuickBmsPath");
+                QuickBms.PluginPath = UpdatePathSetting(QuickBms.PluginPath, txtBmsPluginPath.Text, "QuickBmsPluginPath");
+                WccLite.ExePath = UpdatePathSetting(WccLite.ExePath, txtWccLitePath.Text, "WccLitePath");
                 Program.Settings.EndBatch();
             }
 
