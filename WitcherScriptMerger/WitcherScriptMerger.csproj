@@ -67,7 +67,7 @@
     <Compile Include="FileIndex\ModFile.cs" />
     <Compile Include="FileIndex\ModFileCategory.cs" />
     <Compile Include="FileIndex\ModFileIndex.cs" />
-    <Compile Include="FileMerger.cs" />
+    <Compile Include="Inventory\FileMerger.cs" />
     <Compile Include="Forms\DependencyForm.cs">
       <SubType>Form</SubType>
     </Compile>
