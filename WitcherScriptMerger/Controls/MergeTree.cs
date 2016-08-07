@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using WitcherScriptMerger.FileIndex;
 
 namespace WitcherScriptMerger.Controls
 {

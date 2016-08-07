@@ -56,27 +56,25 @@ namespace WitcherScriptMerger
 
         public static bool TryOpenFile(string path)
         {
-            if (File.Exists(path))
-            {
-                if (path.EndsWithIgnoreCase(".exe"))
-                {
-                    var startInfo = new ProcessStartInfo
-                    {
-                        FileName = path,
-                        WorkingDirectory = Path.GetDirectoryName(path)
-                    };
-                    Process.Start(startInfo);
-                }
-                else
-                    Process.Start(path);
-
-                return true;
-            }
-            else
+            if (!File.Exists(path))
             {
                 MainForm.ShowMessage("Can't find file: " + path);
                 return false;
             }
+
+            if (path.EndsWithIgnoreCase(".exe"))  // EXEs need working dir to be specified
+            {
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = path,
+                    WorkingDirectory = Path.GetDirectoryName(path)
+                };
+                Process.Start(startInfo);
+            }
+            else
+                Process.Start(path);
+
+            return true;
         }
 
         public static bool TryOpenFileLocation(string filePath)
@@ -86,16 +84,13 @@ namespace WitcherScriptMerger
 
         public static bool TryOpenDirectory(string dirPath)
         {
-            if (Directory.Exists(dirPath))
-            {
-                Process.Start(dirPath);
-                return true;
-            }
-            else
+            if (!Directory.Exists(dirPath))
             {
                 MainForm.ShowMessage("Can't find directory: " + dirPath);
                 return false;
             }
+            Process.Start(dirPath);
+            return true;
         }
     }
 }

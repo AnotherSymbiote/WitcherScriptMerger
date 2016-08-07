@@ -183,7 +183,7 @@ namespace WitcherScriptMerger.Controls
                         ? "Enable Mod"
                         : "Disable Mod";
 
-                    _contextRemoveFromCustomLoadOrder.Available = Program.LoadOrder.Contains(ClickedNode.Text);
+                    _contextRemoveFromCustomLoadOrder.Available = Program.LoadOrder.ContainsMod(ClickedNode.Text);
                     _contextRemoveFromCustomLoadOrder.Text =
                         isDisabled
                         ? "Clear Priority && Disabled State"

@@ -213,7 +213,7 @@ namespace WitcherScriptMerger.LoadOrder
             return (numSettings >= numMods - 1);
         }
 
-        public bool Contains(string modName)
+        public bool ContainsMod(string modName)
         {
             return Mods.Any(setting => setting.ModName.EqualsIgnoreCase(modName));
         }
