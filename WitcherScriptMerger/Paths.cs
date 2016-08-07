@@ -21,6 +21,8 @@ namespace WitcherScriptMerger
 
         public static string BundlesDirectory => Path.Combine(GameDirectory, BundleBase);
 
+        public static string DlcDirectory => Path.Combine(GameDirectory, "DLC");
+
         static string _scriptsDirSetting = Program.Settings.Get("VanillaScriptsDirectory");
         public static string ScriptsDirectory
         {

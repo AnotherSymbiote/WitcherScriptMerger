@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WitcherScriptMerger.FileIndex;
 using WitcherScriptMerger.Forms;
@@ -337,12 +338,21 @@ namespace WitcherScriptMerger
             if (_vanillaFile == null)
             {
                 ProgressInfo.CurrentAction = "Searching for corresponding vanilla bundle";
-                var bundleDirs = Directory.GetDirectories(Paths.BundlesDirectory)
-                    .Select(path => Path.Combine(path, "bundles"))
-                    .Where(path => Directory.Exists(path))
-                    .ToList();
-                for (int i = bundleDirs.Count - 1; i >= 0; --i)  // Search vanilla directories in reverse
-                {                                                // order, as patches override content.
+
+                var bundleDirs =
+                    Directory.GetDirectories(Paths.BundlesDirectory)
+                        .Select(path => Path.Combine(path, "bundles"))
+                        .Concat(
+                            Directory.GetDirectories(Paths.DlcDirectory)
+                                .Where(path => new Regex("DLC[0-9]*$").IsMatch(path) || new Regex("ep[0-9]$").IsMatch(path))
+                                .Select(path => Path.Combine(path, Paths.BundleBase, "bundles"))
+                        )
+                        .Where(path => Directory.Exists(path))
+                        .OrderBy(path => path, new LoadOrderComparer())
+                        .ToArray();
+
+                for (int i = bundleDirs.Length - 1; i >= 0; --i)  // Search vanilla directories in reverse
+                {                                                 // order, as patches & DLC override content.
                     var bundleFiles = Directory.GetFiles(bundleDirs[i], "*.bundle");
                     foreach (var bundle in bundleFiles)
                     {
