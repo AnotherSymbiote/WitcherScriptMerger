@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 using WitcherScriptMerger.FileIndex;
 
@@ -29,6 +30,11 @@ namespace WitcherScriptMerger.Inventory
                 throw new Exception($"Can't get bundle for file of category '{Category.DisplayName}'.");
 
             return Path.Combine(Paths.ModsDirectory, MergedModName, Paths.BundleBase, BundleName);
+        }
+
+        public FileHash GetHashByModName(string modName)
+        {
+            return Mods.FirstOrDefault(m => m.Name.EqualsIgnoreCase(modName));
         }
     }
 }

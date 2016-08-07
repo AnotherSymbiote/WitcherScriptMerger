@@ -248,9 +248,9 @@ namespace WitcherScriptMerger.Controls
 
         void ContextRemoveFromCustomLoadOrder(object sender, EventArgs e)
         {
-            var modName = RightClickedNode.Text;
-
             Program.LoadOrder.Refresh();
+
+            var modName = RightClickedNode.Text;
 
             var index = Program.LoadOrder.Mods.FindIndex(setting => setting.ModName.EqualsIgnoreCase(modName));
 
@@ -315,6 +315,15 @@ namespace WitcherScriptMerger.Controls
                     }
                     else if ((fileNode.Parent.Tag as ModFileCategory).IsSupported)
                         modNode.SetIsCheckBoxVisible(true);
+
+                    var mergeFile = Program.Inventory
+                        ?.GetMergeByRelativePath(fileNode.Text)
+                        ?.GetHashByModName(modNode.Text);
+                    if (mergeFile != null && mergeFile.IsOutdated)
+                    {
+                        modNode.ToolTipText += " - CHANGED SINCE MERGE";
+                        modNode.SetFontStyle(FontStyle.Italic);
+                    }
                 }
             }
         }

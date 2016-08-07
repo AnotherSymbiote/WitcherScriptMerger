@@ -307,6 +307,7 @@ namespace WitcherScriptMerger.Forms
                         var latestHash = Tools.Hasher.ComputeHash(modFilePath);
                         if (latestHash != null && mod.Hash != latestHash)
                         {
+                            mod.IsOutdated = true;
                             if (ConfirmDeleteForChangedHash(merge, modFilePath, mod.Name))
                             {
                                 willDelete = true;

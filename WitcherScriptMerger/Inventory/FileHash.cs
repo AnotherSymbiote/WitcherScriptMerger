@@ -10,5 +10,8 @@ namespace WitcherScriptMerger.Inventory
 
         [XmlText]
         public string Name { get; set; }
+
+        [XmlIgnore]
+        public bool IsOutdated { get; set; }
     }
 }

@@ -121,6 +121,11 @@ namespace WitcherScriptMerger.Inventory
                 merge.Mods.All(mod => mod.Hash == Tools.Hasher.ComputeHash(merge.GetModFile(mod.Name)));
         }
 
+        public Merge GetMergeByRelativePath(string relativePath)
+        {
+            return Merges.FirstOrDefault(m => m.RelativePath.EqualsIgnoreCase(relativePath));
+        }
+
         // Adds file hashes to old inventories that don't have them
         static void AddMissingHashes(MergeInventory inventory)
         {
