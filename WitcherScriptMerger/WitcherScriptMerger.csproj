@@ -63,7 +63,7 @@
     </Compile>
     <Compile Include="Controls\SMTreeSorter.cs" />
     <Compile Include="Controls\ToolStripRegion.cs" />
-    <Compile Include="Inventory\xxHash.cs" />
+    <Compile Include="Tools\xxHash.cs" />
     <Compile Include="FileIndex\ModFile.cs" />
     <Compile Include="FileIndex\ModFileCategory.cs" />
     <Compile Include="FileIndex\ModFileIndex.cs" />

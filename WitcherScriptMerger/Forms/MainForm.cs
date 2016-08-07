@@ -42,7 +42,6 @@ namespace WitcherScriptMerger.Forms
             set { menuValidateCustomLoadOrder.Checked = value; }
         }
 
-        MergeInventory _inventory = null;
         ModFileIndex _modIndex = null;
 
         #endregion
@@ -241,7 +240,7 @@ namespace WitcherScriptMerger.Forms
             InitializeProgressScreen("Loading Merges", ProgressBarStyle.Continuous);
 
             lblProgressCurrentAction.Text = "Loading MergeInventory.xml file";
-            _inventory = await Task.Run(() =>
+            Program.Inventory = await Task.Run(() =>
                 MergeInventory.Load(Paths.Inventory)
             );
             progressBar.Value = 25;
@@ -252,7 +251,7 @@ namespace WitcherScriptMerger.Forms
             );
             progressBar.Value = 50;
 
-            if (menuValidateCustomLoadOrder.Checked && _inventory.Merges.Any())
+            if (menuValidateCustomLoadOrder.Checked && Program.Inventory.Merges.Any())
             {
                 lblProgressCurrentAction.Text = "Validating load order";
                 await Task.Run(() =>
@@ -276,12 +275,12 @@ namespace WitcherScriptMerger.Forms
             var changed = false;
             var bundleMergesPruned = new List<Merge>();
             var mergesToDelete = new List<Merge>();
-            for (int i = _inventory.Merges.Count - 1; i >= 0; --i)
+            for (int i = Program.Inventory.Merges.Count - 1; i >= 0; --i)
             {
-                var merge = _inventory.Merges[i];
+                var merge = Program.Inventory.Merges[i];
                 if (!File.Exists(merge.GetMergedFile()) && ConfirmPruneMissingMergeFile(merge))
                 {
-                    _inventory.Merges.RemoveAt(i);
+                    Program.Inventory.Merges.RemoveAt(i);
                     changed = true;
 
                     if (merge.IsBundleContent)
@@ -305,7 +304,7 @@ namespace WitcherScriptMerger.Forms
                             willDelete = true;
                             break;
                         }
-                        var latestHash = Hasher.ComputeHash(modFilePath);
+                        var latestHash = Tools.Hasher.ComputeHash(modFilePath);
                         if (latestHash != null && mod.Hash != latestHash)
                         {
                             if (ConfirmDeleteForChangedHash(merge, modFilePath, mod.Name))
@@ -322,27 +321,46 @@ namespace WitcherScriptMerger.Forms
                     }
                 }
 
-                var fileNode = new TreeNode(merge.RelativePath);
-                fileNode.Tag = merge.GetMergedFile();
-                fileNode.ForeColor = MergeTree.FileNodeForeColor;
-
                 this.Invoke((MethodInvoker)delegate
                 {
+                    var fileNode = new TreeNode
+                    {
+                        Text = merge.RelativePath,
+                        ForeColor = MergeTree.FileNodeForeColor,
+                        Tag = new MergeTree.NodeMetadata
+                        {
+                            FilePath = merge.GetMergedFile(),
+                            ModFile = merge
+                        }
+                    };
+
                     var categoryNode = treMerges.GetCategoryNode(merge.Category);
                     if (categoryNode == null)
                     {
-                        categoryNode = new TreeNode(merge.Category.DisplayName);
-                        categoryNode.ToolTipText = merge.Category.ToolTipText;
-                        categoryNode.Tag = merge.Category;
+                        categoryNode = new TreeNode
+                        {
+                            Text = merge.Category.DisplayName,
+                            ToolTipText = merge.Category.ToolTipText,
+                            Tag = merge.Category
+                        };
                         treMerges.Nodes.Add(categoryNode);
                     }
                     categoryNode.Nodes.Add(fileNode);
 
                     foreach (var mod in merge.Mods)
                     {
-                        var modNode = new TreeNode(mod.Name);
-                        modNode.Tag = merge.GetModFile(mod.Name);
-                        fileNode.Nodes.Add(modNode);
+                        fileNode.Nodes.Add(
+                            new TreeNode
+                            {
+                                Text = mod.Name,
+                                Tag = new MergeTree.NodeMetadata
+                                {
+                                    FilePath = merge.GetModFile(mod.Name),
+                                    FileHash = mod,
+                                    ModFile = merge
+                                }
+                            }
+                        );
                     }
                 });
             }
@@ -353,7 +371,7 @@ namespace WitcherScriptMerger.Forms
             }
             if (changed)
             {
-                _inventory.Save();
+                Program.Inventory.Save();
                 if (bundleMergesPruned.Any())
                     return DeleteMerges(bundleMergesPruned);
             }
@@ -458,7 +476,7 @@ namespace WitcherScriptMerger.Forms
             lblStatusLeft1.Text = "Refreshing...";
             lblStatusLeft2.Visible = lblStatusLeft3.Visible = false;
 
-            if (_inventory.ScriptsChanged && _inventory.BundleChanged)
+            if (Program.Inventory.ScriptsChanged && Program.Inventory.BundleChanged)
                 treConflicts.Nodes.Clear();
             else
             {
@@ -472,7 +490,7 @@ namespace WitcherScriptMerger.Forms
                 if (xmlCatNode != null)
                     nodesToUpdate.Add(xmlCatNode);
 
-                if (_inventory.BundleChanged || checkBundles || !menuCheckBundledFiles.Checked)
+                if (Program.Inventory.BundleChanged || checkBundles || !menuCheckBundledFiles.Checked)
                 {
                     var bundleTextCatNode = treConflicts.GetCategoryNode(Categories.BundleText);
                     if (bundleTextCatNode != null)
@@ -483,7 +501,10 @@ namespace WitcherScriptMerger.Forms
                 }
 
                 var missingFileNodes = treConflicts.FileNodes.Where(node =>
-                    node.GetTreeNodes().Any(modNode => !File.Exists(modNode.Tag as string)));
+                    node.GetTreeNodes().Any(modNode =>
+                        !File.Exists(modNode.GetMetadata().FilePath)
+                    )
+                );
                 nodesToUpdate.AddRange(missingFileNodes);
 
                 foreach (var node in nodesToUpdate)
@@ -496,7 +517,7 @@ namespace WitcherScriptMerger.Forms
             }
 
             _modIndex = new ModFileIndex();
-            _modIndex.BuildAsync(_inventory,
+            _modIndex.BuildAsync(
                 menuCheckScripts.Checked,
                 menuCheckXmlFiles.Checked,
                 checkBundles,
@@ -519,7 +540,7 @@ namespace WitcherScriptMerger.Forms
             {
                 foreach (var conflict in _modIndex.Conflicts)
                 {
-                    if (_inventory.HasResolvedConflict(conflict))
+                    if (Program.Inventory.HasResolvedConflict(conflict))
                         continue;
 
                     var fileNode = treConflicts.FileNodes.FirstOrDefault(node =>
@@ -527,31 +548,54 @@ namespace WitcherScriptMerger.Forms
 
                     if (fileNode == null)
                     {
-                        fileNode = new TreeNode(conflict.RelativePath);
-                        fileNode.Tag = (conflict.Category == Categories.Script || conflict.Category == Categories.Xml
-                            ? conflict.GetVanillaFile()
-                            : conflict.RelativePath);
+                        fileNode = new TreeNode
+                        {
+                            Text = conflict.RelativePath,
+                            Tag = new SMTree.NodeMetadata
+                            {
+                                FilePath = (conflict.Category == Categories.Script || conflict.Category == Categories.Xml
+                                    ? conflict.GetVanillaFile()
+                                    : conflict.RelativePath),
+                                ModFile = conflict
+                            }
+                        };
 
                         var categoryNode = treConflicts.GetCategoryNode(conflict.Category);
                         if (categoryNode == null)
                         {
-                            categoryNode = new TreeNode(conflict.Category.DisplayName);
-                            categoryNode.ToolTipText = conflict.Category.ToolTipText;
-                            categoryNode.Tag = conflict.Category;
+                            categoryNode = new TreeNode
+                            {
+                                Text = conflict.Category.DisplayName,
+                                ToolTipText = conflict.Category.ToolTipText,
+                                Tag = conflict.Category
+                            };
                             treConflicts.Nodes.Add(categoryNode);
                         }
                         categoryNode.Nodes.Add(fileNode);
                     }
 
+                    var merge = Program.Inventory.Merges.FirstOrDefault(mrg => mrg.RelativePath.EqualsIgnoreCase(conflict.RelativePath));
                     foreach (var mod in conflict.Mods)
                     {
+                        var mergeModHash = merge?.Mods.FirstOrDefault(m => m.Name.EqualsIgnoreCase(mod.Name));
+                        if (mergeModHash != null && !mergeModHash.IsOutdated)
+                            continue;
+
                         var modNode = fileNode.GetTreeNodes().FirstOrDefault(node =>
                             node.Text.EqualsIgnoreCase(mod.Name));
 
                         if (modNode == null)
                         {
-                            modNode = new TreeNode(mod.Name);
-                            modNode.Tag = conflict.GetModFile(mod.Name);
+                            modNode = new TreeNode
+                            {
+                                Text = mod.Name,
+                                Tag = new SMTree.NodeMetadata
+                                {
+                                    FilePath = conflict.GetModFile(mod.Name),
+                                    FileHash = mergeModHash,
+                                    ModFile = conflict
+                                }
+                            };
                             fileNode.Nodes.Add(modNode);
                         }
                     }
@@ -660,9 +704,9 @@ namespace WitcherScriptMerger.Forms
             
             InitializeProgressScreen("Merging");
 
-            _inventory = MergeInventory.Load(Paths.Inventory);
+            Program.Inventory = MergeInventory.Load(Paths.Inventory);
 
-            var merger = new FileMerger(_inventory, OnMergeProgressChanged, OnMergeComplete);
+            var merger = new FileMerger(Program.Inventory, OnMergeProgressChanged, OnMergeComplete);
 
             var fileNodes = treConflicts.FileNodes.Where(node => node.GetTreeNodes().Count(modNode => modNode.Checked) > 1);
 
@@ -678,10 +722,10 @@ namespace WitcherScriptMerger.Forms
 
         void OnMergeComplete(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (_inventory.HasChanged)
+            if (Program.Inventory.HasChanged)
             {
-                _inventory.Save();
-                RefreshTrees(_inventory.BundleChanged);
+                Program.Inventory.Save();
+                RefreshTrees(Program.Inventory.BundleChanged);
             }
             else
             {
@@ -703,7 +747,7 @@ namespace WitcherScriptMerger.Forms
                 (menuCheckBundledFiles.Checked && !Paths.ValidateBundlesDirectory()))
                 return;
 
-            if (_inventory == null)
+            if (Program.Inventory == null)
                 await RefreshMergeInventory();
             else
             {
@@ -749,7 +793,7 @@ namespace WitcherScriptMerger.Forms
         public void DeleteMerges(IEnumerable<TreeNode> fileNodes)
         {
             var merges = fileNodes.Select(node =>
-                _inventory.Merges.First(merge =>
+                Program.Inventory.Merges.First(merge =>
                     merge.RelativePath.EqualsIgnoreCase(node.Text)))
                     .ToList();
             DeleteMerges(merges);
@@ -768,7 +812,7 @@ namespace WitcherScriptMerger.Forms
                 }
                 if (merge.IsBundleContent)
                 {
-                    var mergesForBundle = _inventory.Merges.Where(m =>
+                    var mergesForBundle = Program.Inventory.Merges.Where(m =>
                     m.IsBundleContent &&
                     m.MergedModName.EqualsIgnoreCase(merge.MergedModName) &&
                     m.BundleName.EqualsIgnoreCase(merge.BundleName));
@@ -788,11 +832,11 @@ namespace WitcherScriptMerger.Forms
                         bundleMerges.Add(merge);
                 }
 
-                _inventory.Merges.Remove(merge);
+                Program.Inventory.Merges.Remove(merge);
             }
-            if (_inventory.HasChanged)
+            if (Program.Inventory.HasChanged)
             {
-                _inventory.Save();
+                Program.Inventory.Save();
                 if (bundleMerges.Count > 0)
                 {
                     HandleDeletedBundleMerges(bundleMerges);
@@ -800,7 +844,7 @@ namespace WitcherScriptMerger.Forms
                 }
                 // If mod index is null, we haven't refreshed it for the 1st time yet. Don't do it here.
                 if (_modIndex != null)
-                    RefreshTrees(_inventory.BundleChanged);
+                    RefreshTrees(Program.Inventory.BundleChanged);
             }
             return false;
         }
@@ -812,7 +856,7 @@ namespace WitcherScriptMerger.Forms
             {
                 InitializeProgressScreen("Merge Deleted");
 
-                new FileMerger(_inventory, OnMergeProgressChanged, OnMergeComplete)
+                new FileMerger(Program.Inventory, OnMergeProgressChanged, OnMergeComplete)
                     .RepackBundleAsync(bundlePath);
             }
         }
@@ -967,13 +1011,13 @@ namespace WitcherScriptMerger.Forms
 
         private void menuRepackBundle_Click(object sender, EventArgs e)
         {
-            var mergedBundles = _inventory.Merges.Where(merge => merge.IsBundleContent).Select(merge => merge.GetMergedBundle()).Distinct();
+            var mergedBundles = Program.Inventory.Merges.Where(merge => merge.IsBundleContent).Select(merge => merge.GetMergedBundle()).Distinct();
             var mergedBundleCount = mergedBundles.Count();
             foreach (var bundlePath in mergedBundles)
             {
                 InitializeProgressScreen($"Repacking Bundle{mergedBundleCount.GetPluralS()}");
 
-                new FileMerger(_inventory, OnMergeProgressChanged, OnMergeComplete)
+                new FileMerger(Program.Inventory, OnMergeProgressChanged, OnMergeComplete)
                     .RepackBundleAsync(bundlePath);
             }
         }

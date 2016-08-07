@@ -74,12 +74,18 @@ namespace WitcherScriptMerger.Inventory
                 ? source.Bundle.FullName
                 : source.TextFile.FullName;
 
-            m.Mods.Add(
-                new FileHash
-                {
-                    Hash = Hasher.ComputeHash(modFilePath),
-                    Name = source.Name
-                });
+            var existingMod = m.Mods.Find(mod => mod.Name.EqualsIgnoreCase(source.Name));
+            if (existingMod != null)
+                existingMod.Hash = Tools.Hasher.ComputeHash(modFilePath);
+            else
+            {
+                m.Mods.Add(
+                    new FileHash
+                    {
+                        Hash = Tools.Hasher.ComputeHash(modFilePath),
+                        Name = source.Name
+                    });
+            }
 
             if (m.Category == Categories.Script)
                 ScriptsChanged = true;
@@ -112,7 +118,7 @@ namespace WitcherScriptMerger.Inventory
                 return false;
 
             return
-                merge.Mods.All(mod => mod.Hash == Hasher.ComputeHash(merge.GetModFile(mod.Name)));
+                merge.Mods.All(mod => mod.Hash == Tools.Hasher.ComputeHash(merge.GetModFile(mod.Name)));
         }
 
         // Adds file hashes to old inventories that don't have them
@@ -127,7 +133,7 @@ namespace WitcherScriptMerger.Inventory
                     if (mod.Hash == null)
                     {
                         anyMissing = true;
-                        mod.Hash = Hasher.ComputeHash(merge.GetModFile(mod.Name));
+                        mod.Hash = Tools.Hasher.ComputeHash(merge.GetModFile(mod.Name));
                     }
                 }
             }

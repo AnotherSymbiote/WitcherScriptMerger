@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using WitcherScriptMerger.Forms;
+using WitcherScriptMerger.Inventory;
 using WitcherScriptMerger.LoadOrder;
 
 namespace WitcherScriptMerger
@@ -11,8 +12,9 @@ namespace WitcherScriptMerger
     {
         public static AppSettings Settings = new AppSettings();
         public static CustomLoadOrder LoadOrder = null;
+        public static MergeInventory Inventory = null;
         public static MainForm MainForm;
-        
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -42,6 +44,7 @@ namespace WitcherScriptMerger
             MainForm = new MainForm();
             Application.Run(MainForm);
         }
+
         static void ShowLaunchFailure(string message)
         {
             MessageBox.Show(
@@ -95,5 +98,4 @@ namespace WitcherScriptMerger
             }
         }
     }
-
 }

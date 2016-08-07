@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using WitcherScriptMerger.FileIndex;
+using WitcherScriptMerger.Inventory;
 
 namespace WitcherScriptMerger.Controls
 {
@@ -15,6 +16,13 @@ namespace WitcherScriptMerger.Controls
         public enum LevelType : int
         {
             Categories, Files, Mods
+        }
+
+        public class NodeMetadata
+        {
+            public string FilePath;
+            public FileHash FileHash;
+            public ModFile ModFile;
         }
 
         #endregion
@@ -233,13 +241,11 @@ namespace WitcherScriptMerger.Controls
                 EndUpdate();
         }
 
-        protected LevelType GetLevelType(TreeNode node) => (LevelType)node.Level;
+        protected bool IsCategoryNode(TreeNode node) => ((LevelType)node.Level == LevelType.Categories);
 
-        protected bool IsCategoryNode(TreeNode node) => (GetLevelType(node) == LevelType.Categories);
+        protected bool IsFileNode(TreeNode node) => ((LevelType)node.Level == LevelType.Files);
 
-        protected bool IsFileNode(TreeNode node) => (GetLevelType(node) == LevelType.Files);
-
-        protected bool IsModNode(TreeNode node) => (GetLevelType(node) == LevelType.Mods);
+        protected bool IsModNode(TreeNode node) => ((LevelType)node.Level == LevelType.Mods);
 
         #region Context Menu
 
@@ -347,13 +353,12 @@ namespace WitcherScriptMerger.Controls
             foreach (var menuItem in _contextMenu.Items.OfType<ToolStripItem>())
                 menuItem.Available = false;
 
-            if (ClickedNode != null && ClickedNode.Tag is string)
+            if (ClickedNode != null && ClickedNode.Tag is NodeMetadata)
             {
                 _contextCopyPath.Available = true;
                 if (IsModNode(ClickedNode))
                 {
-                    var filePath = ClickedNode.Tag as string;
-                    if (ModFile.IsBundle(filePath))
+                    if (ClickedNode.GetMetadata().ModFile.IsBundleContent)
                         _contextOpenModBundleDir.Available = true;
                     else
                         _contextOpenModFile.Available = _contextOpenModFileDir.Available = true;
@@ -392,7 +397,7 @@ namespace WitcherScriptMerger.Controls
             if (RightClickedNode == null)
                 return;
 
-            Program.TryOpenFile(RightClickedNode.Tag as string);
+            Program.TryOpenFile(RightClickedNode.GetMetadata().FilePath);
 
             RightClickedNode = null;
         }
@@ -402,7 +407,7 @@ namespace WitcherScriptMerger.Controls
             if (RightClickedNode == null)
                 return;
 
-            Program.TryOpenFileLocation(RightClickedNode.Tag as string);
+            Program.TryOpenFileLocation(RightClickedNode.GetMetadata().FilePath);
 
             RightClickedNode = null;
         }
@@ -412,7 +417,7 @@ namespace WitcherScriptMerger.Controls
             if (RightClickedNode == null)
                 return;
 
-            Clipboard.SetText(RightClickedNode.Tag as string);
+            Clipboard.SetText(RightClickedNode.GetMetadata().FilePath);
 
             RightClickedNode = null;
         }

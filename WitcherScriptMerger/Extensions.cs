@@ -74,6 +74,11 @@ namespace WitcherScriptMerger
             return node.Nodes.Cast<TreeNode>();
         }
 
+        public static Controls.SMTree.NodeMetadata GetMetadata(this TreeNode node)
+        {
+            return node.Tag as Controls.SMTree.NodeMetadata;
+        }
+
         public static bool IsEmpty(this TreeView tree)
         {
             return (tree.Nodes.Count == 0);

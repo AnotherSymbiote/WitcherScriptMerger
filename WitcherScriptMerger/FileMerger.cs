@@ -19,20 +19,22 @@ namespace WitcherScriptMerger
         public struct MergeSource
         {
             public FileInfo TextFile;
-            public string Name;
             public FileInfo Bundle;
+            public FileHash Hash;
+            public string Name;
 
-            public static MergeSource FromFlatFile(FileInfo file)
-                => Create(file, false);
+            public static MergeSource FromFlatFile(FileInfo file, FileHash hash)
+                => Create(file, hash, false);
 
-            public static MergeSource FromBundle(FileInfo file)
-                => Create(file, true);
+            public static MergeSource FromBundle(FileInfo file, FileHash hash)
+                => Create(file, hash, true);
 
-            static MergeSource Create(FileInfo file, bool isBundle)
+            static MergeSource Create(FileInfo file, FileHash hash, bool isBundle)
                 => new MergeSource
                 {
                     TextFile = isBundle ? null : file,
                     Bundle   = isBundle ? file : null,
+                    Hash     = hash,
                     Name     = ModFile.GetModNameFromPath(file.FullName)
                 };
         }
@@ -169,7 +171,8 @@ namespace WitcherScriptMerger
 
         void MergeFlatFileNode(TreeNode fileNode, TreeNode[] checkedModNodes, Merge merge, bool isNew)
         {
-            var source1 = MergeSource.FromFlatFile(new FileInfo(checkedModNodes[0].Tag as string));
+            var metadata1 = checkedModNodes[0].GetMetadata();
+            var source1 = MergeSource.FromFlatFile(new FileInfo(metadata1.FilePath), metadata1.FileHash);
 
             var relPath = Paths.GetRelativePath(
                 source1.TextFile.FullName,
@@ -180,18 +183,19 @@ namespace WitcherScriptMerger
             if (File.Exists(_outputPath) && !ConfirmOutputOverwrite(_outputPath))
                 return;
 
-            _vanillaFile = new FileInfo(fileNode.Tag as string);
+            _vanillaFile = new FileInfo(fileNode.GetMetadata().FilePath);
 
             for (int i = 1; i < checkedModNodes.Length; ++i)
             {
                 ++ProgressInfo.CurrentMergeNum;
 
-                var source2 = MergeSource.FromFlatFile(new FileInfo(checkedModNodes[i].Tag as string));
-
+                var metadata2 = checkedModNodes[i].GetMetadata();
+                var source2 = MergeSource.FromFlatFile(new FileInfo(metadata2.FilePath), metadata2.FileHash);
+                
                 var mergedFile = MergeText(merge, source1, source2);
                 if (mergedFile != null)
                 {
-                    source1 = MergeSource.FromFlatFile(mergedFile);
+                    source1 = MergeSource.FromFlatFile(mergedFile, null);
                 }
                 else if (DialogResult.Abort == HandleCanceledMerge(checkedModNodes.Length - i - 1, merge))
                     break;
@@ -213,13 +217,15 @@ namespace WitcherScriptMerger
 
             _vanillaFile = null;
 
-            var source1 = MergeSource.FromBundle(new FileInfo(checkedModNodes[0].Tag as string));
+            var metadata1 = checkedModNodes[0].GetMetadata();
+            var source1 = MergeSource.FromBundle(new FileInfo(metadata1.FilePath), metadata1.FileHash);
 
             for (int i = 1; i < checkedModNodes.Length; ++i)
             {
                 ++ProgressInfo.CurrentMergeNum;
 
-                var source2 = MergeSource.FromBundle(new FileInfo(checkedModNodes[i].Tag as string));
+                var metadata2 = checkedModNodes[i].GetMetadata();
+                var source2 = MergeSource.FromBundle(new FileInfo(metadata2.FilePath), metadata2.FileHash);
 
                 if (!GetUnpackedFiles(fileNode.Text, ref source1, ref source2))
                 {
@@ -231,7 +237,7 @@ namespace WitcherScriptMerger
                 var mergedFile = MergeText(merge, source1, source2);
                 if (mergedFile != null)
                 {
-                    source1 = MergeSource.FromFlatFile(mergedFile);
+                    source1 = MergeSource.FromFlatFile(mergedFile, null);
                 }
                 else if (DialogResult.Abort == HandleCanceledMerge(checkedModNodes.Length - i - 1, merge))
                     break;

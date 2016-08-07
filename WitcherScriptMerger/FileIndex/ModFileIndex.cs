@@ -30,7 +30,6 @@ namespace WitcherScriptMerger.FileIndex
         }
 
         public void BuildAsync(
-            MergeInventory inventory,
             bool checkScripts, bool checkXml, bool checkBundles,
             ProgressChangedEventHandler progressHandler,
             RunWorkerCompletedEventHandler completedHandler)
@@ -67,18 +66,18 @@ namespace WitcherScriptMerger.FileIndex
 
                     if (checkScripts)
                     {
-                        Files.AddRange(GetModFilesFromPaths(scriptPaths, Categories.Script, inventory, modName));
+                        Files.AddRange(GetModFilesFromPaths(scriptPaths, Categories.Script, modName));
                     }
                     if (checkXml)
                     {
-                        Files.AddRange(GetModFilesFromPaths(xmlPaths, Categories.Xml, inventory, modName));
+                        Files.AddRange(GetModFilesFromPaths(xmlPaths, Categories.Xml, modName));
                     }
                     if (checkBundles)
                     {
                         foreach (var bundlePath in bundlePaths)
                         {
                             var contentPaths = QuickBms.GetBundleContentPaths(bundlePath);
-                            Files.AddRange(GetModFilesFromPaths(contentPaths, Categories.BundleText, inventory, modName, bundlePath));
+                            Files.AddRange(GetModFilesFromPaths(contentPaths, Categories.BundleText, modName, bundlePath));
                         }
                     }
                     var progressPct = (int)((float)++i / modDirPaths.Count * 100f);
@@ -92,7 +91,10 @@ namespace WitcherScriptMerger.FileIndex
             bgWorker.RunWorkerAsync();
         }
 
-        private List<ModFile> GetModFilesFromPaths(IEnumerable<string> filePaths, ModFileCategory category, MergeInventory inventory, string modName, string bundlePath = null)
+        private List<ModFile> GetModFilesFromPaths(
+            IEnumerable<string> filePaths,
+            ModFileCategory category,
+            string modName, string bundlePath = null)
         {
             var fileList = new List<ModFile>();
             foreach (var filePath in filePaths)
