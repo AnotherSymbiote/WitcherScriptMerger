@@ -7,7 +7,7 @@ using WitcherScriptMerger.Inventory;
 
 namespace WitcherScriptMerger.FileIndex
 {
-    public class ModFile
+    class ModFile
     {
         #region Members
 

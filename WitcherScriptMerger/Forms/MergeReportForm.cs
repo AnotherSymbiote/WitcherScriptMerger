@@ -1,11 +1,9 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Forms;
-using WitcherScriptMerger.FileIndex;
 
 namespace WitcherScriptMerger.Forms
 {
-    internal partial class MergeReportForm : Form
+    partial class MergeReportForm : Form
     {
         #region Initialization
 

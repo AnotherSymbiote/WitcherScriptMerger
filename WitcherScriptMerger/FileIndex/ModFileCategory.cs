@@ -1,6 +1,6 @@
 ﻿namespace WitcherScriptMerger.FileIndex
 {
-    public class ModFileCategory
+    class ModFileCategory
     {
         public ModFileCategory(int orderIndex, string displayName, string toolTipText, bool isSupported, bool isBundled)
         {
@@ -23,7 +23,7 @@
         }
     }
 
-    public static class Categories
+    static class Categories
     {
         public static ModFileCategory Script = new ModFileCategory(
             1, "Scripts", "These plaintext .ws files can be merged", true, false);

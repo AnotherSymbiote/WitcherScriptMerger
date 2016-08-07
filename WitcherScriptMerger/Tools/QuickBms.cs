@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace WitcherScriptMerger.Tools
 {
-    public static class QuickBms
+    static class QuickBms
     {
         public static string ExePath = Program.Settings.Get("QuickBmsPath");
         public static string PluginPath = Program.Settings.Get("QuickBmsPluginPath");

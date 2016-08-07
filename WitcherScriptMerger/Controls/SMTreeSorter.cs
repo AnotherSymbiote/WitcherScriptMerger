@@ -5,7 +5,7 @@ using WitcherScriptMerger.LoadOrder;
 
 namespace WitcherScriptMerger.Controls
 {
-    public class SMTreeSorter : IComparer
+    class SMTreeSorter : IComparer
     {
         public int Compare(object x, object y)
         {

@@ -8,7 +8,7 @@ using WitcherScriptMerger.LoadOrder;
 namespace WitcherScriptMerger.Inventory
 {
     [XmlRoot]
-    public class MergeInventory
+    class MergeInventory
     {
         [XmlElement("Merge")]
         public ObservableCollection<Merge> Merges { get; private set; }

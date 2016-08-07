@@ -3,7 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-public static class TaskbarProgress
+static class TaskbarProgress
 {
     public enum TaskbarStates
     {

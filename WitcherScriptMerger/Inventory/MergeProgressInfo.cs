@@ -2,7 +2,7 @@
 
 namespace WitcherScriptMerger.Inventory
 {
-    public class MergeProgressInfo : INotifyPropertyChanged
+    class MergeProgressInfo : INotifyPropertyChanged
     {
         string _currentAction;
         public string CurrentAction

@@ -12,7 +12,7 @@ using WitcherScriptMerger.Tools;
 
 namespace WitcherScriptMerger.Inventory
 {
-    public class FileMerger
+    class FileMerger
     {
         #region Types
 

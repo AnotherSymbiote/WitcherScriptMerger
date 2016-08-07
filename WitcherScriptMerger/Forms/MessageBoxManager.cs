@@ -8,7 +8,7 @@ using System.Security.Permissions;
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, UnmanagedCode = true)]
 namespace System.Windows.Forms
 {
-    public class MessageBoxManager
+    class MessageBoxManager
     {
         private delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
         private delegate bool EnumChildProc(IntPtr hWnd, IntPtr lParam);

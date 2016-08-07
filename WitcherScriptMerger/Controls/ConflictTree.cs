@@ -9,7 +9,7 @@ using WitcherScriptMerger.LoadOrder;
 
 namespace WitcherScriptMerger.Controls
 {
-    public class ConflictTree : SMTree
+    class ConflictTree : SMTree
     {
         #region Members
 

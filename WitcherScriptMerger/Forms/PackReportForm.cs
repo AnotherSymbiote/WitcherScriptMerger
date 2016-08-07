@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace WitcherScriptMerger.Forms
 {
-    internal partial class PackReportForm : Form
+    partial class PackReportForm : Form
     {
         #region Initialization
 

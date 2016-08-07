@@ -54,7 +54,7 @@ using System.IO;
 
 namespace WitcherScriptMerger.Tools
 {
-    public static class Hasher
+    static class Hasher
     {
         public static string ComputeHash(string filePath)
         {

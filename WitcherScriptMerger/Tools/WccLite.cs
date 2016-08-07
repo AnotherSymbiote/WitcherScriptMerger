@@ -3,7 +3,7 @@ using System.IO;
 
 namespace WitcherScriptMerger.Tools
 {
-    public static class WccLite
+    static class WccLite
     {
         public static string ExePath = Program.Settings.Get("WccLitePath");
 

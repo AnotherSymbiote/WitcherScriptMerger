@@ -5,7 +5,7 @@ using WitcherScriptMerger.Tools;
 
 namespace WitcherScriptMerger
 {
-    internal static class Paths
+    static class Paths
     {
         public const string TempBundleContent = "tempbundlecontent";
         public static string MergedBundleContent = "Merged Bundle Content";

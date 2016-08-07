@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace WitcherScriptMerger.Controls
 {
-    public class MergeTree : SMTree
+    class MergeTree : SMTree
     {
         #region Members
 

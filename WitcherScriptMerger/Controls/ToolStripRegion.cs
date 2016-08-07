@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace WitcherScriptMerger.Controls
 {
-    public class ToolStripRegion
+    class ToolStripRegion
     {
         public ToolStripItemCollection Items;
 

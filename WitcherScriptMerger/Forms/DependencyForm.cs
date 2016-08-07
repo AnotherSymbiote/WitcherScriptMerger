@@ -7,7 +7,7 @@ using WitcherScriptMerger.Tools;
 
 namespace WitcherScriptMerger.Forms
 {
-    public partial class DependencyForm : Form
+    partial class DependencyForm : Form
     {
         bool AreAnyPathsChanged
         {

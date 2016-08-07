@@ -12,7 +12,7 @@ using WitcherScriptMerger.LoadOrder;
 
 namespace WitcherScriptMerger.Forms
 {
-    public partial class MainForm : Form
+    partial class MainForm : Form
     {
         #region Members
 

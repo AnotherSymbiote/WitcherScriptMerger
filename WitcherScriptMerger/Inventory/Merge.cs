@@ -7,7 +7,7 @@ using WitcherScriptMerger.FileIndex;
 namespace WitcherScriptMerger.Inventory
 {
     [XmlRoot]
-    public class Merge : ModFile
+    class Merge : ModFile
     {
         [XmlElement]
         public string MergedModName;

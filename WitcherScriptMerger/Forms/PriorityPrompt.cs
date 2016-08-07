@@ -4,7 +4,7 @@ using WitcherScriptMerger.LoadOrder;
 
 namespace WitcherScriptMerger.Forms
 {
-    public class PriorityPrompt : Form
+    class PriorityPrompt : Form
     {
         const int Spacing = 5;
 

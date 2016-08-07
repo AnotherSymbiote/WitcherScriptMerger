@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace WitcherScriptMerger
 {
-    internal static class Extensions
+    static class Extensions
     {
         #region Strings
 

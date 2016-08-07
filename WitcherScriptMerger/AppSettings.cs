@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace WitcherScriptMerger
 {
-    internal class AppSettings
+    class AppSettings
     {
         string _assemblyPath;
         Configuration _cachedConfig;

@@ -9,7 +9,7 @@ using WitcherScriptMerger.Inventory;
 
 namespace WitcherScriptMerger.Controls
 {
-    public abstract class SMTree : TreeView
+    abstract class SMTree : TreeView
     {
         #region Types
 

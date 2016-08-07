@@ -8,7 +8,7 @@ using WitcherScriptMerger.Tools;
 
 namespace WitcherScriptMerger.FileIndex
 {
-    internal class ModFileIndex
+    class ModFileIndex
     {
         public List<ModFile> Files;
 
