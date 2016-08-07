@@ -49,7 +49,20 @@ namespace WitcherScriptMerger.Tools
             }
 
             if (!Program.MainForm.ReviewEachMergeSetting && hasVanillaVersion)
-                args += " --auto";
+            {
+                if (source1.TextFile.FullName.EqualsIgnoreCase(outputPath)
+                    && source2.Hash != null && source2.Hash.IsOutdated)
+                {
+                    Program.MainForm.ShowMessage(
+                        "You are merging an updated mod file into a merge created with a previous version of the file.\n\n" +
+                        "You should carefully inspect this merge, because KDiff3's auto-solving behavior KEEPS changes from the previous version of the mod file that have been REMOVED in the new version.",
+                        "Warning",
+                        System.Windows.Forms.MessageBoxButtons.OK,
+                        System.Windows.Forms.MessageBoxIcon.Warning);
+                }
+                else
+                    args += " --auto";
+            }
 
             var kdiff3Path = (Path.IsPathRooted(ExePath)
                 ? ExePath
