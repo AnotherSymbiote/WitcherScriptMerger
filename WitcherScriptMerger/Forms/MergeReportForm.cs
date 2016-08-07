@@ -35,6 +35,8 @@ namespace WitcherScriptMerger.Forms
             chkShowAfterMerge.Checked = Program.MainForm.MergeReportSetting;
 
             btnOK.Select();
+
+            lblPlusAndArrow.Left = (ClientSize.Width / 2) - (lblPlusAndArrow.Width / 2);
         }
 
         void MergeReportForm_FormClosing(object sender, FormClosingEventArgs e)

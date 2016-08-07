@@ -257,9 +257,9 @@
             // 
             this.lblPlusAndArrow.AutoSize = true;
             this.lblPlusAndArrow.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPlusAndArrow.Location = new System.Drawing.Point(292, 133);
+            this.lblPlusAndArrow.Location = new System.Drawing.Point(297, 133);
             this.lblPlusAndArrow.Name = "lblPlusAndArrow";
-            this.lblPlusAndArrow.Size = new System.Drawing.Size(42, 155);
+            this.lblPlusAndArrow.Size = new System.Drawing.Size(31, 155);
             this.lblPlusAndArrow.TabIndex = 7;
             this.lblPlusAndArrow.Text = "+\r\n\r\n\r\n\r\n↓";
             this.lblPlusAndArrow.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -270,7 +270,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnOK;
-            this.ClientSize = new System.Drawing.Size(624, 422);
+            this.ClientSize = new System.Drawing.Size(624, 421);
             this.ControlBox = false;
             this.Controls.Add(this.lblTempContentFiles);
             this.Controls.Add(this.chkShowAfterMerge);
