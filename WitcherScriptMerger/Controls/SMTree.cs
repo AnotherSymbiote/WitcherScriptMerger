@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -72,6 +73,8 @@ namespace WitcherScriptMerger.Controls
         ToolStripMenuItem _contextOpenModFile = new ToolStripMenuItem();
         ToolStripMenuItem _contextOpenModFileDir = new ToolStripMenuItem();
         ToolStripMenuItem _contextOpenModBundleDir = new ToolStripMenuItem();
+        ToolStripMenuItem _contextOpenVanillaFile = new ToolStripMenuItem();
+        ToolStripMenuItem _contextOpenVanillaFileDir = new ToolStripMenuItem();
         ToolStripMenuItem _contextCopyPath = new ToolStripMenuItem();
 
         protected ToolStripRegion ContextNodeRegion;
@@ -258,7 +261,9 @@ namespace WitcherScriptMerger.Controls
                 _contextCopyPath,
                 _contextOpenModFile,
                 _contextOpenModFileDir,
-                _contextOpenModBundleDir
+                _contextOpenModBundleDir,
+                _contextOpenVanillaFile,
+                _contextOpenVanillaFileDir
             });
 
             ContextNodeRegion = new ToolStripRegion(_contextMenu as ToolStrip, new ToolStripItem[0]);
@@ -298,6 +303,20 @@ namespace WitcherScriptMerger.Controls
             _contextOpenModBundleDir.Text = "Open Mod Bundle Directory";
             _contextOpenModBundleDir.ToolTipText = "Opens the location of this mod's bundle file";
             _contextOpenModBundleDir.Click += ContextOpenDirectory_Click;
+
+            // contextOpenVanillaFile
+            _contextOpenVanillaFile.Name = "contextOpenVanillaFile";
+            _contextOpenVanillaFile.Size = new Size(225, 22);
+            _contextOpenVanillaFile.Text = "Open Vanilla File";
+            _contextOpenVanillaFile.ToolTipText = "Opens the unmodded version of the file";
+            _contextOpenVanillaFile.Click += ContextOpenFile_Click;
+
+            // contextOpenVanillaFileDir
+            _contextOpenVanillaFileDir.Name = "contextOpenVanillaFileDir";
+            _contextOpenVanillaFileDir.Size = new Size(225, 22);
+            _contextOpenVanillaFileDir.Text = "Open Vanilla File Directory";
+            _contextOpenVanillaFileDir.ToolTipText = "Opens the location of the unmodded version of the file";
+            _contextOpenVanillaFileDir.Click += ContextOpenDirectory_Click;
 
             // contextCopyPath
             _contextCopyPath.Name = "contextCopyPath";
@@ -356,7 +375,14 @@ namespace WitcherScriptMerger.Controls
             if (ClickedNode != null && ClickedNode.Tag is NodeMetadata)
             {
                 _contextCopyPath.Available = true;
-                if (IsModNode(ClickedNode))
+                if (IsFileNode(ClickedNode)
+                    && !((ModFileCategory)ClickedNode.Parent.Tag).IsBundled
+                    && File.Exists((ClickedNode.Tag as NodeMetadata).FilePath))
+                {
+                    _contextOpenVanillaFile.Available = true;
+                    _contextOpenVanillaFileDir.Available = true;
+                }
+                else if (IsModNode(ClickedNode))
                 {
                     if (ClickedNode.GetMetadata().ModFile.IsBundleContent)
                         _contextOpenModBundleDir.Available = true;

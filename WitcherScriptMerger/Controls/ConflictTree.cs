@@ -18,8 +18,6 @@ namespace WitcherScriptMerger.Controls
 
         public static readonly new Color FileNodeForeColor = UnresolvedForeColor;
 
-        ToolStripMenuItem _contextOpenVanillaFile = new ToolStripMenuItem();
-        ToolStripMenuItem _contextOpenVanillaFileDir = new ToolStripMenuItem();
         ToolStripSeparator _contextCustomLoadOrderSeparator = new ToolStripSeparator();
         ToolStripMenuItem _contextPrioritizeMod = new ToolStripMenuItem();
         ToolStripMenuItem _contextToggleMod = new ToolStripMenuItem();
@@ -29,11 +27,6 @@ namespace WitcherScriptMerger.Controls
 
         public ConflictTree()
         {
-            ContextOpenRegion.Items.AddRange(new ToolStripItem[]
-            {
-                _contextOpenVanillaFile,
-                _contextOpenVanillaFileDir
-            });
             ContextNodeRegion.Items.AddRange(new ToolStripItem[]
             {
                 _contextCustomLoadOrderSeparator,
@@ -42,20 +35,6 @@ namespace WitcherScriptMerger.Controls
                 _contextRemoveFromCustomLoadOrder
             });
             BuildContextMenu();
-
-            // contextOpenVanillaFile
-            _contextOpenVanillaFile.Name = "contextOpenVanillaFile";
-            _contextOpenVanillaFile.Size = new Size(225, 22);
-            _contextOpenVanillaFile.Text = "Open Vanilla File";
-            _contextOpenVanillaFile.ToolTipText = "Opens the unmodded version of the file";
-            _contextOpenVanillaFile.Click += ContextOpenFile_Click;
-
-            // contextOpenVanillaFileDir
-            _contextOpenVanillaFileDir.Name = "contextOpenVanillaFileDir";
-            _contextOpenVanillaFileDir.Size = new Size(225, 22);
-            _contextOpenVanillaFileDir.Text = "Open Vanilla File Directory";
-            _contextOpenVanillaFileDir.ToolTipText = "Opens the location of the unmodded version of the file";
-            _contextOpenVanillaFileDir.Click += ContextOpenDirectory_Click;
 
             // contextCustomLoadOrderSeparator
             _contextCustomLoadOrderSeparator.Name = "contextCustomLoadOrderSeparator";
@@ -158,14 +137,7 @@ namespace WitcherScriptMerger.Controls
 
             if (ClickedNode != null)
             {
-                if (IsFileNode(ClickedNode)
-                    && !((ModFileCategory)ClickedNode.Parent.Tag).IsBundled
-                    && File.Exists((string)ClickedNode.Tag))
-                {
-                    _contextOpenVanillaFile.Available = true;
-                    _contextOpenVanillaFileDir.Available = true;
-                }
-                else if (IsModNode(ClickedNode))
+                if (IsModNode(ClickedNode))
                 {
                     _contextCustomLoadOrderSeparator.Available = true;
                     _contextPrioritizeMod.Available = true;
