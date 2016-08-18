@@ -309,14 +309,14 @@ namespace WitcherScriptMerger.Controls
             _contextOpenVanillaFile.Size = new Size(225, 22);
             _contextOpenVanillaFile.Text = "Open Vanilla File";
             _contextOpenVanillaFile.ToolTipText = "Opens the unmodded version of the file";
-            _contextOpenVanillaFile.Click += ContextOpenFile_Click;
+            _contextOpenVanillaFile.Click += ContextOpenVanillaFile_Click;
 
             // contextOpenVanillaFileDir
             _contextOpenVanillaFileDir.Name = "contextOpenVanillaFileDir";
             _contextOpenVanillaFileDir.Size = new Size(225, 22);
             _contextOpenVanillaFileDir.Text = "Open Vanilla File Directory";
             _contextOpenVanillaFileDir.ToolTipText = "Opens the location of the unmodded version of the file";
-            _contextOpenVanillaFileDir.Click += ContextOpenDirectory_Click;
+            _contextOpenVanillaFileDir.Click += ContextOpenVanillaDirectory_Click;
 
             // contextCopyPath
             _contextCopyPath.Name = "contextCopyPath";
@@ -377,7 +377,7 @@ namespace WitcherScriptMerger.Controls
                 _contextCopyPath.Available = true;
                 if (IsFileNode(ClickedNode)
                     && !((ModFileCategory)ClickedNode.Parent.Tag).IsBundled
-                    && File.Exists((ClickedNode.Tag as NodeMetadata).FilePath))
+                    && File.Exists((ClickedNode.Tag as NodeMetadata).ModFile.GetVanillaFile()))
                 {
                     _contextOpenVanillaFile.Available = true;
                     _contextOpenVanillaFileDir.Available = true;
@@ -434,6 +434,26 @@ namespace WitcherScriptMerger.Controls
                 return;
 
             Program.TryOpenFileLocation(RightClickedNode.GetMetadata().FilePath);
+
+            RightClickedNode = null;
+        }
+
+        protected void ContextOpenVanillaFile_Click(object sender, EventArgs e)
+        {
+            if (RightClickedNode == null)
+                return;
+
+            Program.TryOpenFile(RightClickedNode.GetMetadata().ModFile.GetVanillaFile());
+
+            RightClickedNode = null;
+        }
+
+        protected void ContextOpenVanillaDirectory_Click(object sender, EventArgs e)
+        {
+            if (RightClickedNode == null)
+                return;
+
+            Program.TryOpenFileLocation(RightClickedNode.GetMetadata().ModFile.GetVanillaFile());
 
             RightClickedNode = null;
         }
