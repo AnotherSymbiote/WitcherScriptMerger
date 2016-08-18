@@ -241,10 +241,19 @@ namespace WitcherScriptMerger.Forms
                         if (latestHash != null && mod.Hash != latestHash)
                         {
                             mod.IsOutdated = true;
-                            if (ConfirmDeleteForChangedHash(merge, modFilePath, mod.Name))
+                            if (Program.Settings.Get<bool>("ValidateMergeSources"))
                             {
-                                willDelete = true;
-                                break;
+                                var choice = PromptToDeleteForChangedHash(merge, modFilePath, mod.Name);
+                                if (choice == DialogResult.Yes)
+                                {
+                                    willDelete = true;
+                                    break;
+                                }
+                                else if (choice == DialogResult.Cancel)  // Never
+                                {
+                                    Program.Settings.Set("ValidateMergeSources", false);
+                                    Program.Settings.Save();
+                                }
                             }
                         }
                     }
@@ -382,7 +391,7 @@ namespace WitcherScriptMerger.Forms
                 MessageBoxIcon.Question));
         }
 
-        private bool ConfirmDeleteForChangedHash(Merge merge, string modFilePath, string modName)
+        private DialogResult PromptToDeleteForChangedHash(Merge merge, string modFilePath, string modName)
         {
             var msg =
                 $"The '{modName}' {(merge.IsBundleContent ? "bundle" : "version of the following file")} " +
@@ -395,11 +404,17 @@ namespace WitcherScriptMerger.Forms
                 ? "Delete this affected merge & repack the merged bundle?"
                 : "Delete this affected merge?";
 
-            return (DialogResult.Yes == ShowMessage(
+            MessageBoxManager.Cancel = "Ne&ver";
+            MessageBoxManager.Register();
+
+            var choice = MessageBox.Show(
                 msg,
                 "Merged Mod File Changed",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question));
+                MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Exclamation);
+
+            MessageBoxManager.Unregister();
+            return choice;
         }
 
         void RefreshConflictsTree(bool checkBundles = true)
