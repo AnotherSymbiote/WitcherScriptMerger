@@ -50,26 +50,11 @@
             this.menuOpenLoadOrderFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuOpenMergedModDir = new System.Windows.Forms.ToolStripMenuItem();
             this.menuOpenBundleContentDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.menuDependencies = new System.Windows.Forms.ToolStripMenuItem();
             this.menuRepackBundle = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFileSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.menuExitAndPlay = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuOptions = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuRefreshingConflicts = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuCheckScripts = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuCheckXmlFiles = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuCheckBundledFiles = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuValidateCustomLoadOrder = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuCollapseIf = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuCollapseNotMergeable = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuCollapseCustomLoadOrder = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuMerging = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuReviewEach = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuPathsInKDiff3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuCompletionSounds = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuMergeReport = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuPackReport = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuShowStatusBar = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.lblStatusLeft1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblStatusLeft2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -90,9 +75,9 @@
             // 
             this.txtGameDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGameDir.Location = new System.Drawing.Point(254, 3);
+            this.txtGameDir.Location = new System.Drawing.Point(177, 3);
             this.txtGameDir.Name = "txtGameDir";
-            this.txtGameDir.Size = new System.Drawing.Size(358, 20);
+            this.txtGameDir.Size = new System.Drawing.Size(435, 20);
             this.txtGameDir.TabIndex = 0;
             this.txtGameDir.TextChanged += new System.EventHandler(this.txtGameDir_TextChanged);
             this.txtGameDir.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_KeyDown);
@@ -293,8 +278,7 @@
             // 
             this.menuStrip.BackColor = System.Drawing.SystemColors.Control;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuFile,
-            this.menuOptions});
+            this.menuFile});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(654, 24);
@@ -304,6 +288,7 @@
             // 
             this.menuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuOpen,
+            this.menuOptions,
             this.menuDependencies,
             this.menuRepackBundle,
             this.menuFileSeparator,
@@ -348,6 +333,13 @@
             this.menuOpenBundleContentDir.ToolTipText = "Opens the location of your merged bundle content files";
             this.menuOpenBundleContentDir.Click += new System.EventHandler(this.menuOpenBundleContentDir_Click);
             // 
+            // menuOptions
+            // 
+            this.menuOptions.Name = "menuOptions";
+            this.menuOptions.Size = new System.Drawing.Size(203, 22);
+            this.menuOptions.Text = "Op&tions...";
+            this.menuOptions.Click += new System.EventHandler(this.menuOptions_Click);
+            // 
             // menuDependencies
             // 
             this.menuDependencies.Name = "menuDependencies";
@@ -376,145 +368,6 @@
             this.menuExitAndPlay.Text = "E&xit && Launch Game";
             this.menuExitAndPlay.ToolTipText = "Exits Script Merger & launches The Witcher 3";
             this.menuExitAndPlay.Click += new System.EventHandler(this.menuExitAndPlay_Click);
-            // 
-            // menuOptions
-            // 
-            this.menuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuRefreshingConflicts,
-            this.menuMerging,
-            this.menuShowStatusBar});
-            this.menuOptions.Name = "menuOptions";
-            this.menuOptions.Size = new System.Drawing.Size(61, 20);
-            this.menuOptions.Text = "&Options";
-            // 
-            // menuRefreshingConflicts
-            // 
-            this.menuRefreshingConflicts.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuCheckScripts,
-            this.menuCheckXmlFiles,
-            this.menuCheckBundledFiles,
-            this.menuValidateCustomLoadOrder,
-            this.menuCollapseIf});
-            this.menuRefreshingConflicts.Name = "menuRefreshingConflicts";
-            this.menuRefreshingConflicts.Size = new System.Drawing.Size(189, 22);
-            this.menuRefreshingConflicts.Text = "&Refreshing Conflicts...";
-            // 
-            // menuCheckScripts
-            // 
-            this.menuCheckScripts.CheckOnClick = true;
-            this.menuCheckScripts.Name = "menuCheckScripts";
-            this.menuCheckScripts.Size = new System.Drawing.Size(235, 22);
-            this.menuCheckScripts.Text = "Check &Scripts";
-            this.menuCheckScripts.ToolTipText = "Check for mod conflicts in .ws script files";
-            // 
-            // menuCheckXmlFiles
-            // 
-            this.menuCheckXmlFiles.CheckOnClick = true;
-            this.menuCheckXmlFiles.Name = "menuCheckXmlFiles";
-            this.menuCheckXmlFiles.Size = new System.Drawing.Size(235, 22);
-            this.menuCheckXmlFiles.Text = "Check Non-Bundled &XML Files";
-            this.menuCheckXmlFiles.ToolTipText = "Check for mod conflicts in .xml files that aren\'t packaged in bundles";
-            // 
-            // menuCheckBundledFiles
-            // 
-            this.menuCheckBundledFiles.CheckOnClick = true;
-            this.menuCheckBundledFiles.Name = "menuCheckBundledFiles";
-            this.menuCheckBundledFiles.Size = new System.Drawing.Size(235, 22);
-            this.menuCheckBundledFiles.Text = "Check &Bundled Files";
-            this.menuCheckBundledFiles.ToolTipText = "Check for mod conflicts in the contents of .bundle files";
-            // 
-            // menuValidateCustomLoadOrder
-            // 
-            this.menuValidateCustomLoadOrder.CheckOnClick = true;
-            this.menuValidateCustomLoadOrder.Name = "menuValidateCustomLoadOrder";
-            this.menuValidateCustomLoadOrder.Size = new System.Drawing.Size(235, 22);
-            this.menuValidateCustomLoadOrder.Text = "&Validate Custom Load Order";
-            this.menuValidateCustomLoadOrder.ToolTipText = "Whether to make sure your custom load order (if any) loads merged files first";
-            // 
-            // menuCollapseIf
-            // 
-            this.menuCollapseIf.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuCollapseNotMergeable,
-            this.menuCollapseCustomLoadOrder});
-            this.menuCollapseIf.Name = "menuCollapseIf";
-            this.menuCollapseIf.Size = new System.Drawing.Size(235, 22);
-            this.menuCollapseIf.Text = "Auto-&Collapse in Tree If...";
-            // 
-            // menuCollapseNotMergeable
-            // 
-            this.menuCollapseNotMergeable.CheckOnClick = true;
-            this.menuCollapseNotMergeable.Name = "menuCollapseNotMergeable";
-            this.menuCollapseNotMergeable.Size = new System.Drawing.Size(244, 22);
-            this.menuCollapseNotMergeable.Text = "&Not Mergeable";
-            this.menuCollapseNotMergeable.ToolTipText = "Auto-collapse conflicts that can\'t be merged (non-text files)";
-            // 
-            // menuCollapseCustomLoadOrder
-            // 
-            this.menuCollapseCustomLoadOrder.CheckOnClick = true;
-            this.menuCollapseCustomLoadOrder.Name = "menuCollapseCustomLoadOrder";
-            this.menuCollapseCustomLoadOrder.Size = new System.Drawing.Size(244, 22);
-            this.menuCollapseCustomLoadOrder.Text = "Resolved by &Custom Load Order";
-            this.menuCollapseCustomLoadOrder.ToolTipText = "Auto-collapse conflicts that are resolved by your custom load order";
-            // 
-            // menuMerging
-            // 
-            this.menuMerging.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuReviewEach,
-            this.menuPathsInKDiff3,
-            this.menuCompletionSounds,
-            this.menuMergeReport,
-            this.menuPackReport});
-            this.menuMerging.Name = "menuMerging";
-            this.menuMerging.Size = new System.Drawing.Size(189, 22);
-            this.menuMerging.Text = "&Merging...";
-            // 
-            // menuReviewEach
-            // 
-            this.menuReviewEach.CheckOnClick = true;
-            this.menuReviewEach.Name = "menuReviewEach";
-            this.menuReviewEach.Size = new System.Drawing.Size(297, 22);
-            this.menuReviewEach.Text = "&Review Each Merge (even if auto-solvable)";
-            this.menuReviewEach.ToolTipText = "Show text comparison UI for every merge";
-            // 
-            // menuPathsInKDiff3
-            // 
-            this.menuPathsInKDiff3.CheckOnClick = true;
-            this.menuPathsInKDiff3.Name = "menuPathsInKDiff3";
-            this.menuPathsInKDiff3.Size = new System.Drawing.Size(297, 22);
-            this.menuPathsInKDiff3.Text = "Show File Paths in &KDiff3";
-            this.menuPathsInKDiff3.ToolTipText = "Show full file paths instead of just Vanilla, modName1, modName2";
-            // 
-            // menuCompletionSounds
-            // 
-            this.menuCompletionSounds.CheckOnClick = true;
-            this.menuCompletionSounds.Name = "menuCompletionSounds";
-            this.menuCompletionSounds.Size = new System.Drawing.Size(297, 22);
-            this.menuCompletionSounds.Text = "Play Completion &Sounds";
-            this.menuCompletionSounds.ToolTipText = "Play a sound after merging or packing a bundle";
-            // 
-            // menuMergeReport
-            // 
-            this.menuMergeReport.CheckOnClick = true;
-            this.menuMergeReport.Name = "menuMergeReport";
-            this.menuMergeReport.Size = new System.Drawing.Size(297, 22);
-            this.menuMergeReport.Text = "Show Report After Each &Merge";
-            this.menuMergeReport.ToolTipText = "Show a report with buttons to open files/directories";
-            // 
-            // menuPackReport
-            // 
-            this.menuPackReport.Name = "menuPackReport";
-            this.menuPackReport.Size = new System.Drawing.Size(297, 22);
-            this.menuPackReport.Text = "Show Report After &Packing Bundle";
-            this.menuPackReport.ToolTipText = "Show a report with list of contents & button to open content directory";
-            // 
-            // menuShowStatusBar
-            // 
-            this.menuShowStatusBar.CheckOnClick = true;
-            this.menuShowStatusBar.Name = "menuShowStatusBar";
-            this.menuShowStatusBar.Size = new System.Drawing.Size(189, 22);
-            this.menuShowStatusBar.Text = "&Show Status Bar";
-            this.menuShowStatusBar.ToolTipText = "Show bar with statistics at the bottom of the window";
-            this.menuShowStatusBar.Click += new System.EventHandler(this.menuShowStatusBar_Click);
             // 
             // statusStrip
             // 
@@ -580,7 +433,7 @@
             // lblGameDir
             // 
             this.lblGameDir.AutoSize = true;
-            this.lblGameDir.Location = new System.Drawing.Point(147, 6);
+            this.lblGameDir.Location = new System.Drawing.Point(70, 6);
             this.lblGameDir.Name = "lblGameDir";
             this.lblGameDir.Size = new System.Drawing.Size(101, 13);
             this.lblGameDir.TabIndex = 9;
@@ -643,28 +496,12 @@
         private System.Windows.Forms.Label lblProgressCurrentAction;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem menuOptions;
-        private System.Windows.Forms.ToolStripMenuItem menuCheckScripts;
-        private System.Windows.Forms.ToolStripMenuItem menuCheckBundledFiles;
-        private System.Windows.Forms.ToolStripMenuItem menuReviewEach;
-        private System.Windows.Forms.ToolStripMenuItem menuPathsInKDiff3;
-        private System.Windows.Forms.ToolStripMenuItem menuMergeReport;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusLeft1;
-        private System.Windows.Forms.ToolStripMenuItem menuShowStatusBar;
         private System.Windows.Forms.Label lblProgressCurrentPhase;
-        private System.Windows.Forms.ToolStripMenuItem menuPackReport;
-        private System.Windows.Forms.ToolStripMenuItem menuRefreshingConflicts;
-        private System.Windows.Forms.ToolStripMenuItem menuMerging;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusSpring;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusRight;
-        private System.Windows.Forms.ToolStripMenuItem menuCompletionSounds;
         private System.Windows.Forms.Label lblGameDir;
-        private System.Windows.Forms.ToolStripMenuItem menuCheckXmlFiles;
-        private System.Windows.Forms.ToolStripMenuItem menuValidateCustomLoadOrder;
-        private System.Windows.Forms.ToolStripMenuItem menuCollapseIf;
-        private System.Windows.Forms.ToolStripMenuItem menuCollapseNotMergeable;
-        private System.Windows.Forms.ToolStripMenuItem menuCollapseCustomLoadOrder;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusLeft2;
         private System.Windows.Forms.ToolStripStatusLabel lblStatusLeft3;
         private System.Windows.Forms.ToolStripMenuItem menuFile;
@@ -676,6 +513,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuDependencies;
         private System.Windows.Forms.ToolStripSeparator menuFileSeparator;
         private System.Windows.Forms.ToolStripMenuItem menuExitAndPlay;
+        private System.Windows.Forms.ToolStripMenuItem menuOptions;
     }
 }
 

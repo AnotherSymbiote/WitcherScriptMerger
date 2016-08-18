@@ -30,7 +30,7 @@ namespace WitcherScriptMerger.Forms
             txtFilePath2.Text = file2;
             txtMergedPath.Text = outputFile;
 
-            chkShowAfterMerge.Checked = Program.MainForm.MergeReportSetting;
+            chkShowAfterMerge.Checked = Program.Settings.Get<bool>("ReportAfterMerge");
 
             btnOK.Select();
 
@@ -39,7 +39,7 @@ namespace WitcherScriptMerger.Forms
 
         void MergeReportForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Program.MainForm.MergeReportSetting = chkShowAfterMerge.Checked;
+            Program.Settings.Set("ReportAfterMerge", chkShowAfterMerge.Checked);
         }
 
         #endregion

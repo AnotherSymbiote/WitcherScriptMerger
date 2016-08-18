@@ -149,11 +149,11 @@ namespace WitcherScriptMerger.Inventory
                         foreach (var bundleMerge in _pendingBundleMerges)
                             _inventory.Merges.Add(bundleMerge);
 
-                        if (Program.MainForm.CompletionSoundsSetting)
+                        if (Program.Settings.Get<bool>("PlayCompletionSounds"))
                         {
                             System.Media.SystemSounds.Asterisk.Play();
                         }
-                        if (Program.MainForm.PackReportSetting)
+                        if (Program.Settings.Get<bool>("ReportAfterPack"))
                         {
                             using (var reportForm = new PackReportForm(newBundlePath))
                             {
@@ -270,11 +270,11 @@ namespace WitcherScriptMerger.Inventory
                     _inventory.AddModToMerge(source2, merge);
                 }
 
-                if (Program.MainForm.CompletionSoundsSetting)
+                if (Program.Settings.Get<bool>("PlayCompletionSounds"))
                 {
                     System.Media.SystemSounds.Asterisk.Play();
                 }
-                if (Program.MainForm.MergeReportSetting)
+                if (Program.Settings.Get<bool>("ReportAfterMerge"))
                 {
                     using (var reportForm = new MergeReportForm(
                         ProgressInfo.CurrentMergeNum, ProgressInfo.TotalMergeCount,
@@ -410,11 +410,11 @@ namespace WitcherScriptMerger.Inventory
                 if (newBundlePath == null)
                     return;
 
-                if (Program.MainForm.CompletionSoundsSetting)
+                if (Program.Settings.Get<bool>("PlayCompletionSounds"))
                 {
                     System.Media.SystemSounds.Asterisk.Play();
                 }
-                if (Program.MainForm.PackReportSetting)
+                if (Program.Settings.Get<bool>("ReportAfterPack"))
                 {
                     using (var reportForm = new PackReportForm(bundlePath))
                     {

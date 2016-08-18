@@ -41,7 +41,7 @@ namespace WitcherScriptMerger.Tools
                 "--cs \"FollowFileLinks=1\" " +
                 "--cs \"FollowDirLinks=1\"";
 
-            if (!Program.MainForm.PathsInKdiff3Setting)
+            if (!Program.Settings.Get<bool>("ShowPathsInKDiff3"))
             {
                 if (hasVanillaVersion)
                     args += $" --L1 Vanilla --L2 \"{source1.Name}\" --L3 \"{source2.Name}\"";
@@ -49,7 +49,7 @@ namespace WitcherScriptMerger.Tools
                     args += $" --L1 \"{source1.Name}\" --L2 \"{source2.Name}\"";
             }
 
-            if (!Program.MainForm.ReviewEachMergeSetting && hasVanillaVersion)
+            if (!Program.Settings.Get<bool>("ReviewEachMerge") && hasVanillaVersion)
             {
                 if (source1.TextFile.FullName.EqualsIgnoreCase(outputPath)
                     && source2.Hash != null && source2.Hash.IsOutdated)

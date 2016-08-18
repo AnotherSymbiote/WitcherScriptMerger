@@ -8,15 +8,25 @@ namespace WitcherScriptMerger
     class AppSettings
     {
         string _assemblyPath;
-        Configuration _cachedConfig;
 
-        bool IsBatching => (_cachedConfig != null);
+        Configuration _cachedConfig;
+        Configuration CachedConfig
+        {
+            get
+            {
+                if (_cachedConfig == null)
+                    _cachedConfig = ConfigurationManager.OpenExeConfiguration(_assemblyPath);
+                return _cachedConfig;
+            }
+        }
+
+        public bool HasConfigFile => CachedConfig.HasFile;
 
         public AppSettings()
         {
             _assemblyPath = Assembly.GetEntryAssembly().Location;
 
-            if (!GetConfig().HasFile)
+            if (!CachedConfig.HasFile)
             {
                 MessageBox.Show(
                     "Config file is missing.",
@@ -27,52 +37,31 @@ namespace WitcherScriptMerger
             }
         }
 
-        Configuration GetConfig() => ConfigurationManager.OpenExeConfiguration(_assemblyPath);
-
-        public bool HasConfigFile => GetConfig().HasFile;
-
-        public void StartBatch()
-        {
-            _cachedConfig = GetConfig();
-        }
-
-        public void EndBatch()
-        {
-            if (!IsBatching)
-                return;
-            TrySave(_cachedConfig);
-            _cachedConfig = null;
-        }
-
         public void Set(string key, object value)
         {
-            var config = _cachedConfig ?? GetConfig();
             try
             {
-                config.AppSettings.Settings[key].Value = value.ToString();
+                CachedConfig.AppSettings.Settings[key].Value = value.ToString();
             }
             catch
             {
-                config.AppSettings.Settings.Add(key, value.ToString());
+                CachedConfig.AppSettings.Settings.Add(key, value.ToString());
             }
-            if (!IsBatching)
-                TrySave(config);
         }
 
         public T Get<T>(string key)
         {
             try
             {
-                var config = _cachedConfig ?? GetConfig();
-                if (config.HasFile)
+                if (CachedConfig.HasFile)
                 {
-                    var valueString = config.AppSettings.Settings[key].Value;
+                    var valueString = CachedConfig.AppSettings.Settings[key].Value;
                     var parseMethod = typeof(T).GetMethod("Parse", new Type[] { typeof(string) });
                     var valueObject = parseMethod.Invoke(null, new object[] { valueString });
                     return (T)valueObject;
                 }
 
-                Program.MainForm.ShowError($"Config file doesn't exist:\n\n{config.FilePath}");
+                Program.MainForm.ShowError($"Config file doesn't exist:\n\n{CachedConfig.FilePath}");
                 return default(T);
             }
             catch
@@ -85,11 +74,10 @@ namespace WitcherScriptMerger
         {
             try
             {
-                var config = _cachedConfig ?? GetConfig();
-                if (config.HasFile)
-                    return config.AppSettings.Settings[key].Value;
+                if (CachedConfig.HasFile)
+                    return CachedConfig.AppSettings.Settings[key].Value;
 
-                Program.MainForm.ShowError($"Config file doesn't exist:\n\n{config.FilePath}");
+                Program.MainForm.ShowError($"Config file doesn't exist:\n\n{CachedConfig.FilePath}");
                 return string.Empty;
             }
             catch
@@ -98,11 +86,11 @@ namespace WitcherScriptMerger
             }
         }
 
-        void TrySave(Configuration config)
+        public void Save()
         {
             try
             {
-                config.Save(ConfigurationSaveMode.Minimal);
+                CachedConfig.Save(ConfigurationSaveMode.Minimal);
             }
             catch (Exception ex)
             {

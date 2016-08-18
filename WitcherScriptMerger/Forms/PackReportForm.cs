@@ -17,14 +17,14 @@ namespace WitcherScriptMerger.Forms
             var contentPaths = Directory.GetFiles(Paths.MergedBundleContent, "*", SearchOption.AllDirectories);
             txtContent.Text = string.Join(Environment.NewLine, contentPaths);
 
-            chkShowAfterPack.Checked = Program.MainForm.PackReportSetting;
+            chkShowAfterPack.Checked = Program.Settings.Get<bool>("ReportAfterPack");
 
             btnOK.Select();
         }
 
         void PackReportForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Program.MainForm.PackReportSetting = chkShowAfterPack.Checked;
+            Program.Settings.Set("ReportAfterPack", chkShowAfterPack.Checked);
         }
 
         #endregion

@@ -18,30 +18,6 @@ namespace WitcherScriptMerger.Forms
 
         public string GameDirectorySetting => txtGameDir.Text;
 
-        public bool PathsInKdiff3Setting => menuPathsInKDiff3.Checked;
-
-        public bool ReviewEachMergeSetting => menuReviewEach.Checked;
-
-        public bool CompletionSoundsSetting => menuCompletionSounds.Checked;
-
-        public bool MergeReportSetting
-        {
-            get { return menuMergeReport.Checked; }
-            set { menuMergeReport.Checked = value; }
-        }
-
-        public bool PackReportSetting
-        {
-            get { return menuPackReport.Checked; }
-            set { menuPackReport.Checked = value; }
-        }
-
-        public bool ValidateCustomLoadOrderSetting
-        {
-            get { return menuValidateCustomLoadOrder.Checked; }
-            set { menuValidateCustomLoadOrder.Checked = value; }
-        }
-
         ModFileIndex _modIndex = null;
 
         #endregion
@@ -56,22 +32,8 @@ namespace WitcherScriptMerger.Forms
 
         void MainForm_Load(object sender, EventArgs e)
         {
-            Program.Settings.StartBatch();
             txtGameDir.Text = Program.Settings.Get("GameDirectory");
-            menuCheckScripts.Checked = Program.Settings.Get<bool>("CheckScripts");
-            menuCheckXmlFiles.Checked = Program.Settings.Get<bool>("CheckXmlFiles");
-            menuCheckBundledFiles.Checked = Program.Settings.Get<bool>("CheckBundleContents");
-            menuValidateCustomLoadOrder.Checked = Program.Settings.Get<bool>("ValidateCustomLoadOrder");
-            menuCollapseCustomLoadOrder.Checked = Program.Settings.Get<bool>("CollapseCustomLoadOrder");
-            menuCollapseNotMergeable.Checked = Program.Settings.Get<bool>("CollapseNotMergeable");
-            menuReviewEach.Checked = Program.Settings.Get<bool>("ReviewEachMerge");
-            menuPathsInKDiff3.Checked = Program.Settings.Get<bool>("ShowPathsInKDiff3");
-            menuCompletionSounds.Checked = Program.Settings.Get<bool>("PlayCompletionSounds");
-            menuMergeReport.Checked = Program.Settings.Get<bool>("ReportAfterMerge");
-            menuPackReport.Checked = Program.Settings.Get<bool>("ReportAfterPack");
-            menuShowStatusBar.Checked = Program.Settings.Get<bool>("ShowStatusBar");
             LoadLastWindowConfiguration();
-            Program.Settings.EndBatch();
         }
 
         async void MainForm_Shown(object sender, EventArgs e)
@@ -99,21 +61,7 @@ namespace WitcherScriptMerger.Forms
                 return;
             }
 
-            Program.Settings.StartBatch();
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
-            Program.Settings.Set("CheckScripts", menuCheckScripts.Checked);
-            Program.Settings.Set("CheckXmlFiles", menuCheckXmlFiles.Checked);
-            Program.Settings.Set("CheckBundleContents", menuCheckBundledFiles.Checked);
-            Program.Settings.Set("ValidateCustomLoadOrder", menuValidateCustomLoadOrder.Checked);
-            Program.Settings.Set("CollapseCustomLoadOrder", menuCollapseCustomLoadOrder.Checked);
-            Program.Settings.Set("CollapseNotMergeable", menuCollapseNotMergeable.Checked);
-            Program.Settings.Set("ReviewEachMerge", menuReviewEach.Checked);
-            Program.Settings.Set("ShowPathsInKDiff3", menuPathsInKDiff3.Checked);
-            Program.Settings.Set("PlayCompletionSounds", menuCompletionSounds.Checked);
-            Program.Settings.Set("ReportAfterMerge", menuMergeReport.Checked);
-            Program.Settings.Set("ReportAfterPack", menuPackReport.Checked);
-            Program.Settings.Set("ShowStatusBar", menuShowStatusBar.Checked);
-            statusStrip.Visible = menuShowStatusBar.Checked;
 
             if (WindowState == FormWindowState.Maximized)
                 Program.Settings.Set("StartMaximized", true);
@@ -126,7 +74,7 @@ namespace WitcherScriptMerger.Forms
                 Program.Settings.Set("StartPosLeft", Left);
             }
             Program.Settings.Set("StartSplitterPosPct", (int)((float)splitContainer.SplitterDistance / splitContainer.Width * 100f));
-            Program.Settings.EndBatch();
+            Program.Settings.Save();
         }
 
         void LoadLastWindowConfiguration()
@@ -158,21 +106,6 @@ namespace WitcherScriptMerger.Forms
         void txtGameDir_TextChanged(object sender, EventArgs e)
         {
             Program.Settings.Set("GameDirectory", txtGameDir.Text);
-        }
-
-        void menuShowStatusBar_Click(object sender, EventArgs e)
-        {
-            statusStrip.Visible = menuShowStatusBar.Checked;
-            if (statusStrip.Visible)
-            {
-                splitContainer.Height -= statusStrip.Height;
-                pnlProgress.Height -= statusStrip.Height;
-            }
-            else
-            {
-                splitContainer.Height += statusStrip.Height;
-                pnlProgress.Height += statusStrip.Height;
-            }
         }
 
         void UpdateStatusText()
@@ -251,7 +184,7 @@ namespace WitcherScriptMerger.Forms
             );
             progressBar.Value = 50;
 
-            if (menuValidateCustomLoadOrder.Checked && Program.Inventory.Merges.Any())
+            if (Program.Settings.Get<bool>("ValidateCustomLoadOrder") && Program.Inventory.Merges.Any())
             {
                 lblProgressCurrentAction.Text = "Validating load order";
                 await Task.Run(() =>
@@ -471,7 +404,7 @@ namespace WitcherScriptMerger.Forms
 
         void RefreshConflictsTree(bool checkBundles = true)
         {
-            checkBundles = checkBundles && menuCheckBundledFiles.Checked;
+            checkBundles = checkBundles && Program.Settings.Get<bool>("CheckBundleContents");
 
             InitializeProgressScreen("Detecting Conflicts", ProgressBarStyle.Continuous);
             lblStatusLeft1.Text = "Refreshing...";
@@ -491,7 +424,7 @@ namespace WitcherScriptMerger.Forms
                 if (xmlCatNode != null)
                     nodesToUpdate.Add(xmlCatNode);
 
-                if (Program.Inventory.BundleChanged || checkBundles || !menuCheckBundledFiles.Checked)
+                if (Program.Inventory.BundleChanged || checkBundles || !Program.Settings.Get<bool>("CheckBundleContents"))
                 {
                     var bundleTextCatNode = treConflicts.GetCategoryNode(Categories.BundleText);
                     if (bundleTextCatNode != null)
@@ -519,9 +452,9 @@ namespace WitcherScriptMerger.Forms
 
             _modIndex = new ModFileIndex();
             _modIndex.BuildAsync(
-                menuCheckScripts.Checked,
-                menuCheckXmlFiles.Checked,
-                checkBundles,
+                Program.Settings.Get<bool>("CheckScripts"),
+                Program.Settings.Get<bool>("CheckXmlFiles"),
+                Program.Settings.Get<bool>("CheckBundleContents"),
                 OnRefreshConflictsProgressChanged,
                 OnRefreshConflictsComplete);
         }
@@ -610,7 +543,7 @@ namespace WitcherScriptMerger.Forms
                     if (!(catNode.Tag as ModFileCategory).IsSupported)
                     {
                         catNode.SetIsCheckBoxVisible(false, true);
-                        if (menuCollapseNotMergeable.Checked)
+                        if (Program.Settings.Get<bool>("CollapseNotMergeable"))
                             catNode.Collapse();
                     }
                 }
@@ -619,7 +552,7 @@ namespace WitcherScriptMerger.Forms
 
                 foreach (var fileNode in treConflicts.FileNodes)
                 {
-                    if (menuCollapseCustomLoadOrder.Checked && fileNode.ForeColor == ConflictTree.ResolvedForeColor)
+                    if (Program.Settings.Get<bool>("CollapseCustomLoadOrder") && fileNode.ForeColor == ConflictTree.ResolvedForeColor)
                         fileNode.Collapse();
                 }
             }
@@ -744,8 +677,8 @@ namespace WitcherScriptMerger.Forms
         async void RefreshTrees(bool checkBundles = true)
         {
             if (!Paths.ValidateModsDirectory() ||
-                (menuCheckScripts.Checked && !Paths.ValidateScriptsDirectory()) ||
-                (menuCheckBundledFiles.Checked && !Paths.ValidateBundlesDirectory()))
+                (Program.Settings.Get<bool>("CheckScripts") && !Paths.ValidateScriptsDirectory()) ||
+                (Program.Settings.Get<bool>("CheckBundleContents") && !Paths.ValidateBundlesDirectory()))
                 return;
 
             if (Program.Inventory == null)
@@ -1008,6 +941,14 @@ namespace WitcherScriptMerger.Forms
         private void menuOpenBundleContentDir_Click(object sender, EventArgs e)
         {
             Program.TryOpenDirectory(Paths.MergedBundleContent);
+        }
+
+        private void menuOptions_Click(object sender, EventArgs e)
+        {
+            using (var optionsForm = new OptionsForm())
+            {
+                ShowModal(optionsForm);
+            }
         }
 
         private void menuRepackBundle_Click(object sender, EventArgs e)

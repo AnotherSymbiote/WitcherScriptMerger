@@ -63,6 +63,12 @@
     </Compile>
     <Compile Include="Controls\SMTreeSorter.cs" />
     <Compile Include="Controls\ToolStripRegion.cs" />
+    <Compile Include="Forms\OptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OptionsForm.Designer.cs">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\xxHash.cs" />
     <Compile Include="FileIndex\ModFile.cs" />
     <Compile Include="FileIndex\ModFileCategory.cs" />
@@ -114,6 +120,9 @@
     <Compile Include="Tools\WccLite.cs" />
     <EmbeddedResource Include="Forms\DependencyForm.resx">
       <DependentUpon>DependencyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OptionsForm.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PackReportForm.resx">
       <DependentUpon>PackReportForm.cs</DependentUpon>

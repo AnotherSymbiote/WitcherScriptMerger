@@ -55,12 +55,11 @@ namespace WitcherScriptMerger.Forms
 
             if (AreAnyPathsChanged)
             {
-                Program.Settings.StartBatch();
                 KDiff3.ExePath = UpdatePathSetting(KDiff3.ExePath, txtKDiff3Path.Text, "Kdiff3Path");
                 QuickBms.ExePath = UpdatePathSetting(QuickBms.ExePath, txtBmsPath.Text, "QuickBmsPath");
                 QuickBms.PluginPath = UpdatePathSetting(QuickBms.PluginPath, txtBmsPluginPath.Text, "QuickBmsPluginPath");
                 WccLite.ExePath = UpdatePathSetting(WccLite.ExePath, txtWccLitePath.Text, "WccLitePath");
-                Program.Settings.EndBatch();
+                Program.Settings.Save();
             }
 
             DialogResult = (allValid

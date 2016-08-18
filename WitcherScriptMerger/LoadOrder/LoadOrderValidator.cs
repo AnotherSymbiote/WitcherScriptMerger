@@ -23,7 +23,8 @@ namespace WitcherScriptMerger.LoadOrder
             }
             else if (choice == DialogResult.Cancel)  // Never
             {
-                Program.MainForm.ValidateCustomLoadOrderSetting = false;
+                Program.Settings.Set("ValidateCustomLoadOrder", false);
+                Program.Settings.Save();
             }
         }
 
