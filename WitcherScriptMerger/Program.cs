@@ -72,7 +72,8 @@ namespace WitcherScriptMerger
                 Process.Start(startInfo);
             }
             else
-                Process.Start(path);
+                try { Process.Start(path); }
+                catch (Exception) { }
 
             return true;
         }
