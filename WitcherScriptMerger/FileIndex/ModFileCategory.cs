@@ -1,6 +1,6 @@
 ﻿namespace WitcherScriptMerger.FileIndex
 {
-    class ModFileCategory
+    public class ModFileCategory
     {
         public ModFileCategory(int orderIndex, string displayName, string toolTipText, bool isSupported, bool isBundled)
         {

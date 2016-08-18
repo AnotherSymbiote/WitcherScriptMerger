@@ -3,7 +3,7 @@
 namespace WitcherScriptMerger.Inventory
 {
     [XmlRoot]
-    class FileHash
+    public class FileHash
     {
         [XmlAttribute]
         public string Hash { get; set; }
