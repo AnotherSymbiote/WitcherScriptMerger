@@ -55,7 +55,7 @@ namespace WitcherScriptMerger.Tools
 
             if (!Program.Settings.Get<bool>("ReviewEachMerge") && hasVanillaVersion)
             {
-                if (source1FullName.EqualsIgnoreCase(source2FullName)
+                if (source1FullName.EqualsIgnoreCase(outputPath)
                     && source2.Hash != null && source2.Hash.IsOutdated)
                 {
                     Program.MainForm.ShowMessage(
