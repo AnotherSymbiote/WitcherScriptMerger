@@ -33,8 +33,8 @@ namespace WitcherScriptMerger.Tools
                 : "");
 
             // resolve any simlinked files
-            var source1FullName = source1.TextFile.FullName.ResolveTargetFileFullName();
-            var source2FullName = source2.TextFile.FullName.ResolveTargetFileFullName();
+            var source1FullName = source1.TextFile.ResolveTargetFileFullName();
+            var source2FullName = source2.TextFile.ResolveTargetFileFullName();
 
             args +=
                 $"\"{source1FullName}\" \"{source2FullName}\" " +

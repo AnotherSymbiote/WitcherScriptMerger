@@ -56,12 +56,13 @@ namespace WitcherScriptMerger
             return num == 1 ? "" : "s";
         }
 
-        public static string ResolveTargetFileFullName(this string fileFullName)
+        #endregion
+
+        #region FileInfo
+        public static string ResolveTargetFileFullName(this FileInfo fileInfo)
         {
-            var fileInfo = new FileInfo(fileFullName);
             return fileInfo.Exists ? SimLink.GetSymbolicLinkTarget(fileInfo) : fileInfo.FullName;
         }
-
         #endregion
 
         #region Tree & Context Menu
