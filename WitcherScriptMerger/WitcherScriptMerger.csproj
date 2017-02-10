@@ -69,6 +69,7 @@
     <Compile Include="Forms\OptionsForm.Designer.cs">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SimLink.cs" />
     <Compile Include="Tools\xxHash.cs" />
     <Compile Include="FileIndex\ModFile.cs" />
     <Compile Include="FileIndex\ModFileCategory.cs" />
