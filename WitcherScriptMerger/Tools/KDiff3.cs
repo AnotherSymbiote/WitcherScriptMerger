@@ -32,8 +32,12 @@ namespace WitcherScriptMerger.Tools
                 ? "\"" + vanillaFile.FullName + "\" "
                 : "");
 
+            // resolve any simlinked files
+            var source1FullName = source1.TextFile.FullName.ResolveTargetFileFullName();
+            var source2FullName = source2.TextFile.FullName.ResolveTargetFileFullName();
+
             args +=
-                $"\"{source1.TextFile.FullName}\" \"{source2.TextFile.FullName}\" " +
+                $"\"{source1FullName}\" \"{source2FullName}\" " +
                 $"-o \"{outputPath}\" " +
                 "--cs \"WhiteSpace3FileMergeDefault=2\" " +
                 "--cs \"CreateBakFiles=0\" " +
@@ -51,7 +55,7 @@ namespace WitcherScriptMerger.Tools
 
             if (!Program.Settings.Get<bool>("ReviewEachMerge") && hasVanillaVersion)
             {
-                if (source1.TextFile.FullName.EqualsIgnoreCase(outputPath)
+                if (source1FullName.EqualsIgnoreCase(source2FullName)
                     && source2.Hash != null && source2.Hash.IsOutdated)
                 {
                     Program.MainForm.ShowMessage(

@@ -8,6 +8,8 @@ using System.Windows.Forms;
 
 namespace WitcherScriptMerger
 {
+    using System.IO;
+
     static class Extensions
     {
         #region Strings
@@ -52,6 +54,12 @@ namespace WitcherScriptMerger
         public static string GetPluralS(this int num)
         {
             return num == 1 ? "" : "s";
+        }
+
+        public static string ResolveTargetFileFullName(this string fileFullName)
+        {
+            var fileInfo = new FileInfo(fileFullName);
+            return fileInfo.Exists ? SimLink.GetSymbolicLinkTarget(fileInfo) : fileInfo.FullName;
         }
 
         #endregion
